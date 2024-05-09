@@ -97,4 +97,7 @@ export const styles = StyleSheet.create({
   btn: {
     marginTop: sizes.screenHeight* 0.33
   },
+  btnIOS: {
+    marginTop: sizes.screenHeight* 0.29
+  },
 });

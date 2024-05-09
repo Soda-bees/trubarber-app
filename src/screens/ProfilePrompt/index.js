@@ -6,6 +6,7 @@ import {
   Touchable,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import images from '../../services/utilities/images';
@@ -35,10 +36,10 @@ export default function ProfilePrompt({navigation}) {
         </TouchableOpacity>
         <View style={styles.Hertotextcontainer}>
           <Text style={styles.heroText}>TRU BARBER</Text>
-          <Text style={styles.heroText}>SETUP YOUR PROFILE</Text>
+          <Text style={Platform.OS == 'android' ? styles.heroText : styles.heroTextIOS}>SETUP YOUR PROFILE</Text>
           <Text style={styles.heroText}>PROMPT</Text>
         </View>
-        <View style={styles.Nextbtn}>
+        <View style={Platform.OS == 'android' ? styles.Nextbtn : styles.Nextbtn1IOS}>
           <Button title={'Next'} onPress={handleUploadProfilePic}/>
         </View>
       </View>

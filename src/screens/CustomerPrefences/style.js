@@ -26,6 +26,22 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
     width: sizes.screenWidth * 0.6,
   },
+  heroText1IOS: {
+    marginTop: sizes.screenHeight * 0.015,
+    textAlign: 'center',
+    fontSize: fontSize.medium,
+    color: colors.black,
+    fontWeight: '500',
+    width: sizes.screenWidth * 0.7,
+  },
+  heroTextIOS: {
+    marginTop: sizes.screenHeight * 0.04,
+    textAlign: 'center',
+    fontSize: fontSize.medium,
+    color: colors.black,
+    fontWeight: '500',
+    width: sizes.screenWidth * 0.8,
+  },
   headertext: {
     fontWeight: '700',
     color: colors.black,
@@ -39,6 +55,10 @@ export const styles = StyleSheet.create({
   },
   Nextbtn: {
     top: sizes.screenHeight * 0.1,
+  },
+
+  NextbtnIOS: {
+    top: sizes.screenHeight * 0.07,
   },
   notSelected: {
     color: colors.grayText,

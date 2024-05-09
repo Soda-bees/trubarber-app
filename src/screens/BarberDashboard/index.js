@@ -8,6 +8,7 @@ import {
   Image,
   TextInput,
   Animated,
+  Platform,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {styles} from './style';
@@ -159,7 +160,7 @@ export default function BarberDashboard({navigation}) {
             </View>
           </ImageBackground>
         </View>
-        <ScrollView style={styles.ScrollViewContainer}>
+        <ScrollView style={styles.ScrollViewContainer} showsVerticalScrollIndicator={false}>
           <View style={styles.containerBody}>
             <View style={styles.detailRow}>
               <View style={styles.detailContainer}>
@@ -200,7 +201,7 @@ export default function BarberDashboard({navigation}) {
                       <Text style={styles.dateHeadingTwo}>{item.date}</Text>
                       <Text style={styles.timeHeading}>{item.time}</Text>
                     </View>
-                    <Text style={styles.statusHeadingTwo}>{item.status}</Text>
+                    <Text style={Platform.OS == 'android' ? styles.statusHeadingTwo : styles.statusHeadingTwoIOS}>{item.status}</Text>
                   </View>
                 ))}
               </ScrollView>
@@ -277,6 +278,7 @@ export default function BarberDashboard({navigation}) {
             ))}
           </View>
         </ScrollView>
+        <View style={Platform.OS == 'ios' && styles.paddingBtm}/>
       </View>
     </SafeAreaView>
   );

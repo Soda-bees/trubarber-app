@@ -6,6 +6,7 @@ import {
   Touchable,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import images from '../../services/utilities/images';
@@ -36,7 +37,7 @@ export default function OutletCreated({navigation}) {
             </Text>
           </View>
         </View>
-        <View style={styles.nextBtn}>
+        <View style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
         <TouchableOpacity style={styles.btnView} onPress={() => navigation.navigate('BarberTabs')}>
           <Text style={styles.btnText}>Get Ready</Text>
         </TouchableOpacity>

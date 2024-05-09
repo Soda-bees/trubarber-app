@@ -1,4 +1,4 @@
-import {View, Text, SafeAreaView, Image, TouchableOpacity} from 'react-native';
+import {View, Text, SafeAreaView, Image, TouchableOpacity, Platform} from 'react-native';
 import React, {useState} from 'react';
 import images from '../../services/utilities/images';
 import BackArrow from '../../components/BackArrow';
@@ -84,13 +84,13 @@ export default function AddServices({navigation}) {
               </TouchableOpacity>
             ))}
           </View>
-          <View style={styles.nextBtn}>
+        </View>
+          <View style={Platform.OS = 'android' ? styles.nextBtn : styles.nextBtnIOS}>
             <Button
               title={'Next'}
               onPress={() => navigation.navigate('ServiceInfo')}
             />
           </View>
-        </View>
       </View>
     </SafeAreaView>
   );

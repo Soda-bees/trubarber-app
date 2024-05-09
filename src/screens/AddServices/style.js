@@ -92,6 +92,10 @@ export const styles = StyleSheet.create({
       nextBtn: {
         top: sizes.screenHeight * 0.06
       },
+
+      nextBtnIOS: {
+        top: sizes.screenHeight * 0.06
+      },
     
       description: {
         color: colors.black,

@@ -16,6 +16,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: sizes.screenHeight * 0.032,
   },
+  centerHeaderIOS: {
+    alignItems: 'center',
+    marginTop: sizes.screenHeight * 0.015,
+  },
 
   headerText: {
     fontWeight: '900',
@@ -91,6 +95,10 @@ export const styles = StyleSheet.create({
   },
   nextBtn: {
     top: sizes.screenHeight * 0.06
+  },
+
+  nextBtnIOS: {
+    top: sizes.screenHeight * 0.02
   },
 
   description: {

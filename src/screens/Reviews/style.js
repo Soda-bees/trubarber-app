@@ -34,6 +34,7 @@ export const styles = StyleSheet.create({
     borderColor: colors.emptyStar,
     borderWidth: sizes.screenWidth * 0.003,
     marginTop: sizes.screenHeight * 0.012,
+    flex:1
   },
   ratingData: {
     justifyContent: 'space-between',
@@ -90,7 +91,7 @@ export const styles = StyleSheet.create({
     marginBottom: sizes.screenHeight * 0.015,
     width: sizes.screenWidth * 0.82,
     paddingHorizontal: sizes.screenWidth * 0.04,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   search: {
     alignSelf: 'flex-end',
@@ -99,4 +100,7 @@ export const styles = StyleSheet.create({
     color: colors.black,
     width: sizes.screenWidth * 0.68,
   },
+
+  paddingBottom:{
+    marginBottom:sizes.screenHeight * 0.09}
 });

@@ -103,7 +103,7 @@ export default function BaberCatalogue({navigation}) {
         <View style={styles.containerBody}>
           <Text style={styles.headingSchedule}>Services</Text>
           <Text style={styles.txtBelowSchedule}>Your Service Offerings</Text>
-          <ScrollView style={styles.scrollContainer}>
+          <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
             <View>
               <View style={styles.serviceContainer}>
                 {servicesData.map((item, index) => (
@@ -127,8 +127,8 @@ export default function BaberCatalogue({navigation}) {
           <TouchableOpacity onPress={() => navigation.navigate('AddServices')}>
           <Image style={styles.addService} source={images.addBtn} />
           </TouchableOpacity>
-       
         </View>
+        <View style={Platform.OS == 'ios' && styles.paddingBtm}/>
       </View>
     </SafeAreaView>
   );

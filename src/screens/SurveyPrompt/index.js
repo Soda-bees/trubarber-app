@@ -5,6 +5,7 @@ import {
   TextInput,
   Touchable,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import images from '../../services/utilities/images';
@@ -31,10 +32,10 @@ export default function SurveyPrompt({navigation}) {
           resizeMode="contain"
         />
       </TouchableOpacity>
-      <View style={styles.Hertotextcontainer}>
-        <Text style={styles.heroText}>TRU BARBER SURVEY PROMPT</Text>
+      <View style={Platform.OS == 'android' ? styles.Hertotextcontainer : styles.HertotextcontainerIOS}>
+        <Text style={Platform.OS == 'android' ? styles.heroText : styles.heroTextIOS}>TRU BARBER SURVEY PROMPT</Text>
       </View>
-      <View style={styles.Nextbtn}>
+      <View style={Platform.OS == 'android' ? styles.Nextbtn : styles.NextbtnIOS}>
         <Button title={'Next'} onPress={handleCustomerPreferences} />
       </View>
     </View>

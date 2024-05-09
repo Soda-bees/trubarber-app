@@ -6,7 +6,8 @@ import {
   Touchable,
   TouchableOpacity,
   SafeAreaView,
-  Alert
+  Alert,
+  Platform
 } from 'react-native';
 import React, {useState} from 'react';
 import images from '../../services/utilities/images';
@@ -134,7 +135,7 @@ const handleProfileSetupPrompt = () => {
           <Text style={styles.textSize}>Choose picture from gallery</Text>
         </TouchableOpacity>
 
-        <View style={styles.nextBtn}>
+        <View style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
           <Button title={'Next'} onPress={handleProfileSetupPrompt}/>
         </View>
       </View>

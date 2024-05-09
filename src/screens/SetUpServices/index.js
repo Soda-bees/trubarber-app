@@ -6,6 +6,7 @@ import {
   Touchable,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import images from '../../services/utilities/images';
@@ -57,7 +58,7 @@ export default function SetUpServices({navigation}) {
         <View style={styles.backArrow}>
           <BackArrow onPress={() => navigation.goBack()} />
         </View>
-        <View style={styles.centerHeader}>
+        <View style={Platform.OS == 'android' ? styles.centerHeader : styles.centerHeaderIOS}>
           <Text style={styles.headerText}>Set-Up Services</Text>
           <Text style={styles.subText}>
             Choose from the options below to set up the services offered at your
@@ -87,7 +88,7 @@ export default function SetUpServices({navigation}) {
             </TouchableOpacity>
           ))}
         </View>
-          <View style={styles.nextBtn}>
+          <View style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
             <Button
               title={'Next'}
               onPress={() =>

@@ -6,6 +6,7 @@ import {
   Touchable,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import images from '../../services/utilities/images';
@@ -120,7 +121,12 @@ export default function CustomerPrefences({navigation}) {
         ) : survey === 'hairCut' ? (
           <View>
             <View style={styles.heroTextcontainer}>
-              <Text style={styles.heroText}>
+              <Text
+                style={
+                  Platform.OS == 'android'
+                    ? styles.heroText
+                    : styles.heroTextIOS
+                }>
                 What services are you interested in? (Select all that apply)
               </Text>
             </View>
@@ -156,9 +162,14 @@ export default function CustomerPrefences({navigation}) {
         ) : survey === 'contact' ? (
           <View>
             <View style={styles.heroTextcontainer}>
-              <Text style={styles.heroText}>
+              <Text
+                style={
+                  Platform.OS == 'android'
+                    ? styles.heroText
+                    : styles.heroText1IOS
+                }>
                 What is your preferred method of communication for appointment
-                reminders and updates?{' '}
+                reminders and updates?
               </Text>
             </View>
             <TouchableOpacity
@@ -193,7 +204,12 @@ export default function CustomerPrefences({navigation}) {
         ) : survey === 'influence' ? (
           <View>
             <View style={styles.heroTextcontainer}>
-              <Text style={styles.heroText}>
+              <Text
+                style={
+                  Platform.OS == 'android'
+                    ? styles.heroText
+                    : styles.heroTextIOS
+                }>
                 What factors influence your choice of a barber shop? (Select all
                 that apply)
               </Text>
@@ -231,7 +247,8 @@ export default function CustomerPrefences({navigation}) {
           survey === 'onceMonth'
         )}
 
-        <View style={styles.Nextbtn}>
+        <View
+          style={Platform.OS == 'android' ? styles.Nextbtn : styles.NextbtnIOS}>
           <Button title={'Next'} onPress={next} />
         </View>
       </View>

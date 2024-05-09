@@ -21,7 +21,7 @@ export default function BarberTabNavigation() {
         tabBarStyle: {
           backgroundColor: colors.white,
           width: sizes.screenWidth,
-          height: sizes.screenHeight * 0.075,
+          height: Platform.OS == 'android' ? sizes.screenHeight * 0.075 : sizes.screenHeight * 0.11,
           paddingTop: sizes.screenHeight * 0.01,
           paddingHorizontal: sizes.screenWidth * 0.04,
           borderTopRightRadius: sizes.screenWidth * 0.07,

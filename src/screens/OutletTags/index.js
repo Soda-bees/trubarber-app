@@ -6,6 +6,7 @@ import {
   Touchable,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import {styles} from './style';
@@ -74,7 +75,7 @@ export default function OutletTags({navigation}) {
         </View>
         
 
-        <View style={styles.Nextbtn}>
+        <View style={Platform.OS == 'android' ? styles.Nextbtn : styles.NextbtnIOS}>
           <Button title={'Next'} onPress={()=>navigation.navigate("BusinessVerfication")}/>
         </View>
       </View>

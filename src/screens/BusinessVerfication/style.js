@@ -76,6 +76,9 @@ export const styles = StyleSheet.create({
   nextBtn: {
     top: sizes.screenHeight * 0.23,
   },
+  nextBtnIOS: {
+    top: sizes.screenHeight * 0.16,
+  },
 
   smallText: {
     textAlign: 'center',

@@ -26,6 +26,9 @@ export const styles = StyleSheet.create({
   nextBtn: {
     top: sizes.screenHeight * 0.47,
   },
+  nextBtnIOS: {
+    top: sizes.screenHeight * 0.42,
+  },
 
   grats: {
     justifyContent: 'center',

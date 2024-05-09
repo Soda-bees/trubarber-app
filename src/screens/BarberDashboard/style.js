@@ -216,6 +216,13 @@ export const styles = StyleSheet.create({
     textAlign:'right'
 
   },
+  statusHeadingTwoIOS: {
+    color: colors.red,
+    fontSize: fontSize.smallM,
+    width:sizes.screenWidth* 0.17,
+    textAlign:'right',
+    // backgroundColor:'white'
+  },
   priceHeadingTwo: {
     color: colors.black,
     fontSize: fontSize.smallM,
@@ -359,5 +366,9 @@ export const styles = StyleSheet.create({
   ScrollViewContainer: {
     marginTop: sizes.screenHeight * 0.05,
     marginBottom: sizes.screenHeight * 0.085,
+  },
+
+  paddingBtm:{
+    paddingBottom:sizes.screenHeight * 0.1
   },
 });

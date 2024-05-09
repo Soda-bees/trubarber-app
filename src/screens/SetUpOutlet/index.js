@@ -6,6 +6,7 @@ import {
   Touchable,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import images from '../../services/utilities/images';
@@ -112,12 +113,20 @@ export default function SetUpOutlet({navigation}) {
             )}
           </TouchableOpacity>
         </View>
-        <View style={styles.uploadPress}>
+        <View
+          style={
+            Platform.OS == 'android'
+              ? styles.uploadPress
+              : styles.uploadPressIOS
+          }>
           <Text style={styles.uploadCover}>Upload Cover</Text>
         </View>
         <View style={styles.content}>
           <View style={styles.textContainer}>
-            <Text style={styles.title}>Outlet Name</Text>
+            <Text
+              style={Platform.OS == 'android' ? styles.title : styles.titleIOS}>
+              Outlet Name
+            </Text>
             <TextInput
               onChangeText={setOutletName}
               value={outletName}
@@ -125,7 +134,10 @@ export default function SetUpOutlet({navigation}) {
             {/* <Text style={styles.description}>RedBox Barber</Text> */}
           </View>
           <View style={styles.textContainer}>
-            <Text style={styles.title}>Description</Text>
+            <Text
+              style={Platform.OS == 'android' ? styles.title : styles.titleIOS}>
+              Description
+            </Text>
             <TextInput
               style={styles.description}
               onChangeText={setDescription}
@@ -142,7 +154,12 @@ export default function SetUpOutlet({navigation}) {
           {/* <TouchableOpacity style={styles.timeContainer}> */}
           <View style={styles.timeContainer}>
             <View>
-              <Text style={styles.title}>Time</Text>
+              <Text
+                style={
+                  Platform.OS == 'android' ? styles.title : styles.titleIOS
+                }>
+                Time
+              </Text>
               <TextInput
                 style={styles.description}
                 onChangeText={setTime}
@@ -158,13 +175,16 @@ export default function SetUpOutlet({navigation}) {
 
           {/* </TouchableOpacity> */}
           {/* <TouchableOpacity style={styles.timeContainer}> */}
-          <Text style={styles.title}>Location</Text>
+          <Text
+            style={Platform.OS == 'android' ? styles.title : styles.titleIOS}>
+            Location
+          </Text>
           <TouchableOpacity style={styles.timeContainer}>
-            <Text style={styles.descriptionTwo}>{location}</Text>
+            <Text style={Platform.OS == 'android' ? styles.descriptionTwo : styles.descriptionTwoIOS}>{location}</Text>
 
             <Image
               source={images.dropDown}
-              style={styles.clockIcon}
+              style={styles.clockIcon1}
               resizeMode="contain"
             />
           </TouchableOpacity>

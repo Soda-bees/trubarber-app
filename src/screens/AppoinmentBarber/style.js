@@ -286,5 +286,9 @@ export const styles = StyleSheet.create({
   textGray:{
     color:colors.darkGray,
     fontSize:fontSize.smallM
-  }
+  },
+
+  paddingBtm:{
+    paddingBottom:sizes.screenHeight * 0.11
+  },
 });

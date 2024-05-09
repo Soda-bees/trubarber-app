@@ -51,12 +51,12 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.01,
     marginStart: sizes.screenHeight * 0.013,
   },
-  
+
   uplaodImageContianer: {
     marginTop: sizes.screenHeight * 0.01,
     flexDirection: 'row',
     alignSelf: 'center',
-    alignItems:'center'
+    alignItems: 'center',
   },
   uploadImgText: {
     color: colors.gratsText,
@@ -90,7 +90,6 @@ export const styles = StyleSheet.create({
   serviceContentRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    // paddingHorizontal: sizes.screenWidth * 0.02,
     paddingVertical: sizes.screenHeight * 0.008,
     justifyContent: 'space-between',
   },
@@ -104,6 +103,17 @@ export const styles = StyleSheet.create({
     marginStart: sizes.screenWidth * 0.02,
     height: sizes.screenHeight * 0.052,
   },
+  serviceInputContainerIOS: {
+    fontSize: fontSize.medium,
+    color: colors.black,
+    fontWeight: '500',
+    backgroundColor: colors.white,
+    width: sizes.screenWidth * 0.5,
+    borderRadius: sizes.screenWidth * 0.02,
+    marginStart: sizes.screenWidth * 0.02,
+    height: sizes.screenHeight * 0.052,
+    paddingHorizontal: 10,
+  },
   priceInputContainer: {
     fontSize: fontSize.medium,
     color: colors.black,
@@ -113,6 +123,17 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.02,
     marginStart: sizes.screenWidth * 0.04,
     height: sizes.screenHeight * 0.052,
+  },
+  priceInputContainerIOS: {
+    fontSize: fontSize.medium,
+    color: colors.black,
+    fontWeight: '500',
+    backgroundColor: colors.white,
+    width: sizes.screenWidth * 0.27,
+    borderRadius: sizes.screenWidth * 0.02,
+    marginStart: sizes.screenWidth * 0.04,
+    height: sizes.screenHeight * 0.052,
+    paddingHorizontal: 7,
   },
   addMoreBtn: {
     backgroundColor: colors.btnColor,
@@ -131,7 +152,6 @@ export const styles = StyleSheet.create({
   },
   descriptionContianer: {
     marginTop: sizes.screenHeight * 0.01,
- 
   },
   descriptionHeadingText: {
     fontWeight: '500',
@@ -145,11 +165,15 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.02,
     paddingVertical: sizes.screenHeight * 0.01,
     paddingHorizontal: sizes.screenWidth * 0.02,
-    borderWidth:sizes.screenWidth* 0.003,
-    borderColor:colors.borderColor
+    borderWidth: sizes.screenWidth * 0.003,
+    borderColor: colors.borderColor,
   },
   saveChangeBtn: {
-    marginTop: sizes.screenHeight * 0.02
+    marginTop: sizes.screenHeight * 0.02,
+  },
+
+  saveChangeBtnIOS: {
+    paddingBottom: sizes.screenHeight * 0.08,
   },
   uploadImage: {
     marginTop: sizes.screenHeight * 0.01,
@@ -167,9 +191,7 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.02,
     backgroundColor: colors.selectorcolor,
   },
-  addimage:{
+  addimage: {
     height: sizes.screenHeight * 0.05,
   },
-
-  
 });

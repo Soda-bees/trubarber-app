@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   ImageBackground,
   ScrollView,
+  Platform,
 } from 'react-native';
 import {styles} from './style.js';
 import images from '../../services/utilities/images';
@@ -52,7 +53,7 @@ export default function WelcomeScreen({navigation}) {
               style={styles.letsGetStartedImg1}
               source={images.bigSliderhat}>
               <View style={styles.textContainer}>
-                <Text style={styles.textBoldBlack}>Welcome to True Barber</Text>
+                <Text style={Platform.OS == 'android' ? styles.textBoldBlack : styles.textBoldBlackIOS}>Welcome to True Barber</Text>
                 <Text style={styles.subTitle}>Where Style Meets Precision</Text>
                 <Text style={styles.description}>
                   A sleek and modern barber shop interior, with stylish barber
@@ -99,26 +100,36 @@ export default function WelcomeScreen({navigation}) {
           </View>
         </ScrollView>
 
-        <View style={styles.wrapDot}>
+        <View style={Platform.OS == 'android' ? styles.wrapDot : styles.wrapDotIOS}>
           {itemList?.map((item, index) => {
             return (
               <View key={index}>
                 {imgActive !== 3 && (
                   <View>
-                    <Text
-                      // key={index}
-                      style={
-                        imgActive == index ? styles.dotActive : styles.dot
-                      }>
-                      __
-                    </Text>
+                 {Platform.OS == 'android' ? (
+                     <Text
+                     // key={index}
+                     style={
+                       imgActive == index ? styles.dotActive : styles.dot
+                     }>
+                     __
+                   </Text>
+                 ) : (
+                  <Text
+                  // key={index}
+                  style={
+                    imgActive == index ? styles.dotActiveIOS : styles.dotIOS
+                  }>
+                  __
+                </Text>
+                 )}
                   </View>
                 )}
               </View>
             );
           })}
         </View>
-        <View style={styles.buttonContainer}>
+        <View style={Platform.OS == 'android' ? styles.buttonContainer : styles.buttonContainerIOS}>
           <TouchableOpacity style={styles.btnViewLight} onPress={handleLogin}>
             <Text style={styles.btnTextLight}>Sign In</Text>
             <Image

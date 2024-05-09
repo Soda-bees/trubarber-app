@@ -84,8 +84,21 @@ export const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent:'space-between'
   },
+  texInputViewIOS:{
+    backgroundColor: colors.white,
+    marginTop:sizes.screenHeight* 0.01,
+    marginBottom:sizes.screenHeight* 0.09,
+    borderRadius:sizes.screenWidth* 0.03,
+    paddingHorizontal:sizes.screenWidth* 0.04,
+    paddingVertical:sizes.screenWidth* 0.04,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between',
+    alignSelf:"center",
+    // flex:1
+  },
   textInputContainer: {
-    width:sizes.screenWidth* 0.74,
+    width:sizes.screenWidth* 0.72,
     color:colors.black
 },
 });

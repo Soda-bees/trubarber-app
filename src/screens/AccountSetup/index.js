@@ -6,6 +6,8 @@ import {
   Touchable,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import React, {useState} from 'react';
 import images from '../../services/utilities/images';
@@ -15,6 +17,7 @@ import {colors, sizes} from '../../services';
 import Backarrow from '../../components/BackArrow';
 import {Checkbox} from 'react-native-paper';
 import BackArrow from '../../components/BackArrow';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function AccountSetup({navigation}) {
   const [email, setEmail] = useState('');
@@ -23,97 +26,99 @@ export default function AccountSetup({navigation}) {
   const [cityAdress, setcityAdress] = useState('');
   const [checked, setChecked] = useState(false);
 
-  const handleProfilePrompt = () =>{
-    navigation.navigate('ProfilePrompt')
-  }
+  const handleProfilePrompt = () => {
+    navigation.navigate('ProfilePrompt');
+  };
 
   const handlegoBack = () => {
-    navigation.goBack()
-  }
+    navigation.goBack();
+  };
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <View style={styles.arrowTop}>
-          <BackArrow onPress={handlegoBack}/>
+          <BackArrow onPress={handlegoBack} />
         </View>
         <Text style={styles.Forgotpass}>Account SetUp</Text>
         <Text style={styles.textContainer}>
           Set Up Your Account by Filling in Your Details!
         </Text>
-        <View style={styles.inputContainer}>
-          <View style={styles.wholeContainer}>
-            <View style={styles.row}>
-              <Image source={images.user} style={styles.inputImage} />
-              <TextInput
-                placeholder="Tyler Simons"
-                style={styles.input}
-                placeholderTextColor={colors.placeholdertext}
-                value={name}
-                onChangeText={text => {
-                  setName(text);
-                }}
-              />
+        <KeyboardAwareScrollView enableOnAndroid={true}>
+          <View style={styles.inputContainer}>
+            <View style={styles.wholeContainer}>
+              <View style={styles.row}>
+                <Image source={images.user} style={styles.inputImage} />
+                <TextInput
+                  placeholder="Tyler Simons"
+                  style={styles.input}
+                  placeholderTextColor={colors.placeholdertext}
+                  value={name}
+                  onChangeText={text => {
+                    setName(text);
+                  }}
+                />
+              </View>
+            </View>
+            <View style={styles.inputField}>
+              <View style={styles.row}>
+                <Image
+                  source={images.Message}
+                  style={styles.inputImage}
+                  resizeMode="contain"
+                />
+                <TextInput
+                  placeholder="tyler13@email.com"
+                  style={styles.input}
+                  placeholderTextColor={colors.placeholdertext}
+                  value={email}
+                  onChangeText={text => {
+                    setEmail(text);
+                  }}
+                />
+              </View>
+            </View>
+            <View style={styles.inputField}>
+              <View style={styles.row}>
+                <Image
+                  source={images.Call}
+                  style={styles.inputImage}
+                  resizeMode="contain"
+                />
+                <TextInput
+                  placeholder="Phone Number"
+                  style={styles.input}
+                  keyboardType="number-pad"
+                  placeholderTextColor={colors.placeholdertext}
+                  value={phoneNumber}
+                  onChangeText={text => {
+                    setphoneNumber(text);
+                  }}
+                />
+              </View>
+            </View>
+            <View style={styles.inputField}>
+              <View style={styles.row}>
+                <Image
+                  source={images.Location}
+                  style={styles.inputImage}
+                  resizeMode="contain"
+                />
+                <TextInput
+                  placeholder="City Address"
+                  placeholderTextColor={colors.placeholdertext}
+                  style={styles.input}
+                  value={cityAdress}
+                  onChangeText={text => {
+                    setcityAdress(text);
+                  }}
+                />
+              </View>
             </View>
           </View>
-          <View style={styles.inputField}>
-            <View style={styles.row}>
-              <Image
-                source={images.Message}
-                style={styles.inputImage}
-                resizeMode="contain"
-              />
-              <TextInput
-                placeholder="tyler13@email.com"
-                style={styles.input}
-                placeholderTextColor={colors.placeholdertext}
-                value={email}
-                onChangeText={text => {
-                  setEmail(text);
-                }}
-              />
-            </View>
-          </View>
-          <View style={styles.inputField}>
-            <View style={styles.row}>
-              <Image
-                source={images.Call}
-                style={styles.inputImage}
-                resizeMode="contain"
-              />
-              <TextInput
-                placeholder="Phone Number"
-                style={styles.input}
-                keyboardType="number-pad"
-                placeholderTextColor={colors.placeholdertext}
-                value={phoneNumber}
-                onChangeText={text => {
-                  setphoneNumber(text);
-                }}
-              />
-            </View>
-          </View>
-          <View style={styles.inputField}>
-            <View style={styles.row}>
-              <Image
-                source={images.Location}
-                style={styles.inputImage}
-                resizeMode="contain"
-              />
-              <TextInput
-                placeholder="City Address"
-                placeholderTextColor={colors.placeholdertext}
-                style={styles.input}
-                value={cityAdress}
-                onChangeText={text => {
-                  setcityAdress(text);
-                }}
-              />
-            </View>
-          </View>
-        </View>
+        </KeyboardAwareScrollView>
 
-        <View style={styles.checkboxView}>
+        <View style={Platform.OS == 'android' ? styles.checkboxView : styles.checkboxViewIOS}>
           <View>
             {checked ? (
               <TouchableOpacity onPress={() => setChecked(!checked)}>
@@ -128,7 +133,7 @@ export default function AccountSetup({navigation}) {
                 <Image
                   source={images.unchecked}
                   resizeMode="contain"
-                  style={[styles.checked,styles.tintColor]}
+                  style={[styles.checked, styles.tintColor]}
                 />
               </TouchableOpacity>
             )}
@@ -139,8 +144,9 @@ export default function AccountSetup({navigation}) {
           </Text>
         </View>
 
-        <View style={styles.nextBtn}>
-          <Button title={'Next'} onPress={handleProfilePrompt}/>
+        <View
+          style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
+          <Button title={'Next'} onPress={handleProfilePrompt} />
         </View>
       </View>
     </SafeAreaView>

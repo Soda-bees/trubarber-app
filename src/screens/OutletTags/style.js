@@ -78,4 +78,8 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.38,
   },
 
+  NextbtnIOS: {
+    marginTop: sizes.screenHeight * 0.34,
+  },
+
 });

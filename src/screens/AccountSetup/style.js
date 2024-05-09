@@ -31,8 +31,7 @@ export const styles = StyleSheet.create({
     color: colors.black,
     paddingLeft: sizes.screenWidth * 0.03,
   },
-
-  inputField: {
+inputField: {
     marginTop: sizes.screenHeight * 0.02,
     flexDirection: 'row',
     alignItems: 'center',
@@ -73,11 +72,24 @@ export const styles = StyleSheet.create({
   nextBtn: {
     marginTop: sizes.screenHeight * 0.17,
   },
+
+  nextBtnIOS: {
+    // marginTop: sizes.screenHeight * 0.13,
+    bottom:sizes.screenHeight * 0.1
+    
+  },
   checkboxView: {
     flexDirection: 'row',
     alignItems: 'start',
     marginHorizontal: sizes.screenWidth * 0.05,
     marginTop: sizes.screenHeight * 0.02,
+  },
+  checkboxViewIOS: {
+    flexDirection: 'row',
+    alignItems: 'start',
+    marginHorizontal: sizes.screenWidth * 0.05,
+    marginTop: sizes.screenHeight * 0.02,
+    marginBottom: sizes.screenHeight * 0.22,
   },
 
   checkboxTitle: {

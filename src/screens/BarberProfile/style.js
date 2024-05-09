@@ -107,4 +107,7 @@ export const styles = StyleSheet.create({
   btn: {
     top: sizes.screenHeight * 0.21,
   },
+  btnIOS: {
+    top: sizes.screenHeight * 0.16,
+  },
 });

@@ -136,7 +136,7 @@ export default function BusinessVerfication({navigation}) {
           />
           <Text style={styles.textBlack}>Choose picture from gallery</Text>
         </TouchableOpacity>
-        <View style={styles.nextBtn}>
+        <View style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
           <Button title={'Next'} onPress={()=>navigation.navigate("OutletCreated")}/>
         </View>
       </View>

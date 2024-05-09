@@ -107,16 +107,14 @@ export default function AppoinmentBarber({navigation}) {
           height: 'auto',
           left: sizes.screenWidth * 0.15,
           width: 'auto',
-          marginTop:sizes.screenHeight* 0.002
-}}>
+          marginTop: sizes.screenHeight * 0.002,
+        }}>
         <Text style={styles.textBlack}>{item.clientName}</Text>
         <Text style={styles.textGray}>{item.service}</Text>
         <Text style={styles.textGray}>{item.duration}</Text>
       </View>
     );
   };
-
- 
 
   return (
     <SafeAreaView>
@@ -174,7 +172,9 @@ export default function AppoinmentBarber({navigation}) {
             </View>
           </ImageBackground>
         </View>
-        <ScrollView style={styles.scrollContianer}>
+        <ScrollView
+          style={styles.scrollContianer}
+          showsVerticalScrollIndicator={false}>
           <View style={styles.containerBody}>
             <Text style={styles.headingSchedule}>My Schedule</Text>
             <Text style={styles.txtBelowSchedule}>
@@ -241,16 +241,16 @@ export default function AppoinmentBarber({navigation}) {
                   />
                 </View>
               </View>
-              
+
               <Timetable
                 items={appointmentTimeline}
                 renderItem={props => <RenderItem {...props} />}
                 date={date}
                 is12Hour
-               
               />
             </View>
           </View>
+        <View style={Platform.OS == 'ios' && styles.paddingBtm} />
         </ScrollView>
         <Modal
           animationType="fade"

@@ -50,7 +50,11 @@ export const styles = StyleSheet.create({
   uploadPress: {
     alignItems: 'center',
     marginTop: sizes.screenHeight * 0.012,
-    // backgroundColor: 'red'
+  },
+
+  uploadPressIOS: {
+    alignItems: 'center',
+    marginTop: sizes.screenHeight * 0.022,
   },
 
   uploadCover: {
@@ -73,13 +77,15 @@ export const styles = StyleSheet.create({
     // justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
-
   },
 
   clockIcon: {
-    // right: sizes.screenWidth * 0.01,
     height: sizes.screenHeight * 0.0222,
-    // backgroundColor: 'red',
+    width: sizes.screenWidth * 0.042,
+    top:15
+  },
+  clockIcon1: {
+    height: sizes.screenHeight * 0.0222,
     width: sizes.screenWidth * 0.042,
   },
 
@@ -87,6 +93,13 @@ export const styles = StyleSheet.create({
     color: colors.durationColor,
     fontSize: fontSize.small,
     marginStart: sizes.screenWidth * 0.01,
+  },
+
+  titleIOS: {
+    color: colors.durationColor,
+    fontSize: fontSize.small,
+    marginVertical: sizes.screenHeight * 0.007,
+    // marginStart: sizes.screenWidth * 0.01,
   },
   imagestyle: {
     width: sizes.screenWidth * 0.9,
@@ -108,6 +121,12 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     textAlignVertical: 'top',
     width: sizes.screenWidth * 0.83,
-    marginStart:sizes.screenWidth* 0.01
+    marginStart: sizes.screenWidth * 0.01,
+  },
+  descriptionTwoIOS: {
+    color: colors.black,
+    fontWeight: '600',
+    textAlignVertical: 'top',
+    width: sizes.screenWidth * 0.83,
   },
 });

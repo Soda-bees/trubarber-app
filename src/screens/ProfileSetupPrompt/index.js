@@ -1,4 +1,4 @@
-import {View, Text, SafeAreaView} from 'react-native';
+import {View, Text, SafeAreaView, Platform} from 'react-native';
 import React from 'react';
 import {styles} from './style';
 import BackArrow from '../../components/BackArrow';
@@ -21,12 +21,12 @@ export default function ProfileSetupPrompt({navigation}) {
         <BackArrow onPress={handlegoBack}/>
       </View>
       
-      <View style={styles.Hertotextcontainer}>
+      <View style={Platform.OS == 'android' ? styles.Hertotextcontainer : styles.HertotextcontainerIOS}>
        <Text style={styles.heroText}>
           HELP TRU BARBER VERIFY YOUR IDENTITY
         </Text>
       </View>
-      <View style={styles.buttonTop}>
+      <View style={Platform.OS == 'android' ? styles.buttonTop : styles.buttonTopIOS}>
         <Button title={'Next'} onPress={handleSurveryPrompt}/>
       </View>
     </View>

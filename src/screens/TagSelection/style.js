@@ -13,10 +13,10 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '600',
   },
-  
+
   arrowTop: {
     marginLeft: sizes.screenWidth * 0.04,
-    marginTop: sizes.screenHeight * 0.04
+    marginTop: sizes.screenHeight * 0.04,
   },
 
   adjustWidth: {
@@ -37,8 +37,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginHorizontal:sizes.screenWidth* 0.08
-
+    marginHorizontal: sizes.screenWidth * 0.08,
   },
 
   tagContainernotSelected: {
@@ -47,7 +46,7 @@ export const styles = StyleSheet.create({
     marginBottom: sizes.screenHeight * 0.009,
     height: sizes.screenHeight * 0.06,
     justifyContent: 'center',
-    borderRadius: sizes.screenWidth*0.03,
+    borderRadius: sizes.screenWidth * 0.03,
     alignItems: 'center',
   },
   tagContainerselected: {
@@ -56,7 +55,7 @@ export const styles = StyleSheet.create({
     marginBottom: sizes.screenHeight * 0.009,
     height: sizes.screenHeight * 0.06,
     justifyContent: 'center',
-    borderRadius: sizes.screenWidth*0.03,
+    borderRadius: sizes.screenWidth * 0.03,
     alignItems: 'center',
   },
   notSelectedtext: {
@@ -65,7 +64,7 @@ export const styles = StyleSheet.create({
     paddingRight: sizes.screenWidth * 0.02,
   },
   selectedText: {
-    color:colors.black,
+    color: colors.black,
     fontWeight: '400',
     paddingLeft: sizes.screenWidth * 0.02,
     paddingRight: sizes.screenWidth * 0.02,
@@ -73,5 +72,9 @@ export const styles = StyleSheet.create({
 
   Nextbtn: {
     top: sizes.screenHeight * 0.37,
+  },
+
+  NextbtnIOS: {
+    top: sizes.screenHeight * 0.32,
   },
 });

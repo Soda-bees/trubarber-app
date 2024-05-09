@@ -41,6 +41,14 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.5,
     fontWeight: '700',
   },
+
+  textBoldBlackIOS: {
+    fontFamily: 'Satoshi-Bold',
+    color: colors.white,
+    fontSize: fontSize.h2,
+    width: sizes.screenWidth * 0.6,
+    fontWeight: '700',
+  },
   subTitle: {
     color: colors.white,
     fontSize: fontSize.extraLarge,
@@ -83,6 +91,12 @@ export const styles = StyleSheet.create({
     gap: sizes.screenHeight * 0.01,
   },
 
+  buttonContainerIOS: {
+    // backgroundColor: 'red',
+    bottom: sizes.screenHeight * 0.1,
+    gap: sizes.screenHeight * 0.01,
+  },
+
   btnViewLight: {
     backgroundColor: colors.black,
     padding: sizes.screenHeight * 0.02,
@@ -115,6 +129,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     bottom: sizes.screenHeight * 0.07,
   },
+  wrapDotIOS: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    alignItems: 'center',
+    bottom: sizes.screenHeight * 0.12,
+  },
   wrap: {
     width: sizes.screenWidth * 0.1,
   },
@@ -124,11 +144,24 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.h2,
     width: sizes.screenWidth * 0.1,
   },
+  dotActiveIOS: {
+    // marginLeft:18,
+    color: colors.white,
+    fontSize: fontSize.h2,
+    width: sizes.screenWidth * 0.13,
+  },
   dot: {
     margin: sizes.screenHeight * 0.0,
     color: colors.disabledBg2,
     opacity: 0.6,
     fontSize: fontSize.h2,
     width: sizes.screenWidth * 0.1,
+  },
+  dotIOS: {
+    margin: sizes.screenHeight * 0.0,
+    color: colors.disabledBg2,
+    opacity: 0.6,
+    fontSize: fontSize.h2,
+    width: sizes.screenWidth * 0.13,
   },
 });

@@ -7,6 +7,7 @@ import {
   ScrollView,
   TextInput,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import {styles} from './style.js';
@@ -142,7 +143,7 @@ export default function ProfileSecurity({navigation}) {
             </View>
           </View>
         </View>
-        <View style={styles.btn}>
+        <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
           <Button title={'Save'} onPress={() => navigation.navigate('Profile')}/>
         </View>
       </View>

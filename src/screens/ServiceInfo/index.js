@@ -8,6 +8,8 @@ import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
+  Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import React, {useState} from 'react';
 import images from '../../services/utilities/images';
@@ -16,11 +18,12 @@ import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {PermissionsAndroid, PermissionsIOS} from 'react-native';
-import {colors} from '../../services';
+import {colors, sizes} from '../../services';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function ServiceInfo({navigation}) {
   const [imgUri, setImgUri] = useState(null);
-  const [addServiceImage,setAddServiceImage] = useState (images.hairCut)
+  const [addServiceImage, setAddServiceImage] = useState(images.hairCut);
   const [serviceNameHeading, setserviceNameHeading] = useState('Haircut');
   const [serviceImg, setServiceImg] = useState(images.hairCut);
   const [serviceName, setServiceName] = useState('Haircut');
@@ -140,7 +143,7 @@ export default function ServiceInfo({navigation}) {
                   <Image
                     source={{uri: imgUri}}
                     style={styles.imagestyle}
-                    resizeMode='cover'
+                    resizeMode="cover"
                   />
                 ) : (
                   <Image
@@ -158,47 +161,50 @@ export default function ServiceInfo({navigation}) {
                 <Text style={styles.uploadImgText}>Add Service Pictures</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.serviceDetailContainer}>
-              <View style={styles.tableHeadingRow}>
-                <Text style={styles.tableServiceHeading}>{serviceName}</Text>
-                <Text style={styles.tablePriceHeading}>Price</Text>
-              </View>
-              {serviceDetail.map((item, index) => (
-                <View style={styles.serviceContentRow} key={index}>
-                  <TouchableOpacity onPress={() => deleteServiceDetails(index)}>
-                    <Image source={images.minusRed} />
-                  </TouchableOpacity>
-                  <TextInput
-                    onChangeText={text =>
-                      setServiceDetail(prevState => {
-                        const updateServiceDetail = [...prevState];
-                        updateServiceDetail[index].name = text.replace('');
-                        return updateServiceDetail;
-                      })
-                    }
-                    value={item.name}
-                    style={styles.serviceInputContainer}></TextInput>
-                  <TextInput
-                    onChangeText={text =>
-                      setServiceDetail(prevState => {
-                        const updateServiceDetail = [...prevState];
-                        updateServiceDetail[index].price = text.replace(
-                          '$',
-                          '',
-                        );
-                        return updateServiceDetail;
-                      })
-                    }
-                    value={`$ ${item.price}`}
-                    style={styles.priceInputContainer}></TextInput>
+            <KeyboardAvoidingView style={{flex:1}} behavior='padding' keyboardVerticalOffset={sizes.screenHeight * 0.13 }>
+              <View style={styles.serviceDetailContainer}>
+                <View style={styles.tableHeadingRow}>
+                  <Text style={styles.tableServiceHeading}>{serviceName}</Text>
+                  <Text style={styles.tablePriceHeading}>Price</Text>
                 </View>
-              ))}
-              <TouchableOpacity
-                style={styles.addMoreBtn}
-                onPress={addMoreService}>
-                <Text style={styles.addMoreBtnText}> + Add More</Text>
-              </TouchableOpacity>
-            </View>
+                {serviceDetail.map((item, index) => (
+                  <View style={styles.serviceContentRow} key={index}>
+                    <TouchableOpacity
+                      onPress={() => deleteServiceDetails(index)}>
+                      <Image source={images.minusRed} />
+                    </TouchableOpacity>
+                    <TextInput
+                      onChangeText={text =>
+                        setServiceDetail(prevState => {
+                          const updateServiceDetail = [...prevState];
+                          updateServiceDetail[index].name = text.replace('');
+                          return updateServiceDetail;
+                        })
+                      }
+                      value={item.name}
+                      style={Platform.OS == 'android' ? styles.serviceInputContainer : styles.serviceInputContainerIOS}></TextInput>
+                    <TextInput
+                      onChangeText={text =>
+                        setServiceDetail(prevState => {
+                          const updateServiceDetail = [...prevState];
+                          updateServiceDetail[index].price = text.replace(
+                            '$',
+                            '',
+                          );
+                          return updateServiceDetail;
+                        })
+                      }
+                      value={`$ ${item.price}`}
+                      style={Platform.OS == 'android' ? styles.priceInputContainer : styles.priceInputContainerIOS}></TextInput>
+                  </View>
+                ))}
+                <TouchableOpacity
+                  style={styles.addMoreBtn}
+                  onPress={addMoreService}>
+                  <Text style={styles.addMoreBtnText}> + Add More</Text>
+                </TouchableOpacity>
+              </View>
+            </KeyboardAvoidingView>
             <View style={styles.descriptionContianer}>
               <Text style={styles.descriptionHeadingText}>Description</Text>
               <TextInput
@@ -217,6 +223,7 @@ export default function ServiceInfo({navigation}) {
                 }}
               />
             </View>
+            <View style={Platform.OS == 'ios' && styles.saveChangeBtnIOS} />
           </View>
         </ScrollView>
       </View>
