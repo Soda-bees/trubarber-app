@@ -1,0 +1,135 @@
+import {
+  View,
+  Text,
+  SafeAreaView,
+  ImageBackground,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import React, {useState} from 'react';
+import {ScrollView, TextInput} from 'react-native-gesture-handler';
+import {styles} from './style';
+import images from '../../services/utilities/images';
+import {colors} from '../../services';
+
+export default function BaberCatalogue({navigation}) {
+  const [currentLocation, setCurrentLocation] = useState(
+    'Rachael McPhail Street...',
+  );
+
+  const [servicesData, setserviceData] = useState([
+    {
+      serviceImage: images.hairCut,
+      serviceName: 'Haircuts',
+      serviceStyles: '5',
+    },
+    {
+      serviceImage: images.HDblush,
+      serviceName: 'Makeup',
+      serviceStyles: '5',
+    },
+    {
+      serviceImage: images.HDmanicure,
+      serviceName: 'Manicure',
+      serviceStyles: '5',
+    },
+    {
+      serviceImage: images.hairDresserchair,
+      serviceName: 'Manicure',
+      serviceStyles: '5',
+    },
+    {
+      serviceImage: images.beardTrim,
+      serviceName: 'Beard',
+      serviceStyles: '5',
+    },
+  ]);
+
+  return (
+    <SafeAreaView>
+      <View style={styles.container}>
+        <View style={styles.backgroundColor}>
+          <ImageBackground
+            source={images.transparentBg}
+            resizeMode="contain"
+            style={styles.transparentBg}>
+            <View style={styles.topIconRow}>
+              <TouchableOpacity
+                style={styles.locationRow}
+                onPress={() => navigation.navigate('WholeMap')}>
+                <View style={styles.locationContainertop}>
+                  <Image style={styles.iconImage} source={images.redLocation} />
+                </View>
+                <View style={styles.locationDetailColumn}>
+                  <Text style={styles.nearbyTxt}>Barber’s Location</Text>
+                  <Text style={styles.currentLocationTxt}>
+                    {currentLocation}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <View style={styles.otherIconRow}>
+                <TouchableOpacity
+                  style={styles.notificationContainer}
+                  onPress={() => {
+                    navigation.navigate('Notifications');
+                  }}>
+                  <Image
+                    style={styles.iconImage}
+                    source={images.notification}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.notificationContainer}
+                onPress={() => {
+                  navigation.navigate('Chats');
+                }}>
+                  <Image style={styles.iconImage} source={images.chat} />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles.inputContainer}>
+              <Image
+                source={images.search}
+                resizeMode="contain"
+                style={styles.search}
+              />
+              <TextInput
+                placeholderTextColor={colors.placeholdertextgray}
+                style={styles.input}
+                placeholder="Search..."
+              />
+            </View>
+          </ImageBackground>
+        </View>
+        <View style={styles.containerBody}>
+          <Text style={styles.headingSchedule}>Services</Text>
+          <Text style={styles.txtBelowSchedule}>Your Service Offerings</Text>
+          <ScrollView style={styles.scrollContainer}>
+            <View>
+              <View style={styles.serviceContainer}>
+                {servicesData.map((item, index) => (
+                  <TouchableOpacity
+                    style={styles.serviceBox}
+                    key={index}
+                    onPress={() => navigation.navigate('BarberSevriceDetails', {serviceNameHeading: item.serviceName,serviceName:item.serviceName})}>
+                    <Image
+                      source={item.serviceImage}
+                      style={styles.serviceImage}
+                    />
+                    <Text style={styles.serviceName}>{item.serviceName}</Text>
+                    <Text style={styles.serviceStyle}>
+                      {item.serviceStyles} Styles
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          </ScrollView>
+          <TouchableOpacity onPress={() => navigation.navigate('AddServices')}>
+          <Image style={styles.addService} source={images.addBtn} />
+          </TouchableOpacity>
+       
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+}

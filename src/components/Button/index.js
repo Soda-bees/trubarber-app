@@ -1,0 +1,35 @@
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React from 'react';
+import {styles} from './style';
+import images from '../../services/utilities/images';
+
+export default function Button({title,light , setmodalTrue, onPress}) {
+
+  return (
+    <View>
+      {
+        light ? (
+          <TouchableOpacity style={styles.btnViewLight} onPress={onPress}>
+          <Text style={styles.btnTextLight}>{title}</Text>
+          <Image
+            source={images.arrowIcon}
+            style={styles.arrowIconLight}
+            resizeMode="contain"
+            />
+        </TouchableOpacity>
+        ):(
+          <TouchableOpacity style={styles.btnView} onPress={onPress}>
+          <Text style={styles.btnText}>{title}</Text>
+          <Image
+            source={images.arrowIcon}
+            style={styles.arrowIcon}
+            resizeMode="contain"
+            />
+        </TouchableOpacity>
+        )
+      }
+
+    </View>
+
+  );
+}
