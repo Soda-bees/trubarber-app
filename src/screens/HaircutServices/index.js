@@ -7,6 +7,7 @@ import {
   ScrollView,
   TextInput,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import {styles} from './style.js';
@@ -72,12 +73,12 @@ export default function HaircutServices({navigation}) {
             </View>
           </ImageBackground>
           <ScrollView>
-            <View style={styles.contentMargin}>
+            <View style={Platform.OS == 'android' ? styles.contentMargin : styles.contentMarginIOS}>
               {barberData.map((item, index) => (
                 <ImageBackground
                   key={index}
                   source={item.image}
-                  imageStyle={styles.containerImage}
+                  imageStyle={Platform.OS == 'android' ? styles.containerImage : styles.containerImageIOS}
                   // style={}
                 >
                   <View style={styles.row}>

@@ -18,7 +18,7 @@ import BackArrow from '../../components/BackArrow/index.js';
 import {colors} from '../../services/index.js';
 import {PermissionsAndroid, PermissionsIOS} from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 // import {colors, sizes} from 'borderBottomcomponents/BackArrow/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
@@ -56,7 +56,7 @@ export default function EditScreen({navigation}) {
     };
 
     if (sourceType === 'library') {
-      launchImageLibrary(options, response => { 
+      launchImageLibrary(options, response => {
         console.log('Library Response:', response);
 
         try {
@@ -102,7 +102,7 @@ export default function EditScreen({navigation}) {
         <View style={styles.borderBottom}>
           <View style={styles.row}>
             <View style={styles.arrowTop}>
-              <BackArrow onPress={() => navigation.goBack()}/>
+              <BackArrow onPress={() => navigation.goBack()} />
             </View>
             <Text style={styles.headerText}>Edit Profile</Text>
           </View>
@@ -119,7 +119,9 @@ export default function EditScreen({navigation}) {
               <Image source={images.youngMan} style={styles.youngMan} />
             )}
           </TouchableOpacity>
-          <TouchableOpacity style={styles.uploadPhoto} onPress={() => uploadPhoto('library')}>
+          <TouchableOpacity
+            style={styles.uploadPhoto}
+            onPress={() => uploadPhoto('library')}>
             <Image
               source={images.editProfileimg}
               style={styles.editProfileimg}
@@ -128,79 +130,84 @@ export default function EditScreen({navigation}) {
             <Text style={styles.photoText}>Upload Photo</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.inputContainer}>
-          <View style={styles.wholeContainer}>
-            <View style={styles.rowInput}>
-              <Image source={images.user} style={styles.inputImage} />
-              <TextInput
-                placeholder="Name"
-                style={styles.input}
-                placeholderTextColor={colors.placeholdertext}
-                value={name}
-                onChangeText={text => {
-                  setName(text);
-                }}
-              />
+        <KeyboardAwareScrollView extraHeight={40} extraScrollHeight={90} enableOnAndroid={true}>
+          <View style={styles.inputContainer}>
+            <View style={styles.wholeContainer}>
+              <View style={styles.rowInput}>
+                <Image source={images.user} style={styles.inputImage} />
+                <TextInput
+                  placeholder="Name"
+                  style={styles.input}
+                  placeholderTextColor={colors.placeholdertext}
+                  value={name}
+                  onChangeText={text => {
+                    setName(text);
+                  }}
+                />
+              </View>
+            </View>
+            <View style={styles.inputField}>
+              <View style={styles.rowInput}>
+                <Image
+                  source={images.Message}
+                  style={styles.inputImage}
+                  resizeMode="contain"
+                />
+                <TextInput
+                  placeholder="tyler13@email.com"
+                  style={styles.input}
+                  placeholderTextColor={colors.placeholdertext}
+                  value={email}
+                  onChangeText={text => {
+                    setEmail(text);
+                  }}
+                />
+              </View>
+            </View>
+            <View style={styles.inputField}>
+              <View style={styles.rowInput}>
+                <Image
+                  source={images.Call}
+                  style={styles.inputImage}
+                  resizeMode="contain"
+                />
+                <TextInput
+                  placeholder="Phone Number"
+                  style={styles.input}
+                  keyboardType="number-pad"
+                  placeholderTextColor={colors.placeholdertext}
+                  value={phoneNumber}
+                  onChangeText={text => {
+                    setphoneNumber(text);
+                  }}
+                />
+              </View>
+            </View>
+            <View style={styles.inputField}>
+              <View style={styles.rowInput}>
+                <Image
+                  source={images.Location}
+                  style={styles.inputImage}
+                  resizeMode="contain"
+                />
+                <TextInput
+                  placeholder="City Address"
+                  placeholderTextColor={colors.placeholdertext}
+                  style={styles.input}
+                  value={cityAdress}
+                  onChangeText={text => {
+                    setcityAdress(text);
+                  }}
+                />
+              </View>
             </View>
           </View>
-          <View style={styles.inputField}>
-            <View style={styles.rowInput}>
-              <Image
-                source={images.Message}
-                style={styles.inputImage}
-                resizeMode="contain"
-              />
-              <TextInput
-                placeholder="tyler13@email.com"
-                style={styles.input}
-                placeholderTextColor={colors.placeholdertext}
-                value={email}
-                onChangeText={text => {
-                  setEmail(text);
-                }}
-              />
-            </View>
-          </View>
-          <View style={styles.inputField}>
-            <View style={styles.rowInput}>
-              <Image
-                source={images.Call}
-                style={styles.inputImage}
-                resizeMode="contain"
-              />
-              <TextInput
-                placeholder="Phone Number"
-                style={styles.input}
-                keyboardType="number-pad"
-                placeholderTextColor={colors.placeholdertext}
-                value={phoneNumber}
-                onChangeText={text => {
-                  setphoneNumber(text);
-                }}
-              />
-            </View>
-          </View>
-          <View style={styles.inputField}>
-            <View style={styles.rowInput}>
-              <Image
-                source={images.Location}
-                style={styles.inputImage}
-                resizeMode="contain"
-              />
-              <TextInput
-                placeholder="City Address"
-                placeholderTextColor={colors.placeholdertext}
-                style={styles.input}
-                value={cityAdress}
-                onChangeText={text => {
-                  setcityAdress(text);
-                }}
-              />
-            </View>
-          </View>
-        </View>
+        </KeyboardAwareScrollView>
         <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
-          <Button title={'Save'} onPress={() => navigation.navigate('Profile')}/>
+          <Button
+            title={'Save'}
+            onPress={() => navigation.navigate('Profile')}
+          />
         </View>
       </View>
     </SafeAreaView>

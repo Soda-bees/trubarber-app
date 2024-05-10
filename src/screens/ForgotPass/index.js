@@ -6,6 +6,7 @@ import {
   Touchable,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import images from '../../services/utilities/images';
@@ -52,7 +53,7 @@ export default function ForgotPass({navigation}) {
             }}
           />
         </View>
-        <View style={styles.nextBtn}>
+        <View style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
           <Button title={'Next'} onPress={handleOTP}/>
         </View>
       </View>

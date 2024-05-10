@@ -303,6 +303,7 @@ export const styles = StyleSheet.create({
     marginLeft: sizes.screenWidth * 0.03,
     marginBottom: sizes.screenHeight * 0.02,
   },
+
   // reviewContainer: {
   //   height : sizes.screenHeight
   // },

@@ -29,7 +29,7 @@ export default function UploadProfilepic({navigation}) {
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       console.log('Camera permission granted');
     } else {
-      console.warn('Camera permission denied');
+      console.log('Camera permission denied');
     }
   };
 

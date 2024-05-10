@@ -94,7 +94,7 @@ export const styles = StyleSheet.create({
       },
 
       nextBtnIOS: {
-        top: sizes.screenHeight * 0.06
+        top: sizes.screenHeight * 0.02
       },
     
       description: {

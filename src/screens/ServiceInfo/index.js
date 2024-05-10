@@ -135,33 +135,37 @@ export default function ServiceInfo({navigation}) {
           </View>
         </View>
         <ScrollView style={styles.scrollContainer}>
-          <View style={styles.containerBody}>
-            <View style={styles.serviceContainer}>
-              <Text style={styles.serviceNameText}>{serviceName} Details</Text>
-              <View style={styles.uploadImage}>
-                {imgUri ? (
-                  <Image
-                    source={{uri: imgUri}}
-                    style={styles.imagestyle}
-                    resizeMode="cover"
-                  />
-                ) : (
-                  <Image
-                    style={styles.addimage}
-                    source={addServiceImage}
-                    resizeMode="contain"
-                  />
-                )}
-              </View>
+          <KeyboardAwareScrollView
+            extraHeight={sizes.screenHeight * 0.24}
+            enableOnAndroid={true}>
+            <View style={styles.containerBody}>
+              <View style={styles.serviceContainer}>
+                <Text style={styles.serviceNameText}>
+                  {serviceName} Details
+                </Text>
+                <View style={styles.uploadImage}>
+                  {imgUri ? (
+                    <Image
+                      source={{uri: imgUri}}
+                      style={styles.imagestyle}
+                      resizeMode="cover"
+                    />
+                  ) : (
+                    <Image
+                      style={styles.addimage}
+                      source={addServiceImage}
+                      resizeMode="contain"
+                    />
+                  )}
+                </View>
 
-              <TouchableOpacity
-                style={styles.uplaodImageContianer}
-                onPress={() => uploadPhoto('library')}>
-                <Image source={images.plusRed} />
-                <Text style={styles.uploadImgText}>Add Service Pictures</Text>
-              </TouchableOpacity>
-            </View>
-            <KeyboardAvoidingView style={{flex:1}} behavior='padding' keyboardVerticalOffset={sizes.screenHeight * 0.13 }>
+                <TouchableOpacity
+                  style={styles.uplaodImageContianer}
+                  onPress={() => uploadPhoto('library')}>
+                  <Image source={images.plusRed} />
+                  <Text style={styles.uploadImgText}>Add Service Pictures</Text>
+                </TouchableOpacity>
+              </View>
               <View style={styles.serviceDetailContainer}>
                 <View style={styles.tableHeadingRow}>
                   <Text style={styles.tableServiceHeading}>{serviceName}</Text>
@@ -182,7 +186,11 @@ export default function ServiceInfo({navigation}) {
                         })
                       }
                       value={item.name}
-                      style={Platform.OS == 'android' ? styles.serviceInputContainer : styles.serviceInputContainerIOS}></TextInput>
+                      style={
+                        Platform.OS == 'android'
+                          ? styles.serviceInputContainer
+                          : styles.serviceInputContainerIOS
+                      }></TextInput>
                     <TextInput
                       onChangeText={text =>
                         setServiceDetail(prevState => {
@@ -195,7 +203,11 @@ export default function ServiceInfo({navigation}) {
                         })
                       }
                       value={`$ ${item.price}`}
-                      style={Platform.OS == 'android' ? styles.priceInputContainer : styles.priceInputContainerIOS}></TextInput>
+                      style={
+                        Platform.OS == 'android'
+                          ? styles.priceInputContainer
+                          : styles.priceInputContainerIOS
+                      }></TextInput>
                   </View>
                 ))}
                 <TouchableOpacity
@@ -204,27 +216,27 @@ export default function ServiceInfo({navigation}) {
                   <Text style={styles.addMoreBtnText}> + Add More</Text>
                 </TouchableOpacity>
               </View>
-            </KeyboardAvoidingView>
-            <View style={styles.descriptionContianer}>
-              <Text style={styles.descriptionHeadingText}>Description</Text>
-              <TextInput
-                onChangeText={setServiceAbout}
-                value={serviceAbout}
-                multiline={true}
-                numberOfLines={4}
-                style={styles.descriptionTextContainer}
-              />
+              <View style={styles.descriptionContianer}>
+                <Text style={styles.descriptionHeadingText}>Description</Text>
+                <TextInput
+                  onChangeText={setServiceAbout}
+                  value={serviceAbout}
+                  multiline={true}
+                  numberOfLines={4}
+                  style={styles.descriptionTextContainer}
+                />
+              </View>
+              <View style={styles.saveChangeBtn}>
+                <Button
+                  title={'Save Changes'}
+                  onPress={() => {
+                    navigation.navigate('OutletTags');
+                  }}
+                />
+              </View>
+              <View style={Platform.OS == 'ios' && styles.saveChangeBtnIOS} />
             </View>
-            <View style={styles.saveChangeBtn}>
-              <Button
-                title={'Save Changes'}
-                onPress={() => {
-                  navigation.navigate('OutletTags');
-                }}
-              />
-            </View>
-            <View style={Platform.OS == 'ios' && styles.saveChangeBtnIOS} />
-          </View>
+          </KeyboardAwareScrollView>
         </ScrollView>
       </View>
     </SafeAreaView>

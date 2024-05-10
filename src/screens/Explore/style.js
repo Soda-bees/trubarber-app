@@ -245,5 +245,9 @@ export const styles = StyleSheet.create({
   scrollContainer:{
     marginTop:sizes.screenHeight* 0.05,
     marginBottom:sizes.screenHeight* 0.02
-  }
+  },
+
+  paddingBtm:{
+    paddingBottom:sizes.screenHeight * 0.1
+  },
 });

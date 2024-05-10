@@ -1,5 +1,6 @@
 import {
   Image,
+  Platform,
   SafeAreaView,
   Text,
   TextInput,

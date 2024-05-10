@@ -56,6 +56,18 @@ export const styles = StyleSheet.create({
     color: colors.black,
     borderRadius: sizes.screenWidth * 0.03,
   },
+  cellIOS: {
+    backgroundColor: colors.selectorcolor,
+    fontFamily: 'Satoshi-Bold',
+    width: sizes.screenWidth * 0.16,
+    height: sizes.screenHeight * 0.08,
+    lineHeight: sizes.screenHeight * 0.08,
+    fontSize: fontSize.h4,
+    textAlign: 'center',
+    color: colors.black,
+    borderRadius: sizes.screenWidth * 0.03,
+    overflow:'hidden'
+  },
   textcenter: {
     marginTop: sizes.screenHeight * 0.092,
     textAlign: 'center',
@@ -82,5 +94,11 @@ export const styles = StyleSheet.create({
   },
   marginTop: {
     top: sizes.screenHeight * 0.33,
+  },
+  marginTopIOS: {
+    position:'absolute',
+    bottom:sizes.screenHeight * 0.04,
+    alignSelf:'center'
+    // top: sizes.screenHeight * 0.33,
   },
 });

@@ -44,9 +44,28 @@ export const styles = StyleSheet.create({
     gap: sizes.screenWidth * 0.052,
   },
 
+  contentMarginIOS: {
+    marginLeft: sizes.screenWidth * 0.045,
+    marginRight: sizes.screenWidth * 0.045,
+    marginTop: sizes.screenHeight * 0.02,
+    // backgroundColor: 'red',
+    height: sizes.screenHeight,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: sizes.screenWidth * 0.065,
+  },
+
   containerImage: {
     marginTop: sizes.screenHeight * 0.012,
     width: sizes.screenHeight * 0.22,
+    height: sizes.screenHeight * 0.24,
+    borderRadius: sizes.screenWidth * 0.042,
+    // borderRadius: 22,
+  },
+  
+  containerImageIOS: {
+    marginTop: sizes.screenHeight * 0.012,
+    width: sizes.screenHeight * 0.21,
     height: sizes.screenHeight * 0.24,
     borderRadius: sizes.screenWidth * 0.042,
     // borderRadius: 22,

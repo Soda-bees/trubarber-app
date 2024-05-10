@@ -5,6 +5,7 @@ import {
   TextInput,
   Touchable,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import images from '../../services/utilities/images';
@@ -94,7 +95,7 @@ export default function Otp({navigation}) {
 
             <Text style={styles.forgetText}> seconds </Text>
           </View> */}
-      <View style={styles.marginTop}>
+      <View style={Platform.OS == 'android' ? styles.marginTop : styles.marginTopIOS}>
         <Button title={'Next'} onPress={handleResetPassword}/>
       </View>
     </View>

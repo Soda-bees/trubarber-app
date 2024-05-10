@@ -65,8 +65,9 @@ export const styles = StyleSheet.create({
   },
 
   input: {
-    width: sizes.screenWidth * 0.66,
+    width: sizes.screenWidth * 0.7,
     color: colors.black,
+    marginLeft:sizes.screenWidth * 0.02
   },
 
   inputImage: {
@@ -76,7 +77,8 @@ export const styles = StyleSheet.create({
 
   eyeicon: {
     height: sizes.screenHeight * 0.03,
-    alignSelf:'flex-end'
+    width: sizes.screenHeight * 0.03,
+    alignSelf:'flex-end',
   },
 
   forgotPass: {

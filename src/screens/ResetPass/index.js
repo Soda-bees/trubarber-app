@@ -5,6 +5,7 @@ import {
   TextInput,
   Touchable,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import {styles} from './style';
@@ -92,7 +93,7 @@ export default function ResetPass({navigation}) {
           )}
         </View>
       </View>
-      <View style={styles.nextBtn}>
+      <View style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
         <Button title={'Next'} onPress={handleSignIn} />
       </View>
     </View>

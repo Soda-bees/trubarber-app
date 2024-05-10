@@ -17,8 +17,8 @@ import CalendarStrip from 'react-native-calendar-strip';
 import 'moment';
 import moment from 'moment';
 import BackArrow from '../../components/BackArrow';
-import { colors } from '../../services/utilities/colors';
-import { sizes } from '../../services/index.js';
+import {colors} from '../../services/utilities/colors';
+import {sizes} from '../../services/index.js';
 import Button from '../../components/Button/index.js';
 
 export default function BookingProcess({navigation}) {
@@ -77,7 +77,7 @@ export default function BookingProcess({navigation}) {
         <View style={styles.header}>
           <View style={styles.allignment}>
             <View style={styles.arrowTop}>
-              <BackArrow onPress={() => navigation.goBack()}/>
+              <BackArrow onPress={() => navigation.goBack()} />
             </View>
             <Text style={styles.headerText}>Book Appointment</Text>
           </View>
@@ -175,45 +175,49 @@ export default function BookingProcess({navigation}) {
           </ScrollView>
         </View>
         <View style={styles.bookContainer}>
-          <View style={styles.flexRow}>
-            <Text style={styles.textBlack}>Haircuts</Text>
-            <View style={styles.directionRow}>
-              <TouchableOpacity>
-                <Text style={styles.change}>Change</Text>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Image
-                  source={images.crossbtn}
-                  resizeMode="contain"
-                  style={styles.crossbtn}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.barberContainer}>
-            <View style={styles.barberNameImage}>
-              <View style={styles.imageContainer}>
-                <Image
-                  source={images.barberHat}
-                  style={styles.imageContainer}
-                />
-              </View>
-              <View>
-                <Text style={styles.barberName}>RedBox Barber</Text>
-                <Text style={styles.time}>02:00-02:45</Text>
+          <ScrollView>
+            <View style={styles.flexRow}>
+              <Text style={styles.textBlack}>Haircuts</Text>
+              <View style={styles.directionRow}>
+                <TouchableOpacity>
+                  <Text style={styles.change}>Change</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image
+                    source={images.crossbtn}
+                    resizeMode="contain"
+                    style={styles.crossbtn}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
-            <View style={styles.marginTop}>
-              <Text style={styles.priceSmalltext}>$25.00</Text>
+            <View style={styles.barberContainer}>
+              <View style={styles.barberNameImage}>
+                <View style={styles.imageContainer}>
+                  <Image
+                    source={images.barberHat}
+                    style={styles.imageContainer}
+                  />
+                </View>
+                <View>
+                  <Text style={styles.barberName}>RedBox Barber</Text>
+                  <Text style={styles.time}>02:00-02:45</Text>
+                </View>
+              </View>
+              <View style={styles.marginTop}>
+                <Text style={styles.priceSmalltext}>$25.00</Text>
+              </View>
             </View>
-          </View>
-          <View style={styles.total}>
-            <Text style={styles.totalText}>Total:</Text>
-            <Text style={styles.priceBlack}>$25.00</Text>
-          </View>
-          <TouchableOpacity style={styles.textContainer}>
-            <Text style={styles.addAnotherservice}>+ Add Another Service</Text>
-          </TouchableOpacity>
+            <View style={styles.total}>
+              <Text style={styles.totalText}>Total:</Text>
+              <Text style={styles.priceBlack}>$25.00</Text>
+            </View>
+            <TouchableOpacity style={styles.textContainer}>
+              <Text style={styles.addAnotherservice}>
+                + Add Another Service
+              </Text>
+            </TouchableOpacity>
+          </ScrollView>
         </View>
         <View style={styles.paymentBorder}>
           <View style={styles.paymentTitle}>
@@ -221,7 +225,9 @@ export default function BookingProcess({navigation}) {
           </View>
           <View style={styles.credtDebit}>
             <Text style={styles.creditText}>Credit / Debit Cards</Text>
-            <TouchableOpacity style={styles.blackPlusbox} onPress={()=>navigation.navigate("AddCard")}>
+            <TouchableOpacity
+              style={styles.blackPlusbox}
+              onPress={() => navigation.navigate('AddCard')}>
               <Image
                 source={images.whiteCross}
                 style={styles.starSize}

@@ -54,4 +54,9 @@ export const styles = StyleSheet.create({
   nextBtn: {
     top: sizes.screenHeight * 0.395,
   },
+  nextBtnIOS: {
+    position:'absolute',
+    bottom:sizes.screenHeight * 0.1,
+    alignSelf:'center'
+  },
 });

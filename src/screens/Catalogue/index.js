@@ -7,6 +7,7 @@ import {
   ScrollView,
   TextInput,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import {styles} from './style.js';
@@ -82,7 +83,6 @@ export default function Catalogue({navigation}) {
       serviceImage: images.hairCut,
       serviceText: 'Makeup',
     },
- 
   ]);
 
   return (
@@ -136,13 +136,21 @@ export default function Catalogue({navigation}) {
 
         {btnActive === 'barber' ? (
           <ScrollView style={styles.scrollContainer}>
-            <View style={styles.contentMargin}>
+            <View
+              style={
+                Platform.OS == 'android'
+                  ? styles.contentMargin
+                  : styles.contentMarginIOS
+              }>
               {barberData.map((item, index) => (
                 <ImageBackground
                   key={index}
                   source={item.image}
-                  imageStyle={styles.containerImage}
-                >
+                  imageStyle={
+                    Platform.OS == 'android'
+                      ? styles.containerImage
+                      : styles.containerImageIOS
+                  }>
                   <View style={styles.row}>
                     <Text style={styles.textWhite}>5.0</Text>
                     <StarRating
@@ -166,7 +174,11 @@ export default function Catalogue({navigation}) {
                           />
                           <Text style={styles.textBlack}>{item.location}</Text>
                         </View>
-                        <TouchableOpacity style={styles.bookBtn} onPress={()=>navigation.navigate("BookAppointment")}>
+                        <TouchableOpacity
+                          style={styles.bookBtn}
+                          onPress={() =>
+                            navigation.navigate('BookAppointment')
+                          }>
                           <Text style={styles.btnText}>Book Appointment</Text>
                           <Image
                             source={images.arrowIcon}
@@ -180,6 +192,12 @@ export default function Catalogue({navigation}) {
                 </ImageBackground>
               ))}
             </View>
+            <View
+              style={{
+                paddingBottom:
+                  Platform.OS == 'ios' && sizes.screenHeight * 0.08,
+              }}
+            />
           </ScrollView>
         ) : btnActive === 'services' ? (
           <ScrollView>
@@ -187,9 +205,8 @@ export default function Catalogue({navigation}) {
               {servicesData.map((item, index) => (
                 <TouchableOpacity
                   key={index}
-                  style={styles.serviceImagecontainer} 
-                  onPress={()=>navigation.navigate("HaircutServices")}
-                  >
+                  style={styles.serviceImagecontainer}
+                  onPress={() => navigation.navigate('HaircutServices')}>
                   <Image
                     source={item.serviceImage}
                     style={styles.serviceImageresize}
@@ -199,6 +216,12 @@ export default function Catalogue({navigation}) {
                 </TouchableOpacity>
               ))}
             </View>
+            <View
+              style={{
+                paddingBottom:
+                  Platform.OS == 'ios' && sizes.screenHeight * 0.18,
+              }}
+            />
           </ScrollView>
         ) : null}
       </View>

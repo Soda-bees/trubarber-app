@@ -81,10 +81,27 @@ export const styles = StyleSheet.create({
     gap: sizes.screenWidth * 0.052,
     marginBottom:sizes.screenHeight* 0.03
   },
+  contentMarginIOS: {
+    marginLeft: sizes.screenWidth * 0.04,
+    marginRight: sizes.screenWidth * 0.04,
+    // marginTop: sizes.screenHeight * 0.02,
+    height: sizes.screenHeight,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: sizes.screenWidth * 0.065,
+    marginBottom:sizes.screenHeight* 0.03,
+  },
 
   containerImage: {
     marginTop: sizes.screenHeight * 0.012,
     width: sizes.screenHeight * 0.22,
+    height: sizes.screenHeight * 0.24,
+    borderRadius: sizes.screenWidth * 0.042,
+  },
+
+  containerImageIOS: {
+    marginTop: sizes.screenHeight * 0.012,
+    width: sizes.screenHeight * 0.21,
     height: sizes.screenHeight * 0.24,
     borderRadius: sizes.screenWidth * 0.042,
   },

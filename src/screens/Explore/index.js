@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import images from '../../services/utilities/images';
@@ -226,6 +227,7 @@ export default function Explore({navigation}) {
             </ScrollView>
           </View>
         </ScrollView>
+        <View style={Platform.OS == 'ios' && styles.paddingBtm } />
       </View>
     </SafeAreaView>
   );

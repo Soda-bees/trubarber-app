@@ -123,13 +123,16 @@ export const styles = StyleSheet.create({
   input: {
     width: sizes.screenWidth * 0.7,
     color: colors.black,
-    fontSize: fontSize.small
+    fontSize: fontSize.small,
+    marginLeft:sizes.screenWidth * 0.01
   },
 
   btn: {
     top: sizes.screenHeight  * 0.182
   },
   btnIOS: {
-    top: sizes.screenHeight  * 0.15
+    position:'absolute',
+    alignSelf:"center",
+    bottom:sizes.screenHeight * 0.1
   },
 });

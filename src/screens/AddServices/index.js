@@ -85,7 +85,7 @@ export default function AddServices({navigation}) {
             ))}
           </View>
         </View>
-          <View style={Platform.OS = 'android' ? styles.nextBtn : styles.nextBtnIOS}>
+          <View style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
             <Button
               title={'Next'}
               onPress={() => navigation.navigate('ServiceInfo')}

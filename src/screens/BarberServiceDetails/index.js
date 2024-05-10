@@ -103,7 +103,7 @@ export default function BarberServiceDetails({route, navigation}) {
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
-            setModalVisible(!modalVisible);
+          setModalVisible(!modalVisible);
           }}>
           <View style={styles.modalView}>
             <TouchableOpacity
@@ -120,7 +120,7 @@ export default function BarberServiceDetails({route, navigation}) {
             <TouchableOpacity
               style={styles.modalRow}
               onPress={() => {
-                setModalVisible(false);
+                setModalVisible(!modalVisible);
               }}>
               <Image source={images.deleteIcon} />
               <Text style={styles.modalText}>Delete</Text>

@@ -7,6 +7,7 @@ import {
   ScrollView,
   TextInput,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import {styles} from './style.js';
@@ -72,7 +73,7 @@ export default function Appointments({navigation}) {
           <View style={styles.transparentBg}>
             <View style={styles.row}>
               <View style={styles.arrowTop}>
-                <BackArrow onPress={() => navigation.goBack()}/>
+                <BackArrow onPress={() => navigation.goBack()} />
               </View>
               <View style={styles.headerContainer}>
                 <Text style={styles.headerText}>Appoinments</Text>
@@ -134,6 +135,11 @@ export default function Appointments({navigation}) {
               </View>
             </View>
           ))}
+          <View
+            style={{
+              paddingBottom: Platform.OS == 'ios' && sizes.screenHeight * 0.09,
+            }}
+          />
         </ScrollView>
       </View>
     </SafeAreaView>

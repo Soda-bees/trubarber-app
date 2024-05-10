@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import {styles} from './style.js';
@@ -274,7 +275,7 @@ export default function BookAppointment({navigation}) {
                 </View>
               </View>
             ))}
-            <View style={{paddingBottom: sizes.screenHeight * 0.04}}></View>
+            <View style={{paddingBottom: Platform.OS == 'android' ? sizes.screenHeight * 0.04 : sizes.screenHeight * 0.09}}></View>
           </ScrollView>
         ) : tab === 'Reviews' ? (
           <View style={styles.reviewContainer}>
@@ -334,7 +335,7 @@ export default function BookAppointment({navigation}) {
                   </Text>
                 </View>
               ))}
-              <View style={{paddingBottom: sizes.screenHeight * 0.71}}></View>
+              <View style={{paddingBottom: Platform.OS == 'android' ? sizes.screenHeight * 0.71 : sizes.screenHeight * 0.73}}></View>
             </ScrollView>
           </View>
         ) : null}
