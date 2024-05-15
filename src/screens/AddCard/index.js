@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import React, {useState} from 'react';
@@ -26,13 +27,14 @@ export default function AddCard({navigation}) {
     setModalopen(!modalOpen);
   };
 
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.allignment}>
             <View style={styles.arrowTop}>
-              <BackArrow onPress={() => navigation.goBack()}/>
+              <BackArrow onPress={() => navigation.goBack()} />
             </View>
             <Text style={styles.headerText}>Add Card</Text>
           </View>
@@ -41,7 +43,11 @@ export default function AddCard({navigation}) {
           <Text style={styles.title}>Name on Card</Text>
           <TextInput
             placeholderTextColor={colors.placeholdertextgray}
-            style={styles.inputColor}
+            style={
+              Platform.OS == 'android'
+                ? styles.inputColor
+                : styles.inputColorIOS
+            }
             placeholder="Name on Card"
             value={cardName}
             onChangeText={text => setCardname(text)}
@@ -50,7 +56,11 @@ export default function AddCard({navigation}) {
             <Text style={styles.title}>Card Number</Text>
             <TextInput
               placeholderTextColor={colors.placeholdertextgray}
-              style={styles.inputColor}
+              style={
+                Platform.OS == 'android'
+                  ? styles.inputColor
+                  : styles.inputColorIOS
+              }
               keyboardType="numeric"
               placeholder="xxxxxxxxxxxxxxxxxx"
               value={cardNumber}
@@ -63,9 +73,14 @@ export default function AddCard({navigation}) {
                 <Text style={styles.title}>Expiry Date</Text>
                 <TextInput
                   placeholderTextColor={colors.placeholdertextgray}
-                  style={styles.inputColor}
+                  style={
+                    Platform.OS == 'android'
+                      ? styles.inputColor
+                      : styles.inputColorIOS
+                  }
                   placeholder="Exp.Date"
                   value={expiryDate}
+                  keyboardType="numeric"
                   onChangeText={text => setExpirydate(text)}
                 />
               </View>
@@ -73,7 +88,11 @@ export default function AddCard({navigation}) {
                 <Text style={styles.title}>Security Code</Text>
                 <TextInput
                   placeholderTextColor={colors.placeholdertextgray}
-                  style={styles.inputColor}
+                  style={
+                    Platform.OS == 'android'
+                      ? styles.inputColor
+                      : styles.inputColorIOS
+                  }
                   keyboardType="numeric"
                   placeholder="CVV"
                   value={securityCode}

@@ -40,11 +40,11 @@ export default function AccountSetup({navigation}) {
         <View style={styles.arrowTop}>
           <BackArrow onPress={handlegoBack} />
         </View>
+        <KeyboardAwareScrollView enableOnAndroid={true} extraScrollHeight={40}>
         <Text style={styles.Forgotpass}>Account SetUp</Text>
         <Text style={styles.textContainer}>
           Set Up Your Account by Filling in Your Details!
         </Text>
-        <KeyboardAwareScrollView enableOnAndroid={true}>
           <View style={styles.inputContainer}>
             <View style={styles.wholeContainer}>
               <View style={styles.row}>
@@ -116,7 +116,6 @@ export default function AccountSetup({navigation}) {
               </View>
             </View>
           </View>
-        </KeyboardAwareScrollView>
 
         <View style={Platform.OS == 'android' ? styles.checkboxView : styles.checkboxViewIOS}>
           <View>
@@ -143,6 +142,8 @@ export default function AccountSetup({navigation}) {
             Terms and Policies.
           </Text>
         </View>
+        </KeyboardAwareScrollView>
+
 
         <View
           style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>

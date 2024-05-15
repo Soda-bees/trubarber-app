@@ -59,6 +59,14 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth* 0.03,
     paddingLeft: sizes.screenWidth * 0.032,
   },
+  inputColorIOS: {
+    marginTop: sizes.screenHeight * 0.012,
+    backgroundColor: colors.selectorcolor,
+    color: colors.grayText,
+    borderRadius: sizes.screenWidth* 0.03,
+    paddingLeft: sizes.screenWidth * 0.032,
+    height:sizes.screenHeight * 0.05
+  },
 
   marginTop: {
     marginTop: sizes.screenHeight * 0.042,
