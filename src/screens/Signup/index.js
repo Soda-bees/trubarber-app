@@ -7,14 +7,20 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
-import {styles} from './style';
+import React, { useState } from 'react';
+import { styles } from './style';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import {colors} from '../../services';
+import { colors } from '../../services';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeRole, selectRole, setRole } from '../../store/role';
 
-export default function Signup({navigation}) {
-  const [btnActive, setactive] = useState('user');
+
+export default function Signup({ navigation }) {
+
+  const role = useSelector(selectRole)
+  const dispatch = useDispatch()
+
   const [showPass, setShowpass] = useState(false);
   const [email, setEmail] = useState('');
   const [userName, setuserName] = useState('');
@@ -25,22 +31,33 @@ export default function Signup({navigation}) {
   };
 
   const handleSignUP = () => {
-    if (btnActive === 'user') {
-      navigation.navigate('AccountSetup');
-    }else{
-      navigation.navigate('SetUpOutlet');
-
+    if (role) {
+      if (role === 'user') {
+        navigation.navigate('AccountSetup');
+      } else {
+        navigation.navigate('SetUpOutlet');
+      }
+    } else {
+      console.warn('Please select role')
     }
   };
+
+  const handleChangeRole = (role) => {
+    dispatch(setRole(role))
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.toggleContainer}>
         <TouchableOpacity
-          style={btnActive == 'user' ? styles.active : styles.inActive}
-          onPress={() => setactive('user')}>
+          style={role == 'user' ? styles.active : styles.inActive}
+          onPress={() =>
+            handleChangeRole('user')
+            //  setactive('user')
+          }
+        >
           <Text
             style={
-              btnActive == 'user'
+              role == 'user'
                 ? styles.textColorwhite
                 : styles.toggleTextsize
             }>
@@ -48,11 +65,15 @@ export default function Signup({navigation}) {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={btnActive == 'barber' ? styles.active : styles.inActive}
-          onPress={() => setactive('barber')}>
+          style={role == 'barber' ? styles.active : styles.inActive}
+          onPress={() =>
+            handleChangeRole('barber')
+            // setactive('barber')
+          }
+        >
           <Text
             style={
-              btnActive == 'barber'
+              role == 'barber'
                 ? styles.textColorwhite
                 : styles.toggleTextsize
             }>
