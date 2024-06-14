@@ -131,4 +131,11 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.smallM,
     color: colors.disabledBg2,
   },
+
+  toasterStyle:{
+    position:"absolute",
+    alignSelf:'center',
+    // marginTop:sizes.screenHeight * 0.11
+    // marginBottom:sizes.screenHeight * 0.5
+  },
 });

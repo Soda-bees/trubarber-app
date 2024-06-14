@@ -4,8 +4,9 @@ import {colors, fontSize, sizes} from '../../services';
 export const styles = StyleSheet.create({
   btnView: {
     backgroundColor: colors.btnColor,
-    padding: sizes.screenHeight * 0.02,
     width: sizes.screenWidth * 0.85,
+    height:sizes.screenHeight * 0.07,
+    paddingHorizontal:sizes.screenWidth * 0.05,
     alignSelf: 'center',
     borderRadius: sizes.screenWidth * 0.05,
     flexDirection: 'row',

@@ -13,38 +13,80 @@ import images from '../../services/utilities/images';
 import Button from '../../components/Button';
 import { colors } from '../../services';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeRole, selectRole, setRole } from '../../store/role';
+import { selectRole, setRole } from '../../store/role';
+import { validateEmailAvailability } from '../../services/config/API';
+import Toast from 'react-native-toast-message';
+import { ErrorShow } from '../../components/Error';
+import Loader from '../../components/Loader';
 
 
 export default function Signup({ navigation }) {
 
-  const role = useSelector(selectRole)
-  const dispatch = useDispatch()
+  // const role = useSelector(selectRole)
+  // const dispatch = useDispatch()
 
   const [showPass, setShowpass] = useState(false);
   const [email, setEmail] = useState('');
   const [userName, setuserName] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('')
+  const [loader, setLoader] = useState(false)
 
   const handleSignIn = () => {
     navigation.navigate('Login');
   };
 
-  const handleSignUP = () => {
-    if (role) {
-      if (role === 'user') {
-        navigation.navigate('AccountSetup');
-      } else {
-        navigation.navigate('SetUpOutlet');
+  const handleEmailValidation = async () => {
+    if (role !== '') {
+      if (email && password && userName) {
+        if (password.length <= 8) {
+          return ErrorShow('error', 'Oops!', 'Password must contain atleast 8 characters');
+        }
+        try {
+          setLoader(true);
+          const response = await validateEmailAvailability(email)
+          if (response.data.success) {
+            const userData = {
+              userName,
+              email,
+              password,
+              role,
+            }
+
+            console.log(userData);
+
+            if (role === 'user') {
+              console.log('clicked');
+              navigation.navigate('AccountSetup'), { userData };
+            } else {
+              navigation.navigate('SetUpOutlet'), { userData };
+            }
+            setLoader(false);
+          }
+          else {
+            setLoader(false)
+            return ErrorShow('error', 'Oops!', response.data.message)
+          }
+
+        } catch (error) {
+          console.log(error);
+          setLoader(false);
+
+        }
+      }
+      else {
+        ErrorShow('error', 'Oops!', 'All fields are required');
       }
     } else {
-      console.warn('Please select role')
+      ErrorShow('error', 'Oops!', 'Please select your Role');
     }
-  };
 
-  const handleChangeRole = (role) => {
-    dispatch(setRole(role))
   }
+
+  const handleChangeRole = (r) => {
+    setRole(r)
+  }
+  // console.log(role);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.toggleContainer}>
@@ -151,11 +193,15 @@ export default function Signup({ navigation }) {
         </View>
       </View>
       <View style={styles.forgotPass}>
-        <Button title={'Sign Up'} onPress={handleSignUP} />
+        {loader ? (
+          <Loader title={'Sign Up'} />
+        ) : (
+          <Button title={'Sign Up'} onPress={() => handleEmailValidation()} />
+        )}
+
       </View>
       <View style={styles.SignupContainer}>
         <Text style={styles.fontWeight}>Already have an account?</Text>
-
         <Button title={'Sign In'} light={true} onPress={handleSignIn} />
         {/* <View style={styles.textContainer}>
           <Text style={styles.textOpacity}>
@@ -163,6 +209,10 @@ export default function Signup({ navigation }) {
             Conditions
           </Text>
         </View> */}
+
+      </View>
+      <View style={styles.toasterStyle}>
+        <Toast />
       </View>
     </SafeAreaView>
   );
