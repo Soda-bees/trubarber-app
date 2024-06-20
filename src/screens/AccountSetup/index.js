@@ -9,7 +9,7 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import images from '../../services/utilities/images';
 import {styles} from './style.js';
 import Button from '../../components/Button';
@@ -18,20 +18,42 @@ import Backarrow from '../../components/BackArrow';
 import {Checkbox} from 'react-native-paper';
 import BackArrow from '../../components/BackArrow';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {ErrorShow} from '../../components/Error';
+import Toast from 'react-native-toast-message';
 
-export default function AccountSetup({navigation}) {
+export default function AccountSetup({navigation, route}) {
+  const {userData} = route.params;
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [phoneNumber, setphoneNumber] = useState('');
+  const [phoneNumber, setphoneNumber] = useState(null);
   const [cityAdress, setcityAdress] = useState('');
   const [checked, setChecked] = useState(false);
+  const [stateChange, setStateChange] = useState(true);
 
-  const handleProfilePrompt = () => {
-    navigation.navigate('ProfilePrompt');
-  };
+  // const handleProfilePrompt = () => {
+  //   navigation.navigate('ProfilePrompt');
+  // };
 
   const handlegoBack = () => {
     navigation.goBack();
+  };
+
+  useEffect(() => {
+    if (userData) {
+      setName(userData.name);
+      setEmail(userData.email);
+    }
+  }, []);
+
+  const handleConfirm = () => {
+    if (!phoneNumber) {
+      return ErrorShow('error', 'Oops!', 'Please enter phone Number');
+    }
+    if (!checked) {
+      return ErrorShow('error', 'Oops!', 'Please select the checkbox');
+    }
+    userData.phone = phoneNumber;
+    navigation.navigate('ProfilePrompt', {userData});
   };
 
   return (
@@ -41,10 +63,10 @@ export default function AccountSetup({navigation}) {
           <BackArrow onPress={handlegoBack} />
         </View>
         <KeyboardAwareScrollView enableOnAndroid={true} extraScrollHeight={40}>
-        <Text style={styles.Forgotpass}>Account SetUp</Text>
-        <Text style={styles.textContainer}>
-          Set Up Your Account by Filling in Your Details!
-        </Text>
+          <Text style={styles.Forgotpass}>Account SetUp</Text>
+          <Text style={styles.textContainer}>
+            Set Up Your Account by Filling in Your Details!
+          </Text>
           <View style={styles.inputContainer}>
             <View style={styles.wholeContainer}>
               <View style={styles.row}>
@@ -54,9 +76,10 @@ export default function AccountSetup({navigation}) {
                   style={styles.input}
                   placeholderTextColor={colors.placeholdertext}
                   value={name}
-                  onChangeText={text => {
-                    setName(text);
-                  }}
+                  // onChangeText={text => {
+                  //   setName(text);
+                  // }}
+                  editable={false}
                 />
               </View>
             </View>
@@ -72,9 +95,10 @@ export default function AccountSetup({navigation}) {
                   style={styles.input}
                   placeholderTextColor={colors.placeholdertext}
                   value={email}
-                  onChangeText={text => {
-                    setEmail(text);
-                  }}
+                  // onChangeText={text => {
+                  //   setEmail(text);
+                  // }}
+                  editable={false}
                 />
               </View>
             </View>
@@ -97,7 +121,7 @@ export default function AccountSetup({navigation}) {
                 />
               </View>
             </View>
-            <View style={styles.inputField}>
+            {/* <View style={styles.inputField}>
               <View style={styles.row}>
                 <Image
                   source={images.Location}
@@ -114,40 +138,47 @@ export default function AccountSetup({navigation}) {
                   }}
                 />
               </View>
+            </View> */}
+          </View>
+
+          <View
+            style={
+              Platform.OS == 'android'
+                ? styles.checkboxView
+                : styles.checkboxViewIOS
+            }>
+            <View>
+              {checked ? (
+                <TouchableOpacity onPress={() => setChecked(!checked)}>
+                  <Image
+                    source={images.checked}
+                    resizeMode="contain"
+                    style={styles.checked}
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={() => setChecked(!checked)}>
+                  <Image
+                    source={images.unchecked}
+                    resizeMode="contain"
+                    style={[styles.checked, styles.tintColor]}
+                  />
+                </TouchableOpacity>
+              )}
             </View>
+            <Text style={styles.checkboxTitle}>
+              By selecting the checkbox, you are indicating your agreement to
+              the Terms and Policies.
+            </Text>
           </View>
-
-        <View style={Platform.OS == 'android' ? styles.checkboxView : styles.checkboxViewIOS}>
-          <View>
-            {checked ? (
-              <TouchableOpacity onPress={() => setChecked(!checked)}>
-                <Image
-                  source={images.checked}
-                  resizeMode="contain"
-                  style={styles.checked}
-                />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={() => setChecked(!checked)}>
-                <Image
-                  source={images.unchecked}
-                  resizeMode="contain"
-                  style={[styles.checked, styles.tintColor]}
-                />
-              </TouchableOpacity>
-            )}
-          </View>
-          <Text style={styles.checkboxTitle}>
-            By selecting the checkbox, you are indicating your agreement to the
-            Terms and Policies.
-          </Text>
-        </View>
         </KeyboardAwareScrollView>
-
 
         <View
           style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
-          <Button title={'Next'} onPress={handleProfilePrompt} />
+          <Button title={'Next'} onPress={handleConfirm} />
+        </View>
+        <View style={styles.toasterStyle}>
+          <Toast />
         </View>
       </View>
     </SafeAreaView>

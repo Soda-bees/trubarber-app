@@ -14,6 +14,12 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '700',
   },
+  toasterStyle:{
+    position:"absolute",
+    alignSelf:'center',
+    // marginTop:sizes.screenHeight * 0.11
+    // marginBottom:sizes.screenHeight * 0.5
+  },
   arrowTop: {
     marginLeft: sizes.screenWidth * 0.04,
     marginTop: sizes.screenHeight * 0.04,
@@ -70,11 +76,12 @@ inputField: {
     resizeMode: 'contain',
   },
   nextBtn: {
-    marginTop: sizes.screenHeight * 0.17,
+    position:'absolute',
+    alignSelf:'center',
+    bottom: sizes.screenHeight * 0.048
   },
 
   nextBtnIOS: {
-    // marginTop: sizes.screenHeight * 0.13,
     bottom:sizes.screenHeight * 0.1
     
   },

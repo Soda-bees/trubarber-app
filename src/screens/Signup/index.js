@@ -7,30 +7,27 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
-import { styles } from './style';
+import React, {useState} from 'react';
+import {styles} from './style';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import { colors } from '../../services';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectRole, setRole } from '../../store/role';
-import { validateEmailAvailability } from '../../services/config/API';
+import {colors} from '../../services';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectRole, setRole} from '../../store/role';
+import {validateEmailAvailability} from '../../services/config/API';
 import Toast from 'react-native-toast-message';
-import { ErrorShow } from '../../components/Error';
+import {ErrorShow} from '../../components/Error';
 import Loader from '../../components/Loader';
 
-
-export default function Signup({ navigation }) {
-
-  // const role = useSelector(selectRole)
-  // const dispatch = useDispatch()
+export default function Signup({navigation}) {
+  const role = useSelector(selectRole);
+  const dispatch = useDispatch();
 
   const [showPass, setShowpass] = useState(false);
   const [email, setEmail] = useState('');
   const [userName, setuserName] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('')
-  const [loader, setLoader] = useState(false)
+  const [loader, setLoader] = useState(false);
 
   const handleSignIn = () => {
     navigation.navigate('Login');
@@ -40,84 +37,77 @@ export default function Signup({ navigation }) {
     if (role !== '') {
       if (email && password && userName) {
         if (password.length <= 8) {
-          return ErrorShow('error', 'Oops!', 'Password must contain atleast 8 characters');
+          return ErrorShow(
+            'error',
+            'Oops!',
+            'Password must contain atleast 8 characters',
+          );
         }
         try {
           setLoader(true);
-          const response = await validateEmailAvailability(email)
+          const response = await validateEmailAvailability(email);
           if (response.data.success) {
             const userData = {
-              userName,
+              name: userName,
               email,
               password,
               role,
-            }
+            };
 
             console.log(userData);
 
             if (role === 'user') {
               console.log('clicked');
-              navigation.navigate('AccountSetup'), { userData };
+              navigation.navigate('AccountSetup', {userData});
             } else {
-              navigation.navigate('SetUpOutlet'), { userData };
+              navigation.navigate('SetUpOutlet', {userData});
             }
             setLoader(false);
+          } else {
+            setLoader(false);
+            return ErrorShow('error', 'Oops!', response.data.message);
           }
-          else {
-            setLoader(false)
-            return ErrorShow('error', 'Oops!', response.data.message)
-          }
-
         } catch (error) {
           console.log(error);
           setLoader(false);
-
         }
-      }
-      else {
+      } else {
         ErrorShow('error', 'Oops!', 'All fields are required');
       }
     } else {
       ErrorShow('error', 'Oops!', 'Please select your Role');
     }
+  };
 
-  }
-
-  const handleChangeRole = (r) => {
-    setRole(r)
-  }
+  const handleChangeRole = r => {
+    dispatch(setRole(r));
+  };
   // console.log(role);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.toggleContainer}>
         <TouchableOpacity
           style={role == 'user' ? styles.active : styles.inActive}
-          onPress={() =>
-            handleChangeRole('user')
+          onPress={
+            () => handleChangeRole('user')
             //  setactive('user')
-          }
-        >
+          }>
           <Text
             style={
-              role == 'user'
-                ? styles.textColorwhite
-                : styles.toggleTextsize
+              role == 'user' ? styles.textColorwhite : styles.toggleTextsize
             }>
             User
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={role == 'barber' ? styles.active : styles.inActive}
-          onPress={() =>
-            handleChangeRole('barber')
+          onPress={
+            () => handleChangeRole('barber')
             // setactive('barber')
-          }
-        >
+          }>
           <Text
             style={
-              role == 'barber'
-                ? styles.textColorwhite
-                : styles.toggleTextsize
+              role == 'barber' ? styles.textColorwhite : styles.toggleTextsize
             }>
             Barber
           </Text>
@@ -198,7 +188,6 @@ export default function Signup({ navigation }) {
         ) : (
           <Button title={'Sign Up'} onPress={() => handleEmailValidation()} />
         )}
-
       </View>
       <View style={styles.SignupContainer}>
         <Text style={styles.fontWeight}>Already have an account?</Text>
@@ -209,7 +198,6 @@ export default function Signup({ navigation }) {
             Conditions
           </Text>
         </View> */}
-
       </View>
       <View style={styles.toasterStyle}>
         <Toast />

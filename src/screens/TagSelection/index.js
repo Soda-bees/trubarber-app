@@ -39,20 +39,20 @@ export default function TagSelection({navigation}) {
     });
   };
 
-  const handleNext = () =>{
-    navigation.navigate('MyTabs');
-
-  }
+  const handleNext = () => {
+    console.log(selectedTags);
+    // navigation.navigate('MyTabs');
+  };
 
   const handleGoback = () => {
-    navigation.goBack()
-  }
+    navigation.goBack();
+  };
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <View style={styles.arrowTop}>
-          <BackArrow onPress={handleGoback}/>
+          <BackArrow onPress={handleGoback} />
         </View>
         <Text style={styles.forgotPass}>Tag Selection</Text>
         <View style={styles.adjustWidth}>
@@ -84,8 +84,9 @@ export default function TagSelection({navigation}) {
           ))}
         </View>
 
-        <View style={Platform.OS == 'android' ? styles.Nextbtn :styles.NextbtnIOS}>
-          <Button title={'Next'} onPress={handleNext}/>
+        <View
+          style={Platform.OS == 'android' ? styles.Nextbtn : styles.NextbtnIOS}>
+          <Button title={'Next'} onPress={handleNext} />
         </View>
       </View>
     </SafeAreaView>

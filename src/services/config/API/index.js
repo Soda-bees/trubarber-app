@@ -19,3 +19,20 @@ export const validateEmailAvailability = async email => {
         return error;
     }
 };
+
+export const uploadProfile = async formData => {
+    try {
+      const axiosConfig = {
+        method: 'post',
+        url: `http://192.168.100.112:6000/user/uploadProfile`,
+        data: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+      const data = await axios(axiosConfig);
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };

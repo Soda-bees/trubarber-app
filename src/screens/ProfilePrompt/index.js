@@ -13,7 +13,8 @@ import images from '../../services/utilities/images';
 import {styles} from './style.js';
 import Button from '../../components/Button';
 
-export default function ProfilePrompt({navigation}) {
+export default function ProfilePrompt({navigation, route}) {
+  const {userData} = route.params;
   const [email, setEmail] = useState('');
 
   const handlegoBack = () => {
@@ -21,7 +22,7 @@ export default function ProfilePrompt({navigation}) {
   }
 
   const handleUploadProfilePic = () =>{
-    navigation.navigate('UploadProfilepic')
+    navigation.navigate('UploadProfilepic', {userData})
   }
 
   return (

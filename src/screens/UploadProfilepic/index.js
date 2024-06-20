@@ -7,20 +7,25 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Alert,
-  Platform
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import images from '../../services/utilities/images';
 import {styles} from './style.js';
 import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {PermissionsAndroid, PermissionsIOS} from 'react-native';
+import {ErrorShow} from '../../components/Error';
+import Toast from 'react-native-toast-message';
+import {uploadProfile} from '../../services/config/API';
+import Loader from '../../components/Loader';
 
-
-
-export default function UploadProfilepic({navigation}) {
+export default function UploadProfilepic({navigation, route}) {
+  const {userData} = route.params;
+  console.log(userData, ' naya wala h yeh');
   const [imgUri, setImgUri] = useState(null);
+  const [loader, setLoader] = useState(false);
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
@@ -55,7 +60,9 @@ export default function UploadProfilepic({navigation}) {
           const uri =
             response.uri || (response.assets && response.assets[0].uri);
           if (uri) {
-            setImgUri(uri);
+            // setImgUri(uri);
+            const img = response.assets[0];
+            handleUploadProfile(img);
           } else {
             console.warn('No image URI found in library response');
           }
@@ -67,19 +74,23 @@ export default function UploadProfilepic({navigation}) {
       await requestCameraPermission();
 
       launchCamera(options, response => {
-        console.log('** Full Camera Response:**', response.assets[0].uri);
+        // console.log('** Full Camera Response:**', response?.assets[0]?.uri);
         try {
           const uri = response.assets[0].uri;
           if (!uri) {
             const cameraResponseUri = response.path || response.uri;
             if (cameraResponseUri) {
               console.log('Using alternative camera URI:', cameraResponseUri);
-              setImgUri(cameraResponseUri);
+              // setImgUri(cameraResponseUri);
+              const img = cameraResponseUri.assets[0];
+              handleUploadProfile(img);
             } else {
               console.log('No image URI found in camera response');
             }
           } else {
-            setImgUri(uri);
+            // setImgUri(uri);
+            const img = response.assets[0];
+            handleUploadProfile(img);
           }
         } catch (error) {
           console.error('Error setting imgUri:', error);
@@ -88,20 +99,53 @@ export default function UploadProfilepic({navigation}) {
     }
   };
 
-const handlegoBack = () => {
-  navigation.goBack()
-}
+  const handlegoBack = () => {
+    navigation.goBack();
+  };
 
-const handleProfileSetupPrompt = () => {
-  navigation.navigate('ProfileSetupPrompt')
-}
 
+  const handlePhoteUpdate = () => {
+    if (!imgUri) {
+      return ErrorShow('error', 'Oops!', 'Please Upload photo');
+    }
+    userData.profile = imgUri;
+    navigation.navigate('ProfileSetupPrompt', {userData});
+  };
+
+  const handleUploadProfile = async image => {
+    setLoader(true);
+    try {
+      const img = {
+        uri: image.uri,
+        type: image.type,
+        fileName: image.fileName,
+      };
+      const formData = new FormData();
+      formData.append('image', {
+        uri: img.uri,
+        type: img.type,
+        name: img.fileName,
+      });
+      const response = await uploadProfile(formData);
+      console.log(response?.data);
+      if (response.status == 200) {
+        setImgUri(response?.data?.url);
+        setLoader(false);
+      } else {
+        setLoader(false);
+        console.log(response.message);
+      }
+    } catch (error) {
+      setLoader(false);
+      console.log(error);
+    }
+  };
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <View style={styles.backArrow}>
-          <BackArrow onPress={handlegoBack}/>
+          <BackArrow onPress={handlegoBack} />
         </View>
         <Text style={styles.forgetPass}>Upload Profile Picture</Text>
         <Text style={styles.subText}>Upload your profile picture here</Text>
@@ -135,10 +179,16 @@ const handleProfileSetupPrompt = () => {
           <Text style={styles.textSize}>Choose picture from gallery</Text>
         </TouchableOpacity>
 
-        <View style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
-          <Button title={'Next'} onPress={handleProfileSetupPrompt}/>
+        <View
+          style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
+          {loader ? (
+            <Loader title={'Next'} />
+          ) : (
+            <Button title={'Next'} onPress={handlePhoteUpdate} />
+          )}
         </View>
       </View>
+      <Toast />
     </SafeAreaView>
   );
 }
