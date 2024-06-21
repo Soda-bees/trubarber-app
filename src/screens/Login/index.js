@@ -7,36 +7,42 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
-import { styles } from './style';
+import React, {useState} from 'react';
+import {styles} from './style';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import { colors } from '../../services';
-import { useDispatch, useSelector } from 'react-redux';
-import { removeRole, selectRole, setRole } from '../../store/role';
+import {colors} from '../../services';
+import {useDispatch, useSelector} from 'react-redux';
+import {removeRole, selectRole, setRole} from '../../store/role';
+import {ErrorShow} from '../../components/Error';
+import {signin} from '../../services/config/API';
+import Toast from 'react-native-toast-message';
+import {setUserData} from '../../store/userData';
+import {setAuthToken} from '../../store/authToken';
+import Loader from '../../components/Loader';
 
-export default function Login({ navigation }) {
+export default function Login({navigation}) {
+  const dispatch = useDispatch();
 
-  const dispatch = useDispatch()
-
-  const role = useSelector(selectRole)
+  const role = useSelector(selectRole);
 
   const [showPass, setShowpass] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loader, setLoader] = useState(false);
 
-  const handleLogin = () => {
-    if (role) {
-      if (role === 'user') {
-        navigation.navigate('MyTabs');
-      } else {
-        navigation.navigate('BarberTabs');
-      }
-    } else {
-      console.warn('Please select role')
-    }
+  // const handleLogin = () => {
+  //   if (role) {
+  //     if (role === 'user') {
+  //       navigation.navigate('MyTabs');
+  //     } else {
+  //       navigation.navigate('BarberTabs');
+  //     }
+  //   } else {
+  //     console.warn('Please select role')
+  //   }
 
-  };
+  // };
 
   const handleForgotPassword = () => {
     navigation.navigate('ForgotPass');
@@ -46,39 +52,63 @@ export default function Login({ navigation }) {
     navigation.navigate('Signup');
   };
 
-  const handleChangeRole = (role) => {
-    dispatch(setRole(role))
-  }
+  const handleChangeRole = role => {
+    dispatch(setRole(role));
+  };
+
+  const handleSignIn = async () => {
+    if (role == null) {
+      return ErrorShow('error', 'Oops', 'Please select role');
+    }
+    try {
+      setLoader(true);
+      const body = {
+        email,
+        password,
+        role,
+      };
+      const response = await signin(body);
+      console.log(response?.data?.user?.role);
+      if (response.status == 200) {
+        setLoader(false);
+        dispatch(setUserData(response?.data?.user));
+        dispatch(setAuthToken(response?.data?.token));
+        dispatch(setRole(response?.data?.user?.role));
+      } else {
+        setLoader(false);
+        ErrorShow('error', 'Oops', response?.data?.message);
+      }
+    } catch (error) {
+      setLoader(false);
+      ErrorShow('error', 'Oops', error?.message);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.toggleContainer}>
         <TouchableOpacity
           style={role === 'user' ? styles.active : styles.inActive}
-          onPress={() =>
-            handleChangeRole('user')
+          onPress={
+            () => handleChangeRole('user')
             // setactive('user')
           }>
           <Text
             style={
-              role == 'user'
-                ? styles.textColorwhite
-                : styles.toggleTextsize
+              role == 'user' ? styles.textColorwhite : styles.toggleTextsize
             }>
             User
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={role == 'barber' ? styles.active : styles.inActive}
-          onPress={() =>
-            handleChangeRole('barber')
+          onPress={
+            () => handleChangeRole('barber')
             // setactive('barber')
           }>
           <Text
             style={
-              role == 'barber'
-                ? styles.textColorwhite
-                : styles.toggleTextsize
+              role == 'barber' ? styles.textColorwhite : styles.toggleTextsize
             }>
             Barber
           </Text>
@@ -143,7 +173,11 @@ export default function Login({ navigation }) {
         </TouchableOpacity>
       </View>
       <View style={styles.buttonTop}>
-        <Button title={'Login'} onPress={handleLogin} />
+        {loader ? (
+          <Loader title={'Login'} />
+        ) : (
+          <Button title={'Login'} onPress={handleSignIn} />
+        )}
       </View>
 
       <View style={styles.signupContainer}>
@@ -153,6 +187,7 @@ export default function Login({ navigation }) {
         <Button title={'Sign Up'} light={true} onPress={handleSignUP} />
         {/* <Button title={'Sign Up'} light={true} onPress={handleSignUP}/> */}
       </View>
+      <Toast />
     </SafeAreaView>
   );
 }

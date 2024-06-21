@@ -368,9 +368,9 @@ export default function CustomerPreferences({navigation, route}) {
         },
       ];
 
-      console.log(surveyAnswers);
-
-      navigation.navigate('TagSelection', {surveyAnswers});
+      // console.log(surveyAnswers);
+      userData.survey = surveyAnswers;
+      navigation.navigate('TagSelection', {userData});
     }
   };
 

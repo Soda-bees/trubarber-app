@@ -112,8 +112,7 @@ import phoneIcon from '../../../assets/phoneIcon.png';
 import arrowBlackIcon from '../../../assets/arrowBlackIcon.png';
 import plusRed from '../../../assets/plusRed.png';
 import addBtn from '../../../assets/addBtn.png';
-
-
+import congoImg from '../../../assets/congoImg.png';
 
 const images = {
   whiteCrossexit,
@@ -229,7 +228,8 @@ const images = {
   phoneIcon,
   arrowBlackIcon,
   plusRed,
-  addBtn
+  addBtn,
+  congoImg,
 };
 
 export default images;

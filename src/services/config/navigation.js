@@ -47,21 +47,36 @@ import Notifications from '../../screens/Notifications';
 import Chats from '../../screens/Chats';
 import ChatDetails from '../../screens/ChatDetails';
 import AddServices from '../../screens/AddServices';
+import Congratulation from '../../screens/Congratulation';
+import {useSelector} from 'react-redux';
+import {selectAuthToken} from '../../store/authToken';
+import {selectRole} from '../../store/role';
 
 const Stack = createStackNavigator();
 export default function MainNavigator() {
+  const authToken = useSelector(selectAuthToken);
+  const role = useSelector(selectRole);
+  console.log('navigation =-=-=-=-=->>', authToken);
+  console.log('navigation =-=-=-=-=->>', role);
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="MyStack" component={MyStack} />
-      {/* <Stack.Screen name="AccountSetup" component={AccountSetup} />  */}
-
+        {/* <Stack.Screen name="MyStack" component={UserStack} /> */}
+        {authToken ? (
+          role === 'user' ? (
+            <Stack.Screen name="UserStack" component={UserStack} />
+          ) : (
+            <Stack.Screen name="BarberStack" component={BarberStack} />
+          )
+        ) : (
+          <Stack.Screen name="AuthStack" component={AuthStack} />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-const MyStack = () => {
+const AuthStack = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
@@ -69,19 +84,20 @@ const MyStack = () => {
       <Stack.Screen name="ForgotPass" component={ForgotPass} />
       <Stack.Screen name="Otp" component={Otp} />
       <Stack.Screen name="ResetPass" component={ResetPass} />
-      <Stack.Screen name="Signup" component={Signup} />   
-      <Stack.Screen name="AccountSetup" component={AccountSetup} /> 
-      <Stack.Screen name="ProfilePrompt" component={ProfilePrompt} />  
-      <Stack.Screen name="UploadProfilepic" component={UploadProfilepic} />      
-      <Stack.Screen name="ProfileSetupPrompt" component={ProfileSetupPrompt} />      
-      <Stack.Screen name="SurveyPrompt" component={SurveyPrompt} />      
-      <Stack.Screen name="CustomerPrefences" component={CustomerPrefences} />      
+      <Stack.Screen name="Signup" component={Signup} />
+      <Stack.Screen name="AccountSetup" component={AccountSetup} />
+      <Stack.Screen name="ProfilePrompt" component={ProfilePrompt} />
+      <Stack.Screen name="UploadProfilepic" component={UploadProfilepic} />
+      <Stack.Screen name="ProfileSetupPrompt" component={ProfileSetupPrompt} />
+      <Stack.Screen name="SurveyPrompt" component={SurveyPrompt} />
+      <Stack.Screen name="CustomerPrefences" component={CustomerPrefences} />
       <Stack.Screen name="Explore" component={Explore} />
       <Stack.Screen name="Catalogue" component={Catalogue} />
       <Stack.Screen name="Appointments" component={Appointments} />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="SetUpOutlet" component={SetUpOutlet} />
       <Stack.Screen name="TagSelection" component={TagSelection} />
+      <Stack.Screen name="Congratulation" component={Congratulation} />
       <Stack.Screen name="WholeMap" component={WholeMap} />
       <Stack.Screen name="MyTabs" component={MyTabs} />
       <Stack.Screen name="BookAppointment" component={BookAppointment} />
@@ -97,13 +113,137 @@ const MyStack = () => {
       <Stack.Screen name="BarberTabs" component={BarberTabs} />
       <Stack.Screen name="ServiceInfo" component={ServiceInfo} />
       <Stack.Screen name="OutletTags" component={OutletTags} />
-      <Stack.Screen name="BusinessVerfication" component={BusinessVerfication} />
+      <Stack.Screen
+        name="BusinessVerfication"
+        component={BusinessVerfication}
+      />
       <Stack.Screen name="OutletCreated" component={OutletCreated} />
       <Stack.Screen name="AppoinmentBarber" component={AppoinmentBarber} />
       <Stack.Screen name="BarberDashboard" component={BarberDashboard} />
       <Stack.Screen name="BarberProfile" component={BarberProfile} />
       <Stack.Screen name="BaberCatalogue" component={BaberCatalogue} />
-      <Stack.Screen name="BarberSevriceDetails" component={BarberSevriceDetails} />
+      <Stack.Screen
+        name="BarberSevriceDetails"
+        component={BarberSevriceDetails}
+      />
+      <Stack.Screen name="EditService" component={EditService} />
+      <Stack.Screen name="Reviews" component={Reviews} />
+      <Stack.Screen name="Notifications" component={Notifications} />
+      <Stack.Screen name="Chats" component={Chats} />
+      <Stack.Screen name="ChatDetails" component={ChatDetails} />
+      <Stack.Screen name="AddServices" component={AddServices} />
+    </Stack.Navigator>
+  );
+};
+const UserStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="MyTabs" component={MyTabs} />
+      <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="ForgotPass" component={ForgotPass} />
+      <Stack.Screen name="Otp" component={Otp} />
+      <Stack.Screen name="ResetPass" component={ResetPass} />
+      <Stack.Screen name="Signup" component={Signup} />
+      <Stack.Screen name="AccountSetup" component={AccountSetup} />
+      <Stack.Screen name="ProfilePrompt" component={ProfilePrompt} />
+      <Stack.Screen name="UploadProfilepic" component={UploadProfilepic} />
+      <Stack.Screen name="ProfileSetupPrompt" component={ProfileSetupPrompt} />
+      <Stack.Screen name="SurveyPrompt" component={SurveyPrompt} />
+      <Stack.Screen name="CustomerPrefences" component={CustomerPrefences} />
+      <Stack.Screen name="Explore" component={Explore} />
+      <Stack.Screen name="Catalogue" component={Catalogue} />
+      <Stack.Screen name="Appointments" component={Appointments} />
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="SetUpOutlet" component={SetUpOutlet} />
+      <Stack.Screen name="TagSelection" component={TagSelection} />
+      <Stack.Screen name="Congratulation" component={Congratulation} />
+      <Stack.Screen name="WholeMap" component={WholeMap} />
+      <Stack.Screen name="BookAppointment" component={BookAppointment} />
+      <Stack.Screen name="BookingProcess" component={BookingProcess} />
+      <Stack.Screen name="AddCard" component={AddCard} />
+      <Stack.Screen name="ServiceDetails" component={ServiceDetails} />
+      <Stack.Screen name="HaircutServices" component={HaircutServices} />
+      <Stack.Screen name="AppointmentDetails" component={AppointmentDetails} />
+      <Stack.Screen name="EditScreen" component={EditScreen} />
+      <Stack.Screen name="ProfileSecurity" component={ProfileSecurity} />
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+      <Stack.Screen name="SetUpServices" component={SetUpServices} />
+      <Stack.Screen name="BarberTabs" component={BarberTabs} />
+      <Stack.Screen name="ServiceInfo" component={ServiceInfo} />
+      <Stack.Screen name="OutletTags" component={OutletTags} />
+      <Stack.Screen
+        name="BusinessVerfication"
+        component={BusinessVerfication}
+      />
+      <Stack.Screen name="OutletCreated" component={OutletCreated} />
+      <Stack.Screen name="AppoinmentBarber" component={AppoinmentBarber} />
+      <Stack.Screen name="BarberDashboard" component={BarberDashboard} />
+      <Stack.Screen name="BarberProfile" component={BarberProfile} />
+      <Stack.Screen name="BaberCatalogue" component={BaberCatalogue} />
+      <Stack.Screen
+        name="BarberSevriceDetails"
+        component={BarberSevriceDetails}
+      />
+      <Stack.Screen name="EditService" component={EditService} />
+      <Stack.Screen name="Reviews" component={Reviews} />
+      <Stack.Screen name="Notifications" component={Notifications} />
+      <Stack.Screen name="Chats" component={Chats} />
+      <Stack.Screen name="ChatDetails" component={ChatDetails} />
+      <Stack.Screen name="AddServices" component={AddServices} />
+    </Stack.Navigator>
+  );
+};
+const BarberStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="BarberTabs" component={BarberTabs} />
+      <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="ForgotPass" component={ForgotPass} />
+      <Stack.Screen name="Otp" component={Otp} />
+      <Stack.Screen name="ResetPass" component={ResetPass} />
+      <Stack.Screen name="Signup" component={Signup} />
+      <Stack.Screen name="AccountSetup" component={AccountSetup} />
+      <Stack.Screen name="ProfilePrompt" component={ProfilePrompt} />
+      <Stack.Screen name="UploadProfilepic" component={UploadProfilepic} />
+      <Stack.Screen name="ProfileSetupPrompt" component={ProfileSetupPrompt} />
+      <Stack.Screen name="SurveyPrompt" component={SurveyPrompt} />
+      <Stack.Screen name="CustomerPrefences" component={CustomerPrefences} />
+      <Stack.Screen name="Explore" component={Explore} />
+      <Stack.Screen name="Catalogue" component={Catalogue} />
+      <Stack.Screen name="Appointments" component={Appointments} />
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="SetUpOutlet" component={SetUpOutlet} />
+      <Stack.Screen name="TagSelection" component={TagSelection} />
+      <Stack.Screen name="Congratulation" component={Congratulation} />
+      <Stack.Screen name="WholeMap" component={WholeMap} />
+      <Stack.Screen name="MyTabs" component={MyTabs} />
+      <Stack.Screen name="BookAppointment" component={BookAppointment} />
+      <Stack.Screen name="BookingProcess" component={BookingProcess} />
+      <Stack.Screen name="AddCard" component={AddCard} />
+      <Stack.Screen name="ServiceDetails" component={ServiceDetails} />
+      <Stack.Screen name="HaircutServices" component={HaircutServices} />
+      <Stack.Screen name="AppointmentDetails" component={AppointmentDetails} />
+      <Stack.Screen name="EditScreen" component={EditScreen} />
+      <Stack.Screen name="ProfileSecurity" component={ProfileSecurity} />
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+      <Stack.Screen name="SetUpServices" component={SetUpServices} />
+      <Stack.Screen name="ServiceInfo" component={ServiceInfo} />
+      <Stack.Screen name="OutletTags" component={OutletTags} />
+      <Stack.Screen
+        name="BusinessVerfication"
+        component={BusinessVerfication}
+      />
+      <Stack.Screen name="OutletCreated" component={OutletCreated} />
+      <Stack.Screen name="AppoinmentBarber" component={AppoinmentBarber} />
+      <Stack.Screen name="BarberDashboard" component={BarberDashboard} />
+      <Stack.Screen name="BarberProfile" component={BarberProfile} />
+      <Stack.Screen name="BaberCatalogue" component={BaberCatalogue} />
+      <Stack.Screen
+        name="BarberSevriceDetails"
+        component={BarberSevriceDetails}
+      />
       <Stack.Screen name="EditService" component={EditService} />
       <Stack.Screen name="Reviews" component={Reviews} />
       <Stack.Screen name="Notifications" component={Notifications} />
@@ -119,5 +259,5 @@ const MyTabs = () => {
 };
 
 const BarberTabs = () => {
-  return <BarberTabNavigation/>
-}
+  return <BarberTabNavigation />;
+};

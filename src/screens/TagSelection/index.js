@@ -14,8 +14,12 @@ import Button from '../../components/Button';
 import {colors} from '../../services';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import BackArrow from '../../components/BackArrow';
+import {ErrorShow} from '../../components/Error';
+import Toast from 'react-native-toast-message';
 
-export default function TagSelection({navigation}) {
+export default function TagSelection({navigation, route}) {
+  const {userData} = route.params;
+  // console.log(userData, 'tag selection pr mill rha h bhai');
   const [tagsData, setTagsData] = useState([
     '#OfferedServices',
     '#HaircutStyles',
@@ -46,6 +50,14 @@ export default function TagSelection({navigation}) {
 
   const handleGoback = () => {
     navigation.goBack();
+  };
+
+  const handleSelection = () => {
+    if (selectedTags.length == 0) {
+      return ErrorShow('error', 'Oops', 'Please select at least one Tag');
+    }
+    userData.tagSelection = selectedTags;
+    navigation.navigate('Congratulation', {userData})
   };
 
   return (
@@ -86,9 +98,10 @@ export default function TagSelection({navigation}) {
 
         <View
           style={Platform.OS == 'android' ? styles.Nextbtn : styles.NextbtnIOS}>
-          <Button title={'Next'} onPress={handleNext} />
+          <Button title={'Next'} onPress={handleSelection} />
         </View>
       </View>
+      <Toast />
     </SafeAreaView>
   );
 }

@@ -149,7 +149,7 @@ export default function UploadProfilepic({navigation, route}) {
         </View>
         <Text style={styles.forgetPass}>Upload Profile Picture</Text>
         <Text style={styles.subText}>Upload your profile picture here</Text>
-        <TouchableOpacity
+        <View
           style={styles.uploadImage}
           onPress={() => uploadPhoto('library')}>
           {imgUri ? (
@@ -165,7 +165,7 @@ export default function UploadProfilepic({navigation, route}) {
               resizeMode="contain"
             />
           )}
-        </TouchableOpacity>
+        </View>
         <TouchableOpacity
           style={styles.imageUploadbuttonsContainer}
           onPress={() => uploadPhoto('camera')}>

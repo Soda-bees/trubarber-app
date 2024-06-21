@@ -16,9 +16,19 @@ import Button from '../../components/Button';
 import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
 import {colors, sizes} from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
+import {useDispatch, useSelector} from 'react-redux';
+import {removeAuthToken, selectAuthToken} from '../../store/authToken/index.js';
+import {removeRole} from '../../store/role/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
 export default function Profile({navigation}) {
+  const dispatch = useDispatch();
+  const authToken = useSelector(selectAuthToken);
+
+  const handleLogout = async () => {
+    dispatch(removeAuthToken());
+    dispatch(removeRole());
+  };
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -74,8 +84,7 @@ export default function Profile({navigation}) {
               resizeMode="contain"
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.naviRow}>
+          <TouchableOpacity style={styles.naviRow}>
             <Text style={styles.navText}>Edit Shop</Text>
             <Image
               source={images.arrowRight}
@@ -121,7 +130,7 @@ export default function Profile({navigation}) {
           </TouchableOpacity>
         </View>
         <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
-          <Button title={'Logout'} onPress={()=>navigation.navigate("Login")}/>
+          <Button title={'Logout'} onPress={() => handleLogout()} />
         </View>
       </View>
     </SafeAreaView>

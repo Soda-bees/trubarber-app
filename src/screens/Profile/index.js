@@ -15,9 +15,17 @@ import Button from '../../components/Button';
 import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
 import {colors, sizes} from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
+import { useDispatch } from 'react-redux';
+import { removeAuthToken } from '../../store/authToken/index.js';
+import { removeRole } from '../../store/role/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
 export default function Profile({navigation}) {
+  const dispatch = useDispatch()
+  const handleLogout = async () => {
+      dispatch(removeAuthToken())
+      dispatch(removeRole())
+  }
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -111,7 +119,7 @@ export default function Profile({navigation}) {
           </TouchableOpacity>
         </View>
         <View style={styles.btn}>
-          <Button title={'Logout'} onPress={()=>navigation.navigate("Login")}/>
+          <Button title={'Logout'} onPress={()=>handleLogout()}/>
         </View>
       </View>
     </SafeAreaView>

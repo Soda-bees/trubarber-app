@@ -6,6 +6,13 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.lightgray,
     height: sizes.screenHeight,
   },
+  laoderContainer: {
+    backgroundColor: '#FBFAFA',
+    height: sizes.screenHeight,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   backgroundColor: {
     backgroundColor: colors.pinkishwhite,
   },
@@ -235,19 +242,25 @@ export const styles = StyleSheet.create({
   },
   btnText: {
     fontSize: fontSize.small,
-    color:colors.white,
+    color: colors.white,
     marginLeft: sizes.screenWidth * 0.042,
   },
   arrowStyle: {
     height: sizes.screenHeight * 0.012,
     // backgroundColor: 'orange'
   },
-  scrollContainer:{
-    marginTop:sizes.screenHeight* 0.05,
-    marginBottom:sizes.screenHeight* 0.02
+  scrollContainer: {
+    marginTop: sizes.screenHeight * 0.05,
+    marginBottom: sizes.screenHeight * 0.02,
   },
 
-  paddingBtm:{
-    paddingBottom:sizes.screenHeight * 0.1
+  paddingBtm: {
+    paddingBottom: sizes.screenHeight * 0.1,
+  },
+
+  lottie: {
+    width: sizes.screenWidth * 0.96,
+    height: sizes.screenHeight,
+    marginBottom: sizes.screenHeight * 0.06,
   },
 });

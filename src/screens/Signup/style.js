@@ -138,4 +138,33 @@ export const styles = StyleSheet.create({
     // marginTop:sizes.screenHeight * 0.11
     // marginBottom:sizes.screenHeight * 0.5
   },
+
+  checkboxView: {
+    flexDirection: 'row',
+    alignItems: 'start',
+    // marginHorizontal: sizes.screenWidth * 0.05,
+    marginTop: sizes.screenHeight * 0.02,
+  },
+  checkboxViewIOS: {
+    flexDirection: 'row',
+    alignItems: 'start',
+    marginHorizontal: sizes.screenWidth * 0.05,
+    marginTop: sizes.screenHeight * 0.02,
+    marginBottom: sizes.screenHeight * 0.22,
+  },
+
+  checked: {
+    height: sizes.screenHeight * 0.022,
+    width: sizes.screenWidth * 0.05,
+    marginTop: sizes.screenHeight * 0.005
+  },
+  checkboxTitle: {
+    color: colors.grayText,
+    marginStart: sizes.screenWidth * 0.02,
+    fontSize: fontSize.smallM,
+  },
+
+  tintColor:{
+    tintColor: colors.disabledBg,
+  }
 });

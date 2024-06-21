@@ -18,6 +18,7 @@ import {validateEmailAvailability} from '../../services/config/API';
 import Toast from 'react-native-toast-message';
 import {ErrorShow} from '../../components/Error';
 import Loader from '../../components/Loader';
+import { setAuthToken } from '../../store/authToken';
 
 export default function Signup({navigation}) {
   const role = useSelector(selectRole);
@@ -28,19 +29,27 @@ export default function Signup({navigation}) {
   const [userName, setuserName] = useState('');
   const [password, setPassword] = useState('');
   const [loader, setLoader] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   const handleSignIn = () => {
     navigation.navigate('Login');
   };
 
   const handleEmailValidation = async () => {
-    if (role !== '') {
+    if (role !== null) {
       if (email && password && userName) {
         if (password.length <= 8) {
           return ErrorShow(
             'error',
             'Oops!',
             'Password must contain atleast 8 characters',
+          );
+        }
+        if(!checked){
+          return ErrorShow(
+            'error',
+            'Oops!',
+            'Please select the checkbox',
           );
         }
         try {
@@ -58,7 +67,7 @@ export default function Signup({navigation}) {
 
             if (role === 'user') {
               console.log('clicked');
-              navigation.navigate('AccountSetup', {userData});
+              navigation.navigate('ProfilePrompt', {userData});
             } else {
               navigation.navigate('SetUpOutlet', {userData});
             }
@@ -180,6 +189,36 @@ export default function Signup({navigation}) {
               />
             </TouchableOpacity>
           )}
+        </View>
+        <View
+          style={
+            Platform.OS == 'android'
+              ? styles.checkboxView
+              : styles.checkboxViewIOS
+          }>
+          <View>
+            {checked ? (
+              <TouchableOpacity onPress={() => setChecked(!checked)}>
+                <Image
+                  source={images.checked}
+                  resizeMode="contain"
+                  style={styles.checked}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => setChecked(!checked)}>
+                <Image
+                  source={images.unchecked}
+                  resizeMode="contain"
+                  style={[styles.checked, styles.tintColor]}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+          <Text style={styles.checkboxTitle}>
+            By selecting the checkbox, you are indicating your agreement to the
+            Terms and Policies.
+          </Text>
         </View>
       </View>
       <View style={styles.forgotPass}>

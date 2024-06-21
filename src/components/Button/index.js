@@ -3,33 +3,42 @@ import React from 'react';
 import {styles} from './style';
 import images from '../../services/utilities/images';
 
-export default function Button({title,light , setmodalTrue, onPress}) {
-
+export default function Button({
+  title,
+  light,
+  setmodalTrue,
+  onPress,
+  hideImage,
+}) {
   return (
     <View>
-      {
-        light ? (
-          <TouchableOpacity style={styles.btnViewLight} onPress={onPress}>
+      {light ? (
+        <TouchableOpacity style={styles.btnViewLight} onPress={onPress}>
           <Text style={styles.btnTextLight}>{title}</Text>
-          <Image
-            source={images.arrowIcon}
-            style={styles.arrowIconLight}
-            resizeMode="contain"
+          {!hideImage && (
+            <Image
+              source={images.arrowIcon}
+              style={styles.arrowIconLight}
+              resizeMode="contain"
             />
+          )}
         </TouchableOpacity>
-        ):(
-          <TouchableOpacity style={styles.btnView} onPress={onPress}>
-          <Text style={styles.btnText}>{title}</Text>
-          <Image
-            source={images.arrowIcon}
-            style={styles.arrowIcon}
-            resizeMode="contain"
+      ) : (
+        <TouchableOpacity
+          style={hideImage ? styles.btnView2 : styles.btnView}
+          onPress={onPress}>
+          <Text style={hideImage ? styles.btnText2 : styles.btnText}>
+            {title}
+          </Text>
+          {!hideImage && (
+            <Image
+              source={images.arrowIcon}
+              style={styles.arrowIcon}
+              resizeMode="contain"
             />
+          )}
         </TouchableOpacity>
-        )
-      }
-
+      )}
     </View>
-
   );
 }
