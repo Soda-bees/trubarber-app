@@ -61,7 +61,6 @@ export default function MainNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        {/* <Stack.Screen name="MyStack" component={UserStack} /> */}
         {authToken ? (
           role === 'user' ? (
             <Stack.Screen name="UserStack" component={UserStack} />

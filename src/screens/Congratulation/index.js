@@ -13,20 +13,18 @@ import Toast from 'react-native-toast-message';
 import Loader from '../../components/Loader';
 import {ActivityIndicator} from 'react-native-paper';
 import {colors} from '../../services';
+import { selectlocation } from '../../store/location';
 
 export default function Congratulation({route}) {
   const dispatch = useDispatch();
   const {userData} = route.params;
+  const location = useSelector(selectlocation)
 
   const [loader, setLoader] = useState(false);
 
   const handleSignUp = async () => {
     try {
       setLoader(true);
-      const location = {
-        longitude: 78.87412,
-        latitude: 78.87412,
-      };
       userData.location = location;
       const response = await signup(userData);
       if (response.status == 201) {

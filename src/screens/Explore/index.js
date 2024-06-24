@@ -234,15 +234,15 @@ export default function Explore({navigation}) {
                    
                   ))} */}
                   {barberData?.map((item, index) => {
-                    console.log(item);
+                    console.log('barbar k items hain yeh',item.profile);
                     return (
                       <ImageBackground
                         key={index}
-                        source={item.profile}
+                        source={{uri:item.profile}}
                         imageStyle={styles.containerImage}
                         // style={}
                       >
-                        {/* <View style={styles.row}>
+                        <View style={styles.row}>
                           <Text style={styles.textWhite}>5.0</Text>
                           <StarRating
                             maxStars={1}
@@ -250,7 +250,7 @@ export default function Explore({navigation}) {
                             color={colors.gold}
                             rating={1}
                           />
-                        </View> */}
+                        </View>
                         <View style={styles.marginCardtop}>
                           <ImageBackground
                             source={images.bluredImg}
