@@ -20,8 +20,11 @@ import {useSelector} from 'react-redux';
 import {selectAuthToken} from '../../store/authToken';
 import {getAllBarber} from '../../services/config/API';
 import {ErrorShow} from '../../components/Error';
+import {selectlocation} from '../../store/location';
 
 export default function Explore({navigation}) {
+  const location = useSelector(selectlocation);
+  console.log(location);
   const authToken = useSelector(selectAuthToken);
   const [loader, setLoader] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(
@@ -108,8 +111,8 @@ export default function Explore({navigation}) {
     try {
       setLoader(true);
       const response = await getAllBarber(authToken);
-      console.log(response.data);
-      console.log(response.status);
+      console.log(JSON.stringify(response.data));
+      // console.log(response.location);
       if (response?.status == 200) {
         setLoader(false);
         setBarberdata(response?.data?.barbers);
@@ -122,6 +125,24 @@ export default function Explore({navigation}) {
       setLoader(false);
       ErrorShow('error', 'Oops', response?.error?.message);
     }
+  };
+
+  const haversineDistance = (coords1, coords2) => {
+    const toRad = x => (x * Math.PI) / 180;
+
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = toRad(coords2.latitude - coords1.latitude);
+    const dLon = toRad(coords2.longitude - coords1.longitude);
+    const lat1 = toRad(coords1.latitude);
+    const lat2 = toRad(coords2.latitude);
+
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // Distance in kilometers
+
+    return distance;
   };
 
   return (
@@ -200,8 +221,8 @@ export default function Explore({navigation}) {
                 style={styles.mapStyle}
                 initialRegion={{
                   // 24.816268411931333, 67.04173109688234
-                  latitude: 24.816268411931333,
-                  longitude: 67.04173109688234,
+                  latitude: location.latitude,
+                  longitude: location.longitude,
                   latitudeDelta: 0.0922,
                   longitudeDelta: 0.0421,
                 }}></MapView>
@@ -234,11 +255,14 @@ export default function Explore({navigation}) {
                    
                   ))} */}
                   {barberData?.map((item, index) => {
-                    console.log('barbar k items hain yeh',item.profile);
+                    const distance = location
+                      ? haversineDistance(location, item.location)
+                      : null;
+                    // console.log('barbar k items hain yeh',item.profile);
                     return (
                       <ImageBackground
                         key={index}
-                        source={{uri:item.profile}}
+                        source={{uri: item.profile}}
                         imageStyle={styles.containerImage}
                         // style={}
                       >
@@ -265,9 +289,14 @@ export default function Explore({navigation}) {
                                   resizeMode="contain"
                                   style={styles.locationImg}
                                 />
-                                {/* <Text style={styles.textBlack}>
-                                  {item.location}
-                                </Text> */}
+                                <Text style={styles.textBlack}>
+                                  {/* {`Lat: ${item.location.latitude}, Long: ${item.location.longitude}`} */}
+                                  {distance !== null && (
+                                    <Text style={styles.textBlack}>
+                                      {`Distance: ${distance.toFixed(2)} km`}
+                                    </Text>
+                                  )}
+                                </Text>
                               </View>
                               <TouchableOpacity
                                 style={styles.bookBtn}

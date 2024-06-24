@@ -16,8 +16,11 @@ import MapView, {Marker} from 'react-native-maps';
 import StarRating from 'react-native-star-rating-widget';
 import Modal from 'react-native-modal';
 import BackArrow from '../../components/BackArrow';
+import {useSelector} from 'react-redux';
+import {selectlocation} from '../../store/location';
 
 export default function WholeMap({navigation}) {
+  const location = useSelector(selectlocation);
   const [currentLocation, setCurrentLocation] = useState(
     'Rachael McPhail Street...',
   );
@@ -61,10 +64,11 @@ export default function WholeMap({navigation}) {
                     source={images.notification}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.notificationContainer}
-                onPress={() => {
-                  navigation.navigate('Chats');
-                }}>
+                <TouchableOpacity
+                  style={styles.notificationContainer}
+                  onPress={() => {
+                    navigation.navigate('Chats');
+                  }}>
                   <Image style={styles.iconImage} source={images.chat} />
                 </TouchableOpacity>
               </View>
@@ -87,12 +91,22 @@ export default function WholeMap({navigation}) {
           <MapView
             style={styles.mapStyle}
             initialRegion={{
-              latitude: 37.75225,
-              longitude: -122.4324,
+              latitude: location.latitude,
+              longitude: location.longitude,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0722,
-            }}></MapView>
-          <TouchableOpacity
+            }}>
+            <Marker
+              coordinate={{
+                latitude: location.latitude,
+                longitude: location.longitude,
+              }}>
+              <View style={styles.customMarker}>
+                <Text style={styles.markerText}>📍</Text>
+              </View>
+            </Marker>
+          </MapView>
+          {/* <TouchableOpacity
             style={{bottom: sizes.screenHeight * 0.9}}
             onPress={() => setModalopen(!openModal)}>
             <Image
@@ -105,14 +119,15 @@ export default function WholeMap({navigation}) {
               }}
               resizeMode="contain"
             />
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TouchableOpacity> */}
+          {/* <TouchableOpacity
             style={{
               bottom: sizes.screenHeight * 0.9,
               width: sizes.screenHeight * 0.49,
               // backgroundColor: 'red',
             }}
-            onPress={() => setModalopen(!openModal)}>
+            // onPress={() => setModalopen(!openModal)}
+            >
             <Image
               source={images.markerCutter}
               style={{
@@ -123,7 +138,17 @@ export default function WholeMap({navigation}) {
               }}
               resizeMode="contain"
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+                  <Marker
+              coordinate={{
+                latitude: location.latitude,
+                longitude: location.longitude,
+              }}>
+              <ImageBackground
+                source={images.locationIcon}
+                style={styles.locationImgIcon}
+                resizeMode="contain"></ImageBackground>
+            </Marker>
           {/* <TouchableOpacity
             style={{bottom: sizes.screenHeight * 0.9, backgroundColor: 'red',
                 bottom: sizes.screenHeight * 0.2,
