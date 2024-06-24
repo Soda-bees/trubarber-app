@@ -23,7 +23,6 @@ import Loader from '../../components/Loader';
 
 export default function UploadProfilepic({navigation, route}) {
   const {userData} = route.params;
-  console.log(userData, ' naya wala h yeh');
   const [imgUri, setImgUri] = useState(null);
   const [loader, setLoader] = useState(false);
 

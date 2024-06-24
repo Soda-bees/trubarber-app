@@ -1,10 +1,13 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.lightgray,
     height: sizes.screenHeight,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingBottom: sizes.screenHeight * 0.03
   },
 
   backArrow: {
@@ -14,7 +17,6 @@ export const styles = StyleSheet.create({
   Forgotpass: {
     marginTop: sizes.screenHeight * 0.07,
     marginLeft: sizes.screenWidth * 0.09,
-    // textAlign: 'start',
     fontSize: fontSize.h5,
     color: colors.black,
     fontWeight: '700',
@@ -23,7 +25,6 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.2,
     height: sizes.screenHeight * 0.1,
     borderRadius: sizes.screenWidth * 0.04,
-    // backgroundColor: colors.selectorcolor,
   },
 
   containtext: {
@@ -63,7 +64,7 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.medium,
   },
   content: {
-    marginHorizontal: sizes.screenWidth * 0.08,
+    // marginHorizontal: sizes.screenWidth * 0.08,
     marginTop: sizes.screenHeight * 0.012,
     gap: sizes.screenHeight * 0.02,
   },
@@ -71,18 +72,23 @@ export const styles = StyleSheet.create({
     // backgroundColor: 'red',
     // gap: sizes.screenHeight * 0.004,
     // justifyContent: 'space-between',
+    alignSelf: 'center',
   },
   timeContainer: {
     // gap: sizes.screenHeight * 0.004,
     // justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
+    // flexDirection: 'row',
+    // alignItems: 'center',
+    alignSelf: 'center',
   },
 
   clockIcon: {
     height: sizes.screenHeight * 0.0222,
     width: sizes.screenWidth * 0.042,
-    top:15
+    // top:15
+    position: 'absolute',
+    right: sizes.screenWidth * 0.03,
+    top: sizes.screenWidth * 0.025
   },
   clockIcon1: {
     height: sizes.screenHeight * 0.0222,
@@ -93,6 +99,7 @@ export const styles = StyleSheet.create({
     color: colors.durationColor,
     fontSize: fontSize.small,
     marginStart: sizes.screenWidth * 0.01,
+    paddingBottom: sizes.screenWidth * 0.01
   },
 
   titleIOS: {
@@ -114,7 +121,11 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '600',
     textAlignVertical: 'top',
-    width: sizes.screenWidth * 0.83,
+    width: sizes.screenWidth * 0.9,
+    backgroundColor: colors.selectorcolor,
+    paddingHorizontal: sizes.screenWidth * 0.02,
+    borderRadius: sizes.screenWidth * 0.02,
+    position: 'relative'
   },
   descriptionTwo: {
     color: colors.black,

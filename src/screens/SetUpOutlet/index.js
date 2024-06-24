@@ -7,23 +7,32 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import images from '../../services/utilities/images';
-import {styles} from './style.js';
+import { styles } from './style.js';
 import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {PermissionsAndroid, PermissionsIOS} from 'react-native';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { PermissionsAndroid, PermissionsIOS } from 'react-native';
+import TimePickerComponent from '../../components/TimePicketComponent';
+import Loader from '../../components/Loader';
+import { uploadProfile } from '../../services/config/API';
+import { ErrorShow } from '../../components/Error';
+import Toast from 'react-native-toast-message';
 
-export default function SetUpOutlet({navigation}) {
+export default function SetUpOutlet({ navigation, route }) {
+
+  const { userData } = route.params;
+
   const [outletName, setOutletName] = useState('RedBox Barber');
-  const [description, setDescription] = useState(
-    'Welcome to Redbox Barber, where grooming meets style and tradition merges with the contemporary. Established with a passion for precision and an eye for detail, we take pride in delivering exceptional grooming experiences that go beyond the ordinary.',
-  );
-  const [time, setTime] = useState('10:00 AM - 01:00 AM');
+  const [description, setDescription] = useState('');
   const [location, setLocation] = useState('United States');
   const [imgUri, setImgUri] = useState(null);
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
+  const [loader, setLoader] = useState(false);
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
@@ -58,7 +67,9 @@ export default function SetUpOutlet({navigation}) {
           const uri =
             response.uri || (response.assets && response.assets[0].uri);
           if (uri) {
-            setImgUri(uri);
+            // setImgUri(uri);
+            const img = response.assets[0];
+            handleUploadProfile(img);
           } else {
             console.warn('No image URI found in library response');
           }
@@ -70,7 +81,7 @@ export default function SetUpOutlet({navigation}) {
       await requestCameraPermission();
 
       launchCamera(options, response => {
-        console.log('** Full Camera Response:**', response.assets[0].uri);
+        // console.log('** Full Camera Response:**', response.assets[0].uri);
         try {
           const uri = response.assets[0].uri;
           if (!uri) {
@@ -78,11 +89,15 @@ export default function SetUpOutlet({navigation}) {
             if (cameraResponseUri) {
               console.log('Using alternative camera URI:', cameraResponseUri);
               setImgUri(cameraResponseUri);
+              const img = cameraResponseUri.assets[0];
+              handleUploadProfile(img);
             } else {
               console.log('No image URI found in camera response');
             }
           } else {
-            setImgUri(uri);
+            // setImgUri(uri);
+            const img = response.assets[0];
+            handleUploadProfile(img);
           }
         } catch (error) {
           console.error('Error setting imgUri:', error);
@@ -91,112 +106,136 @@ export default function SetUpOutlet({navigation}) {
     }
   };
 
+  const handleUploadProfile = async image => {
+    setLoader(true);
+    try {
+      const img = {
+        uri: image.uri,
+        type: image.type,
+        fileName: image.fileName,
+      };
+      const formData = new FormData();
+      formData.append('image', {
+        uri: img.uri,
+        type: img.type,
+        name: img.fileName,
+      });
+      const response = await uploadProfile(formData);
+      if (response.status == 200) {
+        setImgUri(response?.data?.url);
+        setLoader(false);
+      } else {
+        setLoader(false);
+        console.log(response.message);
+      }
+    } catch (error) {
+      setLoader(false);
+      console.log(error);
+    }
+  };
+
+  const handleConfirm = async () => {
+    // navigation.navigate('SetUpServices')
+    if (!imgUri) {
+      return ErrorShow('error', 'Oops!', 'Please Upload photo');
+    }
+    if (!description) {
+      return ErrorShow('error', 'Oops!', 'Please fill the description');
+    }
+    const time = `${formatTime(startTime)} - ${formatTime(endTime)}`
+    Object.assign(userData, { profile: imgUri, description, time });
+    navigation.navigate('SetUpServices', { userData })
+  }
+
+  const formatTime = (date) => {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    return hours + ':' + minutes + ' ' + ampm;
+  };
+
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <View style={styles.backArrow}>
-          <BackArrow onPress={() => navigation.goBack()} />
-        </View>
-        <View>
-          <Text style={styles.Forgotpass}>Set-Up Outlet</Text>
-          <TouchableOpacity
-            style={styles.uploadImage}
-            onPress={() => uploadPhoto('library')}>
-            {imgUri ? (
-              <Image
-                source={{uri: imgUri}}
-                style={styles.imagestyle}
-                // resizeMode="center"
-              />
-            ) : (
-              <Image style={styles.addimage} source={images.uploadImgbarber} />
-            )}
-          </TouchableOpacity>
-        </View>
-        <View
-          style={
-            Platform.OS == 'android'
-              ? styles.uploadPress
-              : styles.uploadPressIOS
-          }>
-          <Text style={styles.uploadCover}>Upload Cover</Text>
-        </View>
-        <View style={styles.content}>
-          <View style={styles.textContainer}>
-            <Text
-              style={Platform.OS == 'android' ? styles.title : styles.titleIOS}>
-              Outlet Name
-            </Text>
-            <TextInput
-              onChangeText={setOutletName}
-              value={outletName}
-              style={styles.description}></TextInput>
-            {/* <Text style={styles.description}>RedBox Barber</Text> */}
+        <View >
+          <View style={styles.backArrow}>
+            <BackArrow onPress={() => navigation.goBack()} />
           </View>
-          <View style={styles.textContainer}>
-            <Text
-              style={Platform.OS == 'android' ? styles.title : styles.titleIOS}>
-              Description
-            </Text>
-            <TextInput
-              style={styles.description}
-              onChangeText={setDescription}
-              value={description}
-              multiline={true}
-              numberOfLines={4}></TextInput>
-            {/* <Text style={styles.description}>
-              Welcome to Redbox Barber, where grooming meets style and tradition
-              merges with the contemporary. Established with a passion for
-              precision and an eye for detail, we take pride in delivering
-              exceptional grooming experiences that go beyond the ordinary.
-            </Text> */}
+          <View>
+            <Text style={styles.Forgotpass}>Set-Up Business Profile</Text>
+            <TouchableOpacity
+              style={styles.uploadImage}
+              onPress={() => uploadPhoto('library')}>
+              {imgUri ? (
+                <Image
+                  source={{ uri: imgUri }}
+                  style={styles.imagestyle}
+                  resizeMode="contain"
+                />
+              ) : (
+                <Image style={styles.addimage} source={images.uploadImgbarber} />
+              )}
+            </TouchableOpacity>
           </View>
-          {/* <TouchableOpacity style={styles.timeContainer}> */}
-          <View style={styles.timeContainer}>
-            <View>
+          <View
+            style={
+              Platform.OS == 'android'
+                ? styles.uploadPress
+                : styles.uploadPressIOS
+            }>
+            <Text style={styles.uploadCover}>Upload Cover</Text>
+          </View>
+          <View style={styles.content}>
+            <View style={styles.textContainer}>
+              <Text
+                style={Platform.OS == 'android' ? styles.title : styles.titleIOS}>
+                Description
+              </Text>
+              <TextInput
+                style={styles.description}
+                onChangeText={setDescription}
+                value={description}
+                multiline={true}
+                numberOfLines={4}
+                placeholder='Description'
+              ></TextInput>
+            </View>
+            <View style={styles.timeContainer}>
               <Text
                 style={
                   Platform.OS == 'android' ? styles.title : styles.titleIOS
                 }>
                 Time
               </Text>
-              <TextInput
-                style={styles.description}
-                onChangeText={setTime}
-                value={time}></TextInput>
-              {/* <Text style={styles.description}>10:00 AM - 01:00 AM</Text> */}
+              <View style={styles.description} >
+                <TimePickerComponent
+                  startTime={startTime}
+                  setStartTime={setStartTime}
+                  endTime={endTime}
+                  setEndTime={setEndTime}
+                />
+                <Image
+                  source={images.clockIcon}
+                  style={styles.clockIcon}
+                  resizeMode="contain"
+                />
+              </View>
             </View>
-            <Image
-              source={images.clockIcon}
-              style={styles.clockIcon}
-              resizeMode="contain"
-            />
           </View>
-
-          {/* </TouchableOpacity> */}
-          {/* <TouchableOpacity style={styles.timeContainer}> */}
-          <Text
-            style={Platform.OS == 'android' ? styles.title : styles.titleIOS}>
-            Location
-          </Text>
-          <TouchableOpacity style={styles.timeContainer}>
-            <Text style={Platform.OS == 'android' ? styles.descriptionTwo : styles.descriptionTwoIOS}>{location}</Text>
-
-            <Image
-              source={images.dropDown}
-              style={styles.clockIcon1}
-              resizeMode="contain"
+        </View>
+        <Toast />
+        {
+          loader ?
+            <Loader title={'Next'} />
+            : <Button
+              title={'Next'}
+              onPress={() => handleConfirm()}
             />
-          </TouchableOpacity>
-
-          {/* </TouchableOpacity> */}
-        </View>
-        <View style={styles.nextBtn}>
-          <Button
-            title={'Next'}
-            onPress={() => navigation.navigate('SetUpServices')}
-          />
-        </View>
+        }
       </View>
     </SafeAreaView>
   );
