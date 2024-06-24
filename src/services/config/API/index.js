@@ -72,3 +72,21 @@ export const uploadProfile = async formData => {
     return error;
   }
 };
+
+export const uploadMultiplesImages = async formData => {
+  try {
+    const axiosConfig = {
+      method: 'post',
+      // url: `http://192.168.100.112:6000/user/uploadProfile`,
+      url: `${BASE_URL}barber/uploadMultiplesImages`,
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    const data = await axios(axiosConfig);
+    return data;
+  } catch (error) {
+    return error;
+  }
+};

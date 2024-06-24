@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
@@ -179,19 +179,38 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.01,
     borderRadius: sizes.screenWidth * 0.02,
     width: sizes.screenWidth * 0.9,
-    height: sizes.screenHeight * 0.15,
+    height: sizes.screenHeight * 0.2,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
     backgroundColor: colors.selectorcolor,
+
+    flexDirection: 'row',
   },
   imagestyle: {
-    width: sizes.screenWidth * 0.9,
-    height: sizes.screenHeight * 0.15,
+    width: sizes.screenWidth * 0.4,
+    height: sizes.screenHeight * 0.2,
     borderRadius: sizes.screenWidth * 0.02,
     backgroundColor: colors.selectorcolor,
+  },
+  imagestyle2: {
+    width: sizes.screenWidth * 0.4,
+    height: sizes.screenHeight * 0.2,
+    borderRadius: sizes.screenWidth * 0.02,
+    backgroundColor: colors.selectorcolor,
+    marginLeft: 10
   },
   addimage: {
     height: sizes.screenHeight * 0.05,
   },
+  crossImg: {
+    width: sizes.screenWidth * 0.05,
+    height: sizes.screenWidth * 0.05,
+  },
+  crossImgTouchable: {
+    position: 'absolute',
+    top: 5,
+    left: 5,
+    zIndex: 10,
+  }
 });

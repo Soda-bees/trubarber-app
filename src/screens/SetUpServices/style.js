@@ -1,10 +1,12 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.lightgray,
     height: sizes.screenHeight,
+    justifyContent: 'space-between',
+    paddingBottom: sizes.screenWidth * 0.03
   },
 
   backArrow: {
@@ -40,10 +42,10 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.2,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: sizes.screenWidth* 0.05,
-    borderWidth:sizes.screenWidth* 0.003,
-    borderColor:colors.selectorcolor,
-    marginBottom:sizes.screenHeight* 0.01
+    borderRadius: sizes.screenWidth * 0.05,
+    borderWidth: sizes.screenWidth * 0.003,
+    borderColor: colors.selectorcolor,
+    marginBottom: sizes.screenHeight * 0.01
   },
 
   selectedServiceimagecontainer: {
@@ -52,10 +54,10 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.2,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: sizes.screenWidth* 0.05,
-    borderWidth:sizes.screenWidth* 0.003,
-    borderColor:colors.black,
-    marginBottom:sizes.screenHeight* 0.01
+    borderRadius: sizes.screenWidth * 0.05,
+    borderWidth: sizes.screenWidth * 0.003,
+    borderColor: colors.black,
+    marginBottom: sizes.screenHeight * 0.01
   },
 
   serviceImageresize: {
@@ -72,7 +74,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.042,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius :sizes.screenWidth * 0.012
+    borderRadius: sizes.screenWidth * 0.012
   },
 
   textBlack: {
@@ -82,15 +84,15 @@ export const styles = StyleSheet.create({
   },
 
   serviceTexts: {
-    color:colors.black,
-    marginTop:sizes.screenHeight* 0.01,
-    fontWeight:'bold',
-    fontSize:fontSize.medium
+    color: colors.black,
+    marginTop: sizes.screenHeight * 0.01,
+    fontWeight: 'bold',
+    fontSize: fontSize.medium
   },
   services: {
-    flexDirection:'row',
-    marginTop:sizes.screenHeight*0.02,
-    flexWrap:'wrap',
+    flexDirection: 'row',
+    marginTop: sizes.screenHeight * 0.02,
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
   nextBtn: {

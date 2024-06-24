@@ -135,7 +135,6 @@ export default function SetUpOutlet({ navigation, route }) {
   };
 
   const handleConfirm = async () => {
-    // navigation.navigate('SetUpServices')
     if (!imgUri) {
       return ErrorShow('error', 'Oops!', 'Please Upload photo');
     }
