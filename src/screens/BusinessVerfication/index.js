@@ -7,16 +7,24 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import images from '../../services/utilities/images';
-import {styles} from './style.js';
+import { styles } from './style.js';
 import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {PermissionsAndroid, PermissionsIOS} from 'react-native';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { PermissionsAndroid, PermissionsIOS } from 'react-native';
+import Loader from '../../components/Loader';
+import { uploadProfile } from '../../services/config/API';
+import { ErrorShow } from '../../components/Error';
+import Toast from 'react-native-toast-message';
 
-export default function BusinessVerfication({navigation}) {
+export default function BusinessVerfication({ navigation, route }) {
+
+  const { userData } = route.params;
+
   const [imgUri, setImgUri] = useState(null);
+  const [loader, setLoader] = useState(false)
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
@@ -51,7 +59,9 @@ export default function BusinessVerfication({navigation}) {
           const uri =
             response.uri || (response.assets && response.assets[0].uri);
           if (uri) {
-            setImgUri(uri);
+            // setImgUri(uri);
+            const img = response.assets[0];
+            handleUploadProfile(img);
           } else {
             console.warn('No image URI found in library response');
           }
@@ -63,19 +73,22 @@ export default function BusinessVerfication({navigation}) {
       await requestCameraPermission();
 
       launchCamera(options, response => {
-        console.log('** Full Camera Response:**', response.assets[0].uri);
         try {
           const uri = response.assets[0].uri;
           if (!uri) {
             const cameraResponseUri = response.path || response.uri;
             if (cameraResponseUri) {
               console.log('Using alternative camera URI:', cameraResponseUri);
-              setImgUri(cameraResponseUri);
+              // setImgUri(cameraResponseUri);
+              const img = cameraResponseUri.assets[0];
+              handleUploadProfile(img);
             } else {
               console.log('No image URI found in camera response');
             }
           } else {
-            setImgUri(uri);
+            // setImgUri(uri);
+            const img = response.assets[0];
+            handleUploadProfile(img);
           }
         } catch (error) {
           console.error('Error setting imgUri:', error);
@@ -84,22 +97,58 @@ export default function BusinessVerfication({navigation}) {
     }
   };
 
+  const handleUploadProfile = async image => {
+    setLoader(true);
+    try {
+      const img = {
+        uri: image.uri,
+        type: image.type,
+        fileName: image.fileName,
+      };
+      const formData = new FormData();
+      formData.append('image', {
+        uri: img.uri,
+        type: img.type,
+        name: img.fileName,
+      });
+      const response = await uploadProfile(formData);
+      if (response.status == 200) {
+        setImgUri(response?.data?.url);
+        setLoader(false);
+      } else {
+        setLoader(false);
+        console.log(response.message);
+      }
+    } catch (error) {
+      setLoader(false);
+      console.log(error);
+    }
+  };
+
+  const handleConfirm = async () => {
+    if (!imgUri) {
+      return ErrorShow('error', 'Oops!', 'Please Upload business verification photo');
+    }
+    userData.businessVerification = imgUri
+    navigation.navigate("OutletCreated", { userData })
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <View style={styles.backArrow}>
-          <BackArrow onPress={() =>  navigation.goBack()} />
+          <BackArrow onPress={() => navigation.goBack()} />
         </View>
         <Text style={styles.forgotPass}>Business Verification </Text>
         <Text style={styles.subText}>
           Verify Your Business: Upload Required Documents
         </Text>
-        <TouchableOpacity
+        <View
           style={styles.uploadImage}
-          onPress={() => uploadPhoto('library')}>
+        >
           {imgUri ? (
             <Image
-              source={{uri: imgUri}}
+              source={{ uri: imgUri }}
               style={styles.imagestyle}
               resizeMode="contain"
             />
@@ -110,7 +159,7 @@ export default function BusinessVerfication({navigation}) {
               resizeMode="contain"
             />
           )}
-        </TouchableOpacity>
+        </View>
         <Text style={styles.smallText}>
           Please attach your Business License or Registration Certificate for
           verification
@@ -137,9 +186,15 @@ export default function BusinessVerfication({navigation}) {
           <Text style={styles.textBlack}>Choose picture from gallery</Text>
         </TouchableOpacity>
         <View style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
-          <Button title={'Next'} onPress={()=>navigation.navigate("OutletCreated")}/>
+          {
+            loader ?
+              <Loader title={"Next"} />
+              :
+              <Button title={'Next'} onPress={() => handleConfirm()} />
+          }
         </View>
       </View>
+      <Toast />
     </SafeAreaView>
   );
 }

@@ -22,6 +22,9 @@ import { colors, sizes } from '../../services';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { uploadMultiplesImages } from '../../services/config/API';
 import formatToJSON from '../../services/config/FormatToJson';
+import Loader from '../../components/Loader';
+import Toast from 'react-native-toast-message';
+import { ErrorShow } from '../../components/Error';
 
 export default function ServiceInfo({ navigation, route }) {
 
@@ -60,78 +63,9 @@ export default function ServiceInfo({ navigation, route }) {
   useEffect(() => {
     if (services) {
       setServicesData(services)
-      // setserviceNameHeading(services[currentIndex].name)
-      // setServiceName(services[currentIndex].name)
-      // setServiceDetail(services[currentIndex].options)
     }
   }, [])
 
-  // const requestCameraPermission = async () => {
-  //   const granted = await PermissionsAndroid.request(
-  //     PermissionsAndroid.PERMISSIONS.CAMERA,
-  //   );
-  //   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-  //     console.log('Camera permission granted');
-  //   } else {
-  //     console.warn('Camera permission denied');
-  //   }
-  // };
-
-  // const uploadPhoto = async sourceType => {
-  //   let options = {
-  //     mediaType: 'photo',
-  //     quality: 1,
-  //     maxWidth: 800,
-  //     maxHeight: 600,
-  //     includeBase64: false,
-  //     saveToPhotos: true,
-  //     selectionLimit: 0,
-  //     storageOptions: {
-  //       skipBackup: true,
-  //       path: 'images',
-  //     },
-  //   };
-
-  //   if (sourceType === 'library') {
-  //     launchImageLibrary(options, response => {
-  //       console.log('Library Response:', response);
-
-  //       try {
-  //         const uri =
-  //           response.uri || (response.assets && response.assets[0].uri);
-  //         if (uri) {
-  //           setImgUri(uri);
-  //         } else {
-  //           console.warn('No image URI found in library response');
-  //         }
-  //       } catch (error) {
-  //         console.error('Error setting imgUri:', error);
-  //       }
-  //     });
-  //   } else if (sourceType === 'camera') {
-  //     await requestCameraPermission();
-
-  //     launchCamera(options, response => {
-  //       console.log('** Full Camera Response:**', response.assets[0].uri);
-  //       try {
-  //         const uri = response.assets[0].uri;
-  //         if (!uri) {
-  //           const cameraResponseUri = response.path || response.uri;
-  //           if (cameraResponseUri) {
-  //             console.log('Using alternative camera URI:', cameraResponseUri);
-  //             setImgUri(cameraResponseUri);
-  //           } else {
-  //             console.log('No image URI found in camera response');
-  //           }
-  //         } else {
-  //           setImgUri(uri);
-  //         }
-  //       } catch (error) {
-  //         console.error('Error setting imgUri:', error);
-  //       }
-  //     });
-  //   }
-  // };
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
@@ -160,8 +94,6 @@ export default function ServiceInfo({ navigation, route }) {
     };
 
     const handleResponse = response => {
-      console.log('Response:', response);
-
       try {
         const assets = response.assets || [];
         if (assets.length > 0) {
@@ -195,18 +127,8 @@ export default function ServiceInfo({ navigation, route }) {
       });
 
       const response = await uploadMultiplesImages(formData);
-      console.log(response.status);
-
-      console.log(formatToJSON(response?.data));
       if (response.status == 200) {
         const uploadedUrls = response?.data?.images || [];
-        // setImgUris(uploadedUrls);
-        // setServicesData((prevState) => {
-        //   return {
-        //     ...prevState,
-
-        //   }
-        // })
         setServicesData(prevServices => {
           const newServices = [...prevServices];
           newServices[currentIndex] = {
@@ -228,7 +150,6 @@ export default function ServiceInfo({ navigation, route }) {
 
 
   const deleteServiceDetails = optionsArrayIndex => {
-    // setServiceDetail(prevState => prevState.filter((_, i) => i !== index));
     setServicesData(prevServices => {
       const newServices = [...prevServices];
       const updatedOptions = newServices[currentIndex].options.filter((_, idx) => idx !== optionsArrayIndex);
@@ -253,10 +174,11 @@ export default function ServiceInfo({ navigation, route }) {
   }
 
   const updateOption = (optionsArrayIndex, newName, newPrice) => {
+    const sanitizedPrice = newPrice.replace(/[^0-9.]/g, '');
     setServicesData(prevServices => {
       const newServices = [...prevServices];
       const updatedOptions = [...newServices[currentIndex].options];
-      updatedOptions[optionsArrayIndex] = { ...updatedOptions[optionsArrayIndex], name: newName, price: newPrice };
+      updatedOptions[optionsArrayIndex] = { ...updatedOptions[optionsArrayIndex], name: newName, price: sanitizedPrice };
       newServices[currentIndex] = {
         ...newServices[currentIndex],
         options: updatedOptions
@@ -266,7 +188,6 @@ export default function ServiceInfo({ navigation, route }) {
   };
 
   const addMoreService = () => {
-    // setServiceDetail(prevState => [...prevState, { name: '', price: '' }]);
     setServicesData(prevServices => {
       const newServices = [...prevServices];
       newServices[currentIndex] = {
@@ -277,16 +198,36 @@ export default function ServiceInfo({ navigation, route }) {
     });
   };
 
+  const hasValidOptions = (options) => {
+    return options.some(option => option.name.trim() !== "" && option.price.trim() !== "");
+  };
+
   const handleConfirm = async () => {
-    // navigation.navigate('OutletTags');
     const serviceLength = services.length - 1
     if (currentIndex == serviceLength) {
-      navigation.navigate('OutletTags');
+      if (servicesData[currentIndex]?.pictures?.length == 0) {
+        return ErrorShow('error', 'Oops!', 'Please upload at least one picture');
+      }
+      if (!hasValidOptions(servicesData[currentIndex]?.options)) {
+        return ErrorShow('error', 'Oops!', 'Please add at least one valid option with both name and price');
+      }
+      if (!servicesData[currentIndex]?.description) {
+        return ErrorShow('error', 'Oops!', 'Description required');
+      }
+      userData.services = servicesData
+      navigation.navigate('OutletTags', { userData });
     } else {
+      if (servicesData[currentIndex]?.pictures?.length == 0) {
+        return ErrorShow('error', 'Oops!', 'Please upload at least one picture');
+      }
+      if (!hasValidOptions(servicesData[currentIndex]?.options)) {
+        return ErrorShow('error', 'Oops!', 'Please add at least one valid option with both name and price');
+      }
+      if (!servicesData[currentIndex]?.description) {
+        return ErrorShow('error', 'Oops!', 'Description required');
+      }
       setCurrentIndex(currentIndex + 1)
     }
-    console.log(formatToJSON(servicesData));
-
   }
 
   const handleGoBack = async () => {
@@ -296,6 +237,17 @@ export default function ServiceInfo({ navigation, route }) {
       setCurrentIndex(currentIndex - 1)
     }
   }
+
+  const updateDescription = (newDescription) => {
+    setServicesData(prevServices => {
+      const newServices = [...prevServices];
+      newServices[currentIndex] = {
+        ...newServices[currentIndex],
+        description: newDescription
+      };
+      return newServices;
+    });
+  };
 
   return (
     <SafeAreaView>
@@ -308,61 +260,66 @@ export default function ServiceInfo({ navigation, route }) {
             <Text style={styles.headerText}>{services[currentIndex]?.name} Service</Text>
           </View>
         </View>
+        <View style={styles.serviceContainer}>
+          <Text style={styles.serviceNameText}>
+            {services[currentIndex]?.name} Details
+          </Text>
+          <View style={styles.uploadImage}>
+            {
+              servicesData &&
+                servicesData[currentIndex]?.pictures?.length > 0 ?
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  {
+                    servicesData[currentIndex]?.pictures?.map((item, index) => {
+                      return (
+                        <View key={index}
+                          style={{ position: 'relative' }}
+                        >
+                          <TouchableOpacity style={styles.crossImgTouchable}
+                            onPress={() => deletePicture(index)}
+                          >
+                            <Image source={images.crossCircle} style={styles.crossImg} />
+                          </TouchableOpacity>
+                          <Image
+                            source={{ uri: item }}
+                            style={index == 0 ? styles.imagestyle : styles.imagestyle2}
+                          />
+                        </View>
+                      )
+                    })
+                  }
+                </ScrollView>
+                :
+                <Image
+                  style={styles.addimage}
+                  source={addServiceImage}
+                  resizeMode="contain"
+                />
+            }
+          </View>
+
+          <TouchableOpacity
+            style={styles.uplaodImageContianer}
+            onPress={() => uploadPhoto('library')}>
+            <Image source={images.plusRed} />
+            <Text style={styles.uploadImgText}>Add Service Pictures</Text>
+          </TouchableOpacity>
+        </View>
         <ScrollView style={styles.scrollContainer}>
           <KeyboardAwareScrollView
             extraHeight={sizes.screenHeight * 0.24}
             enableOnAndroid={true}>
-            <View style={styles.containerBody}>
-              <View style={styles.serviceContainer}>
-                <Text style={styles.serviceNameText}>
-                  {services[currentIndex]?.name} Details
-                </Text>
-                <View style={styles.uploadImage}>
-                  {
-                    servicesData &&
-                      servicesData[currentIndex]?.pictures?.length > 0 ?
-                      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                        {
-                          servicesData[currentIndex]?.pictures?.map((item, index) => {
-                            return (
-                              <View key={index}
-                                style={{ position: 'relative' }}
-                              >
-                                <TouchableOpacity style={styles.crossImgTouchable}
-                                  onPress={() => deletePicture(index)}
-                                >
-                                  <Image source={images.crossCircle} style={styles.crossImg} />
-                                </TouchableOpacity>
-                                <Image
-                                  source={{ uri: item }}
-                                  style={index == 0 ? styles.imagestyle : styles.imagestyle2}
-                                />
-                              </View>
-                            )
-                          })
-                        }
-                      </ScrollView>
-                      :
-                      <Image
-                        style={styles.addimage}
-                        source={addServiceImage}
-                        resizeMode="contain"
-                      />
-                  }
-                </View>
 
-                <TouchableOpacity
-                  style={styles.uplaodImageContianer}
-                  onPress={() => uploadPhoto('library')}>
-                  <Image source={images.plusRed} />
-                  <Text style={styles.uploadImgText}>Add Service Pictures</Text>
-                </TouchableOpacity>
-              </View>
+            <View style={styles.containerBody}>
+
               <View style={styles.serviceDetailContainer}>
-                <View style={styles.tableHeadingRow}>
-                  <Text style={styles.tableServiceHeading}>{serviceName}</Text>
-                  <Text style={styles.tablePriceHeading}>Price</Text>
-                </View>
+                {servicesData &&
+                  servicesData[currentIndex]?.options?.length > 0 &&
+                  <View style={styles.tableHeadingRow}>
+                    <Text style={styles.tableServiceHeading}>{serviceName}</Text>
+                    <Text style={styles.tablePriceHeading}>Price</Text>
+                  </View>
+                }
                 {servicesData &&
                   servicesData[currentIndex]?.options?.map((item, index) => (
                     <View style={styles.serviceContentRow} key={index}>
@@ -371,32 +328,18 @@ export default function ServiceInfo({ navigation, route }) {
                         <Image source={images.minusRed} />
                       </TouchableOpacity>
                       <TextInput
-                        // onChangeText={text =>
-                        //   setServiceDetail(prevState => {
-                        //     const updateServiceDetail = [...prevState];
-                        //     updateServiceDetail[index].name = text.replace('');
-                        //     return updateServiceDetail;
-                        //   })
-                        // }
                         onChangeText={text => updateOption(index, text, item.price)}
                         value={item.name}
+                        placeholder='Name'
                         style={
                           Platform.OS == 'android'
                             ? styles.serviceInputContainer
                             : styles.serviceInputContainerIOS
                         }></TextInput>
                       <TextInput
-                        onChangeText={text =>
-                          setServiceDetail(prevState => {
-                            const updateServiceDetail = [...prevState];
-                            updateServiceDetail[index].price = text.replace(
-                              '$',
-                              '',
-                            );
-                            return updateServiceDetail;
-                          })
-                        }
+                        onChangeText={text => updateOption(index, item.name, text)}
                         value={`$ ${item.price}`}
+                        keyboardType='numeric'
                         style={
                           Platform.OS == 'android'
                             ? styles.priceInputContainer
@@ -413,26 +356,49 @@ export default function ServiceInfo({ navigation, route }) {
               <View style={styles.descriptionContianer}>
                 <Text style={styles.descriptionHeadingText}>Description</Text>
                 <TextInput
-                  onChangeText={setServiceAbout}
-                  value={serviceAbout}
+                  onChangeText={updateDescription}
+                  placeholder="Description"
+                  value={servicesData && servicesData[currentIndex]?.description}
                   multiline={true}
                   numberOfLines={4}
                   style={styles.descriptionTextContainer}
                 />
               </View>
-              <View style={styles.saveChangeBtn}>
-                <Button
-                  title={'Save Changes'}
-                  onPress={() => {
-                    handleConfirm()
-                  }}
-                />
-              </View>
-              <View style={Platform.OS == 'ios' && styles.saveChangeBtnIOS} />
             </View>
+
+            {/* </View> */}
+
           </KeyboardAwareScrollView>
         </ScrollView>
+        <View style={styles.saveChangeBtn}>
+          {
+            loader ?
+              <Loader title={'Save Changes'} /> :
+              <Button
+                title={'Save Changes'}
+                onPress={() => {
+                  handleConfirm()
+                }}
+              />
+          }
+        </View>
       </View>
+      <Toast />
     </SafeAreaView>
   );
 }
+
+
+{/* <View style={styles.saveChangeBtn}>
+{
+  loader ?
+    <Loader title={'Save Changes'} /> :
+    <Button
+      title={'Save Changes'}
+      onPress={() => {
+        handleConfirm()
+      }}
+    />
+}
+</View> */}
+{/* <View style={Platform.OS == 'ios' && styles.saveChangeBtnIOS} /> */ }

@@ -5,6 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.lightgray,
     height: sizes.screenHeight,
+    paddingHorizontal: sizes.screenWidth * 0.05,
   },
   row: {
     flexDirection: 'row',
@@ -12,7 +13,7 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.04,
   },
   arrowTop: {
-    marginLeft: sizes.screenWidth * 0.04,
+    // marginLeft: sizes.screenWidth * 0.04,
   },
   headerContainer: {
     width: sizes.screenWidth * 0.852,
@@ -29,11 +30,11 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.032,
   },
   containerBody: {
-    paddingHorizontal: sizes.screenWidth * 0.05,
+    // paddingHorizontal: sizes.screenWidth * 0.05,
   },
   scrollContainer: {
     marginTop: sizes.screenHeight * 0.03,
-    marginBottom: sizes.screenHeight * 0.02,
+    marginBottom: sizes.screenHeight * 0.01,
   },
   serviceContainer: {
     marginTop: sizes.screenHeight * 0.01,
@@ -167,9 +168,10 @@ export const styles = StyleSheet.create({
     paddingHorizontal: sizes.screenWidth * 0.02,
     borderWidth: sizes.screenWidth * 0.003,
     borderColor: colors.borderColor,
+    textAlignVertical:"top"
   },
   saveChangeBtn: {
-    marginTop: sizes.screenHeight * 0.02,
+    paddingBottom:sizes.screenHeight * 0.02
   },
 
   saveChangeBtnIOS: {
@@ -212,5 +214,10 @@ export const styles = StyleSheet.create({
     top: 5,
     left: 5,
     zIndex: 10,
+  },
+  subContainer: {
+    // backgroundColor: 'red',
+    height: sizes.screenHeight ,
+    justifyContent:'space-between'
   }
 });

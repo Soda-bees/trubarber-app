@@ -53,12 +53,12 @@ export default function SetUpServices({ navigation, route }) {
     }
     const services = selectedItem.map(item => ({
       ...item,
-      pictures:[],
+      pictures: [],
       // pictures: ["https://res.cloudinary.com/doohobw9k/image/upload/v1719234104/TruBarber/Services/ve1epynr3j7tis7udjau.jpg",
       //   "https://res.cloudinary.com/doohobw9k/image/upload/v1719234104/TruBarber/Services/ve1epynr3j7tis7udjau.jpg","https://res.cloudinary.com/doohobw9k/image/upload/v1719234104/TruBarber/Services/ve1epynr3j7tis7udjau.jpg",
       // ],
       description: "",
-      options: [],
+      options: [{ name: "", price: "" }],
     }))
     navigation.navigate('ServiceInfo', { userData, services })
   }
@@ -103,12 +103,12 @@ export default function SetUpServices({ navigation, route }) {
         </View>
 
         {/* <View style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}> */}
-          <Button
-            title={'Next'}
-            onPress={() =>
-              handleConfirm()
-            }
-          />
+        <Button
+          title={'Next'}
+          onPress={() =>
+            handleConfirm()
+          }
+        />
         {/* </View> */}
         <Toast />
       </View>

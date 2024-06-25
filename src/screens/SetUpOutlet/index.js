@@ -186,7 +186,7 @@ export default function SetUpOutlet({ navigation, route }) {
                 ? styles.uploadPress
                 : styles.uploadPressIOS
             }>
-            <Text style={styles.uploadCover}>Upload Cover</Text>
+            <Text style={styles.uploadCover}>Upload Photo</Text>
           </View>
           <View style={styles.content}>
             <View style={styles.textContainer}>
