@@ -9,26 +9,46 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
-import {styles} from './style.js';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
+import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
 import BackArrow from '../../components/BackArrow/index.js';
-import {colors} from '../../services/index.js';
-import {PermissionsAndroid, PermissionsIOS} from 'react-native';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { colors } from '../../services/index.js';
+import { PermissionsAndroid, PermissionsIOS } from 'react-native';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserData, setUserData } from '../../store/userData/index.js';
+import { updateProfile, uploadProfile } from '../../services/config/API/index.js';
+import Loader from '../../components/Loader/index.js';
+import { selectAuthToken } from '../../store/authToken/index.js';
+import { ErrorShow } from '../../components/Error/index.js';
+import Toast from 'react-native-toast-message';
+import formatToJSON from '../../services/config/FormatToJson/index.js';
 
 // import {colors, sizes} from 'borderBottomcomponents/BackArrow/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
-export default function EditScreen({navigation}) {
+export default function EditScreen({ navigation }) {
+  const userData = useSelector(selectUserData)
+  const authToken = useSelector(selectAuthToken)
+
+  const dispatch = useDispatch()
+
   const [imgUri, setImgUri] = useState(null);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [phoneNumber, setphoneNumber] = useState('');
-  const [cityAdress, setcityAdress] = useState('');
+  const [loader, setLoader] = useState(false)
+
+  useEffect(() => {
+    if (userData) {
+      setImgUri(userData?.profile)
+      setEmail(userData?.email)
+      setName(userData?.name)
+    }
+  }, [])
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
@@ -63,7 +83,9 @@ export default function EditScreen({navigation}) {
           const uri =
             response.uri || (response.assets && response.assets[0].uri);
           if (uri) {
-            setImgUri(uri);
+            // setImgUri(uri);
+            const img = response.assets[0];
+            handleUploadProfile(img);
           } else {
             console.warn('No image URI found in library response');
           }
@@ -75,19 +97,23 @@ export default function EditScreen({navigation}) {
       await requestCameraPermission();
 
       launchCamera(options, response => {
-        console.log('** Full Camera Response:**', response.assets[0].uri);
+        // console.log('** Full Camera Response:**', response.assets[0].uri);
         try {
           const uri = response.assets[0].uri;
           if (!uri) {
             const cameraResponseUri = response.path || response.uri;
             if (cameraResponseUri) {
               console.log('Using alternative camera URI:', cameraResponseUri);
-              setImgUri(cameraResponseUri);
+              // setImgUri(cameraResponseUri);
+              const img = cameraResponseUri.assets[0];
+              handleUploadProfile(img);
             } else {
               console.log('No image URI found in camera response');
             }
           } else {
-            setImgUri(uri);
+            // setImgUri(uri);
+            const img = response.assets[0];
+            handleUploadProfile(img);
           }
         } catch (error) {
           console.error('Error setting imgUri:', error);
@@ -95,6 +121,57 @@ export default function EditScreen({navigation}) {
       });
     }
   };
+
+  const handleUploadProfile = async image => {
+    setLoader(true);
+    try {
+      const img = {
+        uri: image.uri,
+        type: image.type,
+        fileName: image.fileName,
+      };
+      const formData = new FormData();
+      formData.append('image', {
+        uri: img.uri,
+        type: img.type,
+        name: img.fileName,
+      });
+      const response = await uploadProfile(formData);
+      if (response.status == 200) {
+        setImgUri(response?.data?.url);
+        setLoader(false);
+      } else {
+        setLoader(false);
+        console.log(response.message);
+      }
+    } catch (error) {
+      setLoader(false);
+      console.log(error);
+    }
+  };
+
+  const handleUpdateProfile = async () => {
+    try {
+      setLoader(true)
+      const body = {
+        name,
+        profile: imgUri
+      }
+      const response = await updateProfile(body, authToken)
+      if (response.status == 200) {
+        setLoader(false)
+        ErrorShow('success', 'Congratulation!', response?.data?.message)
+        dispatch(setUserData(response?.data?.updatedUser))
+      } else {
+        setLoader(false)
+        ErrorShow('error', 'Oops!', response?.data?.message)
+      }
+    } catch (error) {
+      setLoader(false)
+      console.log(error);
+      ErrorShow('error', 'Oops!', error?.message)
+    }
+  }
 
   return (
     <SafeAreaView>
@@ -109,15 +186,15 @@ export default function EditScreen({navigation}) {
         </View>
         <View style={styles.contentAlligment}>
           <TouchableOpacity onPress={() => uploadPhoto('library')}>
-            {imgUri ? (
-              <Image
-                source={{uri: imgUri}}
-                style={styles.youngMan}
-                resizeMode="cover"
-              />
-            ) : (
+            {/* {imgUri ? ( */}
+            <Image
+              source={{ uri: imgUri }}
+              style={styles.youngMan}
+              resizeMode="cover"
+            />
+            {/* ) : (
               <Image source={images.youngMan} style={styles.youngMan} />
-            )}
+            )} */}
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.uploadPhoto}
@@ -158,13 +235,14 @@ export default function EditScreen({navigation}) {
                   style={styles.input}
                   placeholderTextColor={colors.placeholdertext}
                   value={email}
+                  editable={false}
                   onChangeText={text => {
                     setEmail(text);
                   }}
                 />
               </View>
             </View>
-            <View style={styles.inputField}>
+            {/* <View style={styles.inputField}>
               <View style={styles.rowInput}>
                 <Image
                   source={images.Call}
@@ -182,8 +260,8 @@ export default function EditScreen({navigation}) {
                   }}
                 />
               </View>
-            </View>
-            <View style={styles.inputField}>
+            </View> */}
+            {/* <View style={styles.inputField}>
               <View style={styles.rowInput}>
                 <Image
                   source={images.Location}
@@ -200,16 +278,21 @@ export default function EditScreen({navigation}) {
                   }}
                 />
               </View>
-            </View>
+            </View> */}
           </View>
         </KeyboardAwareScrollView>
         <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
-          <Button
-            title={'Save'}
-            onPress={() => navigation.navigate('Profile')}
-          />
+          {
+            loader ?
+              <Loader title={'Save'} />
+              : <Button
+                title={'Save'}
+                onPress={() => handleUpdateProfile()}
+              />
+          }
         </View>
       </View>
+      <Toast />
     </SafeAreaView>
   );
 }

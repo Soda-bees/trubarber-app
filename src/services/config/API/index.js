@@ -1,6 +1,6 @@
 import axios from 'axios';
-import {axiosInstance} from '../AxiosInstance';
-import {BASE_URL} from '../AxiosInstance';
+import { axiosInstance } from '../AxiosInstance';
+import { BASE_URL } from '../AxiosInstance';
 
 export const checkServerConnection = async () => {
   try {
@@ -15,7 +15,7 @@ export const validateEmailAvailability = async email => {
   try {
     const response = await axiosInstance.post(
       'auth/validateEmailAvailability',
-      {email},
+      { email },
     );
     return response;
   } catch (error) {
@@ -98,3 +98,29 @@ export const uploadMultiplesImages = async formData => {
     return error;
   }
 };
+
+export const updateProfile = async (body, token) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post('auth/updateProfile', body, { headers });
+    return response;
+  } catch (error) {
+    return error
+  }
+}
+
+export const updatePassword = async (body, token) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post('auth/updatePassword', body , { headers });
+    return response;
+  } catch (error) {
+    return error
+  }
+}

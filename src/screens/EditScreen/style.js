@@ -128,7 +128,8 @@ export const styles = StyleSheet.create({
   },
 
   btn: {
-    top: sizes.screenHeight  * 0.182
+    // top: sizes.screenHeight  * 0.182
+    paddingBottom:sizes.screenWidth * 0.02
   },
   btnIOS: {
     position:'absolute',

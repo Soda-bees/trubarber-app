@@ -8,27 +8,31 @@ import {
   TextInput,
   SafeAreaView,
 } from 'react-native';
-import React, {useState} from 'react';
-import {styles} from './style.js';
+import React, { useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
-import {colors, sizes} from '../../services';
+import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
+import { colors, sizes } from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { removeAuthToken } from '../../store/authToken/index.js';
 import { removeRole } from '../../store/role/index.js';
-// import UserTabNavigation from '../../services/config/UserTabNavigation.js';
+import { selectUserData } from '../../store/userData/index.js';
+import formatToJSON from '../../services/config/FormatToJson/index.js';
 
-export default function Profile({navigation}) {
+export default function Profile({ navigation }) {
+  const userData = useSelector(selectUserData)
   const dispatch = useDispatch()
   const handleLogout = async () => {
-      dispatch(removeAuthToken())
-      dispatch(removeRole())
+    dispatch(removeAuthToken())
+    dispatch(removeRole())
   }
   return (
     <SafeAreaView>
       <View style={styles.container}>
+        <View>
+
         <View style={styles.borderBottom}>
           <View style={styles.transparentBg}>
             <View style={styles.row}>
@@ -43,10 +47,10 @@ export default function Profile({navigation}) {
         </View>
         <View style={styles.contentContainer}>
           <View style={styles.contentAlligment}>
-            <Image source={images.youngMan} style={styles.youngMan} />
+            <Image source={{uri:userData?.profile}} style={styles.youngMan} />
             <View style={styles.nameContainer}>
-              <Text style={styles.firstName}>Cameron</Text>
-              <Text style={styles.lastName}>Williamson</Text>
+              <Text style={styles.firstName}>{userData?.name}</Text>
+              {/* <Text style={styles.lastName}>Williamson</Text> */}
             </View>
           </View>
           <View style={styles.locationPhonecontainer}>
@@ -57,17 +61,17 @@ export default function Profile({navigation}) {
                 style={styles.redLocation}
               />
               <Text style={styles.locationText}>
-                Royal Ln. Mesa, New Jersey
+                Location
               </Text>
             </View>
-            <View style={styles.locationRow}>
+            {/* <View style={styles.locationRow}>
               <Image
                 source={images.redCall}
                 resizeMode="contain"
                 style={styles.redLocation}
               />
               <Text style={styles.locationText}>+1 1256864515</Text>
-            </View>
+            </View> */}
           </View>
         </View>
         <View style={styles.navigation}>
@@ -118,8 +122,10 @@ export default function Profile({navigation}) {
             />
           </TouchableOpacity>
         </View>
+        </View>
+
         <View style={styles.btn}>
-          <Button title={'Logout'} onPress={()=>handleLogout()}/>
+          <Button title={'Logout'} onPress={() => handleLogout()} />
         </View>
       </View>
     </SafeAreaView>
