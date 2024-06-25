@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Button, Text, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { fontSize, sizes } from '../../services';
+import { colors, fontSize, sizes } from '../../services';
 import images from '../../services/utilities/images';
 import { styles } from '../../screens/SetUpOutlet/style';
 import { Image } from 'react-native-svg';
@@ -42,7 +42,7 @@ const TimePickerComponent = ({ startTime, setStartTime, endTime, setEndTime }) =
                         <Text style={{ fontWeight: '800', color: 'black', fontSize: fontSize.medium }}>
                             {`${formatTime(startTime)}`}</Text>
                     </TouchableOpacity>
-                    <Text> - </Text>
+                    <Text style={{color:colors.black}}> - </Text>
                     <TouchableOpacity onPress={() => setShowEndPicker(true)}>
                         <Text style={{ fontWeight: '800', color: 'black', fontSize: fontSize.medium }}>
                             {`${formatTime(endTime)}`}</Text>
