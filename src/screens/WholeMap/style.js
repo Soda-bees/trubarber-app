@@ -161,12 +161,12 @@ export const styles = StyleSheet.create({
 
   textDarkerblack: {
     // backgroundColor: 'orange',
-    color:colors.black,
+    color: colors.black,
     fontWeight: '700',
     fontSize: fontSize.small,
   },
   textBlack: {
-    color:colors.black,
+    color: colors.black,
     fontSize: fontSize.small,
     fontWeight: '700',
   },
@@ -199,7 +199,7 @@ export const styles = StyleSheet.create({
   },
   btnText: {
     // fontSize: fontSize.small,
-    color:colors.white,
+    color: colors.white,
     marginLeft: sizes.screenWidth * 0.042,
   },
   arrowStyle: {
@@ -209,11 +209,40 @@ export const styles = StyleSheet.create({
   modalPosition: {
     top: sizes.screenHeight * 0.24,
     alignSelf: 'center',
-    marginRight: sizes.screenWidth * 0.08
+    marginRight: sizes.screenWidth * 0.08,
   },
   crossIcon: {
     height: sizes.screenHeight * 0.018,
     marginTop: sizes.screenHeight * 0.02,
     width: sizes.screenWidth * 0.04,
+  },
+
+  locationImgIcon: {
+    width: sizes.screenWidth * 0.25,
+    height: sizes.screenWidth * 0.25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // zIndex:1,
+    // backgroundColor:'black'
+  },
+
+  customMarker: {
+    // backgroundColor: '#2A9D8F',
+    padding: 5,
+    borderRadius: 5,
+  },
+  markerText: {
+    color: '#fff',
+    fontSize: 25,
+  },
+
+  markerIngStyle: {
+    width: sizes.screenWidth * 0.08,
+    height: sizes.screenWidth * 0.08,
+    backgroundColor: 'red',
+    marginBottom: 25,
+    borderRadius: sizes.screenWidth * 0.1,
+    borderColor: colors.white,
+    borderWidth: 1,
   },
 });
