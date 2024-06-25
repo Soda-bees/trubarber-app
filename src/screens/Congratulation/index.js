@@ -28,7 +28,6 @@ export default function Congratulation({route}) {
       userData.location = location;
       const response = await signup(userData);
       if (response.status == 201) {
-        console.log('token=-=-=->', response.data.token);
         setLoader(false);
         dispatch(setUserData(response?.data?.userData));
         dispatch(setAuthToken(response?.data?.token));

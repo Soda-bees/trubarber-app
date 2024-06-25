@@ -34,8 +34,16 @@ export const signin = async body => {
 
 export const signup = async body => {
   try {
-    console.log(body);
     const response = await axiosInstance.post('auth/signup', body);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const handleBarberSignup = async body => {
+  try {
+    const response = await axiosInstance.post('auth/barberSignup', body);
     return response;
   } catch (error) {
     return error;

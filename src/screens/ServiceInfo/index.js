@@ -305,7 +305,7 @@ export default function ServiceInfo({ navigation, route }) {
             <Text style={styles.uploadImgText}>Add Service Pictures</Text>
           </TouchableOpacity>
         </View>
-        <ScrollView style={styles.scrollContainer}>
+        <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
           <KeyboardAwareScrollView
             extraHeight={sizes.screenHeight * 0.24}
             enableOnAndroid={true}>
