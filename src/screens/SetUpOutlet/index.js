@@ -9,22 +9,22 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import images from '../../services/utilities/images';
-import { styles } from './style.js';
+import {styles} from './style.js';
 import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { PermissionsAndroid, PermissionsIOS } from 'react-native';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {PermissionsAndroid, PermissionsIOS} from 'react-native';
 import TimePickerComponent from '../../components/TimePicketComponent';
 import Loader from '../../components/Loader';
-import { uploadProfile } from '../../services/config/API';
-import { ErrorShow } from '../../components/Error';
+import {uploadProfile} from '../../services/config/API';
+import {ErrorShow} from '../../components/Error';
 import Toast from 'react-native-toast-message';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-export default function SetUpOutlet({ navigation, route }) {
-
-  const { userData } = route.params;
+export default function SetUpOutlet({navigation, route}) {
+  const {userData} = route.params;
 
   const [outletName, setOutletName] = useState('RedBox Barber');
   const [description, setDescription] = useState('');
@@ -141,12 +141,12 @@ export default function SetUpOutlet({ navigation, route }) {
     if (!description) {
       return ErrorShow('error', 'Oops!', 'Please fill the description');
     }
-    const time = `${formatTime(startTime)} - ${formatTime(endTime)}`
-    Object.assign(userData, { profile: imgUri, description, time });
-    navigation.navigate('SetUpServices', { userData })
-  }
+    const time = `${formatTime(startTime)} - ${formatTime(endTime)}`;
+    Object.assign(userData, {profile: imgUri, description, time});
+    navigation.navigate('SetUpServices', {userData});
+  };
 
-  const formatTime = (date) => {
+  const formatTime = date => {
     let hours = date.getHours();
     let minutes = date.getMinutes();
     const ampm = hours >= 12 ? 'PM' : 'AM';
@@ -156,85 +156,92 @@ export default function SetUpOutlet({ navigation, route }) {
     return hours + ':' + minutes + ' ' + ampm;
   };
 
-
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <View >
+        <View>
           <View style={styles.backArrow}>
             <BackArrow onPress={() => navigation.goBack()} />
           </View>
-          <View>
-            <Text style={styles.Forgotpass}>Set-Up Business Profile</Text>
-            <TouchableOpacity
-              style={styles.uploadImage}
-              onPress={() => uploadPhoto('library')}>
-              {imgUri ? (
-                <Image
-                  source={{ uri: imgUri }}
-                  style={styles.imagestyle}
-                  resizeMode="contain"
-                />
-              ) : (
-                <Image style={styles.addimage} source={images.uploadImgbarber} />
-              )}
-            </TouchableOpacity>
-          </View>
-          <View
-            style={
-              Platform.OS == 'android'
-                ? styles.uploadPress
-                : styles.uploadPressIOS
-            }>
-            <Text style={styles.uploadCover}>Upload Photo</Text>
-          </View>
-          <View style={styles.content}>
-            <View style={styles.textContainer}>
-              <Text
-                style={Platform.OS == 'android' ? styles.title : styles.titleIOS}>
-                Description
-              </Text>
-              <TextInput
-                style={styles.description}
-                onChangeText={setDescription}
-                value={description}
-                multiline={true}
-                numberOfLines={4}
-                placeholder='Description'
-              ></TextInput>
+          <Text style={styles.Forgotpass}>Set-Up Business Profile</Text>
+          <KeyboardAwareScrollView enableOnAndroid={true}>
+            <View>
+              <TouchableOpacity
+                style={styles.uploadImage}
+                onPress={() => uploadPhoto('library')}>
+                {imgUri ? (
+                  <Image
+                    source={{uri: imgUri}}
+                    style={styles.imagestyle}
+                    resizeMode="contain"
+                  />
+                ) : (
+                  <Image
+                    style={styles.addimage}
+                    source={images.uploadImgbarber}
+                  />
+                )}
+              </TouchableOpacity>
             </View>
-            <View style={styles.timeContainer}>
-              <Text
-                style={
-                  Platform.OS == 'android' ? styles.title : styles.titleIOS
-                }>
-                Time
-              </Text>
-              <View style={styles.description} >
-                <TimePickerComponent
-                  startTime={startTime}
-                  setStartTime={setStartTime}
-                  endTime={endTime}
-                  setEndTime={setEndTime}
-                />
-                <Image
-                  source={images.clockIcon}
-                  style={styles.clockIcon}
-                  resizeMode="contain"
-                />
+            <View
+              style={
+                Platform.OS == 'android'
+                  ? styles.uploadPress
+                  : styles.uploadPressIOS
+              }>
+              <Text style={styles.uploadCover}>Upload Photo</Text>
+            </View>
+            <View style={styles.content}>
+              <View style={styles.textContainer}>
+                <Text
+                  style={
+                    Platform.OS == 'android' ? styles.title : styles.titleIOS
+                  }>
+                  Description
+                </Text>
+                <TextInput
+                  style={styles.description}
+                  onChangeText={setDescription}
+                  value={description}
+                  multiline={true}
+                  numberOfLines={4}
+                  placeholder="Description"
+                  placeholderTextColor='black'
+                  >
+                  </TextInput>
+              </View>
+              <View style={styles.timeContainer}>
+                <Text
+                  style={
+                    Platform.OS == 'android' ? styles.title : styles.titleIOS
+                  }>
+                  Time
+                </Text>
+                <View style={styles.description}>
+                  <TimePickerComponent
+                    startTime={startTime}
+                    setStartTime={setStartTime}
+                    endTime={endTime}
+                    setEndTime={setEndTime}
+                  />
+                  <Image
+                    source={images.clockIcon}
+                    style={styles.clockIcon}
+                    resizeMode="contain"
+                  />
+                </View>
               </View>
             </View>
-          </View>
+          </KeyboardAwareScrollView>
         </View>
         <Toast />
-        {
-          loader ?
-            <Loader title={'Next'} />
-            : <Button
-              title={'Next'}
-              onPress={() => handleConfirm()}
-            />
-        }
+        <View style={{position:'absolute', bottom:25}}>
+        {loader ? (
+          <Loader title={'Next'} />
+        ) : (
+          <Button title={'Next'} onPress={() => handleConfirm()} />
+        )}
+        </View>
       </View>
     </SafeAreaView>
   );

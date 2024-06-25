@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.04,
     borderRadius: sizes.screenWidth * 0.04,
     width: sizes.screenWidth * 0.9,
-    height: sizes.screenHeight * 0.18,
+    height: sizes.screenHeight * 0.3,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
@@ -110,7 +110,7 @@ export const styles = StyleSheet.create({
   },
   imagestyle: {
     width: sizes.screenWidth * 0.9,
-    height: sizes.screenHeight * 0.2,
+    height: sizes.screenHeight * 0.3,
     borderRadius: sizes.screenWidth * 0.04,
     backgroundColor: colors.selectorcolor,
   },
@@ -125,7 +125,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.selectorcolor,
     paddingHorizontal: sizes.screenWidth * 0.02,
     borderRadius: sizes.screenWidth * 0.02,
-    position: 'relative'
+    position: 'relative',
   },
   descriptionTwo: {
     color: colors.black,
