@@ -113,7 +113,7 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.29,
   },
   mapStyle: {
-    height: sizes.screenHeight * 0.23,
+    height: sizes.screenHeight * 0.3,
     width: sizes.screenWidth * 0.9,
     borderRadius: sizes.screenWidth * 0.04,
   },
@@ -262,5 +262,24 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.96,
     height: sizes.screenHeight,
     marginBottom: sizes.screenHeight * 0.06,
+  },
+
+  locationImgIcon: {
+    width: sizes.screenWidth * 0.25,
+    height: sizes.screenWidth * 0.25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // zIndex:1,
+    // backgroundColor:'black'
+  },
+
+  markerIngStyle: {
+    width: sizes.screenWidth * 0.08,
+    height: sizes.screenWidth * 0.08,
+    backgroundColor: 'red',
+    marginBottom: 25,
+    borderRadius: sizes.screenWidth * 0.1,
+    borderColor: colors.white,
+    borderWidth: 1,
   },
 });

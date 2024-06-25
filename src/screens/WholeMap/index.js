@@ -18,8 +18,11 @@ import Modal from 'react-native-modal';
 import BackArrow from '../../components/BackArrow';
 import {useSelector} from 'react-redux';
 import {selectlocation} from '../../store/location';
+import {selectbarber} from '../../store/barber';
 
 export default function WholeMap({navigation}) {
+  const barberData = useSelector(selectbarber);
+  const [selectedBarber, setSelectedBarber] = useState('');
   const location = useSelector(selectlocation);
   const [currentLocation, setCurrentLocation] = useState(
     'Rachael McPhail Street...',
@@ -28,6 +31,26 @@ export default function WholeMap({navigation}) {
 
   const handleGoback = () => {
     navigation.goBack();
+  };
+
+  const handleSelectBarber = item => {
+    setSelectedBarber(item);
+    setModalopen(true);
+  };
+
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371;
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+    return distance;
   };
 
   return (
@@ -42,17 +65,6 @@ export default function WholeMap({navigation}) {
               <View>
                 <BackArrow onPress={handleGoback} />
               </View>
-              {/* <View style={styles.locationRow}>
-                <TouchableOpacity style={styles.locationContainertop}>
-                  <Image style={styles.iconImage} source={images.redLocation} />
-                </TouchableOpacity>
-                <View style={styles.locationDetailColumn}>
-                  <Text style={styles.nearbyTxt}>Find barber near</Text>
-                  <Text style={styles.currentLocationTxt}>
-                    {currentLocation}
-                  </Text>
-                </View>
-              </View> */}
               <View style={styles.otherIconRow}>
                 <TouchableOpacity
                   style={styles.notificationContainer}
@@ -93,78 +105,35 @@ export default function WholeMap({navigation}) {
             initialRegion={{
               latitude: location.latitude,
               longitude: location.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0722,
-            }}>
-            <Marker
-              coordinate={{
-                latitude: location.latitude,
-                longitude: location.longitude,
-              }}>
-              <View style={styles.customMarker}>
-                <Text style={styles.markerText}>📍</Text>
-              </View>
-            </Marker>
-          </MapView>
-          {/* <TouchableOpacity
-            style={{bottom: sizes.screenHeight * 0.9}}
-            onPress={() => setModalopen(!openModal)}>
-            <Image
-              source={images.marketBarber}
-              style={{
-                height: sizes.screenHeight * 0.08,
-                width: sizes.screenHeight * 0.09,
-                alignSelf: 'center',
-                left: sizes.screenWidth * 0.4,
-              }}
-              resizeMode="contain"
-            />
-          </TouchableOpacity> */}
-          {/* <TouchableOpacity
-            style={{
-              bottom: sizes.screenHeight * 0.9,
-              width: sizes.screenHeight * 0.49,
-              // backgroundColor: 'red',
+              latitudeDelta: 0.001,
+              longitudeDelta: 0.001,
             }}
-            // onPress={() => setModalopen(!openModal)}
-            >
-            <Image
-              source={images.markerCutter}
-              style={{
-                height: sizes.screenHeight * 0.08,
-                width: sizes.screenHeight * 0.09,
-                alignSelf: 'center',
-                right: sizes.screenWidth * 0.4,
-              }}
-              resizeMode="contain"
-            />
-          </TouchableOpacity> */}
-                  <Marker
-              coordinate={{
-                latitude: location.latitude,
-                longitude: location.longitude,
-              }}>
-              <ImageBackground
-                source={images.locationIcon}
-                style={styles.locationImgIcon}
-                resizeMode="contain"></ImageBackground>
-            </Marker>
-          {/* <TouchableOpacity
-            style={{bottom: sizes.screenHeight * 0.9, backgroundColor: 'red',
-                bottom: sizes.screenHeight * 0.2,
-          
-          }}
-            onPress={() => setModalopen(!openModal)}>
-            <Image
-              source={images.marketBarber}
-              style={{
-                height: sizes.screenHeight * 0.08,
-                width: sizes.screenHeight * 0.09,
-                alignSelf: 'center',
-              }}
-              resizeMode="contain"
-            />
-          </TouchableOpacity> */}
+            followsUserLocation={true}
+            showsMyLocationButton={true}
+            showsUserLocation
+            showsCompass={true}>
+            {barberData?.map((item, index) => {
+              return (
+                <Marker
+                  key={index}
+                  coordinate={{
+                    latitude: item.location.latitude,
+                    longitude: item.location.longitude,
+                  }}
+                  onPress={() => handleSelectBarber(item)}>
+                  <ImageBackground
+                    source={images.locationIcon}
+                    style={styles.locationImgIcon}
+                    resizeMode="contain">
+                    <Image
+                      source={{uri: item.profile}}
+                      style={styles.markerIngStyle}
+                    />
+                  </ImageBackground>
+                </Marker>
+              );
+            })}
+          </MapView>
         </View>
       </View>
       <Modal
@@ -172,55 +141,69 @@ export default function WholeMap({navigation}) {
         onBackdropPress={() => setModalopen(false)}
         backdropOpacity={0.5}
         style={styles.modalPosition}>
-        <ImageBackground
-          source={images.barberCutting}
-          imageStyle={styles.containerImage}
-          // style={}
-        >
-          <View style={styles.spaceBetween}>
-            <View style={styles.row}>
-              <Text style={styles.textWhite}>5.0</Text>
-              <StarRating
-                maxStars={1}
-                starSize={12}
-                color={colors.gold}
-                rating={1}
-              />
-            </View>
-            <TouchableOpacity onPress={() => setModalopen(!openModal)}>
-              <Image
-                source={images.whiteCrossexit}
-                resizeMode="contain"
-                style={styles.crossIcon}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.marginCardtop}>
-            <ImageBackground
-              source={images.bluredImg}
-              imageStyle={styles.bluredImg}>
-              <View style={styles.appointmentContainer}>
-                <Text style={styles.textDarkerblack}>Alex WILLIAMS</Text>
-                <View style={styles.locationContainer}>
-                  <Image
-                    source={images.Location}
-                    resizeMode="contain"
-                    style={styles.locationImg}
-                  />
-                  <Text style={styles.textBlack}>2.5km</Text>
-                </View>
-                <TouchableOpacity style={styles.bookBtn}>
-                  <Text style={styles.btnText}>Book Appointment</Text>
-                  <Image
-                    source={images.arrowIcon}
-                    resizeMode="contain"
-                    style={styles.arrowStyle}
-                  />
-                </TouchableOpacity>
+        {selectedBarber && (
+          <ImageBackground
+            source={images.barberCutting}
+            imageStyle={styles.containerImage}
+            // style={}
+          >
+            <View style={styles.spaceBetween}>
+              <View style={styles.row}>
+                <Text style={styles.textWhite}>5.0</Text>
+                <StarRating
+                  maxStars={1}
+                  starSize={12}
+                  color={colors.gold}
+                  rating={1}
+                />
               </View>
-            </ImageBackground>
-          </View>
-        </ImageBackground>
+              <TouchableOpacity onPress={() => setModalopen(!openModal)}>
+                <Image
+                  source={images.whiteCrossexit}
+                  resizeMode="contain"
+                  style={styles.crossIcon}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.marginCardtop}>
+              <ImageBackground
+                source={images.bluredImg}
+                imageStyle={styles.bluredImg}>
+                <View style={styles.appointmentContainer}>
+                  <Text style={styles.textDarkerblack}>
+                    {selectedBarber.name}
+                  </Text>
+                  <View style={styles.locationContainer}>
+                    <Image
+                      source={images.Location}
+                      resizeMode="contain"
+                      style={styles.locationImg}
+                    />
+                    <Text style={styles.textBlack}>
+                      {/* {console.log(selectedBarber?.location)} */}
+                      {calculateDistance(
+                        location.latitude,
+                        location.longitude,
+                        selectedBarber?.location.latitude,
+                        selectedBarber?.location.longitude,
+                      ).toFixed(2)}
+                      {/* {``} */}
+                      {/* {`Distance: ${distance.toFixed(2)} km`} */}
+                    </Text>
+                  </View>
+                  <TouchableOpacity style={styles.bookBtn}>
+                    <Text style={styles.btnText}>Book Appointment</Text>
+                    <Image
+                      source={images.arrowIcon}
+                      resizeMode="contain"
+                      style={styles.arrowStyle}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </ImageBackground>
+            </View>
+          </ImageBackground>
+        )}
       </Modal>
     </SafeAreaView>
   );

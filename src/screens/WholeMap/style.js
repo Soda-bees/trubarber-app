@@ -220,6 +220,8 @@ export const styles = StyleSheet.create({
   locationImgIcon: {
     width: sizes.screenWidth * 0.25,
     height: sizes.screenWidth * 0.25,
+    justifyContent: 'center',
+    alignItems: 'center',
     // zIndex:1,
     // backgroundColor:'black'
   },
@@ -232,5 +234,15 @@ export const styles = StyleSheet.create({
   markerText: {
     color: '#fff',
     fontSize: 25,
+  },
+
+  markerIngStyle: {
+    width: sizes.screenWidth * 0.08,
+    height: sizes.screenWidth * 0.08,
+    backgroundColor: 'red',
+    marginBottom: 25,
+    borderRadius: sizes.screenWidth * 0.1,
+    borderColor: colors.white,
+    borderWidth: 1,
   },
 });
