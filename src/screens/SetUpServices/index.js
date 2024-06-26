@@ -102,14 +102,14 @@ export default function SetUpServices({ navigation, route }) {
           </View>
         </View>
 
-        {/* <View style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}> */}
+        <View style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
         <Button
           title={'Next'}
           onPress={() =>
             handleConfirm()
           }
         />
-        {/* </View> */}
+        </View>
         <Toast />
       </View>
     </SafeAreaView>

@@ -33,7 +33,8 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: fontSize.medium,
     paddingHorizontal: sizes.screenWidth * 0.06,
-    marginTop: sizes.screenHeight * 0.01
+    marginTop: sizes.screenHeight * 0.01,
+    color:colors.black
   },
 
   serviceImagecontainer: {
@@ -96,7 +97,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   nextBtn: {
-    top: sizes.screenHeight * 0.06
+    position:'absolute',
+    alignSelf:'center',
+    bottom: sizes.screenHeight * 0.03
   },
 
   nextBtnIOS: {

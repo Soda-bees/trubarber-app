@@ -15,8 +15,11 @@ import Button from '../../components/Button';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import {colors, sizes} from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
+import formatToJSON from '../../services/config/FormatToJson/index.js';
 
-export default function BookAppointment({navigation}) {
+export default function BookAppointment({navigation, route}) {
+  const barbar = route.params;
+  console.log('param wala data h yeh', formatToJSON(barbar));
   const [services, selectedServices] = useState([
     {
       images: images.hairCut,
@@ -133,16 +136,16 @@ export default function BookAppointment({navigation}) {
 
   const [tab, setTabs] = useState('About');
 
-  const handleGoback = () =>{
-    navigation.goBack()
-  }
+  const handleGoback = () => {
+    navigation.goBack();
+  };
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <ImageBackground
           imageStyle={styles.headerImage}
-          source={images.barberHat}
+          source={{uri: barbar.item.profile}}
           // style={}
         >
           <View style={styles.headerContainer}>
@@ -161,7 +164,7 @@ export default function BookAppointment({navigation}) {
           <View style={styles.centerContent}>
             <View style={styles.barberDetailscontainer}>
               <View style={styles.alignedDetails}>
-                <Text style={styles.barberName}>REDBOX BARBER</Text>
+                <Text style={styles.barberName}>{barbar?.item?.name}</Text>
                 <View style={styles.row}>
                   <Image
                     source={images.redLocation}
@@ -184,17 +187,17 @@ export default function BookAppointment({navigation}) {
           </View>
         </ImageBackground>
         <View style={styles.todoButtonscontainer}>
-          <View>
+          <View style={styles.call}>
             <TouchableOpacity style={styles.btnColor}>
               <Image
                 style={styles.direction}
                 source={images.direction}
                 resizeMode="contain"
               />
+              <Text style={styles.btnText}>Direction</Text>
             </TouchableOpacity>
-            <Text style={styles.btnText}>Direction</Text>
           </View>
-          <View style={styles.call}>
+          {/* <View style={styles.call}>
             <TouchableOpacity style={styles.btnColor}>
               <Image
                 style={styles.direction}
@@ -203,7 +206,7 @@ export default function BookAppointment({navigation}) {
               />
             </TouchableOpacity>
             <Text style={styles.btnText}>Call</Text>
-          </View>
+          </View> */}
           <View>
             <TouchableOpacity style={styles.btnColor}>
               <Image
@@ -211,8 +214,8 @@ export default function BookAppointment({navigation}) {
                 source={images.Send}
                 resizeMode="contain"
               />
+              <Text style={styles.btnText}>Message</Text>
             </TouchableOpacity>
-            <Text style={styles.btnText}>Message</Text>
           </View>
         </View>
         <View style={styles.tabContainer}>
@@ -234,12 +237,13 @@ export default function BookAppointment({navigation}) {
         </View>
         {tab === 'About' ? (
           <View>
-            <Text style={styles.aboutContent}>
-              Welcome to Redbox Barber, where grooming meets style and tradition
-              merges with the contemporary. Established with a passion for
-              precision and an eye for detail, we take pride in delivering
-              exceptional grooming experiences that go beyond the ordinary.
-            </Text>
+            <ScrollView>
+              <View>
+              <Text style={styles.aboutContent}>
+                {barbar.item.description}
+              </Text>
+              </View>
+            </ScrollView>
             <View style={styles.btn}>
               <Button
                 title={'Book Appointment'}
@@ -267,7 +271,9 @@ export default function BookAppointment({navigation}) {
                     </View>
                   </View>
                   <View style={styles.endContainer}>
-                    <TouchableOpacity style={styles.bookButton} onPress={()=>navigation.navigate("ServiceDetails")}>
+                    <TouchableOpacity
+                      style={styles.bookButton}
+                      onPress={() => navigation.navigate('ServiceDetails')}>
                       <Text style={styles.bookWhite}>Book</Text>
                     </TouchableOpacity>
                     <Text style={styles.title}>{item.Price}</Text>
@@ -275,7 +281,13 @@ export default function BookAppointment({navigation}) {
                 </View>
               </View>
             ))}
-            <View style={{paddingBottom: Platform.OS == 'android' ? sizes.screenHeight * 0.04 : sizes.screenHeight * 0.09}}></View>
+            <View
+              style={{
+                paddingBottom:
+                  Platform.OS == 'android'
+                    ? sizes.screenHeight * 0.04
+                    : sizes.screenHeight * 0.09,
+              }}></View>
           </ScrollView>
         ) : tab === 'Reviews' ? (
           <View style={styles.reviewContainer}>
@@ -335,7 +347,13 @@ export default function BookAppointment({navigation}) {
                   </Text>
                 </View>
               ))}
-              <View style={{paddingBottom: Platform.OS == 'android' ? sizes.screenHeight * 0.71 : sizes.screenHeight * 0.73}}></View>
+              <View
+                style={{
+                  paddingBottom:
+                    Platform.OS == 'android'
+                      ? sizes.screenHeight * 0.71
+                      : sizes.screenHeight * 0.73,
+                }}></View>
             </ScrollView>
           </View>
         ) : null}

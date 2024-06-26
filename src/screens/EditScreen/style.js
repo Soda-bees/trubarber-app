@@ -129,7 +129,9 @@ export const styles = StyleSheet.create({
 
   btn: {
     // top: sizes.screenHeight  * 0.182
-    paddingBottom:sizes.screenWidth * 0.02
+    position:'absolute',
+    alignSelf:'center',
+    bottom: sizes.screenHeight * 0.03,
   },
   btnIOS: {
     position:'absolute',

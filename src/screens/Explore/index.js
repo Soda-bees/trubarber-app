@@ -26,6 +26,7 @@ import {selectlocation, setLocation} from '../../store/location';
 import {setBarber} from '../../store/barber';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
+import formatToJSON from '../../services/config/FormatToJson';
 
 export default function Explore({navigation}) {
   const dispatch = useDispatch();
@@ -38,65 +39,8 @@ export default function Explore({navigation}) {
     'Rachael McPhail Street...',
   );
 
-  const [categories, setCategories] = useState([
-    {
-      name: 'Haircuts',
-      image: images.hairCut,
-    },
-    {
-      name: 'Makeup',
-      image: images.blush,
-    },
-    {
-      name: 'Manicure',
-      image: images.HDmanicure,
-    },
-    {
-      name: 'Massage',
-      image: images.hairDresserchair,
-    },
-    {
-      name: 'Beard',
-      image: images.beardTrim,
-    },
-  ]);
-  const [barberData, setBarberdata] = useState([
-    {
-      image: images.barberHat,
-      name: 'Alex WILLIAMS',
-      location: '2.5km',
-    },
-    {
-      image: images.barberUsingdry,
-      name: 'Alex WILLIAMS',
-      location: '2.5km',
-    },
-    {
-      image: images.barberCutting,
-      name: 'Alex WILLIAMS',
-      location: '2.5km',
-    },
-    {
-      image: images.barberHat,
-      name: 'Alex WILLIAMS',
-      location: '2.5km',
-    },
-    {
-      image: images.barberUsingdry,
-      name: 'Alex WILLIAMS',
-      location: '2.5km',
-    },
-    {
-      image: images.barberCutting,
-      name: 'Alex WILLIAMS',
-      location: '2.5km',
-    },
-    {
-      image: images.barberHat,
-      name: 'Alex WILLIAMS',
-      location: '2.5km',
-    },
-  ]);
+  const [categories, setCategories] = useState([]);
+  const [barberData, setBarberdata] = useState([]);
 
   let animation = React.createRef();
 
@@ -114,16 +58,45 @@ export default function Explore({navigation}) {
     handleGetAllBarber();
   }, []);
 
+  const extractServiceData = data => {
+    let servicesData = [];
+
+    // Loop through each barber's data
+    data?.forEach(barber => {
+      if (barber.services) {
+        // Loop through each service of the current barber
+        barber.services.forEach(service => {
+          // Check if the service name already exists in servicesData
+          const existingService = servicesData.find(
+            s => s.name === service.name,
+          );
+
+          // If service name does not exist in servicesData, add it
+          if (!existingService) {
+            servicesData.push({
+              name: service.name,
+              icon: service.icon,
+            });
+          }
+        });
+      }
+    });
+    return servicesData;
+    // setCategories(servicesData);
+  };
+
   const handleGetAllBarber = async () => {
     try {
       setLoader(true);
       const response = await getAllBarber(authToken);
-      // console.log(JSON.stringify(response.data));
+      // console.log(formatToJSON(response.data));
       // console.log(response.data);
       if (response?.status == 200) {
-        setLoader(false);
+        const serviceData = await extractServiceData(response?.data?.barbers);
+        setCategories(serviceData);
         setBarberdata(response?.data?.barbers);
         dispatch(setBarber(response?.data?.barbers));
+        setLoader(false);
       } else {
         setLoader(false);
         ErrorShow('error', 'Oops', response?.data?.message);
@@ -349,22 +322,31 @@ export default function Explore({navigation}) {
               </MapView>
             </View>
             <View style={styles.marginTop}>
-              <Text style={styles.heading}>Categories</Text>
+              {categories?.length > 0 && (
+                <Text style={styles.heading}>Categories</Text>
+              )}
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.categoryRow}>
-                  {categories.map((item, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      style={styles.categoryBox}
-                      onPress={() => navigation.navigate('ServiceDetails')}>
-                      <Image
-                        source={item.image}
-                        style={styles.imageResize}
-                        resizeMode="contain"
-                      />
-                      <Text style={styles.categoryTxt}>{item.name}</Text>
-                    </TouchableOpacity>
-                  ))}
+                  {categories?.length > 0 &&
+                    categories?.map((item, index) => {
+                      return (
+                        <TouchableOpacity
+                          key={index}
+                          style={styles.categoryBox}
+                          onPress={() =>
+                            navigation.navigate('HaircutServices', {
+                              name: item.name,
+                            })
+                          }>
+                          <Image
+                            source={{uri: item?.icon}}
+                            style={styles.imageResize}
+                            resizeMode="contain"
+                          />
+                          <Text style={styles.categoryTxt}>{item.name}</Text>
+                        </TouchableOpacity>
+                      );
+                    })}
                 </View>
               </ScrollView>
             </View>
@@ -420,7 +402,7 @@ export default function Explore({navigation}) {
                                   {/* {`Lat: ${item.location.latitude}, Long: ${item.location.longitude}`} */}
                                   {distance !== null && (
                                     <Text style={styles.textBlack}>
-                                      {`Distance: ${distance.toFixed(2)} km`}
+                                      {`${distance.toFixed(2)} km`}
                                     </Text>
                                   )}
                                 </Text>
@@ -428,7 +410,7 @@ export default function Explore({navigation}) {
                               <TouchableOpacity
                                 style={styles.bookBtn}
                                 onPress={() =>
-                                  navigation.navigate('BookAppointment')
+                                  navigation.navigate('BookAppointment', {item})
                                 }>
                                 <Text style={styles.btnText}>
                                   Book Appointment

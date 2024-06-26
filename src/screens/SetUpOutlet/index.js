@@ -126,11 +126,14 @@ export default function SetUpOutlet({navigation, route}) {
         setLoader(false);
       } else {
         setLoader(false);
-        console.log(response.message);
+        ErrorShow('error', 'Oops', response.message);
+        console.log('eles =-=-=->', response.message);
       }
     } catch (error) {
       setLoader(false);
-      console.log(error);
+      ErrorShow('error', 'Oops', error.message);
+      ErrorShow('error', 'Oops', error);
+      console.log('catch=-=-=-=-', error);
     }
   };
 
@@ -206,9 +209,8 @@ export default function SetUpOutlet({navigation, route}) {
                   multiline={true}
                   numberOfLines={4}
                   placeholder="Description"
-                  placeholderTextColor='black'
-                  >
-                  </TextInput>
+                  placeholderTextColor="black"
+                />
               </View>
               <View style={styles.timeContainer}>
                 <Text
@@ -235,12 +237,12 @@ export default function SetUpOutlet({navigation, route}) {
           </KeyboardAwareScrollView>
         </View>
         <Toast />
-        <View style={{position:'absolute', bottom:25}}>
-        {loader ? (
-          <Loader title={'Next'} />
-        ) : (
-          <Button title={'Next'} onPress={() => handleConfirm()} />
-        )}
+        <View style={{position: 'absolute', bottom: 25}}>
+          {loader ? (
+            <Loader title={'Next'} />
+          ) : (
+            <Button title={'Next'} onPress={() => handleConfirm()} />
+          )}
         </View>
       </View>
     </SafeAreaView>

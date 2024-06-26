@@ -143,7 +143,7 @@ export default function WholeMap({navigation}) {
         style={styles.modalPosition}>
         {selectedBarber && (
           <ImageBackground
-            source={images.barberCutting}
+            source={{uri: selectedBarber.profile}}
             imageStyle={styles.containerImage}
             // style={}
           >
