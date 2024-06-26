@@ -6,44 +6,23 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import React, {useState} from 'react';
-import {ScrollView, TextInput} from 'react-native-gesture-handler';
-import {styles} from './style';
+import React, { useState } from 'react';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import { styles } from './style';
 import images from '../../services/utilities/images';
-import {colors} from '../../services';
+import { colors } from '../../services';
+import { useSelector } from 'react-redux';
+import { selectUserData } from '../../store/userData';
+import formatToJSON from '../../services/config/FormatToJson';
 
-export default function BaberCatalogue({navigation}) {
+export default function BaberCatalogue({ navigation }) {
+  const userData = useSelector(selectUserData)
+  console.log(formatToJSON(userData));
   const [currentLocation, setCurrentLocation] = useState(
     'Rachael McPhail Street...',
   );
+  const [servicesData, setserviceData] = useState([]);
 
-  const [servicesData, setserviceData] = useState([
-    {
-      serviceImage: images.hairCut,
-      serviceName: 'Haircuts',
-      serviceStyles: '5',
-    },
-    {
-      serviceImage: images.HDblush,
-      serviceName: 'Makeup',
-      serviceStyles: '5',
-    },
-    {
-      serviceImage: images.HDmanicure,
-      serviceName: 'Manicure',
-      serviceStyles: '5',
-    },
-    {
-      serviceImage: images.hairDresserchair,
-      serviceName: 'Manicure',
-      serviceStyles: '5',
-    },
-    {
-      serviceImage: images.beardTrim,
-      serviceName: 'Beard',
-      serviceStyles: '5',
-    },
-  ]);
 
   return (
     <SafeAreaView>
@@ -79,9 +58,9 @@ export default function BaberCatalogue({navigation}) {
                   />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.notificationContainer}
-                onPress={() => {
-                  navigation.navigate('Chats');
-                }}>
+                  onPress={() => {
+                    navigation.navigate('Chats');
+                  }}>
                   <Image style={styles.iconImage} source={images.chat} />
                 </TouchableOpacity>
               </View>
@@ -106,29 +85,31 @@ export default function BaberCatalogue({navigation}) {
           <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
             <View>
               <View style={styles.serviceContainer}>
-                {servicesData.map((item, index) => (
+                {userData?.services?.map((item, index) => (
                   <TouchableOpacity
                     style={styles.serviceBox}
                     key={index}
-                    onPress={() => navigation.navigate('BarberSevriceDetails', {serviceNameHeading: item.serviceName,serviceName:item.serviceName})}>
+                    onPress={() => navigation.navigate('BarberSevriceDetails', { serviceNameHeading: item.serviceName, serviceName: item.serviceName })}
+                  >
                     <Image
-                      source={item.serviceImage}
+                      source={{ uri: item.icon }}
                       style={styles.serviceImage}
                     />
-                    <Text style={styles.serviceName}>{item.serviceName}</Text>
+                    <Text style={styles.serviceName}>{item.name}</Text>
                     <Text style={styles.serviceStyle}>
-                      {item.serviceStyles} Styles
+                      {`${item?.options?.length} Styles`}
                     </Text>
                   </TouchableOpacity>
                 ))}
               </View>
             </View>
           </ScrollView>
+          {/* SetUpServices */}
           <TouchableOpacity onPress={() => navigation.navigate('AddServices')}>
-          <Image style={styles.addService} source={images.addBtn} />
+            <Image style={styles.addService} source={images.addBtn} />
           </TouchableOpacity>
         </View>
-        <View style={Platform.OS == 'ios' && styles.paddingBtm}/>
+        <View style={Platform.OS == 'ios' && styles.paddingBtm} />
       </View>
     </SafeAreaView>
   );

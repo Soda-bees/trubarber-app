@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import images from '../../services/utilities/images';
-import {styles} from '../Otp/style.js';
+import { styles } from '../Otp/style.js';
 import Button from '../../components/Button';
 import {
   CodeField,
@@ -17,13 +17,28 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
+import Loader from '../../components/Loader';
+import { useSelector } from 'react-redux';
+import { selectRole } from '../../store/role';
+import { handleForgotPass } from '../../services/config/API';
+import { ErrorShow } from '../../components/Error';
+import Toast from 'react-native-toast-message';
+import formatToJSON from '../../services/config/FormatToJson';
 
-export default function Otp({navigation}) {
+export default function Otp({ navigation, route }) {
+  const role = useSelector(selectRole)
+  const { email, otp } = route?.params
   const [value, setValue] = useState('');
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(30);
-  // const route = useRoute();
-  // const {isUser} = route.params;
+  const [loader, setLoader] = useState(false)
+  const [oldOTP, setOldOTP] = useState('')
+
+  useEffect(() => {
+    if (otp) {
+      setOldOTP(otp)
+    }
+  }, [otp])
 
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
@@ -40,10 +55,34 @@ export default function Otp({navigation}) {
     this.otpInput.setValue('1234');
   };
 
-  const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
+  const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
 
   const handleResetPassword = () => {
-    navigation.navigate('ResetPass')
+    if (value !== oldOTP) {
+      return ErrorShow('error', 'Oops', "OTP doesn't match")
+    }
+    navigation.navigate('ResetPass', { email })
+  }
+
+  const handleResendOTP = async () => {
+    try {
+      setLoader(true)
+      const body = { email, role }
+      const response = await handleForgotPass(body)
+      console.log(formatToJSON(response?.data));
+      if (response?.status == 200) {
+        setLoader(false)
+        console.log(response?.data?.otp);
+        setOldOTP(response?.data?.otp)
+      } else {
+        setLoader(false)
+        ErrorShow('error', 'Oops', response?.data?.message)
+      }
+    } catch (error) {
+      setLoader(false)
+      console.log(error);
+      ErrorShow('error', 'Oops', error?.message)
+    }
   }
 
   return (
@@ -51,7 +90,7 @@ export default function Otp({navigation}) {
       <Text style={styles.forgotPass}>Enter OTP</Text>
       <View style={styles.adjustWidth}>
         <Text style={styles.subText}>
-          You would’ve received an OTP on your email ***@gmail.com
+          You would’ve received an OTP on your email <Text style={{ fontWeight: '800' }}>{email}</Text>
         </Text>
       </View>
       <View style={styles.inputRow}>
@@ -63,7 +102,7 @@ export default function Otp({navigation}) {
           rootStyle={styles.codeFieldRoot}
           keyboardType="number-pad"
           textContentType="oneTimeCode"
-          renderCell={({index, symbol, isFocused}) => (
+          renderCell={({ index, symbol, isFocused }) => (
             <Text
               key={index}
               style={[
@@ -79,7 +118,7 @@ export default function Otp({navigation}) {
       <View style={styles.recevieOTP}>
         <View style={styles.row}>
           <Text style={styles.textSize}>Didn’t receive the OTP?</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleResendOTP}>
             <Text style={styles.resend}> Resend</Text>
           </TouchableOpacity>
         </View>
@@ -96,8 +135,13 @@ export default function Otp({navigation}) {
             <Text style={styles.forgetText}> seconds </Text>
           </View> */}
       <View style={Platform.OS == 'android' ? styles.marginTop : styles.marginTopIOS}>
-        <Button title={'Next'} onPress={handleResetPassword}/>
+        {
+          loader ?
+            <Loader title={'Next'} /> :
+            <Button title={'Next'} onPress={handleResetPassword} />
+        }
       </View>
+      <Toast />
     </View>
   );
 }

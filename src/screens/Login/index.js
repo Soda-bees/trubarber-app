@@ -45,11 +45,18 @@ export default function Login({navigation}) {
   // };
 
   const handleForgotPassword = () => {
+    if(!role){
+      return ErrorShow('error', 'Oops', 'Please select role');
+    }
     navigation.navigate('ForgotPass');
+    setEmail('')
+    setPassword('')
   };
 
   const handleSignUP = () => {
     navigation.navigate('Signup');
+    setEmail('')
+    setPassword('')
   };
 
   const handleChangeRole = role => {

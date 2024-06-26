@@ -8,28 +8,14 @@ import {styles} from './style';
 export default function AddServices({navigation}) {
   const [servicesData, setserviceData] = useState([
     {
-      serviceImage: images.hairCut,
-      serviceText: 'Haircuts',
+      icon: "https://res.cloudinary.com/doohobw9k/image/upload/v1719221917/TruBarber/Profile/xph66mkuv5k2iluyveyj.png",
+      name: 'Haircut',
     },
     {
-      serviceImage: images.HDblush,
-      serviceText: 'Makeup',
-    },
-    {
-      serviceImage: images.HDmanicure,
-      serviceText: 'Manicure',
-    },
-    {
-      serviceImage: images.hairDresserchair,
-      serviceText: 'Manicure',
-    },
-    {
-      serviceImage: images.beardTrim,
-      serviceText: 'Beard',
+      icon: "https://res.cloudinary.com/doohobw9k/image/upload/v1719221945/TruBarber/Profile/nd7aapjxiwy92htjnctg.png",
+      name: 'Beard',
     },
   ]);
-
-//   const [selectedItem, setSelecteditem] = useState([]);
 
   
   const [selectedItem, setSelecteditem] = useState(null);
@@ -38,15 +24,6 @@ export default function AddServices({navigation}) {
     setSelecteditem(tag === selectedItem ? null : tag);
   };
 
-    // const handleTagPress = tag => {
-    //   setSelecteditem(prevSelecteditem => {
-    //     if (prevSelecteditem.includes(tag)) {
-    //       return prevSelecteditem.filter(item => item !== tag);
-    //     } else {
-    //       return [...prevSelecteditem, tag];
-    //     }
-    //   });
-    // };
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -76,11 +53,11 @@ export default function AddServices({navigation}) {
                 ]}
                 onPress={() => handleTagPress(tag)}>
                 <Image
-                  source={tag.serviceImage}
+                  source={{uri:tag.icon}}
                   style={styles.serviceImageresize}
                   resizeMode="contain"
                 />
-                <Text style={styles.serviceTexts}>{tag.serviceText}</Text>
+                <Text style={styles.serviceTexts}>{tag.name}</Text>
               </TouchableOpacity>
             ))}
           </View>

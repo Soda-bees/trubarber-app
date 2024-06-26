@@ -150,6 +150,10 @@ export default function EditScreen({ navigation }) {
     }
   };
 
+  const onHide = () => {
+    navigation.goBack()
+  }
+
   const handleUpdateProfile = async () => {
     try {
       setLoader(true)
@@ -160,7 +164,7 @@ export default function EditScreen({ navigation }) {
       const response = await updateProfile(body, authToken)
       if (response.status == 200) {
         setLoader(false)
-        ErrorShow('success', 'Congratulation!', response?.data?.message)
+        ErrorShow('success', 'Congratulation!', response?.data?.message , 'Profile' , navigation)
         dispatch(setUserData(response?.data?.updatedUser))
       } else {
         setLoader(false)

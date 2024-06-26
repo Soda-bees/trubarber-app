@@ -54,9 +54,6 @@ export default function SetUpServices({ navigation, route }) {
     const services = selectedItem.map(item => ({
       ...item,
       pictures: [],
-      // pictures: ["https://res.cloudinary.com/doohobw9k/image/upload/v1719234104/TruBarber/Services/ve1epynr3j7tis7udjau.jpg",
-      //   "https://res.cloudinary.com/doohobw9k/image/upload/v1719234104/TruBarber/Services/ve1epynr3j7tis7udjau.jpg","https://res.cloudinary.com/doohobw9k/image/upload/v1719234104/TruBarber/Services/ve1epynr3j7tis7udjau.jpg",
-      // ],
       description: "",
       options: [{ name: "", price: "" }],
     }))

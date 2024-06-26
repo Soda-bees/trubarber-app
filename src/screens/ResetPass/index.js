@@ -7,20 +7,54 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
-import {styles} from './style';
+import React, { useState } from 'react';
+import { styles } from './style';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import {colors} from '../../services';
+import { colors } from '../../services';
+import { useSelector } from 'react-redux';
+import { selectRole } from '../../store/role';
+import { ErrorShow } from '../../components/Error';
+import Toast from 'react-native-toast-message';
+import Loader from '../../components/Loader';
+import { resetPassword } from '../../services/config/API';
 
-export default function ResetPass({navigation}) {
+export default function ResetPass({ navigation, route }) {
+
+  const { email } = route?.params
+
+  const role = useSelector(selectRole)
+
   const [showPass, setShowpass] = useState(false);
   const [showSecondpass, setShowsecondpass] = useState(false);
   const [password, setPassword] = useState('');
   const [reEnterpassword, setReenterPassword] = useState('');
+  const [loader, setLoader] = useState(false)
 
-  const handleSignIn = () =>{
+  const onHide = () => {
     navigation.navigate('Login')
+  }
+
+  const handleResetPassword = async () => {
+    try {
+      setLoader(true)
+      const body = { email, password, role }
+      if (reEnterpassword !== password) {
+        setLoader(false)
+        return ErrorShow('error', 'Oops', "Password doesn't match")
+      }
+      const response = await resetPassword(body)
+      if (response.status == 200) {
+        setLoader(false)
+        ErrorShow('success', 'Congratulation!', response?.data?.message, 'Login', navigation)
+      } else {
+        setLoader(false)
+        ErrorShow('error', 'Oops', response?.data?.message)
+      }
+    } catch (error) {
+      setLoader(false)
+      ErrorShow('error', 'Oops', error?.message)
+    }
   }
 
   return (
@@ -29,7 +63,7 @@ export default function ResetPass({navigation}) {
       <Text style={styles.subText}>
         Enter a new password to reset the password of your account
       </Text>
-      <View style={styles.inputContainer}> 
+      <View style={styles.inputContainer}>
         <View style={styles.inputStyle}>
           <TextInput
             placeholder="Enter New Password"
@@ -94,8 +128,13 @@ export default function ResetPass({navigation}) {
         </View>
       </View>
       <View style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
-        <Button title={'Next'} onPress={handleSignIn} />
+        {
+          loader ?
+            <Loader title={'Next'} /> :
+            <Button title={'Next'} onPress={handleResetPassword} />
+        }
       </View>
+      <Toast />
     </View>
   );
 }

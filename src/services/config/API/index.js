@@ -118,7 +118,31 @@ export const updatePassword = async (body, token) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post('auth/updatePassword', body , { headers });
+    const response = await axiosInstance.post('auth/updatePassword', body, { headers });
+    return response;
+  } catch (error) {
+    return error
+  }
+}
+
+export const handleForgotPass = async (body) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    const response = await axiosInstance.post('auth/forgotPassword', body, { headers });
+    return response;
+  } catch (error) {
+    return error
+  }
+}
+
+export const resetPassword = async (body) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    const response = await axiosInstance.post('auth/resetPassword', body, { headers });
     return response;
   } catch (error) {
     return error
