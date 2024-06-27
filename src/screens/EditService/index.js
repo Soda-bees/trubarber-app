@@ -17,7 +17,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {colors} from '../../services';
 
 export default function EditService({route,navigation}) {
-  const {serviceNameHeading,serviceName} = route.params
+  // const {serviceNameHeading,serviceName} = route.params
 
   // const [serviceNameHeading, setserviceNameHeading] = useState('Hair Cuts');
   // const [serviceName, setServiceName] = useState('Haircut');
@@ -133,7 +133,7 @@ export default function EditService({route,navigation}) {
             <BackArrow onPress={() => navigation.goBack()} />
           </View>
           <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>{serviceNameHeading}</Text>
+            <Text style={styles.headerText}>{"serviceNameHeading"}</Text>
           </View>
           <TouchableOpacity>
             <Image source={images.threeDots} />
@@ -142,7 +142,7 @@ export default function EditService({route,navigation}) {
         <ScrollView style={styles.scrollContainer}>
           <View style={styles.containerBody}>
             <View style={styles.serviceContainer}>
-              <Text style={styles.serviceNameText}>{serviceName} Details</Text>
+              <Text style={styles.serviceNameText}>{"serviceName"} Details</Text>
               <ScrollView showsHorizontalScrollIndicator={false} horizontal>
                 {serviceImage.map((item, index) => (
                   <View key={index}>
@@ -167,7 +167,7 @@ export default function EditService({route,navigation}) {
             </View>
             <View style={styles.serviceDetailContainer}>
               <View style={styles.tableHeadingRow}>
-                <Text style={styles.tableServiceHeading}>{serviceName}</Text>
+                <Text style={styles.tableServiceHeading}>{"serviceName"}</Text>
                 <Text style={styles.tablePriceHeading}>Price</Text>
               </View>
               {serviceDetail.map((item, index) => (

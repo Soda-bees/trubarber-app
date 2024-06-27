@@ -148,3 +148,59 @@ export const resetPassword = async (body) => {
     return error
   }
 }
+
+export const addServices = async (body, token) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    };
+    const response = await axiosInstance.post('barber/addService', body, { headers });
+    return response;
+  } catch (error) {
+    return error
+  }
+}
+
+export const getAddressFromCoordinates = async (latitude, longitude) => {
+  const GOOGLE_MAPS_API_KEY = 'AIzaSyCbWOArVUIn-uRQ8S3fsvayHrep5El4ab4';
+  try {
+    const response = await axios.get(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_MAPS_API_KEY}`,
+    );
+    if (response.data.status === 'OK') {
+      const addressComponents = response.data.results[0].address_components;
+      const area =
+        addressComponents.find(component =>
+          component.types.includes('sublocality_level_1'),
+        )?.long_name || '';
+      const city =
+        addressComponents.find(component =>
+          component.types.includes('locality'),
+        )?.long_name || '';
+      return { area, city }
+      // setAddress({ area, city });
+      // console.log(area, city);
+    } else {
+      console.log('Error fetching address:', response.data.status);
+      return response?.data?.status
+    }
+  } catch (error) {
+    console.log('Error in geocoding:', error);
+    return error
+  }
+};
+
+
+export const updateService = async (body, token) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    };
+    const response = await axiosInstance.post('barber/updateService', body, { headers });
+    return response;
+  } catch (error) {
+    return error
+  }
+}

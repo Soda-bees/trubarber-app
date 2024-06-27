@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import images from '../../services/utilities/images';
 import { styles } from './style.js';
 import Button from '../../components/Button';
@@ -21,7 +21,8 @@ import Toast from 'react-native-toast-message';
 
 export default function SetUpServices({ navigation, route }) {
 
-  const { userData } = route.params;
+  const userData = route?.params?.userData;
+  const previousServices = route?.params?.previousServices;
 
   const [servicesData, setserviceData] = useState([
     {
@@ -33,6 +34,24 @@ export default function SetUpServices({ navigation, route }) {
       name: 'Beard',
     },
   ]);
+
+  const filterServices = () => {
+    // Create a set of names from previous services for quick lookup
+    const previousServiceNames = new Set(previousServices?.map(service => service?.name));
+
+    // Filter servicesData to remove any services that are in previousServices based on name
+    // return servicesData.filter(service => !previousServiceNames.has(service.name));
+    const data = servicesData?.filter(service => !previousServiceNames.has(service.name));
+    // console.log(formatToJSON(data));
+    setserviceData(data)
+  };
+
+  useEffect(() => {
+    if (!userData) {
+      // console.log(previousServices);
+      filterServices()
+    }
+  }, [])
 
   const [selectedItem, setSelecteditem] = useState([]);
 
@@ -47,7 +66,6 @@ export default function SetUpServices({ navigation, route }) {
   };
 
   const handleConfirm = async () => {
-    // navigation.navigate('ServiceInfo')
     if (selectedItem.length === 0) {
       return ErrorShow('error', 'Oops!', 'Please select at least one service');
     }
@@ -57,7 +75,11 @@ export default function SetUpServices({ navigation, route }) {
       description: "",
       options: [{ name: "", price: "" }],
     }))
-    navigation.navigate('ServiceInfo', { userData, services })
+    if (userData) {
+      navigation.navigate('ServiceInfo', { userData, services, isAdd: false, isEdit: false })
+    } else {
+      navigation.navigate('ServiceInfo', { services, isAdd: true, isEdit: false })
+    }
   }
 
   return (

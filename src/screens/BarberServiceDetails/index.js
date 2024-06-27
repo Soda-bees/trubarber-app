@@ -6,19 +6,20 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
-  Modal,
 } from 'react-native';
-import React, {useState} from 'react';
-import {styles} from './style.js';
+import React, { useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import {StarRatingDisplay} from 'react-native-star-rating-widget';
-import {colors, sizes} from '../../services';
+import { StarRatingDisplay } from 'react-native-star-rating-widget';
+import { colors, sizes } from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
+import Modal from 'react-native-modal'
 
-export default function BarberServiceDetails({route, navigation}) {
+export default function BarberServiceDetails({ route, navigation }) {
   // const [serviceNameHeading, setserviceNameHeading] = useState('Hair Cuts');
-  const {serviceNameHeading, serviceName} = route.params;
+  // const {serviceNameHeading, serviceName} = route.params;
+  const { item } = route?.params
 
   const [serviceAbout, setserviceAbout] = useState(
     'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id es',
@@ -45,11 +46,11 @@ export default function BarberServiceDetails({route, navigation}) {
     },
   ]);
   const [serviceImage, setServiceImage] = useState([
-    {image: images.barberUsingdry},
-    {image: images.barberUsingdry},
-    {image: images.barberUsingdry},
-    {image: images.barberUsingdry},
-    {image: images.barberUsingdry},
+    { image: images.barberUsingdry },
+    { image: images.barberUsingdry },
+    { image: images.barberUsingdry },
+    { image: images.barberUsingdry },
+    { image: images.barberUsingdry },
   ]);
   return (
     <SafeAreaView>
@@ -59,11 +60,12 @@ export default function BarberServiceDetails({route, navigation}) {
             <BackArrow onPress={() => navigation.goBack()} />
           </View>
           <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>{serviceNameHeading}</Text>
+            <Text style={styles.headerText}>{item?.name}</Text>
           </View>
           <TouchableOpacity
+            style={{ padding: sizes.screenWidth * 0.02 }}
             onPress={() => {
-              setModalVisible(true);
+              setModalVisible(!modalVisible);
             }}>
             <Image source={images.threeDots} />
           </TouchableOpacity>
@@ -72,14 +74,14 @@ export default function BarberServiceDetails({route, navigation}) {
           <View style={styles.containerBody}>
             <View style={styles.aboutContainer}>
               <Text style={styles.aboutHeading}>About</Text>
-              <Text style={styles.aboutDescription}>{serviceAbout}</Text>
+              <Text style={styles.aboutDescription}>{item?.description}</Text>
             </View>
             <View style={styles.serviceDetailContainer}>
               <View style={styles.tableHeadingRow}>
-                <Text style={styles.tableServiceHeading}>{serviceName}</Text>
+                <Text style={styles.tableServiceHeading}>{item?.name}</Text>
                 <Text style={styles.tablePriceHeading}>Price</Text>
               </View>
-              {serviceDetail.map((item, index) => (
+              {item?.options?.map((item, index) => (
                 <View style={styles.serviceContentRow} key={index}>
                   <Text style={styles.serviceNameText}>{item.name}</Text>
                   <Text style={styles.priceText}>$ {item.price}</Text>
@@ -87,33 +89,36 @@ export default function BarberServiceDetails({route, navigation}) {
               ))}
             </View>
           </View>
-          <View style={styles.imageView}>
-            <Text style={styles.imageHeading}>Images</Text>
-            <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-              {serviceImage.map((item, index) => (
-                <View key={index}>
-                  <Image style={styles.imageContainer} source={item.image} />
-                </View>
-              ))}
-            </ScrollView>
-          </View>
         </ScrollView>
+        <View style={styles.imageView}>
+          <Text style={styles.imageHeading}>Images</Text>
+          <ScrollView showsHorizontalScrollIndicator={false} horizontal>
+            {item?.pictures?.map((item, index) => (
+              <View key={index}>
+                <Image style={styles.imageContainer} source={{ uri: item }} />
+              </View>
+            ))}
+          </ScrollView>
+        </View>
         <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-          setModalVisible(!modalVisible);
-          }}>
+          animationIn={'slideInRight'}
+          isVisible={modalVisible}
+          onBackdropPress={() => setModalVisible(!modalVisible)}
+        >
           <View style={styles.modalView}>
             <TouchableOpacity
               style={styles.modalRow}
               onPress={() => {
-                navigation.navigate('EditService', {
-                  serviceNameHeading,
-                  serviceName,
-                });
-              }}>
+                setModalVisible(false)
+                navigation.navigate('ServiceInfo', { services: [item], isAdd: false, isEdit: true })
+              }}
+            // onPress={() => {
+            //   navigation.navigate('EditService', {
+            //     serviceNameHeading,
+            //     serviceName,
+            //   });
+            // }}
+            >
               <Image source={images.editIcon} />
               <Text style={styles.modalText}>Edit</Text>
             </TouchableOpacity>

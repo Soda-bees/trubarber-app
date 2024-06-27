@@ -17,7 +17,6 @@ import formatToJSON from '../../services/config/FormatToJson';
 
 export default function BaberCatalogue({ navigation }) {
   const userData = useSelector(selectUserData)
-  console.log(formatToJSON(userData));
   const [currentLocation, setCurrentLocation] = useState(
     'Rachael McPhail Street...',
   );
@@ -89,7 +88,8 @@ export default function BaberCatalogue({ navigation }) {
                   <TouchableOpacity
                     style={styles.serviceBox}
                     key={index}
-                    onPress={() => navigation.navigate('BarberSevriceDetails', { serviceNameHeading: item.serviceName, serviceName: item.serviceName })}
+                    onPress={() => navigation.navigate('BarberSevriceDetails', { item })}
+                  // onPress={() => navigation.navigate('BarberSevriceDetails', { serviceNameHeading: item.serviceName, serviceName: item.serviceName })}
                   >
                     <Image
                       source={{ uri: item.icon }}
@@ -104,10 +104,12 @@ export default function BaberCatalogue({ navigation }) {
               </View>
             </View>
           </ScrollView>
-          {/* SetUpServices */}
-          <TouchableOpacity onPress={() => navigation.navigate('AddServices')}>
-            <Image style={styles.addService} source={images.addBtn} />
-          </TouchableOpacity>
+          {
+            userData?.services?.length < 2 &&
+            <TouchableOpacity onPress={() => navigation.navigate('SetUpServices', { previousServices: userData?.services })}>
+              <Image style={styles.addService} source={images.addBtn} />
+            </TouchableOpacity>
+          }
         </View>
         <View style={Platform.OS == 'ios' && styles.paddingBtm} />
       </View>

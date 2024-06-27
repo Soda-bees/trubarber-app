@@ -27,6 +27,9 @@ import { selectAuthToken } from '../../store/authToken/index.js';
 import { ErrorShow } from '../../components/Error/index.js';
 import Toast from 'react-native-toast-message';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
+import TimePickerComponent from '../../components/TimePicketComponent/index.js';
+import { selectRole } from '../../store/role/index.js';
+import { parse, format } from 'date-fns';
 
 // import {colors, sizes} from 'borderBottomcomponents/BackArrow/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
@@ -34,6 +37,7 @@ import formatToJSON from '../../services/config/FormatToJson/index.js';
 export default function EditScreen({ navigation }) {
   const userData = useSelector(selectUserData)
   const authToken = useSelector(selectAuthToken)
+  const role = useSelector(selectRole)
 
   const dispatch = useDispatch()
 
@@ -41,14 +45,54 @@ export default function EditScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [loader, setLoader] = useState(false)
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
+  const [description, setDescription] = useState('');
+
+  const parseTimeString = (time) => {
+    const [startTimeString, endTimeString] = time.split(' - ');
+    const startTime = parseSingleTimeString(startTimeString);
+    const endTime = parseSingleTimeString(endTimeString);
+    return { startTime, endTime };
+  };
+
+  const parseSingleTimeString = (timeString) => {
+    const [time, modifier] = timeString.split(' ');
+
+    let [hours, minutes] = time.split(':');
+    if (hours === '12') {
+      hours = '00';
+    }
+    if (modifier === 'PM') {
+      hours = parseInt(hours, 10) + 12;
+    }
+
+    const date = new Date();
+    date.setHours(parseInt(hours, 10));
+    date.setMinutes(parseInt(minutes, 10));
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+
+    return date;
+  };
 
   useEffect(() => {
     if (userData) {
-      setImgUri(userData?.profile)
-      setEmail(userData?.email)
-      setName(userData?.name)
+      if (role == 'user') {
+        setImgUri(userData?.profile)
+        setEmail(userData?.email)
+        setName(userData?.name)
+      } else {
+        setImgUri(userData?.profile)
+        setEmail(userData?.email)
+        setName(userData?.name)
+        setDescription(userData?.description)
+        const { startTime, endTime } = parseTimeString(userData?.time);
+        setStartTime(startTime);
+        setEndTime(endTime);
+      }
     }
-  }, [])
+  }, [userData])
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
@@ -150,21 +194,38 @@ export default function EditScreen({ navigation }) {
     }
   };
 
-  const onHide = () => {
+  const formatTime = date => {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    return hours + ':' + minutes + ' ' + ampm;
+  };
+
+  const onHide = async () => [
     navigation.goBack()
-  }
+  ]
 
   const handleUpdateProfile = async () => {
     try {
       setLoader(true)
-      const body = {
+      const userBody = {
         name,
         profile: imgUri
       }
-      const response = await updateProfile(body, authToken)
+      const BarberBody = {
+        name,
+        profile: imgUri,
+        description,
+        time: `${formatTime(startTime)} - ${formatTime(endTime)}`
+      }
+      const response = await updateProfile(role == 'user' ? userBody : BarberBody, authToken)
+      console.log(formatToJSON(response));
       if (response.status == 200) {
         setLoader(false)
-        ErrorShow('success', 'Congratulation!', response?.data?.message , 'Profile' , navigation)
+        ErrorShow('success', 'Congratulation!', response?.data?.message, onHide)
         dispatch(setUserData(response?.data?.updatedUser))
       } else {
         setLoader(false)
@@ -246,43 +307,33 @@ export default function EditScreen({ navigation }) {
                 />
               </View>
             </View>
-            {/* <View style={styles.inputField}>
-              <View style={styles.rowInput}>
+            <View style={styles.inputField}>
+              <View style={styles.description}>
+                <TimePickerComponent
+                  startTime={startTime}
+                  setStartTime={setStartTime}
+                  endTime={endTime}
+                  setEndTime={setEndTime}
+                  isBold={false}
+                />
                 <Image
-                  source={images.Call}
-                  style={styles.inputImage}
+                  source={images.clockIcon}
+                  style={styles.clockIcon}
                   resizeMode="contain"
                 />
-                <TextInput
-                  placeholder="Phone Number"
-                  style={styles.input}
-                  keyboardType="number-pad"
-                  placeholderTextColor={colors.placeholdertext}
-                  value={phoneNumber}
-                  onChangeText={text => {
-                    setphoneNumber(text);
-                  }}
-                />
               </View>
-            </View> */}
-            {/* <View style={styles.inputField}>
-              <View style={styles.rowInput}>
-                <Image
-                  source={images.Location}
-                  style={styles.inputImage}
-                  resizeMode="contain"
-                />
-                <TextInput
-                  placeholder="City Address"
-                  placeholderTextColor={colors.placeholdertext}
-                  style={styles.input}
-                  value={cityAdress}
-                  onChangeText={text => {
-                    setcityAdress(text);
-                  }}
-                />
-              </View>
-            </View> */}
+            </View>
+            <View style={styles.inputFieldDes}>
+              <TextInput
+                style={styles.description}
+                onChangeText={setDescription}
+                value={description}
+                multiline={true}
+                numberOfLines={4}
+                placeholder="Description"
+                placeholderTextColor='black'
+              />
+            </View>
           </View>
         </KeyboardAwareScrollView>
         <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>

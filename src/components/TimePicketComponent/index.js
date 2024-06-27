@@ -6,7 +6,7 @@ import images from '../../services/utilities/images';
 import { styles } from '../../screens/SetUpOutlet/style';
 import { Image } from 'react-native-svg';
 
-const TimePickerComponent = ({ startTime, setStartTime, endTime, setEndTime }) => {
+const TimePickerComponent = ({ startTime, setStartTime, endTime, setEndTime , isBold }) => {
     // const [startTime, setStartTime] = useState(new Date());
     // const [endTime, setEndTime] = useState(new Date());
     const [showStartPicker, setShowStartPicker] = useState(false);
@@ -39,12 +39,12 @@ const TimePickerComponent = ({ startTime, setStartTime, endTime, setEndTime }) =
             <View>
                 <View style={{ flexDirection: 'row', paddingVertical: sizes.screenWidth * 0.02 }}>
                     <TouchableOpacity onPress={() => setShowStartPicker(true)}>
-                        <Text style={{ fontWeight: '800', color: 'black', fontSize: fontSize.medium }}>
+                        <Text style={isBold ? { fontWeight: '800', color: 'black', fontSize: fontSize.medium } : {color: 'black', fontSize: fontSize.medium }}>
                             {`${formatTime(startTime)}`}</Text>
                     </TouchableOpacity>
                     <Text style={{color:colors.black}}> - </Text>
                     <TouchableOpacity onPress={() => setShowEndPicker(true)}>
-                        <Text style={{ fontWeight: '800', color: 'black', fontSize: fontSize.medium }}>
+                        <Text style={isBold ? { fontWeight: '800', color: 'black', fontSize: fontSize.medium } : {color: 'black', fontSize: fontSize.medium }}>
                             {`${formatTime(endTime)}`}</Text>
                     </TouchableOpacity>
                 </View>

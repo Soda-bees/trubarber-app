@@ -90,6 +90,7 @@ export const styles = StyleSheet.create({
   imageView: {
     paddingLeft: sizes.screenWidth * 0.06,
     marginTop: sizes.screenHeight * 0.03,
+    paddingBottom:sizes.screenHeight * 0.02
   },
   imageHeading: {
     fontSize: fontSize.medium,
@@ -110,14 +111,16 @@ export const styles = StyleSheet.create({
   modalView:{
     backgroundColor:colors.lightgray,
     width:sizes.screenWidth* 0.3,
-    marginTop:sizes.screenHeight* 0.08,
+    // marginTop:sizes.screenHeight* 0.09,
     alignSelf:'flex-end',
     marginRight:sizes.screenHeight* 0.02,
     paddingHorizontal:sizes.screenHeight*0.02,
     paddingVertical:sizes.screenHeight* 0.01,
     borderRadius:sizes.screenWidth*0.02,
     borderWidth:sizes.screenWidth* 0.002,
-    borderColor:colors.borderColor
+    borderColor:colors.borderColor,
+    position:'absolute',
+    top:sizes.screenHeight * 0.07
   },
   modalRow:{
     flexDirection:'row',

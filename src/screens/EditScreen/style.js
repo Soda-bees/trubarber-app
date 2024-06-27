@@ -90,6 +90,14 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.selectorcolor,
     height: sizes.screenHeight * 0.07,
   },
+  inputFieldDes: {
+    marginTop: sizes.screenHeight * 0.02,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: sizes.screenWidth * 0.03,
+    backgroundColor: colors.selectorcolor,
+    // height: sizes.screenHeight * 0.07,
+  },
 
   wholeContainer: {
     marginTop: sizes.screenHeight * 0.06,
@@ -135,5 +143,23 @@ export const styles = StyleSheet.create({
     position:'absolute',
     alignSelf:"center",
     bottom:sizes.screenHeight * 0.1
+  },
+  description: {
+    color: colors.black,
+    // fontWeight: '600',
+    textAlignVertical: 'top',
+    width: sizes.screenWidth * 0.9,
+    backgroundColor: colors.selectorcolor,
+    paddingHorizontal: sizes.screenWidth * 0.03,
+    borderRadius: sizes.screenWidth * 0.02,
+    position: 'relative',
+  },
+  clockIcon: {
+    height: sizes.screenHeight * 0.0222,
+    width: sizes.screenWidth * 0.042,
+    // top:15
+    position: 'absolute',
+    right: sizes.screenWidth * 0.03,
+    top: sizes.screenWidth * 0.025
   },
 });

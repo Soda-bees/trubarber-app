@@ -35,6 +35,10 @@ export default function ProfileSecurity({ navigation }) {
   const [reEnterpassword, setReenterPassword] = useState('');
   const [enterNewpassword, setEnternewPassword] = useState('');
 
+  const onHide = () => {
+    navigation.goBack()
+  }
+  
   const handleUpdatePasswrd = async () => {
     // navigation.navigate('Profile')
     try {
@@ -49,8 +53,11 @@ export default function ProfileSecurity({ navigation }) {
       }
       const response = await updatePassword(body, authToken)
       if (response.status == 200) {
+        setPassword('')
+        setEnternewPassword('')
+        setReenterPassword('')
         setLoader(false)
-        ErrorShow('success', 'Congratulation!', response?.data?.message)
+        ErrorShow('success', 'Congratulation!', response?.data?.message , onHide)
       } else {
         setLoader(false)
         ErrorShow('error', 'Oops!', response?.data?.message)

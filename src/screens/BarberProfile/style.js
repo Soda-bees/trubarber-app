@@ -37,10 +37,11 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.042,
     marginLeft: sizes.screenWidth * 0.072,
     marginRight: sizes.screenWidth * 0.072,
-    height: sizes.screenHeight * 0.21,
+    // height: sizes.screenHeight * 0.21,
     borderWidth: sizes.screenWidth*0.002,
     borderColor: colors.selectorcolor,
     borderRadius: sizes.screenWidth * 0.042,
+    paddingVertical:sizes.screenWidth * 0.025
   },
   contentAlligment: {
     marginTop: sizes.screenHeight * 0.012,
@@ -55,7 +56,7 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.22,
   },
   nameContainer: {
-    width: sizes.screenWidth * 0.24,
+    // width: sizes.screenWidth * 0.24,
   },
   firstName: {
     fontSize: fontSize.h6,
@@ -105,7 +106,7 @@ export const styles = StyleSheet.create({
   },
 
   btn: {
-    top: sizes.screenHeight * 0.21,
+    top: sizes.screenHeight * 0.28,
   },
   btnIOS: {
     top: sizes.screenHeight * 0.16,

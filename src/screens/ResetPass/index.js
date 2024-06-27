@@ -46,7 +46,7 @@ export default function ResetPass({ navigation, route }) {
       const response = await resetPassword(body)
       if (response.status == 200) {
         setLoader(false)
-        ErrorShow('success', 'Congratulation!', response?.data?.message, 'Login', navigation)
+        ErrorShow('success', 'Congratulation!', response?.data?.message, onHide)
       } else {
         setLoader(false)
         ErrorShow('error', 'Oops', response?.data?.message)

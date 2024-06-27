@@ -93,7 +93,7 @@ const AuthStack = () => {
       <Stack.Screen name="Explore" component={Explore} />
       <Stack.Screen name="Catalogue" component={Catalogue} />
       <Stack.Screen name="Appointments" component={Appointments} />
-      <Stack.Screen name="Profile" component={Profile} />
+      {/* <Stack.Screen name="Profile" component={Profile} /> */}
       <Stack.Screen name="SetUpOutlet" component={SetUpOutlet} />
       <Stack.Screen name="TagSelection" component={TagSelection} />
       <Stack.Screen name="Congratulation" component={Congratulation} />
@@ -120,7 +120,7 @@ const AuthStack = () => {
       <Stack.Screen name="AppoinmentBarber" component={AppoinmentBarber} />
       <Stack.Screen name="BarberDashboard" component={BarberDashboard} />
       <Stack.Screen name="BarberProfile" component={BarberProfile} />
-      <Stack.Screen name="BaberCatalogue" component={BaberCatalogue} />
+      {/* <Stack.Screen name="BaberCatalogue" component={BaberCatalogue} /> */}
       <Stack.Screen
         name="BarberSevriceDetails"
         component={BarberSevriceDetails}
@@ -153,7 +153,7 @@ const UserStack = () => {
       <Stack.Screen name="Explore" component={Explore} />
       <Stack.Screen name="Catalogue" component={Catalogue} />
       <Stack.Screen name="Appointments" component={Appointments} />
-      <Stack.Screen name="Profile" component={Profile} />
+      {/* <Stack.Screen name="Profile" component={Profile} /> */}
       <Stack.Screen name="SetUpOutlet" component={SetUpOutlet} />
       <Stack.Screen name="TagSelection" component={TagSelection} />
       <Stack.Screen name="Congratulation" component={Congratulation} />
@@ -179,7 +179,7 @@ const UserStack = () => {
       <Stack.Screen name="AppoinmentBarber" component={AppoinmentBarber} />
       <Stack.Screen name="BarberDashboard" component={BarberDashboard} />
       <Stack.Screen name="BarberProfile" component={BarberProfile} />
-      <Stack.Screen name="BaberCatalogue" component={BaberCatalogue} />
+      {/* <Stack.Screen name="BaberCatalogue" component={BaberCatalogue} /> */}
       <Stack.Screen
         name="BarberSevriceDetails"
         component={BarberSevriceDetails}
@@ -212,7 +212,7 @@ const BarberStack = () => {
       <Stack.Screen name="Explore" component={Explore} />
       <Stack.Screen name="Catalogue" component={Catalogue} />
       <Stack.Screen name="Appointments" component={Appointments} />
-      <Stack.Screen name="Profile" component={Profile} />
+      {/* <Stack.Screen name="Profile" component={Profile} /> */}
       <Stack.Screen name="SetUpOutlet" component={SetUpOutlet} />
       <Stack.Screen name="TagSelection" component={TagSelection} />
       <Stack.Screen name="Congratulation" component={Congratulation} />
@@ -238,7 +238,7 @@ const BarberStack = () => {
       <Stack.Screen name="AppoinmentBarber" component={AppoinmentBarber} />
       <Stack.Screen name="BarberDashboard" component={BarberDashboard} />
       <Stack.Screen name="BarberProfile" component={BarberProfile} />
-      <Stack.Screen name="BaberCatalogue" component={BaberCatalogue} />
+      {/* <Stack.Screen name="BaberCatalogue" component={BaberCatalogue} /> */}
       <Stack.Screen
         name="BarberSevriceDetails"
         component={BarberSevriceDetails}

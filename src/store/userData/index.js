@@ -11,10 +11,18 @@ const userDataSlice = createSlice({
         },
         removeUserData: (state) => {
             state.userData = null
+        },
+        updateServiceRedux: (state, action) => {
+            const updatedService = action.payload;
+            if (state.userData && state.userData.services) {
+                state.userData.services = state.userData.services.map(service =>
+                    service._id === updatedService._id ? updatedService : service
+                );
+            }
         }
     }
 })
 
-export const { setUserData, removeUserData } = userDataSlice.actions
+export const { setUserData, removeUserData, updateServiceRedux } = userDataSlice.actions
 export const selectUserData = state => state.user.userData
 export default userDataSlice.reducer
