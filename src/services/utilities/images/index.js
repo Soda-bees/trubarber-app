@@ -32,6 +32,7 @@ import Discovery from '../../../assets/Discovery.png';
 import beardTrim from '../../../assets/beardTrim.png';
 import hairDresserchair from '../../../assets/hairDresserchair.png';
 import barberUsingdry from '../../../assets/barberUsingdry.png';
+import barberUsingdry2 from '../../../assets/barberUsingdry2.png';
 import whiteLocation from '../../../assets/whiteLocation.png';
 import largerBarberhat from '../../../assets/largerBarberhat.png';
 import youngMan from '../../../assets/youngMan.png';
@@ -141,6 +142,7 @@ const images = {
   largerBarberhat,
   whiteLocation,
   barberUsingdry,
+  barberUsingdry2,
   hairDresserchair,
   beardTrim,
   Discovery,

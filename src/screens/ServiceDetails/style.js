@@ -39,7 +39,9 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth* 0.03,
   },
   serviceImageresize: {
-    height: sizes.screenHeight * 0.04,
+    height: sizes.screenWidth * 0.11,
+    width: sizes.screenWidth * 0.11,
+    // backgroundColor:'red'
   },
 
   detailContainer: {
@@ -72,7 +74,7 @@ export const styles = StyleSheet.create({
     // backgroundColor: 'red',
     marginLeft: sizes.screenWidth * 0.0952,
     marginRight: sizes.screenWidth * 0.0952,
-    marginTop: sizes.screenHeight * 0.59,
+    marginTop: sizes.screenHeight * 0.05,
   },
   borderRight: {
     borderRightWidth: sizes.screenWidth* 0.002,
@@ -104,8 +106,87 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: sizes.screenWidth* 0.03,
   },
+  btn2: {
+    backgroundColor: colors.lightRed,
+    justifyContent: 'center',
+    width: sizes.screenWidth * 0.312,
+    height: sizes.screenHeight * 0.05,
+    alignItems: 'center',
+    borderRadius: sizes.screenWidth* 0.03,
+  },
   whiteText: {
     color: colors.white,
     fontSize: fontSize.h6,
+  },
+  whiteText2: {
+    color: colors.black,
+    fontSize: fontSize.h6,
+  },
+
+  categoryName:{
+    color: colors.black,
+    fontSize: fontSize.large,
+    fontWeight:'600',
+    marginTop:sizes.screenHeight * 0.03,
+    marginBottom:sizes.screenHeight * 0.02,
+  },
+  categoryImg:{
+    color: colors.black,
+    fontSize: fontSize.large,
+    fontWeight:'600',
+    marginTop:sizes.screenHeight * 0.03,
+    marginBottom:sizes.screenHeight * 0.02,
+    marginLeft:sizes.screenHeight * 0.03,
+  },
+
+  styleMainView:{
+    borderWidth:1,
+    borderColor:'white',
+    alignSelf:'center',
+    width:sizes.screenWidth * 0.9,
+    height:sizes.screenHeight * 0.07,
+    borderRadius:sizes.screenWidth * 0.03,
+    backgroundColor:colors.outlineColor,
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems:'center',
+    paddingHorizontal:sizes.screenWidth * 0.04,
+    marginTop:sizes.screenHeight * 0.004
+  },
+
+  styleMainView2:{
+    borderWidth:1,
+    borderColor:'white',
+    alignSelf:'center',
+    width:sizes.screenWidth * 0.9,
+    height:sizes.screenHeight * 0.07,
+    borderRadius:sizes.screenWidth * 0.03,
+    backgroundColor:colors.lightRed,
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems:'center',
+    paddingHorizontal:sizes.screenWidth * 0.04,
+    marginTop:sizes.screenHeight * 0.004
+  },
+
+  styleName:{
+    color:colors.black,
+    fontSize:fontSize.h6,
+    fontWeight:'600'
+  },
+  imgStyle:{
+    // resizeMode:'contain',
+    width:sizes.screenWidth * 0.35,
+    height:sizes.screenWidth * 0.5,
+    borderRadius:sizes.screenWidth * 0.04,
+    // backgroundColor:'red',
+    // marginLeft:sizes.screenWidth * 0.02
+  },
+  imageContainer:{
+    flexDirection:'row',
+    marginLeft:sizes.screenWidth * 0.02,
+    // backgroundColor:'red',
+    width:sizes.screenWidth * 0.35,
+    height:sizes.screenWidth * 0.5,
   },
 });

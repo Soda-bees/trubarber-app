@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {styles} from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
@@ -18,34 +18,9 @@ import BackArrow from '../../components/BackArrow/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 
 export default function BookAppointment({navigation, route}) {
-  const barbar = route.params;
-  console.log('param wala data h yeh', formatToJSON(barbar));
-  const [services, selectedServices] = useState([
-    {
-      images: images.hairCut,
-      title: 'Haircuts',
-      description: 'Excepteur sint occaecat cupidatat non proident, sunt....',
-      Price: '$25.00',
-    },
-    {
-      images: images.blush,
-      title: 'Mackup',
-      description: 'Excepteur sint occaecat cupidatat non proident, sunt....',
-      Price: '$25.00',
-    },
-    {
-      images: images.nailPolish,
-      title: 'manicure',
-      description: 'Excepteur sint occaecat cupidatat non proident, sunt....',
-      Price: '$25.00',
-    },
-    {
-      images: images.hairCut,
-      title: 'haircut',
-      description: 'Excepteur sint occaecat cupidatat non proident, sunt....',
-      Price: '$25.00',
-    },
-  ]);
+  const barbar = route?.params?.item;
+  // console.log('param wala data h yeh', formatToJSON(barbar));
+  const [services, setServices] = useState([]);
 
   const [rating, setRatings] = useState([
     {
@@ -140,12 +115,16 @@ export default function BookAppointment({navigation, route}) {
     navigation.goBack();
   };
 
+  useEffect(() => {
+    setServices(barbar?.services);
+  }, [barbar]);
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <ImageBackground
           imageStyle={styles.headerImage}
-          source={{uri: barbar.item.profile}}
+          source={{uri: barbar.profile}}
           // style={}
         >
           <View style={styles.headerContainer}>
@@ -164,7 +143,7 @@ export default function BookAppointment({navigation, route}) {
           <View style={styles.centerContent}>
             <View style={styles.barberDetailscontainer}>
               <View style={styles.alignedDetails}>
-                <Text style={styles.barberName}>{barbar?.item?.name}</Text>
+                <Text style={styles.barberName}>{barbar?.name}</Text>
                 <View style={styles.row}>
                   <Image
                     source={images.redLocation}
@@ -237,12 +216,8 @@ export default function BookAppointment({navigation, route}) {
         </View>
         {tab === 'About' ? (
           <View>
-            <ScrollView>
-              <View>
-              <Text style={styles.aboutContent}>
-                {barbar.item.description}
-              </Text>
-              </View>
+            <ScrollView style={styles.scrollView}>
+              <Text style={styles.aboutContent}>{barbar?.description}</Text>
             </ScrollView>
             <View style={styles.btn}>
               <Button
@@ -253,34 +228,37 @@ export default function BookAppointment({navigation, route}) {
           </View>
         ) : tab === 'Services' ? (
           <ScrollView>
-            {services.map((item, index) => (
-              <View key={index}>
-                <View style={styles.servicesContainer}>
-                  <View style={styles.serviceImagecontainer}>
-                    <Image
-                      source={item.images}
-                      style={styles.serviceImageresize}
-                      resizeMode="contain"
-                    />
-                  </View>
-                  <View style={styles.flexCol}>
-                    <Text style={styles.title}>{item.title}</Text>
-                    <View style={styles.descriptionExtended}>
-                      <Text style={styles.description}>{item.description}</Text>
-                      <Text style={styles.serviceTime}>2h</Text>
+            {services?.length > 0 &&
+              services?.map((item, index) => (
+                <View key={index}>
+                  <View style={styles.servicesContainer}>
+                    <View style={styles.serviceImagecontainer}>
+                      <Image
+                        source={{uri:item?.icon}}
+                        style={styles.serviceImageresize}
+                        resizeMode="contain"
+                      />
+                    </View>
+                    <View style={styles.flexCol}>
+                      <Text style={styles.title}>{item?.name}</Text>
+                      <View style={styles.descriptionExtended}>
+                        <Text style={styles.description} numberOfLines={2}>
+                          {item.description}
+                        </Text>
+                        {/* <Text style={styles.serviceTime}>2h</Text> */}
+                      </View>
+                    </View>
+                    <View style={styles.endContainer}>
+                      <TouchableOpacity
+                        style={styles.bookButton}
+                        onPress={() => navigation.navigate('ServiceDetails', {item})}>
+                        <Text style={styles.bookWhite}>Book</Text>
+                      </TouchableOpacity>
+                      {/* <Text style={styles.title}>{item.Price}</Text> */}
                     </View>
                   </View>
-                  <View style={styles.endContainer}>
-                    <TouchableOpacity
-                      style={styles.bookButton}
-                      onPress={() => navigation.navigate('ServiceDetails')}>
-                      <Text style={styles.bookWhite}>Book</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.title}>{item.Price}</Text>
-                  </View>
                 </View>
-              </View>
-            ))}
+              ))}
             <View
               style={{
                 paddingBottom:
