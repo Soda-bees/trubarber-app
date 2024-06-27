@@ -10,9 +10,6 @@ import React, {useState} from 'react';
 import {styles} from './style.js';
 import images from '../../services/utilities/images';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
-// import BackArrow from '../../components/BackArrow';
-// import {colors, sizes} from '../../services';
-// import Button from '../../components/Button';
 import CalendarStrip from 'react-native-calendar-strip';
 import 'moment';
 import moment from 'moment';
@@ -21,7 +18,9 @@ import {colors} from '../../services/utilities/colors';
 import {sizes} from '../../services/index.js';
 import Button from '../../components/Button/index.js';
 
-export default function BookingProcess({navigation}) {
+export default function BookingProcess({navigation, route}) {
+  const {selectedIndices} = route.params;
+  console.log('booking wala param', selectedIndices);
   const [selected, setSelected] = useState(null);
 
   const currentDate = moment();

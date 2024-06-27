@@ -97,7 +97,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   nextBtn: {
-    top: sizes.screenHeight * 0.06
+    position:'absolute',
+    alignSelf:'center',
+    bottom: sizes.screenHeight * 0.03
   },
 
   nextBtnIOS: {

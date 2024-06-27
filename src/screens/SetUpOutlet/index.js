@@ -126,11 +126,14 @@ export default function SetUpOutlet({ navigation, route }) {
         setLoader(false);
       } else {
         setLoader(false);
-        console.log(response.message);
+        ErrorShow('error', 'Oops', response.message);
+        console.log('eles =-=-=->', response.message);
       }
     } catch (error) {
       setLoader(false);
-      console.log(error);
+      ErrorShow('error', 'Oops', error.message);
+      ErrorShow('error', 'Oops', error);
+      console.log('catch=-=-=-=-', error);
     }
   };
 
@@ -207,8 +210,7 @@ export default function SetUpOutlet({ navigation, route }) {
                   numberOfLines={4}
                   placeholder="Description"
                   placeholderTextColor='black'
-                >
-                </TextInput>
+                />
               </View>
               <View style={styles.timeContainer}>
                 <View style={styles.description}>
@@ -238,6 +240,6 @@ export default function SetUpOutlet({ navigation, route }) {
           )}
         </View>
       </View>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 }

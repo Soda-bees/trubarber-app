@@ -24,7 +24,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   nextBtn: {
-    top: sizes.screenHeight * 0.47,
+    position:'absolute',
+    alignSelf:'center',
+    bottom: sizes.screenHeight * 0.02,
   },
   nextBtnIOS: {
     top: sizes.screenHeight * 0.42,

@@ -33,8 +33,8 @@ export const styles = StyleSheet.create({
     // paddingHorizontal: sizes.screenWidth * 0.05,
   },
   scrollContainer: {
-    marginTop: sizes.screenHeight * 0.03,
-    marginBottom: sizes.screenHeight * 0.01,
+    // marginTop: sizes.screenHeight * 0.03,
+    // marginBottom: sizes.screenHeight * 0.01,
   },
   serviceContainer: {
     marginTop: sizes.screenHeight * 0.01,
@@ -153,6 +153,7 @@ export const styles = StyleSheet.create({
   },
   descriptionContianer: {
     marginTop: sizes.screenHeight * 0.01,
+    marginBottom: sizes.screenHeight * 0.01,
   },
   descriptionHeadingText: {
     fontWeight: '500',
@@ -168,7 +169,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: sizes.screenWidth * 0.02,
     borderWidth: sizes.screenWidth * 0.003,
     borderColor: colors.borderColor,
-    textAlignVertical:"top"
+    textAlignVertical:"top",
   },
   saveChangeBtn: {
     paddingBottom:sizes.screenHeight * 0.02

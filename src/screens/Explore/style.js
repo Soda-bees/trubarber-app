@@ -143,7 +143,7 @@ export const styles = StyleSheet.create({
   },
   categoryBox: {
     height: sizes.screenHeight * 0.1,
-    width: sizes.screenWidth * 0.2,
+    width: sizes.screenWidth * 0.45,
     borderRadius: sizes.screenWidth * 0.02,
     backgroundColor: colors.userBarbertoggle,
     alignItems: 'center',
@@ -157,7 +157,8 @@ export const styles = StyleSheet.create({
   },
 
   imageResize: {
-    height: sizes.screenHeight * 0.04,
+    height: sizes.screenWidth * 0.09,
+    width: sizes.screenWidth * 0.09,
   },
   contentMargin: {
     marginLeft: sizes.screenWidth * 0.052,

@@ -116,25 +116,23 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.pinkBtnbackground,
     alignItems: 'center',
     justifyContent: 'center',
-    height: sizes.screenHeight * 0.072,
-    width: sizes.screenWidth * 0.154,
+    height: sizes.screenHeight * 0.06,
+    width: sizes.screenWidth * 0.42,
     borderRadius: sizes.screenWidth* 0.04,
-    marginRight: sizes.screenWidth * 0.062,
-    marginLeft: sizes.screenWidth * 0.062,
+    marginRight: sizes.screenWidth * 0.03,
+    marginLeft: sizes.screenWidth * 0.03,
+    flexDirection:'row'
   },
   direction: {
     height: sizes.screenHeight * 0.026,
   },
   btnText: {
     textAlign: 'center',
-    marginRight: sizes.screenWidth * 0.062,
-    marginLeft: sizes.screenWidth * 0.062,
-    color: colors.grayText,
-    marginTop: sizes.screenHeight * 0.012,
+    color: colors.red,
+    fontSize:fontSize.medium,
   },
   call: {
     borderStyle: 'solid',
-    borderLeftWidth: 0.5,
     borderRightWidth: 0.5,
   },
   tabContainer: {
@@ -158,12 +156,15 @@ export const styles = StyleSheet.create({
   },
   aboutContent: {
     color: colors.grayText,
-    marginTop: sizes.screenHeight * 0.032,
+    marginTop: sizes.screenHeight * 0.004,
     marginLeft: sizes.screenWidth * 0.092,
     marginRight: sizes.screenWidth * 0.092,
+    // height:sizes.screenHeight * 0.25
   },
   btn: {
-    marginTop: sizes.screenHeight * 0.052,
+    position:'absolute',
+    top:sizes.screenHeight * 0.3,
+    left:sizes.screenWidth * 0.08,
   },
 
   servicesContainer: {
@@ -185,7 +186,8 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth*0.04,
   },
   serviceImageresize: {
-    height: sizes.screenHeight * 0.04,
+    height: sizes.screenWidth * 0.1,
+    width: sizes.screenWidth * 0.1,
   },
   flexCol: {
     marginTop: sizes.screenHeight * 0.012,
@@ -302,6 +304,12 @@ export const styles = StyleSheet.create({
     marginRight: sizes.screenWidth * 0.022,
     marginLeft: sizes.screenWidth * 0.03,
     marginBottom: sizes.screenHeight * 0.02,
+  },
+
+  scrollView: {
+    height:sizes.screenHeight * 0.28,
+    marginTop:10
+    // flex: 1,
   },
 
   // reviewContainer: {
