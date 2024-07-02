@@ -288,8 +288,8 @@ export default function Explore({navigation}) {
               <MapView
                 style={styles.mapStyle}
                 initialRegion={{
-                  latitude: location.latitude,
-                  longitude: location.longitude,
+                  latitude: location?.latitude,
+                  longitude: location?.longitude,
                   latitudeDelta: 0.001,
                   longitudeDelta: 0.001,
                 }}
@@ -302,8 +302,8 @@ export default function Explore({navigation}) {
                     <Marker
                       key={index}
                       coordinate={{
-                        latitude: item.location.latitude,
-                        longitude: item.location.longitude,
+                        latitude: item?.location?.latitude,
+                        longitude: item?.location?.longitude,
                       }}
                       // onPress={() => handleSelectBarber(item)}
                     >
@@ -362,8 +362,8 @@ export default function Explore({navigation}) {
                     //   ? calculateDistance(location, item.location)
                     //   : null;
                     const distance = calculateDistance(
-                      location.latitude,
-                      location.longitude,
+                      location?.latitude,
+                      location?.longitude,
                       item.location.latitude,
                       item.location.longitude,
                     );

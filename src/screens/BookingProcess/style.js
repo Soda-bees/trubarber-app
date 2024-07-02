@@ -8,9 +8,10 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight,
   },
   containerCheck: {
-    flex: 1,
-    marginBottom: sizes.screenHeight * 0.12,
+    // flex: 1,
+    // marginBottom: sizes.screenHeight * 0.12,
     // height: sizes.screenHeight * 0.2
+    // backgroundColor:'red'
   },
   calender: {
     height: sizes.screenHeight * 0.2,
@@ -99,8 +100,8 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.07,
     justifyContent: 'center',
     alignItems: 'center',
-    borderTopWidth: sizes.screenWidth* 0.002,
-    borderBottomWidth: sizes.screenWidth* 0.002,
+    borderTopWidth: sizes.screenWidth * 0.002,
+    borderBottomWidth: sizes.screenWidth * 0.002,
     borderColor: colors.lightBordercolor,
   },
 
@@ -117,7 +118,7 @@ export const styles = StyleSheet.create({
     // flexDirection: 'row',
   },
   selected: {
-    borderWidth: sizes.screenWidth* 0.002,
+    borderWidth: sizes.screenWidth * 0.002,
     width: sizes.screenWidth * 0.16,
     justifyContent: 'center',
     alignItems: 'center',
@@ -143,6 +144,12 @@ export const styles = StyleSheet.create({
   flexRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems:'center',
+  },
+  flexRow1: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems:'center',
   },
   textBlack: {
     color: colors.black,
@@ -176,8 +183,17 @@ export const styles = StyleSheet.create({
   },
   barberName: {
     color: colors.black,
-    fontWeight: '500',
+    fontWeight: '600',
+    fontSize: fontSize.medium,
   },
+  
+  barberName2: {
+    color: colors.black,
+    fontWeight: '600',
+    fontSize: fontSize.medium,
+    marginVertical: 4
+  },
+  
   time: {
     color: colors.durationColor,
   },
@@ -192,7 +208,7 @@ export const styles = StyleSheet.create({
   },
   marginTop: {
     marginTop: sizes.screenHeight * 0.02,
-    borderWidth: sizes.screenWidth* 0.002,
+    borderWidth: sizes.screenWidth * 0.002,
     width: sizes.screenWidth * 0.16,
     alignItems: 'center',
     height: sizes.screenHeight * 0.03,
@@ -211,7 +227,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: sizes.screenWidth * 0.03,
     marginTop: sizes.screenHeight * 0.02,
-    borderBottomWidth: sizes.screenWidth* 0.002,
+    borderBottomWidth: sizes.screenWidth * 0.002,
     borderColor: colors.lightBordercolor,
   },
 
@@ -235,7 +251,7 @@ export const styles = StyleSheet.create({
   },
   paymentBorder: {
     marginTop: sizes.screenHeight * 0.03,
-    borderTopWidth: sizes.screenWidth* 0.002,
+    borderTopWidth: sizes.screenWidth * 0.002,
     borderColor: colors.lightBordercolor,
     gap: sizes.screenHeight * 0.02,
   },
@@ -271,7 +287,7 @@ export const styles = StyleSheet.create({
   cardDetailscontainer: {
     marginLeft: sizes.screenWidth * 0.08,
     marginRight: sizes.screenWidth * 0.08,
-    borderWidth: sizes.screenWidth* 0.002,
+    borderWidth: sizes.screenWidth * 0.002,
     height: sizes.screenHeight * 0.05,
     alignItems: 'center',
     flexDirection: 'row',
@@ -294,10 +310,26 @@ export const styles = StyleSheet.create({
   },
   btnMargin: {
     marginTop: sizes.screenHeight * 0.04,
+    marginBottom: sizes.screenHeight * 0.03,
   },
   textContainer: {
     // backgroundColor: 'orange',
     marginTop: sizes.screenHeight * 0.01,
     width: sizes.screenWidth * 0.47,
+  },
+
+  disabledText: {
+    color: colors.grayBorder,
+    fontWeight: '600',
+  },
+  disabledText1: {
+    color: colors.grayBorder,
+    fontWeight: '800',
+  },
+  crossIcon: {
+    height: 20,
+    width: 20,
+    marginRight: 6,
+    marginVertical: 3
   },
 });

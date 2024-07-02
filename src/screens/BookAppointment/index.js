@@ -124,7 +124,7 @@ export default function BookAppointment({navigation, route}) {
       <View style={styles.container}>
         <ImageBackground
           imageStyle={styles.headerImage}
-          source={{uri: barbar.profile}}
+          source={{uri: barbar?.profile}}
           // style={}
         >
           <View style={styles.headerContainer}>
@@ -222,7 +222,9 @@ export default function BookAppointment({navigation, route}) {
             <View style={styles.btn}>
               <Button
                 title={'Book Appointment'}
-                onPress={() => navigation.navigate('BookingProcess')}
+                onPress={() => {
+                  // navigation.navigate('BookingProcess')
+                }}
               />
             </View>
           </View>

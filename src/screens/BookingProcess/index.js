@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {styles} from './style.js';
 import images from '../../services/utilities/images';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
@@ -17,20 +17,26 @@ import BackArrow from '../../components/BackArrow';
 import {colors} from '../../services/utilities/colors';
 import {sizes} from '../../services/index.js';
 import Button from '../../components/Button/index.js';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectbarber} from '../../store/barber/index.js';
+import {
+  deleteCartItem,
+  removeCart,
+  selectCart,
+  setCart,
+  updateCart,
+} from '../../store/cart/index.js';
+import formatToJSON from '../../services/config/FormatToJson/index.js';
 
 export default function BookingProcess({navigation, route}) {
-  const {selectedIndices} = route.params;
-  console.log('booking wala param', selectedIndices);
+  const dispatch = useDispatch();
+  const barbers = useSelector(selectbarber);
+  const cart = useSelector(selectCart);
+  // console.log(formatToJSON(cart));
+
   const [selected, setSelected] = useState(null);
-
-  const currentDate = moment();
-
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-
-  const handleMonthChange = newMonthIndex => {
-    setSelectedMonth(newMonthIndex);
-  };
-
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [barber, setBarber] = useState();
   const [dateData, setDatedata] = useState([
     {
       time: '1:00',
@@ -70,51 +76,131 @@ export default function BookingProcess({navigation, route}) {
     },
   ]);
 
+  const findBarber = async () => {
+    const barber = await barbers.find(barber => barber._id === cart?.barber);
+    setBarber(barber);
+    handleCreateTimeSlot(barber);
+  };
+  const setTotalPrice = () => {
+    let totalPrice = 0;
+    cart.services.forEach(service => {
+      totalPrice += parseFloat(service.price);
+    });
+    console.log('price', totalPrice);
+    setTotalAmount(totalPrice);
+  };
+
+  const handleCreateTimeSlot = async barber => {
+    const time = barber?.time;
+
+    if (typeof time === 'string') {
+      const [startTime, endTime] = time.split(' - ');
+
+      console.log('Start Time:', startTime);
+      console.log('End Time:', endTime);
+      handleCreateTimeSlotSecond(startTime, endTime);
+    } else {
+      console.log('Invalid time format');
+    }
+  };
+
+  const handleCreateTimeSlotSecond = (startTime, endTime) => {
+    const timeSlots = [];
+  
+  // Function to convert 12-hour format time to a Date object
+  const convertTo24HourFormat = (time) => {
+    let [hour, minutes] = time.split(':');
+    minutes = minutes.slice(0, 2);
+    const modifier = time.slice(-2);
+    hour = parseInt(hour);
+    minutes = parseInt(minutes);
+
+    if (modifier === 'PM' && hour !== 12) {
+      hour += 12;
+    }
+    if (modifier === 'AM' && hour === 12) {
+      hour = 0;
+    }
+
+    return { hour, minutes };
+  };
+
+  // Convert start and end times to Date objects
+  let { hour: startHour, minutes: startMinutes } = convertTo24HourFormat(startTime);
+  let { hour: endHour, minutes: endMinutes } = convertTo24HourFormat(endTime);
+
+  // Ensure endMinutes are ignored for hour slots
+  if (endMinutes > 0) {
+    endHour += 1;
+  }
+
+  // Generate one-hour slots
+  let currentHour = startHour;
+  while (currentHour !== endHour) {
+    const hours = currentHour % 24;
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const formattedHour = hours % 12 === 0 ? 12 : hours % 12;
+    const formattedTime = `${formattedHour}:00 ${ampm}`;
+    timeSlots.push(formattedTime);
+    currentHour = (currentHour + 1) % 24;
+  }
+console.log(timeSlots);
+  return timeSlots;
+  };
+
+  useEffect(() => {
+    findBarber();
+    setTotalPrice();
+  }, [cart]);
+
+  const deleteOptions = item => {
+    dispatch(deleteCartItem(item));
+  };
+
+  const currentDate = moment();
+
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+
+  const handleMonthChange = newMonthIndex => {
+    setSelectedMonth(newMonthIndex);
+  };
+
+  // useEffect(() => {
+  //   const calculateTotal = () => {
+  //     let total = 0;
+  //     services?.forEach(serviceItem => {
+  //       const service = serviceItem?.service;
+  //       const selectedIndexes = serviceItem?.selectedIndexes;
+  //       selectedIndexes?.forEach(index => {
+  //         total += parseFloat(service?.options[index]?.price);
+  //       });
+  //     });
+  //     setTotalAmount(total);
+  //   };
+
+  //   calculateTotal();
+  // }, [services]);
+
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.allignment}>
-            <View style={styles.arrowTop}>
-              <BackArrow onPress={() => navigation.goBack()} />
-            </View>
-            <Text style={styles.headerText}>Book Appointment</Text>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.allignment}>
+          <View style={styles.arrowTop}>
+            <BackArrow
+              onPress={() => {
+                // dispatch(removeCart());
+                navigation.goBack();
+              }}
+            />
           </View>
+          <Text style={styles.headerText}>Book Appointment</Text>
         </View>
+      </View>
+      <ScrollView>
         <View style={styles.topContentcontainer}>
           <View style={styles.rowcontainer}>
             <Text style={styles.datesHeading}>Select Date</Text>
-            {/* <TouchableOpacity style={styles.row}>
-              <Text style={styles.datesHeading}>Feb</Text>
-              <Image
-                style={styles.redTriangle}
-                resizeMode="contain"
-                source={images.redTriangle}
-              />
-            </TouchableOpacity> */}
           </View>
-          {/* <View style={styles.row}>
-            <View style={styles.spaceTop}>
-              <Text style={styles.days}>Sat</Text>
-              <Text style={styles.dates}>31</Text>
-            </View>
-            <View style={styles.spaceTop}>
-              <Text style={styles.days}>Sat</Text>
-              <Text style={styles.dates}>31</Text>
-            </View>
-            <View style={styles.spaceTop}>
-              <Text style={styles.days}>Sat</Text>
-              <Text style={styles.dates}>31</Text>
-            </View>
-            <View style={styles.spaceTop}>
-              <Text style={styles.days}>Sat</Text>
-              <Text style={styles.dates}>31</Text>
-            </View>
-            <View style={styles.spaceTop}>
-              <Text style={styles.days}>Sat</Text>
-              <Text style={styles.dates}>31</Text>
-            </View>
-          </View> */}
           <View>
             <View style={styles.containerCheck}>
               <CalendarStrip
@@ -124,15 +210,16 @@ export default function BookingProcess({navigation, route}) {
                   borderWidth: 1,
                 }}
                 style={{
-                  height: sizes.screenHeight * 0.16,
+                  height: sizes.screenHeight * 0.12,
                   paddingTop: sizes.screenHeight * 0.01,
-                  paddingBottom: sizes.screenHeight * 0.02,
+                  // paddingBottom: sizes.screenHeight * 0.02,
                 }}
                 dayContainerStyle={{borderWidth: 1}}
                 scrollerPaging
                 useNativeDriver
                 scrollable
                 highlightDateNumberStyle={{color: colors.red}}
+                calendarHeaderStyle={{color: colors.black}}
                 highlightDateNameStyle={{color: colors.red}}
                 highlightDateContainerStyle={{
                   backgroundColor: colors.dateSelected,
@@ -175,43 +262,97 @@ export default function BookingProcess({navigation, route}) {
         </View>
         <View style={styles.bookContainer}>
           <ScrollView>
-            <View style={styles.flexRow}>
-              <Text style={styles.textBlack}>Haircuts</Text>
-              <View style={styles.directionRow}>
-                <TouchableOpacity>
-                  <Text style={styles.change}>Change</Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Image
-                    source={images.crossbtn}
-                    resizeMode="contain"
-                    style={styles.crossbtn}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
             <View style={styles.barberContainer}>
               <View style={styles.barberNameImage}>
                 <View style={styles.imageContainer}>
                   <Image
-                    source={images.barberHat}
+                    source={{uri: barber?.profile}}
                     style={styles.imageContainer}
                   />
                 </View>
                 <View>
-                  <Text style={styles.barberName}>RedBox Barber</Text>
+                  <Text style={styles.barberName}>{barber?.name}</Text>
                   <Text style={styles.time}>02:00-02:45</Text>
                 </View>
               </View>
-              <View style={styles.marginTop}>
-                <Text style={styles.priceSmalltext}>$25.00</Text>
-              </View>
+            </View>
+
+            {/* {services?.map((item, serviceIndex) => {
+              const service = item?.service;
+              const selectedIndexes = item?.selectedIndexes;
+              const selectedOptions = getSelectedOptions(
+                service,
+                selectedIndexes,
+              );
+              return (
+                <View key={serviceIndex}>
+                  {
+                    selectedIndexes?.length >0?
+                  <Text style={styles.barberName2}>{service?.name}</Text>:null
+                  }
+                  {selectedOptions?.map((item, optionIndex) => {
+                    return (
+                      <View style={styles.flexRow} key={optionIndex}>
+                        <View style={styles.flexRow}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              deleteOptions(serviceIndex, optionIndex);
+                            }}>
+                            <Image
+                              source={images.crossIcon}
+                              style={styles.crossIcon}
+                            />
+                          </TouchableOpacity>
+                          <Text style={styles.disabledText}>{item?.name}</Text>
+                        </View>
+                        <Text style={styles.disabledText}>{`$${parseFloat(
+                          item?.price,
+                        )?.toFixed(2)}`}</Text>
+                      </View>
+                    );
+                  })}
+                </View>
+              );
+            })} */}
+            <View style={{marginTop: 20}}>
+              {cart.services?.map((item, index) => {
+                return (
+                  // <View key={index}>
+                  <View style={styles.flexRow} key={index}>
+                    <View style={styles.flexRow1}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          deleteOptions(item);
+                        }}>
+                        <Image
+                          source={images.crossIcon}
+                          style={styles.crossIcon}
+                        />
+                      </TouchableOpacity>
+                      <Text style={styles.disabledText}>{item?.name}</Text>
+                      <Text
+                        style={
+                          styles.disabledText1
+                        }>{` (${item?.serviceName})`}</Text>
+                    </View>
+                    <Text
+                      style={styles.disabledText}>{`$ ${item.price}.00`}</Text>
+                  </View>
+                  // </View>
+                );
+              })}
             </View>
             <View style={styles.total}>
               <Text style={styles.totalText}>Total:</Text>
-              <Text style={styles.priceBlack}>$25.00</Text>
+              <Text style={styles.priceBlack}>{`$${parseFloat(
+                totalAmount,
+              )?.toFixed(2)}`}</Text>
             </View>
-            <TouchableOpacity style={styles.textContainer}>
+            <TouchableOpacity
+              style={styles.textContainer}
+              onPress={() =>
+                navigation.navigate('BookAppointment', {item: barber})
+              }>
               <Text style={styles.addAnotherservice}>
                 + Add Another Service
               </Text>
@@ -253,7 +394,7 @@ export default function BookingProcess({navigation, route}) {
         <View style={styles.btnMargin}>
           <Button title={'Book'} />
         </View>
-      </View>
-    </SafeAreaView>
+      </ScrollView>
+    </View>
   );
 }

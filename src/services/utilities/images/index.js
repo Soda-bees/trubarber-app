@@ -115,6 +115,8 @@ import plusRed from '../../../assets/plusRed.png';
 import addBtn from '../../../assets/addBtn.png';
 import congoImg from '../../../assets/congoImg.png';
 import locationIcon from '../../../assets/locationIcon.png';
+import crossIcon from '../../../assets/crossIcon.png';
+
 
 const images = {
   whiteCrossexit,
@@ -234,6 +236,7 @@ const images = {
   addBtn,
   congoImg,
   locationIcon,
+  crossIcon
 };
 
 export default images;

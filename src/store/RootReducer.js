@@ -4,6 +4,8 @@ import authReducer from './authToken';
 import userDataSlice from "./userData"
 import locationSlice from './location';
 import barberSlice from './barber';
+import cartSlice from './cart';
+
 
 const rootReducer = combineReducers({
     role: roleSlice,
@@ -11,5 +13,7 @@ const rootReducer = combineReducers({
     user: userDataSlice,
     location: locationSlice,
     barber: barberSlice,
+    cart: cartSlice,
+
 });
 export default rootReducer;

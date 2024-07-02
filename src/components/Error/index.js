@@ -8,7 +8,7 @@ export const ErrorShow = (type, title, message, onHide) => {
     type: type,
     text1: title,
     text2: message,
-    onHide: onHide || (() => { onHide })
+    onHide: onHide || (() => { onHide }),
     // onHide: () => {
     //   if (screenName) {
     //     navigation.replace(screenName)

@@ -15,45 +15,161 @@ import {colors} from '../../services';
 import Button from '../../components/Button';
 import images from '../../services/utilities/images';
 import {ScrollView} from 'react-native-gesture-handler';
+import formatToJSON from '../../services/config/FormatToJson';
+import {useDispatch, useSelector} from 'react-redux';
+import {removeCart, selectCart, setCart, updateCart} from '../../store/cart';
+import {selectbarber} from '../../store/barber';
+import {selectUserData} from '../../store/userData';
+import {ErrorShow} from '../../components/Error';
+import Toast from 'react-native-toast-message';
 
 export default function ServiceDetails({navigation, route}) {
+  const dispatch = useDispatch();
+  const cart = useSelector(selectCart);
+  // const reduxCart =       useSelector(selectCart)
+  // console.log(reduxCart);
   const {item} = route.params;
-  // console.log('param wala naya data h bhaiii', item);
+  const userData = useSelector(selectUserData);
+  // const barber = useSelector(selectbarber)
+  // console.log('barber wala naya data h bhaiii', formatToJSON(barber));
   const [modalOpen, setModalopen] = useState(false);
-  const [selectedIndices, setSelectedIndices] = useState([]);
+  const [selectedIndices, setSelectedIndices] = useState(null);
   const [styleMenu, setStyleMenu] = useState([]);
   const [totalAmount, setTotalAmount] = useState('');
 
-  // const handleMenu = index => {
-  //   if (selectedIndices.includes(index)) {
-  //     setSelectedIndices(selectedIndices.filter(i => i !== index));
-  //   } else {
-  //     setSelectedIndices([...selectedIndices, index]);
-  //   }
-  // };
   useEffect(() => {
     if (item && Array.isArray(item.options)) {
       setStyleMenu(item.options);
     }
   }, [route.params.item]);
 
-  useEffect(() => {
-    // console.log(selectedIndices);
-    const total = selectedIndices.reduce(
-      (sum, idx) => sum + parseFloat(styleMenu[idx]?.price || 0),
-      0,
-    );
-    setTotalAmount(total);
-  }, [selectedIndices, styleMenu]);
+  // useEffect(() => {
+  //   // console.log(selectedIndices);
+  //   const total = selectedIndices.reduce(
+  //     (sum, idx) => sum + parseFloat(styleMenu[idx]?.price || 0),
+  //     0,
+  //   );
+  //   setTotalAmount(total);
+  // }, [selectedIndices, styleMenu]);
 
-  const handleMenu = index => {
-    setSelectedIndices(prevIndices => {
-      if (prevIndices.includes(index)) {
-        return prevIndices.filter(i => i !== index);
+  const handleMenu = (index, price) => {
+    console.log(price);
+    setSelectedIndices(prevIndex => {
+      if (prevIndex === index) {
+        setTotalAmount(prevAmount => prevAmount - price);
+        // Deselect the current index
+        return null; // Or whatever initial value you want for deselection
       } else {
-        return [...prevIndices, index];
+        // Select a new index
+        setTotalAmount(prevAmount => prevAmount - prevAmount);
+        setTotalAmount(prevAmount => prevAmount + price);
+        return index;
       }
     });
+  };
+
+  const handleAddnewBarber = async () => {
+    dispatch(removeCart());
+    let newArray = item.options
+      .filter((_, index) => index === selectedIndices)
+      .map(option => ({
+        ...option,
+        serviceName: item.name,
+        serviceIcon: item.icon,
+      }));
+    const obj = {
+      barber: item?.barber,
+      user: userData?._id,
+      services: newArray,
+      status: 'pending',
+    };
+    dispatch(setCart(obj));
+    setModalopen(!modalOpen);
+    navigation.navigate('BookingProcess');
+  };
+
+  useEffect(() => {
+    setInitialIndex();
+  }, [item]);
+
+  const setInitialIndex = async () => {
+    if (cart?.barber == item?.barber) {
+      const matchingService = cart.services.find(
+        service => service.serviceName === item.name,
+      );
+      if (matchingService) {
+        const index = item.options.findIndex(
+          option =>
+            option.name === matchingService.name &&
+            option.price === matchingService.price,
+        );
+        if (index !== -1) {
+          setSelectedIndices(index);
+        }
+      }
+    }
+  };
+
+  const handleBookingProcess = () => {
+    if (cart) {
+      if (cart?.barber !== item?.barber) {
+        setModalopen(true);
+        // console.log('barber not same open modal');
+      } else {
+        const serviceNameExists = cart.services.some(
+          service => service.serviceName === item.name,
+        );
+        if (serviceNameExists) {
+          let newArray = item.options
+            .filter((_, index) => index === selectedIndices)
+            .map(option => ({
+              ...option,
+              serviceName: item.name,
+              serviceIcon: item.icon,
+            }));
+          const obj = {
+            barber: item?.barber,
+            user: userData?._id,
+            services: newArray,
+            status: 'pending',
+          };
+          console.log(obj);
+          dispatch(updateCart(obj));
+          navigation.navigate('BookingProcess');
+        } else {
+          const oldCart = cart;
+          let newArray = item.options
+            .filter((_, index) => index === selectedIndices)
+            .map(option => ({
+              ...option,
+              serviceName: item.name,
+              serviceIcon: item.icon,
+            }));
+          const newCart = {
+            ...oldCart,
+            services: [...oldCart?.services, ...newArray],
+          };
+          dispatch(setCart(newCart));
+          navigation.navigate('BookingProcess');
+        }
+      }
+    } else {
+      let newArray = item.options
+        .filter((_, index) => index === selectedIndices)
+        .map(option => ({
+          ...option,
+          serviceName: item.name,
+          serviceIcon: item.icon,
+        }));
+      const obj = {
+        barber: item?.barber,
+        user: userData?._id,
+        services: newArray,
+        status: 'pending',
+      };
+      dispatch(setCart(obj));
+      navigation.navigate('BookingProcess');
+    }
   };
 
   return (
@@ -87,14 +203,15 @@ export default function ServiceDetails({navigation, route}) {
               <TouchableOpacity
                 key={index}
                 style={
-                  selectedIndices.includes(index)
+                  selectedIndices == index
                     ? styles.styleMainView2
                     : styles.styleMainView
                 }
-                onPress={() => handleMenu(index)}>
+                onPress={() => handleMenu(index, item?.price)}>
                 <Text style={styles.styleName}>{item?.name}</Text>
                 <Text style={styles.styleName}>
-                  <Text style={{color: colors.red}}>$</Text> {item?.price}
+                  <Text style={{color: colors.red}}>$</Text>{' '}
+                  {`${parseFloat(item?.price)?.toFixed(2)}`}
                 </Text>
               </TouchableOpacity>
             );
@@ -112,20 +229,55 @@ export default function ServiceDetails({navigation, route}) {
           <View style={styles.priceAndbtnContainer}>
             <View style={styles.borderRight}>
               <Text style={styles.serviceTime}>Total Amount</Text>
-              <Text style={styles.price}>${totalAmount}</Text>
+              <Text style={styles.price}>
+                {/* {`$${parseFloat(totalAmount)?.toFixed(
+                2,
+              )}`} */}
+                {/* {`$ ${totalAmount || '0.00'}`} */}
+                {`$${parseFloat(totalAmount || '0.00')?.toFixed(2)}`}
+              </Text>
             </View>
             <View style={styles.btnWidth}>
               <TouchableOpacity
-                style={selectedIndices.length === 0 ? styles.btn2 : styles.btn}
-                disabled={selectedIndices.length === 0}
-                onPress={() => navigation.navigate('BookingProcess', {selectedIndices})} >
-                <Text style={selectedIndices.length === 0 ? styles.whiteText2 : styles.whiteText}>Book</Text>
+                style={selectedIndices == null ? styles.btn2 : styles.btn}
+                disabled={selectedIndices == null}
+                // onPress={() => navigation.navigate('BookingProcess',  { item, selectedIndices })}
+                onPress={() => handleBookingProcess()}>
+                <Text
+                  style={
+                    selectedIndices == null
+                      ? styles.whiteText2
+                      : styles.whiteText
+                  }>
+                  Book
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
           <View style={{marginBottom: 20}} />
         </ScrollView>
+        <Toast />
       </View>
+      <Modal isVisible={modalOpen} onBackdropPress={() => setModalopen(false)}>
+        <View style={styles.modalMainView}>
+          <Text style={styles.modalMessage}>
+            You have already selected a different barber. Are you sure you want
+            to remove the previously selected barber? Please confirm to proceed.
+          </Text>
+          <View style={styles.btnMainView}>
+            <TouchableOpacity
+              style={styles.btnView1}
+              onPress={handleAddnewBarber}>
+              <Text style={styles.btnText1}>Confirm</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.btnView}
+              onPress={() => setModalopen(false)}>
+              <Text style={styles.btnText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
