@@ -133,5 +133,52 @@ export const styles = StyleSheet.create({
     color:colors.black,
     fontWeight:'500',
     marginStart:sizes.screenWidth* 0.02
-  }
+  },
+  modalMainView: {
+    backgroundColor: colors.white,
+    // height:sizes.screenHeight * 0.21,
+    width:sizes.screenWidth * 0.9,
+    borderRadius:sizes.screenWidth * 0.05,
+    paddingVertical:15
+  },
+  modalMessage:{
+    color:colors.black,
+    alignSelf:'center',
+    paddingHorizontal:15,
+    fontSize:fontSize.medium,
+    width:sizes.screenWidth * 0.85,
+    textAlign:'center'
+  },
+  btnMainView:{
+    flexDirection:'row',
+    justifyContent:'space-between',
+    paddingHorizontal:15,
+    marginTop:15
+  },
+  btnView1:{
+    // borderWidth:1,
+    borderRadius:sizes.screenWidth * 0.03,
+    height:sizes.screenHeight * 0.05, 
+    width:sizes.screenWidth * 0.4, 
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:colors.btnColor,
+  },
+  btnText1:{
+    color:colors.white,
+    fontSize:fontSize.h6,
+  },
+  btnView:{
+    borderWidth:1,
+    borderRadius:sizes.screenWidth * 0.03,
+    height:sizes.screenHeight * 0.05, 
+    width:sizes.screenWidth * 0.4, 
+    justifyContent:'center',
+    alignItems:'center',
+  },
+  
+  btnText:{
+    color:colors.black,
+    fontSize:fontSize.h6,
+  },
 });

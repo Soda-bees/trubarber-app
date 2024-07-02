@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 import React, { useState } from 'react';
 import { styles } from './style.js';
@@ -52,6 +53,23 @@ export default function BarberServiceDetails({ route, navigation }) {
     { image: images.barberUsingdry },
     { image: images.barberUsingdry },
   ]);
+  const [loader, setLoader] = useState(false)
+  const [deletePermission, setDeletePermission] = useState(false)
+
+  const handleDeleteService = async () => {
+    try {
+      console.log(item?._id);
+      setDeletePermission(false)
+      setLoader(true)
+      setTimeout(() => {
+        setLoader(false)
+      }, 1000);
+    } catch (error) {
+      setLoader(false)
+      console.log(error?.message);
+    }
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -103,33 +121,57 @@ export default function BarberServiceDetails({ route, navigation }) {
         <Modal
           animationIn={'slideInRight'}
           isVisible={modalVisible}
-          onBackdropPress={() => setModalVisible(!modalVisible)}
+          onBackdropPress={() => !loader && setModalVisible(!modalVisible)}
         >
-          <View style={styles.modalView}>
-            <TouchableOpacity
-              style={styles.modalRow}
-              onPress={() => {
-                setModalVisible(false)
-                navigation.navigate('ServiceInfo', { services: [item], isAdd: false, isEdit: true })
-              }}
-            // onPress={() => {
-            //   navigation.navigate('EditService', {
-            //     serviceNameHeading,
-            //     serviceName,
-            //   });
-            // }}
-            >
-              <Image source={images.editIcon} />
-              <Text style={styles.modalText}>Edit</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.modalRow}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-              }}>
-              <Image source={images.deleteIcon} />
-              <Text style={styles.modalText}>Delete</Text>
-            </TouchableOpacity>
+          {
+            loader ?
+              <ActivityIndicator size={50} color={"white"} />
+              :
+              <View style={styles.modalView}>
+                <TouchableOpacity
+                  style={styles.modalRow}
+                  onPress={() => {
+                    setModalVisible(false)
+                    navigation.navigate('ServiceInfo', { services: [item], isAdd: false, isEdit: true })
+                  }}
+                // onPress={() => {
+                //   navigation.navigate('EditService', {
+                //     serviceNameHeading,
+                //     serviceName,
+                //   });
+                // }}
+                >
+                  <Image source={images.editIcon} />
+                  <Text style={styles.modalText}>Edit</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalRow}
+                  onPress={() => setDeletePermission(true)}>
+                  <Image source={images.deleteIcon} />
+                  <Text style={styles.modalText}>Delete</Text>
+                </TouchableOpacity>
+              </View>
+          }
+
+        </Modal>
+        <Modal isVisible={deletePermission} onBackdropPress={() => setDeletePermission(false)}>
+          <View style={styles.modalMainView}>
+            <Text style={styles.modalMessage}>
+              Are you sure want to delete this service ?
+            </Text>
+            <View style={styles.btnMainView}>
+              <TouchableOpacity
+                style={styles.btnView1}
+                onPress={handleDeleteService}
+              >
+                <Text style={styles.btnText1}>Confirm</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.btnView}
+                onPress={() => setDeletePermission(false)}>
+                <Text style={styles.btnText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </Modal>
       </View>

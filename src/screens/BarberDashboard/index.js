@@ -9,6 +9,8 @@ import {
   TextInput,
   Animated,
   Platform,
+  PermissionsAndroid,
+  Alert
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {styles} from './style';
@@ -16,13 +18,22 @@ import images from '../../services/utilities/images';
 import {colors, sizes} from '../../services';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import * as Progress from 'react-native-progress';
+import Geolocation from '@react-native-community/geolocation';
+import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
+import { useDispatch } from 'react-redux';
+import { setLocation } from '../../store/location';
+
 export default function BarberDashboard({navigation}) {
+
+  const dispatch = useDispatch()
+
   const [appointmentDone, setAppointmentDone] = useState('03');
   const [appointmentCancelled, setAppointmentCancelled] = useState('03');
   const [profitAmount, setProfitAmount] = useState('1,760.00');
   const [profitPercent, setProfitPercent] = useState('10%');
   const [lossAmount, setLossAmount] = useState('1,760.00');
   const [lossPercent, setLossPercent] = useState('10%');
+  const [region, setRegion] = useState(null);
 
   const [currentLocation, setCurrentLocation] = useState(
     'Rachael McPhail Street...',
@@ -104,6 +115,97 @@ export default function BarberDashboard({navigation}) {
       rating: '4',
     },
   ]);
+
+  useEffect(() => {
+    const initializeLocation = async () => {
+      const hasPermission = await requestLocationPermission();
+      if (hasPermission) {
+        checkLocationServices()
+          .then(() => {
+            getCurrentLocation(setRegion, dispatch);
+          })
+          .catch(error => {
+            console.log('Location services not enabled', error.message);
+            Alert.alert(
+              'Location Services Disabled',
+              'Please enable location services to use this feature.',
+            );
+          });
+      }
+    };
+
+    initializeLocation();
+  }, []);
+
+  const requestLocationPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Location Permission',
+            message:
+              'This app needs access to your location to show your current position on the map.',
+            buttonPositive: 'OK',
+          },
+        );
+
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Location permission granted');
+          return true;
+        } else {
+          console.log('Location permission denied');
+          return false;
+        }
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    } else {
+      return true;
+    }
+  };
+
+  const checkLocationServices = () => {
+    return LocationServicesDialogBox.checkLocationServicesIsEnabled({
+      message:
+        '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
+      ok: 'YES',
+      cancel: 'NO',
+    });
+  };
+
+  const getCurrentLocation = (setRegion, dispatch) => {
+    Geolocation.getCurrentPosition(
+      position => {
+        const {latitude, longitude} = position.coords;
+        // console.log(
+        //   position.coords,
+        //   '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
+        // );
+        const locationObj = {
+          latitude,
+          longitude,
+        };
+        dispatch(setLocation(locationObj));
+        setRegion({
+          latitude,
+          longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        });
+      },
+      error => {
+        console.log('Error getting location: ', error.message);
+        Alert.alert(
+          'Error',
+          'Unable to retrieve your location. Please try again.',
+        );
+      },
+      // {enableHighAccuracy: true, timeout: 20000, maximumAge: 20000},
+    );
+  };
+
 
   return (
     <SafeAreaView>
