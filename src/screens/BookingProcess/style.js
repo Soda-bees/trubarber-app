@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
     // backgroundColor: 'orange',
     fontSize: fontSize.h7,
     color: colors.black,
-    width: sizes.screenWidth * 0.8,
+    width: sizes.screenWidth * 0.87,
     marginTop: sizes.screenHeight * 0.06,
     textAlign: 'center',
     fontWeight: '700',

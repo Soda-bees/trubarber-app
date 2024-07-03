@@ -307,33 +307,39 @@ export default function EditScreen({ navigation }) {
                 />
               </View>
             </View>
-            <View style={styles.inputField}>
-              <View style={styles.description}>
-                <TimePickerComponent
-                  startTime={startTime}
-                  setStartTime={setStartTime}
-                  endTime={endTime}
-                  setEndTime={setEndTime}
-                  isBold={false}
-                />
-                <Image
-                  source={images.clockIcon}
-                  style={styles.clockIcon}
-                  resizeMode="contain"
+            {
+              role == 'barber' &&
+              <View style={styles.inputField}>
+                <View style={styles.description}>
+                  <TimePickerComponent
+                    startTime={startTime}
+                    setStartTime={setStartTime}
+                    endTime={endTime}
+                    setEndTime={setEndTime}
+                    isBold={false}
+                  />
+                  <Image
+                    source={images.clockIcon}
+                    style={styles.clockIcon}
+                    resizeMode="contain"
+                  />
+                </View>
+              </View>
+            }
+            {
+              role == 'barber' &&
+              <View style={styles.inputFieldDes}>
+                <TextInput
+                  style={styles.description}
+                  onChangeText={setDescription}
+                  value={description}
+                  multiline={true}
+                  numberOfLines={4}
+                  placeholder="Description"
+                  placeholderTextColor='black'
                 />
               </View>
-            </View>
-            <View style={styles.inputFieldDes}>
-              <TextInput
-                style={styles.description}
-                onChangeText={setDescription}
-                value={description}
-                multiline={true}
-                numberOfLines={4}
-                placeholder="Description"
-                placeholderTextColor='black'
-              />
-            </View>
+            }
           </View>
         </KeyboardAwareScrollView>
         <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
