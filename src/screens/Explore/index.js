@@ -61,17 +61,13 @@ export default function Explore({navigation}) {
   const extractServiceData = data => {
     let servicesData = [];
 
-    // Loop through each barber's data
     data?.forEach(barber => {
       if (barber.services) {
-        // Loop through each service of the current barber
         barber.services.forEach(service => {
-          // Check if the service name already exists in servicesData
           const existingService = servicesData.find(
             s => s.name === service.name,
           );
 
-          // If service name does not exist in servicesData, add it
           if (!existingService) {
             servicesData.push({
               name: service.name,
@@ -82,15 +78,12 @@ export default function Explore({navigation}) {
       }
     });
     return servicesData;
-    // setCategories(servicesData);
   };
 
   const handleGetAllBarber = async () => {
     try {
       setLoader(true);
       const response = await getAllBarber(authToken);
-      // console.log(formatToJSON(response.data));
-      // console.log(response.data);
       if (response?.status == 200) {
         const serviceData = await extractServiceData(response?.data?.barbers);
         setCategories(serviceData);
@@ -212,6 +205,10 @@ export default function Explore({navigation}) {
       // {enableHighAccuracy: true, timeout: 20000, maximumAge: 20000},
     );
   };
+
+  useEffect(() => {
+    console.log('meh chal rha hn bhaiiiii');
+  }, []);
 
   return (
     <SafeAreaView>
@@ -335,7 +332,7 @@ export default function Explore({navigation}) {
                           style={styles.categoryBox}
                           onPress={() =>
                             navigation.navigate('HaircutServices', {
-                              name: item.name,
+                              name: item?.name,
                             })
                           }>
                           <Image

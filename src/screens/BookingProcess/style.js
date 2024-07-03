@@ -107,8 +107,9 @@ export const styles = StyleSheet.create({
 
   timeAlligment: {
     flexDirection: 'row',
-    gap: sizes.screenWidth * 0.07,
+    gap: sizes.screenWidth * 0.04,
     alignItems: 'center',
+    paddingHorizontal: sizes.screenWidth*0.03
   },
   bookContainer: {
     marginTop: sizes.screenHeight * 0.04,
@@ -118,8 +119,8 @@ export const styles = StyleSheet.create({
     // flexDirection: 'row',
   },
   selected: {
-    borderWidth: sizes.screenWidth * 0.002,
-    width: sizes.screenWidth * 0.16,
+    borderWidth: 1,
+    width: sizes.screenWidth * 0.2,
     justifyContent: 'center',
     alignItems: 'center',
     height: sizes.screenHeight * 0.04,
@@ -129,7 +130,7 @@ export const styles = StyleSheet.create({
   },
   notSelected: {
     borderWidth: 0,
-    width: sizes.screenWidth * 0.14,
+    width: sizes.screenWidth * 0.2,
     justifyContent: 'center',
     alignItems: 'center',
     height: sizes.screenHeight * 0.04,
