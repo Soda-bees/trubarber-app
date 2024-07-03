@@ -32,13 +32,10 @@ export default function HaircutServices({navigation, route}) {
   }, [name]);
 
   const getSpecificBarberBarber = () => {
-    // Assuming barbers is defined and contains your barber data array
     const data = barbers?.filter(barber => {
-      // Check if the barber offers the specified service
       return barber.services.some(service => service.name === name);
     });
 
-    // Assuming formatToJSON is a function that converts data to JSON format
     setBarberdata(data);
   };
 
@@ -130,7 +127,7 @@ export default function HaircutServices({navigation, route}) {
                             <TouchableOpacity
                               style={styles.bookBtn}
                               onPress={() =>
-                                navigation.navigate('BookAppointment')
+                                navigation.navigate('BookAppointment', {item})
                               }>
                               <Text style={styles.btnText}>
                                 Book Appointment

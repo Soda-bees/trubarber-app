@@ -9,81 +9,67 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {styles} from './style.js';
 import images from '../../services/utilities/images';
 import Backarrow from '../../components/BackArrow/index.js';
 import Button from '../../components/Button';
 import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
 import {colors, sizes} from '../../services';
+import {useSelector} from 'react-redux';
+import {selectbarber} from '../../store/barber/index.js';
+import formatToJSON from '../../services/config/FormatToJson/index.js';
+import {selectlocation} from '../../store/location/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
 export default function Catalogue({navigation}) {
+  const barbers = useSelector(selectbarber);
+  // console.log('all barbers', formatToJSON(barbers));
   const [btnActive, setactive] = useState('barber');
+  const location = useSelector(selectlocation);
 
-  const [barberData, setBarberdata] = useState([
-    {
-      image: images.barberHat,
-      name: 'Alex WILLIAMS',
-      location: '2.5km',
-    },
-    {
-      image: images.barberUsingdry,
-      name: 'Alex WILLIAMS',
-      location: '2.5km',
-    },
-    {
-      image: images.barberCutting,
-      name: 'Alex WILLIAMS',
-      location: '2.5km',
-    },
-    {
-      image: images.barberHat,
-      name: 'Alex WILLIAMS',
-      location: '2.5km',
-    },
-    {
-      image: images.barberUsingdry,
-      name: 'Alex WILLIAMS',
-      location: '2.5km',
-    },
-    {
-      image: images.barberCutting,
-      name: 'Alex WILLIAMS',
-      location: '2.5km',
-    },
-    {
-      image: images.barberHat,
-      name: 'Alex WILLIAMS',
-      location: '2.5km',
-    },
-  ]);
-  const [servicesData, setserviceData] = useState([
-    {
-      serviceImage: images.hairCut,
-      serviceText: 'Haircuts',
-    },
-    {
-      serviceImage: images.hairDresserchair,
-      serviceText: 'Makeup',
-    },
-    {
-      serviceImage: images.HDblush,
-      serviceText: 'Manicure',
-    },
-    {
-      serviceImage: images.HDmanicure,
-      serviceText: 'Massage',
-    },
-    {
-      serviceImage: images.beardTrim,
-      serviceText: 'Beard',
-    },
-    {
-      serviceImage: images.hairCut,
-      serviceText: 'Makeup',
-    },
-  ]);
+  const [barberData, setBarberdata] = useState([]);
+  const [servicesData, setserviceData] = useState([]);
+
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371;
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+    return distance;
+  };
+  const extractServiceData = () => {
+    let servicesData = [];
+
+    barbers?.forEach(barber => {
+      if (barber.services) {
+        barber.services.forEach(service => {
+          const existingService = servicesData.find(
+            s => s.name === service.name,
+          );
+
+          if (!existingService) {
+            servicesData.push({
+              name: service.name,
+              icon: service.icon,
+            });
+          }
+        });
+      }
+    });
+    return servicesData;
+  };
+
+  useEffect(() => {
+    setserviceData(extractServiceData());
+  }, [barbers]);
 
   return (
     <SafeAreaView>
@@ -142,55 +128,70 @@ export default function Catalogue({navigation}) {
                   ? styles.contentMargin
                   : styles.contentMarginIOS
               }>
-              {barberData.map((item, index) => (
-                <ImageBackground
-                  key={index}
-                  source={item.image}
-                  imageStyle={
-                    Platform.OS == 'android'
-                      ? styles.containerImage
-                      : styles.containerImageIOS
-                  }>
-                  <View style={styles.row}>
-                    <Text style={styles.textWhite}>5.0</Text>
-                    <StarRating
-                      maxStars={1}
-                      starSize={12}
-                      color={colors.gold}
-                      rating={1}
-                    />
-                  </View>
-                  <View style={styles.marginTop}>
-                    <ImageBackground
-                      source={images.bluredImg}
-                      imageStyle={styles.bluredImg}>
-                      <View style={styles.appointmentContainer}>
-                        <Text style={styles.textDarkerblack}>{item.name}</Text>
-                        <View style={styles.locationContainer}>
-                          <Image
-                            source={images.Location}
-                            resizeMode="contain"
-                            style={styles.locationImg}
-                          />
-                          <Text style={styles.textBlack}>{item.location}</Text>
+              {barbers.map((item, index) => {
+                const distance = calculateDistance(
+                  location?.latitude,
+                  location?.longitude,
+                  item.location.latitude,
+                  item.location.longitude,
+                );
+                return (
+                  <ImageBackground
+                    key={index}
+                    source={{uri: item?.profile}}
+                    imageStyle={
+                      Platform.OS == 'android'
+                        ? styles.containerImage
+                        : styles.containerImageIOS
+                    }>
+                    <View style={styles.row}>
+                      <Text style={styles.textWhite}>5.0</Text>
+                      <StarRating
+                        maxStars={1}
+                        starSize={12}
+                        color={colors.gold}
+                        rating={1}
+                      />
+                    </View>
+                    <View style={styles.marginTop}>
+                      <ImageBackground
+                        source={images.bluredImg}
+                        imageStyle={styles.bluredImg}>
+                        <View style={styles.appointmentContainer}>
+                          <Text style={styles.textDarkerblack}>
+                            {item?.name}
+                          </Text>
+                          <View style={styles.locationContainer}>
+                            <Image
+                              source={images.Location}
+                              resizeMode="contain"
+                              style={styles.locationImg}
+                            />
+                            {/* <Text style={styles.textBlack}>{item.location}</Text> */}
+                            {distance !== null && (
+                              <Text style={styles.textBlack}>
+                                {`${distance.toFixed(2)} km`}
+                              </Text>
+                            )}
+                          </View>
+                          <TouchableOpacity
+                            style={styles.bookBtn}
+                            onPress={() =>
+                              navigation.navigate('BookAppointment', {item})
+                            }>
+                            <Text style={styles.btnText}>Book Appointment</Text>
+                            <Image
+                              source={images.arrowIcon}
+                              resizeMode="contain"
+                              style={styles.arrowStyle}
+                            />
+                          </TouchableOpacity>
                         </View>
-                        <TouchableOpacity
-                          style={styles.bookBtn}
-                          onPress={() =>
-                            navigation.navigate('BookAppointment')
-                          }>
-                          <Text style={styles.btnText}>Book Appointment</Text>
-                          <Image
-                            source={images.arrowIcon}
-                            resizeMode="contain"
-                            style={styles.arrowStyle}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                    </ImageBackground>
-                  </View>
-                </ImageBackground>
-              ))}
+                      </ImageBackground>
+                    </View>
+                  </ImageBackground>
+                );
+              })}
             </View>
             <View
               style={{
@@ -202,19 +203,23 @@ export default function Catalogue({navigation}) {
         ) : btnActive === 'services' ? (
           <ScrollView>
             <View style={styles.services}>
-              {servicesData.map((item, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.serviceImagecontainer}
-                  onPress={() => navigation.navigate('HaircutServices')}>
-                  <Image
-                    source={item.serviceImage}
-                    style={styles.serviceImageresize}
-                    resizeMode="contain"
-                  />
-                  <Text style={styles.serviceTexts}>{item.serviceText}</Text>
-                </TouchableOpacity>
-              ))}
+              {servicesData?.map((item, index) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.serviceImagecontainer}
+                    onPress={() =>
+                      navigation.navigate('HaircutServices', {name: item?.name})
+                    }>
+                    <Image
+                      source={{uri: item?.icon}}
+                      style={styles.serviceImageresize}
+                      resizeMode="contain"
+                    />
+                    <Text style={styles.serviceTexts}>{item?.name}</Text>
+                  </TouchableOpacity>
+                );
+              })}
             </View>
             <View
               style={{

@@ -37,44 +37,7 @@ export default function BookingProcess({navigation, route}) {
   const [selected, setSelected] = useState(null);
   const [totalAmount, setTotalAmount] = useState(0);
   const [barber, setBarber] = useState();
-  const [dateData, setDatedata] = useState([
-    {
-      time: '1:00',
-    },
-    {
-      time: '1:30',
-    },
-    {
-      time: '2:00',
-    },
-    {
-      time: '2:30',
-    },
-    {
-      time: '3:00',
-    },
-    {
-      time: '3:30',
-    },
-    {
-      time: '4:00',
-    },
-    {
-      time: '4:30',
-    },
-    {
-      time: '5:00',
-    },
-    {
-      time: '5:30',
-    },
-    {
-      time: '6:00',
-    },
-    {
-      time: '6:30',
-    },
-  ]);
+  const [dateData, setDatedata] = useState();
 
   const findBarber = async () => {
     const barber = await barbers.find(barber => barber._id === cart?.barber);
@@ -96,61 +59,119 @@ export default function BookingProcess({navigation, route}) {
     if (typeof time === 'string') {
       const [startTime, endTime] = time.split(' - ');
 
-      console.log('Start Time:', startTime);
-      console.log('End Time:', endTime);
-      handleCreateTimeSlotSecond(startTime, endTime);
+      // console.log('Start Time:', startTime);
+      // console.log('End Time:', endTime);
+      // handleCreateTimeSlotSecond(startTime, endTime);
     } else {
       console.log('Invalid time format');
     }
   };
 
-  const handleCreateTimeSlotSecond = (startTime, endTime) => {
+  // const handleCreateTimeSlotSecond = (startTime, endTime) => {
+  //   const timeSlots = [];
+
+  //   const convertTo24HourFormat = time => {
+  //     let [hour, minutes] = time.split(':');
+  //     minutes = minutes.slice(0, 2);
+  //     const modifier = time.slice(-2);
+  //     hour = parseInt(hour);
+  //     minutes = parseInt(minutes);
+
+  //     if (modifier === 'PM' && hour !== 12) {
+  //       hour += 12;
+  //     }
+  //     if (modifier === 'AM' && hour === 12) {
+  //       hour = 0;
+  //     }
+  //     return { hour, minutes };
+  //   };
+
+  //   let { hour: startHour, minutes: startMinutes } = convertTo24HourFormat(startTime);
+  //   let { hour: endHour, minutes: endMinutes } = convertTo24HourFormat(endTime);
+
+  //   let currentHour = startHour;
+
+  //   // Adjust the endHour to include the last slot
+  //   if (endMinutes > 0) {
+  //     endHour += 1;
+  //   }
+
+  //   while (currentHour !== endHour) {
+  //     const hours = currentHour % 24;
+  //     const ampm = hours >= 12 ? 'PM' : 'AM';
+  //     const formattedHour = hours % 12 === 0 ? 12 : hours % 12;
+  //     const formattedTime = `${formattedHour}:00 ${ampm}`;
+  //     timeSlots.push(formattedTime);
+  //     currentHour = (currentHour + 1) % 24;
+  //   }
+  //   return timeSlots;
+  // };
+
+  const handleCreateTimeSlotSecond = (startTime, endTime, timeToRemove) => {
     const timeSlots = [];
-  
-  // Function to convert 12-hour format time to a Date object
-  const convertTo24HourFormat = (time) => {
-    let [hour, minutes] = time.split(':');
-    minutes = minutes.slice(0, 2);
-    const modifier = time.slice(-2);
-    hour = parseInt(hour);
-    minutes = parseInt(minutes);
 
-    if (modifier === 'PM' && hour !== 12) {
-      hour += 12;
+    const convertTo24HourFormat = time => {
+      let [hour, minutes] = time.split(':');
+      minutes = minutes.slice(0, 2);
+      const modifier = time.slice(-2);
+      hour = parseInt(hour);
+      minutes = parseInt(minutes);
+
+      if (modifier === 'PM' && hour !== 12) {
+        hour += 12;
+      }
+      if (modifier === 'AM' && hour === 12) {
+        hour = 0;
+      }
+      return {hour, minutes};
+    };
+
+    let {hour: startHour, minutes: startMinutes} =
+      convertTo24HourFormat(startTime);
+    let {hour: endHour, minutes: endMinutes} = convertTo24HourFormat(endTime);
+
+    // Adjust the endHour to include the last slot
+    if (endMinutes > 0) {
+      endHour += 1;
     }
-    if (modifier === 'AM' && hour === 12) {
-      hour = 0;
+
+    while (
+      startHour < endHour ||
+      (startHour === endHour && startMinutes < endMinutes)
+    ) {
+      const hours = startHour % 24;
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      const formattedHour = hours % 12 === 0 ? 12 : hours % 12;
+      const formattedTime = `${formattedHour}:${startMinutes
+        .toString()
+        .padStart(2, '0')} ${ampm}`;
+      timeSlots.push(formattedTime);
+
+      startHour = (startHour + Math.floor((startMinutes + 60) / 60)) % 24;
+      startMinutes = (startMinutes + 60) % 60;
     }
 
-    return { hour, minutes };
-  };
+    if (timeToRemove) {
+      const filteredTimeSlots = timeSlots.filter(
+        time => !timeToRemove.includes(time),
+      );
 
-  // Convert start and end times to Date objects
-  let { hour: startHour, minutes: startMinutes } = convertTo24HourFormat(startTime);
-  let { hour: endHour, minutes: endMinutes } = convertTo24HourFormat(endTime);
-
-  // Ensure endMinutes are ignored for hour slots
-  if (endMinutes > 0) {
-    endHour += 1;
-  }
-
-  // Generate one-hour slots
-  let currentHour = startHour;
-  while (currentHour !== endHour) {
-    const hours = currentHour % 24;
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    const formattedHour = hours % 12 === 0 ? 12 : hours % 12;
-    const formattedTime = `${formattedHour}:00 ${ampm}`;
-    timeSlots.push(formattedTime);
-    currentHour = (currentHour + 1) % 24;
-  }
-console.log(timeSlots);
-  return timeSlots;
+      return filteredTimeSlots;
+    }
+    return timeSlots;
   };
 
   useEffect(() => {
     findBarber();
     setTotalPrice();
+    const startTime = '10:00 AM';
+    const endTime = '6:00 PM';
+    // const bookedSlots = ['11:00 AM', '1:00 PM'];
+    const bookedSlots = null;
+    console.log('Start Time:', startTime);
+    console.log('End Time:', endTime);
+    setDatedata(handleCreateTimeSlotSecond(startTime, endTime));
+    // console.log('slots:', slots);
   }, [cart]);
 
   const deleteOptions = item => {
@@ -236,24 +257,20 @@ console.log(timeSlots);
         <View style={styles.timeContainer}>
           <ScrollView horizontal>
             <View style={styles.timeAlligment}>
-              {dateData.map((item, index) => (
+              {dateData?.map((item, index) => (
                 <TouchableOpacity
                   key={index}
-                  style={[
-                    styles.selected,
-                    index === selected
-                      ? styles.selectedItem
-                      : styles.notSelected,
-                  ]}
+                  style={
+                    index === selected ? styles.selected : styles.notSelected
+                  }
                   onPress={() => setSelected(index)}>
                   <Text
-                    style={[
-                      styles.selectedTextcolor,
+                    style={
                       index === selected
                         ? styles.selectedTextcolor
-                        : styles.textBlack,
-                    ]}>
-                    {item.time}
+                        : styles.textBlack
+                    }>
+                    {item}
                   </Text>
                 </TouchableOpacity>
               ))}
