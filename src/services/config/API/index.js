@@ -204,3 +204,16 @@ export const updateService = async (body, token) => {
     return error
   }
 }
+
+export const deleteService = async (token , id) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    };
+    const response = await axiosInstance.post(`barber/deleteService/${id}`, {}, { headers });
+    return response;
+  } catch (error) {
+    return error
+  }
+}

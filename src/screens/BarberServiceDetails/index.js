@@ -16,11 +16,19 @@ import { StarRatingDisplay } from 'react-native-star-rating-widget';
 import { colors, sizes } from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
 import Modal from 'react-native-modal'
+import { deleteService } from '../../services/config/API/index.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAuthToken } from '../../store/authToken/index.js';
+import Toast from 'react-native-toast-message';
+import { ErrorShow } from '../../components/Error/index.js';
+import { deleteServiceRedux } from '../../store/userData/index.js';
 
 export default function BarberServiceDetails({ route, navigation }) {
   // const [serviceNameHeading, setserviceNameHeading] = useState('Hair Cuts');
   // const {serviceNameHeading, serviceName} = route.params;
   const { item } = route?.params
+  const dispatch = useDispatch()
+  const authToken = useSelector(selectAuthToken)
 
   const [serviceAbout, setserviceAbout] = useState(
     'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id es',
@@ -58,16 +66,29 @@ export default function BarberServiceDetails({ route, navigation }) {
 
   const handleDeleteService = async () => {
     try {
-      console.log(item?._id);
       setDeletePermission(false)
       setLoader(true)
-      setTimeout(() => {
+      const response = await deleteService(authToken, item?._id)
+      if (response?.status == 200) {
+        dispatch(deleteServiceRedux(item._id))
+        setModalVisible(false)
         setLoader(false)
-      }, 1000);
+        ErrorShow('success', 'Congratulation!', response?.data?.message, onHide)
+      } else {
+        setModalVisible(false)
+        setLoader(false)
+        ErrorShow('error', 'Oops', response?.data?.message);
+      }
     } catch (error) {
+      setModalVisible(false)
       setLoader(false)
       console.log(error?.message);
+      ErrorShow('error', 'Oops', error?.message);
     }
+  }
+
+  const onHide = async () => {
+    navigation.goBack()
   }
 
   return (
@@ -175,6 +196,7 @@ export default function BarberServiceDetails({ route, navigation }) {
           </View>
         </Modal>
       </View>
+      <Toast />
     </SafeAreaView>
   );
 }

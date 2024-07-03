@@ -47,6 +47,9 @@ export const styles = StyleSheet.create({
   },
   chatContianer: {
     marginTop: sizes.screenHeight * 0.03,
+    justifyContent: 'space-between',
+    backgroundColor: colors.black,
+    height: sizes.screenHeight*0.85
   },
   chatRecieved: {
     backgroundColor: colors.chatRecievedBg,
@@ -75,14 +78,15 @@ export const styles = StyleSheet.create({
     marginBottom: sizes.screenHeight * 0.02,
     marginStart: sizes.screenWidth * 0.15,
   },
-  texInputView:{
+      texInputView:{
     backgroundColor: colors.white,
-    marginTop:sizes.screenHeight* 0.15,
+    // marginTop:sizes.screenHeight* 0.15,
     borderRadius:sizes.screenWidth* 0.03,
     paddingHorizontal:sizes.screenWidth* 0.03,
     flexDirection:'row',
     alignItems:'center',
-    justifyContent:'space-between'
+    justifyContent:'space-between',
+    // backgroundColor:colors.black
   },
   texInputViewIOS:{
     backgroundColor: colors.white,
