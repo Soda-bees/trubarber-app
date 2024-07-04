@@ -79,7 +79,6 @@ export default function ServiceDetails({navigation, route}) {
       }));
     const obj = {
       barber: item?.barber,
-      user: userData?._id,
       services: newArray,
       status: 'pending',
     };
@@ -163,7 +162,6 @@ export default function ServiceDetails({navigation, route}) {
         }));
       const obj = {
         barber: item?.barber,
-        user: userData?._id,
         services: newArray,
         status: 'pending',
       };

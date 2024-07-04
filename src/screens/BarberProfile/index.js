@@ -24,6 +24,7 @@ import { selectUserData } from '../../store/userData/index.js';
 import axios from 'axios';
 import { selectlocation } from '../../store/location/index.js';
 import { getAddressFromCoordinates } from '../../services/config/API/index.js';
+import { removeCart } from '../../store/cart/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
 export default function Profile({ navigation }) {
@@ -57,6 +58,9 @@ export default function Profile({ navigation }) {
   const handleLogout = async () => {
     dispatch(removeAuthToken());
     dispatch(removeRole());
+    dispatch(removeUserData())
+    dispatch(removePaymentCard())
+    dispatch(removeCart())
   };
   return (
     <SafeAreaView>

@@ -205,7 +205,7 @@ export const updateService = async (body, token) => {
   }
 }
 
-export const deleteService = async (token , id) => {
+export const deleteService = async (token, id) => {
   try {
     const headers = {
       'Content-Type': 'application/json',
@@ -217,3 +217,42 @@ export const deleteService = async (token , id) => {
     return error
   }
 }
+
+export const handleAddPaymentCard = async (card, token) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    };
+    const response = await axiosInstance.post('user/addPaymentCard', { card }, { headers });
+    return response;
+  } catch (error) {
+    return error
+  }
+}
+
+export const bookAppoinment = async (body, token) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    };
+    const response = await axiosInstance.post('user/bookAppoinment', body, { headers });
+    return response;
+  } catch (error) {
+    return error
+  }
+}
+
+export const hanleGetBookedAppoinment = async (token, id) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.get(`user/getBookedAppoinmentTime/${id}`, { headers });
+    return response;
+  } catch (error) {
+    return error;
+  }
+};

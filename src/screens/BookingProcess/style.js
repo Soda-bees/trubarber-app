@@ -310,7 +310,7 @@ export const styles = StyleSheet.create({
     paddingRight: sizes.screenWidth * 0.09,
   },
   btnMargin: {
-    marginTop: sizes.screenHeight * 0.04,
+    marginTop: sizes.screenHeight * 0.02,
     marginBottom: sizes.screenHeight * 0.03,
   },
   textContainer: {

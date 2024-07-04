@@ -20,6 +20,7 @@ import Toast from 'react-native-toast-message';
 import {setUserData} from '../../store/userData';
 import {setAuthToken} from '../../store/authToken';
 import Loader from '../../components/Loader';
+import { addPaymentCard } from '../../store/paymentCard';
 
 export default function Login({navigation}) {
   const dispatch = useDispatch();
@@ -81,6 +82,7 @@ export default function Login({navigation}) {
         dispatch(setUserData(response?.data?.user));
         dispatch(setAuthToken(response?.data?.token));
         dispatch(setRole(response?.data?.user?.role));
+        dispatch(addPaymentCard(response?.data?.user?.card))
       } else {
         setLoader(false);
         ErrorShow('error', 'Oops', response?.data?.message);

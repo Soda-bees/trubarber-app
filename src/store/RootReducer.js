@@ -5,6 +5,7 @@ import userDataSlice from "./userData"
 import locationSlice from './location';
 import barberSlice from './barber';
 import cartSlice from './cart';
+import paymentCardSlice from "./paymentCard"
 
 
 const rootReducer = combineReducers({
@@ -14,6 +15,6 @@ const rootReducer = combineReducers({
     location: locationSlice,
     barber: barberSlice,
     cart: cartSlice,
-
+    payment: paymentCardSlice
 });
 export default rootReducer;

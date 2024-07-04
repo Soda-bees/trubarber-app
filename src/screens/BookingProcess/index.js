@@ -28,11 +28,17 @@ import {
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import { ErrorShow } from '../../components/Error/index.js';
 import Toast from 'react-native-toast-message';
+import { selectPaymentCard } from '../../store/paymentCard/index.js';
+import Loader from '../../components/Loader/index.js';
+import { selectAuthToken } from '../../store/authToken/index.js';
+import { bookAppoinment, hanleGetBookedAppoinment } from '../../services/config/API/index.js';
 
 export default function BookingProcess({ navigation, route }) {
   const dispatch = useDispatch();
   const barbers = useSelector(selectbarber);
   const cart = useSelector(selectCart);
+  const paymentCard = useSelector(selectPaymentCard)
+  const authToken = useSelector(selectAuthToken)
   const today = moment();
 
   const [selected, setSelected] = useState(null);
@@ -40,11 +46,14 @@ export default function BookingProcess({ navigation, route }) {
   const [barber, setBarber] = useState();
   const [dateData, setDatedata] = useState();
   const [selectedDate, setSelectedDate] = useState(null);
+  const [loader, setLoader] = useState(false)
+  const [bookedTime, setBookedTime] = useState([])
 
   const findBarber = async () => {
     const barber = await barbers.find(barber => barber._id === cart?.barber);
     setBarber(barber);
-    handleCreateTimeSlot(barber);
+    // handleCreateTimeSlot(barber);
+    getBookedAppoinment(barber._id)
   };
   const setTotalPrice = () => {
     let totalPrice = 0;
@@ -137,12 +146,33 @@ export default function BookingProcess({ navigation, route }) {
   };
 
   const handleDateSelected = (date) => {
+    const formatedDate = date.format('MM-DD-YYYY')
+    // console.log("work dateee", formatToJSON(bookedTime));
     setSelectedDate(date.format('MM-DD-YYYY'));
+    const bookedTimesForSelectedDate = bookedTime
+    .filter(booking => booking.date === formatedDate)
+    .map(booking => booking.time);
+    const [startTime, endTime] = barber.time.split(' - ');
+    console.log("booked times array =====>" , bookedTimesForSelectedDate);
+    const availableTimeSlot = handleCreateTimeSlotSecond(startTime, endTime , bookedTimesForSelectedDate)
+    setDatedata(availableTimeSlot)
   };
 
   const getOneHourLater = (selected) => {
     return moment(selected, "h:mm A").add(1, 'hour').format('h:mm A');
   };
+
+  const getBookedAppoinment = async (id) => {
+    try {
+      const response = await hanleGetBookedAppoinment(authToken, id)
+      console.log(response?.data);
+      if (response.status == 200) {
+        setBookedTime(response?.data?.appointments)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleConfirm = async () => {
     if (!selectedDate) {
@@ -151,16 +181,44 @@ export default function BookingProcess({ navigation, route }) {
     if (!selected) {
       return ErrorShow('error', 'Oops!', 'Please select time');
     }
-    if(cart?.services?.length  === 0) {
+    if (cart?.services?.length === 0) {
       return ErrorShow('error', 'Oops!', 'Please select service');
+    }
+    if (!paymentCard) {
+      return ErrorShow('error', 'Oops!', 'Please enter card info');
     }
     const obj = {
       ...cart,
       date: selectedDate,
       time: selected
     }
-    console.log(formatToJSON(obj));
+    try {
+      // setLoader(true)
+      const response = await bookAppoinment(obj, authToken)
+      console.log(response?.data);
+    } catch (error) {
+      setLoader(false)
+      console.log(error);
+    }
+    // console.log(formatToJSON(obj));
   }
+
+  const maskCardNumber = (cardNumber) => {
+    // Remove spaces from the card number
+    const cardNumberWithoutSpaces = cardNumber.replace(/\s+/g, '');
+
+    // Check if the card number is 16 digits
+    if (cardNumberWithoutSpaces.length === 16) {
+      // Mask all but the last 4 digits
+      const maskedCardNumber = '************' + cardNumberWithoutSpaces.slice(-4);
+
+      // Add spaces back to the masked card number
+      return maskedCardNumber.replace(/(.{4})/g, '$1 ').trim();
+    }
+
+    // If the card number is not 16 digits, return it as is (or handle the error)
+    return cardNumber;
+  };
 
   return (
     <SafeAreaView>
@@ -217,6 +275,8 @@ export default function BookingProcess({ navigation, route }) {
               </View>
             </View>
           </View>
+          {
+            dateData?.length > 0 &&
           <View style={styles.timeContainer}>
             <ScrollView horizontal>
               <View style={styles.timeAlligment}>
@@ -240,6 +300,8 @@ export default function BookingProcess({ navigation, route }) {
               </View>
             </ScrollView>
           </View>
+          }
+
           <View style={styles.bookContainer}>
             <ScrollView>
               <View style={styles.barberContainer}>
@@ -319,26 +381,32 @@ export default function BookingProcess({ navigation, route }) {
                 />
               </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.cardDetailscontainer}>
-              <View style={styles.row}>
+            {
+              paymentCard &&
+              <View style={styles.cardDetailscontainer}>
+                <View style={styles.row}>
+                  <Image
+                    source={images.masterCard}
+                    resizeMode="contain"
+                    style={styles.masterCard}
+                  />
+                  <Text style={styles.cardText}>{maskCardNumber(paymentCard?.number)}</Text>
+                </View>
                 <Image
-                  source={images.masterCard}
+                  source={images.arrowRight}
+                  style={styles.arrowRight}
                   resizeMode="contain"
-                  style={styles.masterCard}
                 />
-                <Text style={styles.cardText}>************6489</Text>
               </View>
-              <Image
-                source={images.arrowRight}
-                style={styles.arrowRight}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.btnMargin}>
-            <Button title={'Book'} onPress={handleConfirm} />
+            }
           </View>
         </ScrollView>
+        <View style={styles.btnMargin}>
+          {
+            loader ? <Loader title={'Book'} /> :
+              <Button title={'Book'} onPress={handleConfirm} />
+          }
+        </View>
       </View>
       <Toast />
     </SafeAreaView>

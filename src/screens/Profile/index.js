@@ -18,8 +18,10 @@ import BackArrow from '../../components/BackArrow/index.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeAuthToken } from '../../store/authToken/index.js';
 import { removeRole } from '../../store/role/index.js';
-import { selectUserData } from '../../store/userData/index.js';
+import { removeUserData, selectUserData } from '../../store/userData/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
+import { removePaymentCard } from '../../store/paymentCard/index.js';
+import { removeCart } from '../../store/cart/index.js';
 
 export default function Profile({ navigation }) {
   const userData = useSelector(selectUserData)
@@ -27,6 +29,9 @@ export default function Profile({ navigation }) {
   const handleLogout = async () => {
     dispatch(removeAuthToken())
     dispatch(removeRole())
+    dispatch(removeUserData())
+    dispatch(removePaymentCard())
+    dispatch(removeCart())
   }
   return (
     <SafeAreaView>
