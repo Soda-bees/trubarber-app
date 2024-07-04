@@ -5,6 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.bluishWhite,
     height: sizes.screenHeight,
+    
   },
   row: {
     flexDirection: 'row',
@@ -28,6 +29,13 @@ export const styles = StyleSheet.create({
   containerBody: {
     marginTop: sizes.screenHeight * 0.02,
     paddingHorizontal: sizes.screenWidth * 0.06,
+    // height: sizes.screenHeight,
+    // marginBottom: 40,
+  },
+  containerBody1: {
+    marginTop: sizes.screenHeight * 0.02,
+    // paddingHorizontal: sizes.screenWidth * 0.06,
+    height: sizes.screenHeight,
   },
   line: {
     borderBottomWidth: sizes.screenWidth * 0.002,
@@ -46,10 +54,11 @@ export const styles = StyleSheet.create({
     marginHorizontal: sizes.screenWidth * 0.08,
   },
   chatContianer: {
-    marginTop: sizes.screenHeight * 0.03,
-    justifyContent: 'space-between',
-    backgroundColor: colors.black,
-    height: sizes.screenHeight*0.85
+    // marginTop: sizes.screenHeight * 0.03,
+    justifyContent: 'flex-end',
+    // backgroundColor: colors.red,
+    // backgroundColor: colors.black,
+    minHeight: sizes.screenHeight*0.82
   },
   chatRecieved: {
     backgroundColor: colors.chatRecievedBg,
@@ -78,31 +87,39 @@ export const styles = StyleSheet.create({
     marginBottom: sizes.screenHeight * 0.02,
     marginStart: sizes.screenWidth * 0.15,
   },
-      texInputView:{
+  texInputView: {
     backgroundColor: colors.white,
     // marginTop:sizes.screenHeight* 0.15,
-    borderRadius:sizes.screenWidth* 0.03,
-    paddingHorizontal:sizes.screenWidth* 0.03,
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'space-between',
+    borderRadius: sizes.screenWidth * 0.03,
+    paddingHorizontal: sizes.screenWidth * 0.03,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    // marginBottom:sizes.screenHeight * 0,
+    // bottom:sizes.screenHeight* 0.1,
     // backgroundColor:colors.black
   },
-  texInputViewIOS:{
+  texInputViewIOS: {
     backgroundColor: colors.white,
-    marginTop:sizes.screenHeight* 0.01,
-    marginBottom:sizes.screenHeight* 0.09,
-    borderRadius:sizes.screenWidth* 0.03,
-    paddingHorizontal:sizes.screenWidth* 0.04,
-    paddingVertical:sizes.screenWidth* 0.04,
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'space-between',
-    alignSelf:"center",
+    marginTop: sizes.screenHeight * 0.01,
+    marginBottom: sizes.screenHeight * 0.09,
+    borderRadius: sizes.screenWidth * 0.03,
+    paddingHorizontal: sizes.screenWidth * 0.04,
+    paddingVertical: sizes.screenWidth * 0.04,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    alignSelf: 'center',
     // flex:1
   },
   textInputContainer: {
-    width:sizes.screenWidth* 0.72,
-    color:colors.black
-},
+    width: sizes.screenWidth * 0.72,
+    height: sizes.screenHeight * 0.07,
+    color: colors.black,
+  },
+  arrowBlackIcon: {
+    resizeMode: 'contain',
+    width: sizes.screenWidth * 0.05,
+    height: sizes.screenWidth * 0.05,
+  },
 });

@@ -3,8 +3,10 @@ import {colors, fontSize, sizes} from '../../services';
 
 export const styles = StyleSheet.create({
   arrowContainer: {
-    // marginLeft: sizes.screenWidth * 0.042,
-    // marginTop: sizes.screenHeight * 0.03,
+    width: sizes.screenWidth * 0.055,
+    height: sizes.screenHeight * 0.03,
+    // backgroundColor:'red',
+    justifyContent:'center'
   },
   arrowBlackleft: {
     width: sizes.screenWidth * 0.042,

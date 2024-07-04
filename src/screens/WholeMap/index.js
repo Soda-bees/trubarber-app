@@ -19,9 +19,11 @@ import BackArrow from '../../components/BackArrow';
 import {useSelector} from 'react-redux';
 import {selectlocation} from '../../store/location';
 import {selectbarber} from '../../store/barber';
+import formatToJSON from '../../services/config/FormatToJson';
 
 export default function WholeMap({navigation}) {
   const barberData = useSelector(selectbarber);
+  // console.log(formatToJSON(barberData));
   const [selectedBarber, setSelectedBarber] = useState('');
   const location = useSelector(selectlocation);
   const [currentLocation, setCurrentLocation] = useState(
@@ -191,7 +193,10 @@ export default function WholeMap({navigation}) {
                       {/* {`Distance: ${distance.toFixed(2)} km`} */}
                     </Text>
                   </View>
-                  <TouchableOpacity style={styles.bookBtn}>
+                  <TouchableOpacity
+                    style={styles.bookBtn}
+                    onPress={() =>
+                      navigation.navigate('BookAppointment', {item:selectedBarber})}>
                     <Text style={styles.btnText}>Book Appointment</Text>
                     <Image
                       source={images.arrowIcon}
