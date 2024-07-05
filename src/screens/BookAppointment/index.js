@@ -8,16 +8,17 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style.js';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import {StarRatingDisplay} from 'react-native-star-rating-widget';
-import {colors, sizes} from '../../services';
+import { StarRatingDisplay } from 'react-native-star-rating-widget';
+import { colors, sizes } from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
+import moment from 'moment';
 
-export default function BookAppointment({navigation, route}) {
+export default function BookAppointment({ navigation, route }) {
   const barbar = route?.params?.item;
   // console.log('param wala data h yeh', formatToJSON(barbar));
   const [services, setServices] = useState([]);
@@ -110,6 +111,7 @@ export default function BookAppointment({navigation, route}) {
   ]);
 
   const [tab, setTabs] = useState('About');
+  const [status , setStatus] = useState(null)
 
   const handleGoback = () => {
     navigation.goBack();
@@ -117,28 +119,54 @@ export default function BookAppointment({navigation, route}) {
 
   useEffect(() => {
     setServices(barbar?.services);
+    console.log(barbar.time);
+    handleStatus(barbar.time)
   }, [barbar]);
+
+  const handleStatus = openHours => {
+    const [startTime, endTime] = openHours.split(' - ');
+    const currentTime = moment();
+
+    const openTime = moment(startTime, 'hh:mm A');
+    let closeTime = moment(endTime, 'hh:mm A');
+
+    // If the close time is earlier than the open time, it means the shop closes past midnight
+    if (closeTime.isBefore(openTime)) {
+      closeTime.add(1, 'day');
+    }
+
+    if (currentTime.isBetween(openTime, closeTime) || currentTime.isSame(openTime)) {
+      // return 'open';
+      setStatus('open')
+    } else {
+      // return 'close';
+      setStatus('close')
+    }
+  };
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <ImageBackground
           imageStyle={styles.headerImage}
-          source={{uri: barbar?.profile}}
-          // style={}
+          source={{ uri: barbar?.profile }}
+        // style={}
         >
           <View style={styles.headerContainer}>
             <View style={styles.arrowTop}>
               <BackArrow light={true} onPress={handleGoback} />
             </View>
-            <TouchableOpacity style={styles.openButtonborder}>
+            {}
+            <View style={styles.openButtonborder}>
               <ImageBackground
                 style={styles.openBg}
                 source={images.openBg}
                 resizeMode="cover">
-                <Text style={styles.openButton}>OPEN</Text>
+                <Text style={styles.openButton}>
+                  {status}
+                </Text>
               </ImageBackground>
-            </TouchableOpacity>
+            </View>
           </View>
           <View style={styles.centerContent}>
             <View style={styles.barberDetailscontainer}>
@@ -224,6 +252,7 @@ export default function BookAppointment({navigation, route}) {
                 title={'Book Appointment'}
                 onPress={() => {
                   // navigation.navigate('BookingProcess')
+                  setTabs('Services')
                 }}
               />
             </View>
@@ -236,7 +265,7 @@ export default function BookAppointment({navigation, route}) {
                   <View style={styles.servicesContainer}>
                     <View style={styles.serviceImagecontainer}>
                       <Image
-                        source={{uri:item?.icon}}
+                        source={{ uri: item?.icon }}
                         style={styles.serviceImageresize}
                         resizeMode="contain"
                       />
@@ -253,7 +282,7 @@ export default function BookAppointment({navigation, route}) {
                     <View style={styles.endContainer}>
                       <TouchableOpacity
                         style={styles.bookButton}
-                        onPress={() => navigation.navigate('ServiceDetails', {item})}>
+                        onPress={() => navigation.navigate('ServiceDetails', { item })}>
                         <Text style={styles.bookWhite}>Book</Text>
                       </TouchableOpacity>
                       {/* <Text style={styles.title}>{item.Price}</Text> */}
@@ -318,7 +347,7 @@ export default function BookAppointment({navigation, route}) {
                         color={colors.gold}
                         starSize={20}
                         starStyle={styles.startContainer}
-                        // style={styles.startContainer}
+                      // style={styles.startContainer}
                       />
                     </View>
                   </View>

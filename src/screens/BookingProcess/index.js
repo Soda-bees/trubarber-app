@@ -32,6 +32,7 @@ import { selectPaymentCard } from '../../store/paymentCard/index.js';
 import Loader from '../../components/Loader/index.js';
 import { selectAuthToken } from '../../store/authToken/index.js';
 import { bookAppoinment, hanleGetBookedAppoinment } from '../../services/config/API/index.js';
+import { addAppoinment } from '../../store/userData/index.js';
 
 export default function BookingProcess({ navigation, route }) {
   const dispatch = useDispatch();
@@ -57,7 +58,7 @@ export default function BookingProcess({ navigation, route }) {
   };
   const setTotalPrice = () => {
     let totalPrice = 0;
-    cart.services.forEach(service => {
+    cart?.services.forEach(service => {
       totalPrice += parseFloat(service.price);
     });
     console.log('price', totalPrice);
@@ -146,15 +147,13 @@ export default function BookingProcess({ navigation, route }) {
   };
 
   const handleDateSelected = (date) => {
-    const formatedDate = date.format('MM-DD-YYYY')
-    // console.log("work dateee", formatToJSON(bookedTime));
-    setSelectedDate(date.format('MM-DD-YYYY'));
+    const formatedDate = date?.format('MM-DD-YYYY')
+    setSelectedDate(date?.format('MM-DD-YYYY'));
     const bookedTimesForSelectedDate = bookedTime
-    .filter(booking => booking.date === formatedDate)
-    .map(booking => booking.time);
+      .filter(booking => booking.date === formatedDate)
+      .map(booking => booking.time);
     const [startTime, endTime] = barber.time.split(' - ');
-    console.log("booked times array =====>" , bookedTimesForSelectedDate);
-    const availableTimeSlot = handleCreateTimeSlotSecond(startTime, endTime , bookedTimesForSelectedDate)
+    const availableTimeSlot = handleCreateTimeSlotSecond(startTime, endTime, bookedTimesForSelectedDate)
     setDatedata(availableTimeSlot)
   };
 
@@ -165,7 +164,6 @@ export default function BookingProcess({ navigation, route }) {
   const getBookedAppoinment = async (id) => {
     try {
       const response = await hanleGetBookedAppoinment(authToken, id)
-      console.log(response?.data);
       if (response.status == 200) {
         setBookedTime(response?.data?.appointments)
       }
@@ -193,14 +191,26 @@ export default function BookingProcess({ navigation, route }) {
       time: selected
     }
     try {
-      // setLoader(true)
+      setLoader(true)
       const response = await bookAppoinment(obj, authToken)
       console.log(response?.data);
+      console.log(response?.status);
+      if (response.status == 200) {
+        ErrorShow('success', 'Congratulation!', response?.data?.message, onHide)
+        setLoader(false)
+        dispatch(addAppoinment(response?.data?.appoinment))
+      } else {
+        setLoader(false)
+        ErrorShow('error', 'Oops!', response?.data?.message)
+      }
     } catch (error) {
       setLoader(false)
       console.log(error);
     }
-    // console.log(formatToJSON(obj));
+  }
+
+  const onHide = () => {
+    navigation.navigate('Appointments')
   }
 
   const maskCardNumber = (cardNumber) => {
@@ -277,29 +287,29 @@ export default function BookingProcess({ navigation, route }) {
           </View>
           {
             dateData?.length > 0 &&
-          <View style={styles.timeContainer}>
-            <ScrollView horizontal>
-              <View style={styles.timeAlligment}>
-                {dateData?.map((item, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={
-                      item === selected ? styles.selected : styles.notSelected
-                    }
-                    onPress={() => setSelected(item)}>
-                    <Text
+            <View style={styles.timeContainer}>
+              <ScrollView horizontal>
+                <View style={styles.timeAlligment}>
+                  {dateData?.map((item, index) => (
+                    <TouchableOpacity
+                      key={index}
                       style={
-                        item === selected
-                          ? styles.selectedTextcolor
-                          : styles.textBlack
-                      }>
-                      {item}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </ScrollView>
-          </View>
+                        item === selected ? styles.selected : styles.notSelected
+                      }
+                      onPress={() => setSelected(item)}>
+                      <Text
+                        style={
+                          item === selected
+                            ? styles.selectedTextcolor
+                            : styles.textBlack
+                        }>
+                        {item}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </ScrollView>
+            </View>
           }
 
           <View style={styles.bookContainer}>
@@ -321,7 +331,7 @@ export default function BookingProcess({ navigation, route }) {
                 </View>
               </View>
               <View style={{ marginTop: 20 }}>
-                {cart.services?.map((item, index) => {
+                {cart && cart?.services?.map((item, index) => {
                   return (
                     // <View key={index}>
                     <View style={styles.flexRow} key={index}>

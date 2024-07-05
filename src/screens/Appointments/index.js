@@ -9,16 +9,24 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
-import {styles} from './style.js';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
-import {colors, sizes} from '../../services';
+import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
+import { colors, sizes } from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserData } from '../../store/userData/index.js';
+import { removeCart, selectCart } from '../../store/cart/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
-export default function Appointments({navigation}) {
+export default function Appointments({ navigation }) {
+
+  const dispatch = useDispatch()
+  const userData = useSelector(selectUserData)
+  console.log(userData?.appoinment.length);
+
   const [appointmentData, setappointmentData] = useState([
     {
       image: images.largerBarberhat,
@@ -65,6 +73,10 @@ export default function Appointments({navigation}) {
       location: 'Royal Ln. Mesa, New Jersey',
     },
   ]);
+
+  useEffect(() => {
+    dispatch(removeCart())
+  }, [userData])
 
   return (
     <SafeAreaView>

@@ -92,7 +92,7 @@ const AuthStack = () => {
       <Stack.Screen name="CustomerPrefences" component={CustomerPrefences} />
       <Stack.Screen name="Explore" component={Explore} />
       <Stack.Screen name="Catalogue" component={Catalogue} />
-      <Stack.Screen name="Appointments" component={Appointments} />
+      {/* <Stack.Screen name="Appointments" component={Appointments} /> */}
       {/* <Stack.Screen name="Profile" component={Profile} /> */}
       <Stack.Screen name="SetUpOutlet" component={SetUpOutlet} />
       <Stack.Screen name="TagSelection" component={TagSelection} />
@@ -152,7 +152,7 @@ const UserStack = () => {
       <Stack.Screen name="CustomerPrefences" component={CustomerPrefences} />
       <Stack.Screen name="Explore" component={Explore} />
       <Stack.Screen name="Catalogue" component={Catalogue} />
-      <Stack.Screen name="Appointments" component={Appointments} />
+      {/* <Stack.Screen name="Appointments" component={Appointments} /> */}
       {/* <Stack.Screen name="Profile" component={Profile} /> */}
       <Stack.Screen name="SetUpOutlet" component={SetUpOutlet} />
       <Stack.Screen name="TagSelection" component={TagSelection} />
@@ -211,7 +211,7 @@ const BarberStack = () => {
       <Stack.Screen name="CustomerPrefences" component={CustomerPrefences} />
       <Stack.Screen name="Explore" component={Explore} />
       <Stack.Screen name="Catalogue" component={Catalogue} />
-      <Stack.Screen name="Appointments" component={Appointments} />
+      {/* <Stack.Screen name="Appointments" component={Appointments} /> */}
       {/* <Stack.Screen name="Profile" component={Profile} /> */}
       <Stack.Screen name="SetUpOutlet" component={SetUpOutlet} />
       <Stack.Screen name="TagSelection" component={TagSelection} />

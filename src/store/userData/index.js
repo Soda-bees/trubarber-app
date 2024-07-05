@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import formatToJSON from "../../services/config/FormatToJson";
 
 const userDataSlice = createSlice({
     name: "userData",
@@ -27,10 +28,16 @@ const userDataSlice = createSlice({
                     service => service._id !== deletedService
                 );
             }
+        },
+        addAppoinment: (state, action) => {
+            const appoinment = action.payload;
+            if (state.userData && appoinment.user._id === state.userData._id) {
+                state.userData.appoinment.push(appoinment)
+            }
         }
     }
 })
 
-export const { setUserData, removeUserData, updateServiceRedux, deleteServiceRedux } = userDataSlice.actions
+export const { setUserData, removeUserData, updateServiceRedux, deleteServiceRedux, addAppoinment } = userDataSlice.actions
 export const selectUserData = state => state.user.userData
 export default userDataSlice.reducer
