@@ -83,17 +83,18 @@ export const styles = StyleSheet.create({
   detailsContainer: {
     backgroundColor: colors.lightgray,
     width: sizes.screenWidth * 0.806,
-    height: sizes.screenHeight * 0.15,
+    // height: sizes.screenHeight * 0.15,
     marginTop: sizes.screenHeight * 0.032,
     marginLeft: sizes.screenWidth * 0.09,
     borderRadius: sizes.screenWidth * 0.03,
     borderWidth: sizes.screenWidth * 0.002,
     borderColor: colors.emptyStar,
+    paddingBottom: 10,
   },
 
   contentAllignemnt: {
     marginTop: sizes.screenHeight * 0.01,
-    marginHorizontal:sizes.screenWidth * 0.025,
+    marginHorizontal: sizes.screenWidth * 0.025,
 
     flexDirection: 'row',
     alignItems: 'center',
@@ -109,7 +110,9 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.02,
   },
   serviceImageresize: {
-    height: sizes.screenHeight * 0.03,
+    resizeMode: 'contain',
+    height: sizes.screenWidth * 0.07,
+    width: sizes.screenWidth * 0.07,
   },
 
   directionRow: {
@@ -148,10 +151,14 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontSize: fontSize.smallM,
   },
+  dateAndtimeView: {
+    // width:sizes.screenWidth * 0.3,
+    marginLeft:sizes.screenWidth * 0.03
+  },
 
   bookBtn: {
     marginTop: sizes.screenHeight * 0.012,
-    marginHorizontal:sizes.screenWidth * 0.012,
+    marginHorizontal: sizes.screenWidth * 0.012,
     backgroundColor: colors.btnColor,
     height: sizes.screenHeight * 0.042,
     width: sizes.screenWidth * 0.762,
@@ -159,7 +166,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    alignSelf:'center'
+    alignSelf: 'center',
   },
   btnText: {
     color: colors.white,
@@ -172,5 +179,16 @@ export const styles = StyleSheet.create({
   scrollContainer: {
     marginTop: sizes.screenHeight * 0.02,
     marginBottom: sizes.screenHeight * 0.09,
+  },
+
+  optionsCart: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    borderTopWidth: 1,
+    borderColor: colors.disabledBg,
+    marginTop: 10,
+    paddingTop: 10,
   },
 });

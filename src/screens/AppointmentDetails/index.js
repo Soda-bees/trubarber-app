@@ -16,10 +16,13 @@ import Button from '../../components/Button';
 import CalendarStrip from 'react-native-calendar-strip';
 import 'moment';
 import moment from 'moment';
-import { colors } from '../../services/utilities/colors';
-import { sizes } from '../../services/index.js';
+import {colors} from '../../services/utilities/colors';
+import {sizes} from '../../services/index.js';
+import formatToJSON from '../../services/config/FormatToJson/index.js';
 
-export default function AppointmentDetails({navigation}) {
+export default function AppointmentDetails({navigation, route}) {
+  const {item} = route?.params;
+  console.log('wizzz bro', formatToJSON(item));
   const [selected, setSelected] = useState(null);
 
   const currentDate = moment();
@@ -69,13 +72,35 @@ export default function AppointmentDetails({navigation}) {
     },
   ]);
 
+  const maskCardNumber = cardNumber => {
+    // Remove spaces from the card number
+    const cardNumberWithoutSpaces = cardNumber.replace(/\s+/g, '');
+
+    // Check if the card number is 16 digits
+    if (cardNumberWithoutSpaces.length === 16) {
+      // Mask all but the last 4 digits
+      const maskedCardNumber =
+        '************' + cardNumberWithoutSpaces.slice(-4);
+
+      // Add spaces back to the masked card number
+      return maskedCardNumber.replace(/(.{4})/g, '$1 ').trim();
+    }
+
+    // If the card number is not 16 digits, return it as is (or handle the error)
+    return cardNumber;
+  };
+
+  const getOneHourLater = selected => {
+    return moment(selected, 'h:mm A').add(1, 'hour').format('h:mm A');
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.allignment}>
             <View style={styles.arrowTop}>
-              <BackArrow onPress={() => navigation.goBack()}/>
+              <BackArrow onPress={() => navigation.goBack()} />
             </View>
             <Text style={styles.headerText}>Appoinment Details</Text>
           </View>
@@ -116,7 +141,7 @@ export default function AppointmentDetails({navigation}) {
             </View> */}
           <View>
             <View style={styles.containerCheck}>
-            <CalendarStrip
+              <CalendarStrip
                 daySelectionAnimation={{
                   type: 'border',
                   duration: 100,
@@ -148,27 +173,29 @@ export default function AppointmentDetails({navigation}) {
         <View style={styles.timeContainer}>
           <ScrollView horizontal>
             <View style={styles.timeAlligment}>
-              {dateData.map((item, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.selected,
-                    index === selected
-                      ? styles.selectedItem
-                      : styles.notSelected,
-                  ]}
-                  onPress={() => setSelected(index)}>
-                  <Text
+              {dateData.map((item, index) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
                     style={[
-                      styles.selectedTextcolor,
+                      styles.selected,
                       index === selected
-                        ? styles.selectedTextcolor
-                        : styles.textBlack,
-                    ]}>
-                    {item.time}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+                        ? styles.selectedItem
+                        : styles.notSelected,
+                    ]}
+                    onPress={() => setSelected(index)}>
+                    <Text
+                      style={[
+                        styles.selectedTextcolor,
+                        index === selected
+                          ? styles.selectedTextcolor
+                          : styles.textBlack,
+                      ]}>
+                      {item.time}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
             </View>
           </ScrollView>
         </View>
@@ -197,8 +224,10 @@ export default function AppointmentDetails({navigation}) {
                 />
               </View>
               <View>
-                <Text style={styles.barberName}>RedBox Barber</Text>
-                <Text style={styles.time}>02:00-02:45</Text>
+                <Text style={styles.barberName}>{item?.barber?.name}</Text>
+                <Text style={styles.time}>
+                  {`${item?.time} - ${getOneHourLater(item?.time)}`}
+                </Text>
               </View>
             </View>
             <View style={styles.marginTop}>
