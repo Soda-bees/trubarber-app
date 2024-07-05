@@ -12,20 +12,25 @@ import {
   PermissionsAndroid,
   Alert
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style';
 import images from '../../services/utilities/images';
-import {colors, sizes} from '../../services';
-import {StarRatingDisplay} from 'react-native-star-rating-widget';
+import { colors, sizes } from '../../services';
+import { StarRatingDisplay } from 'react-native-star-rating-widget';
 import * as Progress from 'react-native-progress';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setLocation } from '../../store/location';
+import { socket, socketService } from "../../services/Socket"
+import { selectUserData } from '../../store/userData';
+import { selectAuthToken } from '../../store/authToken';
 
-export default function BarberDashboard({navigation}) {
+export default function BarberDashboard({ navigation }) {
 
   const dispatch = useDispatch()
+  const userData = useSelector(selectUserData)
+  const authToken = useSelector(selectAuthToken)
 
   const [appointmentDone, setAppointmentDone] = useState('03');
   const [appointmentCancelled, setAppointmentCancelled] = useState('03');
@@ -117,6 +122,14 @@ export default function BarberDashboard({navigation}) {
   ]);
 
   useEffect(() => {
+    const cleanup = socketService(dispatch, authToken, userData)
+
+    return () => {
+      cleanup()
+    }
+  }, [userData])
+
+  useEffect(() => {
     const initializeLocation = async () => {
       const hasPermission = await requestLocationPermission();
       if (hasPermission) {
@@ -178,7 +191,7 @@ export default function BarberDashboard({navigation}) {
   const getCurrentLocation = (setRegion, dispatch) => {
     Geolocation.getCurrentPosition(
       position => {
-        const {latitude, longitude} = position.coords;
+        const { latitude, longitude } = position.coords;
         // console.log(
         //   position.coords,
         //   '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
@@ -218,8 +231,8 @@ export default function BarberDashboard({navigation}) {
             <View style={styles.topIconRow}>
               <TouchableOpacity
                 style={styles.locationRow}
-                // onPress={() => navigation.navigate('WholeMap')}
-                >
+              // onPress={() => navigation.navigate('WholeMap')}
+              >
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
                 </View>
@@ -242,9 +255,9 @@ export default function BarberDashboard({navigation}) {
                   />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.notificationContainer}
-                onPress={() => {
-                  navigation.navigate('Chats');
-                }}>
+                  onPress={() => {
+                    navigation.navigate('Chats');
+                  }}>
                   <Image style={styles.iconImage} source={images.chat} />
                 </TouchableOpacity>
               </View>
@@ -381,7 +394,7 @@ export default function BarberDashboard({navigation}) {
             ))}
           </View>
         </ScrollView>
-        <View style={Platform.OS == 'ios' && styles.paddingBtm}/>
+        <View style={Platform.OS == 'ios' && styles.paddingBtm} />
       </View>
     </SafeAreaView>
   );
