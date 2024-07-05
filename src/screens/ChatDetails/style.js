@@ -5,7 +5,6 @@ export const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.bluishWhite,
     height: sizes.screenHeight,
-    
   },
   row: {
     flexDirection: 'row',
@@ -27,7 +26,7 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.01,
   },
   containerBody: {
-    marginTop: sizes.screenHeight * 0.02,
+    marginTop: sizes.screenHeight * 0.05,
     paddingHorizontal: sizes.screenWidth * 0.06,
     // height: sizes.screenHeight,
     // marginBottom: 40,
@@ -55,11 +54,18 @@ export const styles = StyleSheet.create({
   },
   chatContianer: {
     // marginTop: sizes.screenHeight * 0.03,
-    justifyContent: 'flex-end',
-    // backgroundColor: colors.red,
+    // justifyContent: 'flex-end',
+    backgroundColor: colors.red,
     // backgroundColor: colors.black,
-    minHeight: sizes.screenHeight*0.82
+    // minHeight: sizes.screenHeight*0.82,
   },
+
+  chatSubContianer: {
+    height: sizes.screenHeight * 0.92,
+    justifyContent: 'flex-end',
+    overflow: 'hidden',
+  },
+
   chatRecieved: {
     backgroundColor: colors.chatRecievedBg,
     alignSelf: 'flex-start',

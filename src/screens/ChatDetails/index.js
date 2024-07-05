@@ -50,6 +50,30 @@ export default function ChatDetails({navigation}) {
       chat: 'Start start start start start start start start start start start start start start start start',
       user: 'Duis aute irure dolor.',
     },
+    {
+      chat: 'Start start start start start start start start start start start start start start start start',
+      user: 'Duis aute irure dolor.',
+    },
+    {
+      chat: 'Start start start start start start start start start start start start start start start start',
+      user: 'Duis aute irure dolor.',
+    },
+    {
+      chat: 'Start start start start start start start start start start start start start start start start',
+      user: 'Duis aute irure dolor.',
+    },
+    {
+      chat: 'Start start start start start start start start start start start start start start start start',
+      user: 'Duis aute irure dolor.',
+    },
+    {
+      chat: 'Start start start start start start start start start start start start start start start start',
+      user: 'Duis aute irure dolor.',
+    },
+    {
+      chat: 'Start start start start start start start start start start start start start start start start',
+      user: 'Duis aute irure dolor.',
+    },
   ]);
   const [chatName, setChatName] = useState('Cameron Wilson');
   const [chatRecieve, setChatRecieve] = useState([
@@ -117,42 +141,50 @@ export default function ChatDetails({navigation}) {
             <Image source={images.phoneIcon} />
           </TouchableOpacity> */}
         </View>
-        <ScrollView
-          contentContainerStyle={styles.scrollContianer}
-          ref={scrollViewRef}
-          onContentSizeChange={() => scrollToBottom()}
-          onLayout={handleLayout}>
-          <View style={styles.containerBody}>
-            <View style={styles.chatContianer}>
-              {conversation.map((item, index) => (
-                <View style={styles.chatRecieved} key={index}>
-                  <Text style={styles.chatText}>{item.chat}</Text>
-                </View>
-              ))}
-            </View>
+        <View style={styles.chatSubContianer}>
+          <View>
+            <ScrollView
+              contentContainerStyle={styles.scrollContianer}
+              ref={scrollViewRef}
+              onContentSizeChange={() => scrollToBottom()}
+              onLayout={handleLayout}>
+                <View style={{height: 10 }} />
+              <View style={styles.containerBody}>
+                {/* <View style={styles.chatContianer}> */}
+                {conversation.map((item, index) => (
+                  <View style={styles.chatRecieved} key={index}>
+                    <Text style={styles.chatText}>{item.chat}</Text>
+                  </View>
+                ))}
+                {/* </View> */}
+              </View>
+            </ScrollView>
           </View>
-        </ScrollView>
+
+          <View
+            style={
+              Platform.OS === 'android'
+                ? styles.texInputView
+                : styles.texInputViewIOS
+            }>
+            <TextInput
+              placeholder="Write Message.."
+              placeholderTextColor={colors.black}
+              multiline={true}
+              numberOfLines={2}
+              style={styles.textInputContainer}
+            />
+            <TouchableOpacity style={styles.arrowBlackIcon}>
+              <Image source={images.arrowBlackIcon} />
+            </TouchableOpacity>
+          </View>
+          <KeyboardSpacer topSpacing={sizes.screenHeight * 0.03} />
+        </View>
+
         {/* <KeyboardAvoidingView
           behavior="padding" keyboardVerticalOffset={sizes.screenHeight * 0.03}
         > */}
-        <View
-          style={
-            Platform.OS === 'android'
-              ? styles.texInputView
-              : styles.texInputViewIOS
-          }>
-          <TextInput
-            placeholder="Write Message.."
-            placeholderTextColor={colors.black}
-            multiline={true}
-            numberOfLines={2}
-            style={styles.textInputContainer}
-          />
-          <TouchableOpacity style={styles.arrowBlackIcon}>
-            <Image source={images.arrowBlackIcon} />
-          </TouchableOpacity>
-        </View>
-        {/* <KeyboardSpacer topSpacing={sizes.screenHeight * 0.03} /> */}
+
         {/* </KeyboardAvoidingView> */}
       </View>
     </SafeAreaView>
