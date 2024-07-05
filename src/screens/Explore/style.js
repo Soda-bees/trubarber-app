@@ -232,7 +232,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.013,
   },
   bookBtn: {
-    // marginTop: sizes.screenHeight * 0.002,
+    // marginBottom: sizes.screenHeight * 0.02,
     backgroundColor: colors.btnColor,
     height: sizes.screenHeight * 0.032,
     width: sizes.screenWidth * 0.362,

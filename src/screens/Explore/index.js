@@ -11,7 +11,7 @@ import {
   PermissionsAndroid,
   Alert,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback } from 'react';
 import images from '../../services/utilities/images';
 import {styles} from './style';
 import {colors, sizes} from '../../services';
@@ -26,6 +26,7 @@ import {selectlocation, setLocation} from '../../store/location';
 import {setBarber} from '../../store/barber';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
+import { useFocusEffect } from '@react-navigation/native';
 import formatToJSON from '../../services/config/FormatToJson';
 
 export default function Explore({navigation}) {
@@ -98,6 +99,19 @@ export default function Explore({navigation}) {
       console.log(error);
       setLoader(false);
       ErrorShow('error', 'Oops', response?.error?.message);
+    }
+  };
+  const handleRunEveryTime = async () => {
+    try {
+      const response = await getAllBarber(authToken);
+      if (response?.status == 200) {
+        const serviceData = await extractServiceData(response?.data?.barbers);
+        setCategories(serviceData);
+        setBarberdata(response?.data?.barbers);
+        dispatch(setBarber(response?.data?.barbers));
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -206,9 +220,12 @@ export default function Explore({navigation}) {
     );
   };
 
-  useEffect(() => {
-    console.log('meh chal rha hn bhaiiiii');
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      handleRunEveryTime();
+      console.log('meh chal rha hn bhaiiiii');
+    }, [])
+  );
 
   return (
     <SafeAreaView>

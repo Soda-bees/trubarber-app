@@ -201,7 +201,7 @@ export default function HaircutServices({navigation, route}) {
                   );
                 })}
             </View>
-            <View style={{paddingBottom: sizes.screenHeight * 0.24}}></View>
+            {/* <View style={{paddingBottom: sizes.screenHeight * 0.24}}></View> */}
           </ScrollView>
         </View>
       </View>

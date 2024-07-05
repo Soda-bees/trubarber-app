@@ -34,7 +34,8 @@ export default function BaberCatalogue({ navigation }) {
             <View style={styles.topIconRow}>
               <TouchableOpacity
                 style={styles.locationRow}
-                onPress={() => navigation.navigate('WholeMap')}>
+                // onPress={() => navigation.navigate('WholeMap')}
+                >
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
                 </View>

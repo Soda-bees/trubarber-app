@@ -79,7 +79,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: sizes.screenWidth * 0.052,
-    marginBottom:sizes.screenHeight* 0.03
+    marginBottom:sizes.screenHeight* 0.045
   },
   contentMarginIOS: {
     marginLeft: sizes.screenWidth * 0.04,
