@@ -9,19 +9,21 @@ import {
   ScrollView,
   Modal,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style';
 import images from '../../services/utilities/images';
-import {colors, sizes} from '../../services';
+import { colors, sizes } from '../../services';
 import Timetable from 'react-native-calendar-timetable';
 import moment from 'moment';
-import {useSelector} from 'react-redux';
-import {selectUserData} from '../../store/userData';
+import { useSelector } from 'react-redux';
+import { selectUserData } from '../../store/userData';
 import DatePicker from 'react-native-date-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function AppoinmentBarber({navigation}) {
+export default function AppoinmentBarber({ navigation }) {
   const barber = useSelector(selectUserData);
 
+  const [startTime, setStartTime] = useState(new Date());
   const [clientName, setClientName] = useState('John D.');
   const [clientDate, setClientDate] = useState('Mon, Aug 12');
   const [clientTime, setClientTime] = useState('1 PM');
@@ -63,7 +65,7 @@ export default function AppoinmentBarber({navigation}) {
 
   const formatDate = date => {
     const day = date.getDate();
-    const month = date.toLocaleString('default', {month: 'long'});
+    const month = date.toLocaleString('default', { month: 'long' });
     return `${day} ${month}`;
   };
 
@@ -91,15 +93,16 @@ export default function AppoinmentBarber({navigation}) {
     setAppointmentTimeline2(transformedData);
   };
 
-  const RenderItem = ({style, item}) => {
+  const RenderItem = ({ style, item }) => {
     return (
       <View
         style={{
           ...style,
           height: 'auto',
-          left: sizes.screenWidth * 0.15,
+          left: sizes.screenWidth * 0.17,
           width: 'auto',
           marginTop: 6,
+
         }}>
         <Text style={styles.textBlack}>{item.clientName}</Text>
         <Text style={styles.textGray}>{item.service}</Text>
@@ -116,7 +119,7 @@ export default function AppoinmentBarber({navigation}) {
 
     const dateObj = new Date(year, month, day);
 
-    const options = {weekday: 'short', month: 'short', day: 'numeric'};
+    const options = { weekday: 'short', month: 'short', day: 'numeric' };
 
     return dateObj.toLocaleDateString('en-US', options);
   };
@@ -131,7 +134,6 @@ export default function AppoinmentBarber({navigation}) {
       return appointmentDateTime.isAfter(currentDate);
     });
 
-    console.log(nextAppointment);
 
     if (nextAppointment) {
       setClientName(nextAppointment.user.name);
@@ -148,10 +150,13 @@ export default function AppoinmentBarber({navigation}) {
     mapBackendDataToAppointmentTimeline(barber.appoinment);
     setTimesFromDuration(barber.time);
     setNextAppointmentData();
-    setTimeout(() => {
-      console.log(appointmentTimeline2);
-    }, 2000);
+
   }, [barber]);
+
+  const handleSetDate = async (event, selectedDate) => {
+    setOpen(false)
+    setDate(selectedDate)
+  }
 
   return (
     <SafeAreaView>
@@ -164,7 +169,7 @@ export default function AppoinmentBarber({navigation}) {
             <View style={styles.topIconRow}>
               <TouchableOpacity
                 style={styles.locationRow}
-                // onPress={() => navigation.navigate('WholeMap')}
+              // onPress={() => navigation.navigate('WholeMap')}
               >
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
@@ -285,29 +290,42 @@ export default function AppoinmentBarber({navigation}) {
                 items={appointmentTimeline2}
                 renderItem={props => <RenderItem {...props} />}
                 date={date}
-                timeStyle={{color: colors.black}}
+                // timeStyle={colors}
                 fromHour={from ? from : 0}
                 toHour={to ? to : 24}
                 is12Hour
                 hourHeight={70}
+                style={{
+                  time: { color: colors.disabledBg2 },
+                  timeContainer: { backgroundColor: 'transparent', },
+                  contentContainer: { width: sizes.screenWidth * 0.88, },
+                  lines: { width: sizes.screenWidth * 0.75, marginLeft: sizes.screenWidth * 0.14 },
+                  nowLine: {
+                    dot: { backgroundColor: colors.red },
+                    line: { backgroundColor: colors.red  }
+                  }
+                }}
               />
             </View>
           </View>
           <View style={Platform.OS == 'ios' && styles.paddingBtm} />
         </ScrollView>
-        <DatePicker
-          mode="date"
-          modal
-          open={open}
-          date={date}
-          onConfirm={date => {
-            setOpen(false);
-            setDate(date);
-          }}
-          onCancel={() => {
-            setOpen(false);
-          }}
-        />
+        {
+          open &&
+          <DateTimePicker
+            testID="startTimePicker"
+            value={date}
+            mode="date"
+            is24Hour={false}
+            display="spinner"
+            // themeVariant="dark"
+            // textColor="red"
+            positiveButton={{ label: 'Done' }}
+            negativeButton={{ label: 'Cancel' }}
+            onChange={handleSetDate}
+          />
+        }
+
         <Modal
           animationType="fade"
           transparent={true}

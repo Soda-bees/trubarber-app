@@ -1,5 +1,6 @@
 import io from "socket.io-client"
 import { BASE_URL } from "../config/AxiosInstance"
+import { addAppoinment } from "../../store/userData";
 
 let socket;
 
@@ -18,6 +19,7 @@ const socketService = (dispatch, authToken, userData) => {
 
     const handleReceivedNewAppoinment = (data) => {
         console.log("frontend handle Received New Appoinment" , data);
+        dispatch(addAppoinment(data))
     }
 
     socket.on('newAppoinment' , handleReceivedNewAppoinment)

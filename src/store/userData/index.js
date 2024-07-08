@@ -32,13 +32,12 @@ const userDataSlice = createSlice({
         addAppoinment: (state, action) => {
             const appoinment = action.payload;
             if (state.userData && appoinment.user._id === state.userData._id) {
-                console.log("user");
                 state.userData.appoinment.push(appoinment)
             }
-            // if(state.userData && appoinment.barber._id === state.userData._id) {
-            //     console.log("barber");
-            //     state.userData.appoinment.push(appoinment)
-            // }
+            if(state.userData && appoinment.barber._id === state.userData._id) {
+                console.log("barber update");
+                state.userData.appoinment.push(appoinment)
+            }
         }
     }
 })
