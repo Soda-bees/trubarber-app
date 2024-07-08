@@ -191,4 +191,13 @@ export const styles = StyleSheet.create({
     marginTop: 10,
     paddingTop: 10,
   },
+  nameView:{flexDirection:'row' , width:sizes.screenWidth * 0.8 , justifyContent:'space-between'},
+  statusText:{
+    backgroundColor:colors.red,
+    paddingHorizontal:sizes.screenWidth * 0.05,
+    fontSize:fontSize.medium,
+    fontWeight:'500',
+    color:colors.white,
+    borderRadius:sizes.screenWidth * 0.02,
+  }
 });

@@ -120,7 +120,7 @@ export default function Appointments({navigation}) {
                 <BackArrow onPress={() => navigation.goBack()} />
               </View>
               <View style={styles.headerContainer}>
-                <Text style={styles.headerText}>appointment</Text>
+                <Text style={styles.headerText}>Appointment</Text>
               </View>
             </View>
           </View>
@@ -128,7 +128,6 @@ export default function Appointments({navigation}) {
         <ScrollView style={styles.scrollContainer}>
           {userData?.appoinment?.map((item, index) => {
             // const totalAmount = calculateTotalAmount(item?.services)
-            // console.log("totalAmount=-=-=-=-??>" , totalAmount);
             return (
               <View key={index}>
                 <ImageBackground
@@ -136,14 +135,16 @@ export default function Appointments({navigation}) {
                   imageStyle={styles.barberHat}
                   resizeMode="cover">
                   <View style={styles.innerContainer}>
+                    <View style={styles.nameView}>
                     <Text style={styles.contextText}>{item?.barber?.name}</Text>
+                    <Text style={styles.statusText}>{item?.status}</Text>
+                    </View>
                     <View style={styles.locationContainer}>
                       <Image
                         source={images.whiteLocation}
                         style={styles.whiteLocation}
                         resizeMode="contain"
                       />
-                      {/* <Text style={styles.location}>{item.location}</Text> */}
                     </View>
                   </View>
                 </ImageBackground>
@@ -163,7 +164,6 @@ export default function Appointments({navigation}) {
                             <Text style={styles.textBlack}>
                               {item?.serviceName}
                             </Text>
-                            {/* <Text style={styles.duration}>60min</Text> */}
                             <Text style={styles.duration}>{item?.name}</Text>
                           </View>
                         </View>
@@ -202,7 +202,7 @@ export default function Appointments({navigation}) {
                 </View>
               </View>
             );
-          })}
+          }).reverse()}
           <View
             style={{
               paddingBottom: Platform.OS == 'ios' && sizes.screenHeight * 0.09,

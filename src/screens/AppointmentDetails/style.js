@@ -1,6 +1,6 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
-import {black} from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
+import { black } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 export const styles = StyleSheet.create({
   container: {
@@ -8,9 +8,45 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight,
   },
   containerCheck: {
-    flex: 1,
-    marginBottom: sizes.screenHeight * 0.12,
+    // flex: 1,
+    // marginBottom: sizes.screenHeight * 0.12,
     // height: sizes.screenHeight * 0.2
+    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: 'space-between',
+    marginTop: sizes.screenHeight * 0.02
+  },
+  dateRound: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: colors.disabledBg2,
+    borderWidth: 1,
+    height: sizes.screenWidth * 0.14,
+    width: sizes.screenWidth * 0.14,
+    borderRadius: sizes.screenWidth * 0.15,
+  },
+
+  dateRoundSelected: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: colors.red,
+    borderWidth: 1,
+    height: sizes.screenWidth * 0.14,
+    width: sizes.screenWidth * 0.14,
+    borderRadius: sizes.screenWidth * 0.15,
+    backgroundColor: colors.lightRed
+  },
+  dateRoundText: {
+    color: colors.disabledBg2,
+    fontSize: fontSize.smallM,
+    fontWeight: '500'
+  },
+  dateRoundTextSelected: {
+    color: colors.red,
+    fontSize: fontSize.medium,
+    fontWeight: '500'
   },
   calender: {
     height: sizes.screenHeight * 0.2,
@@ -28,14 +64,14 @@ export const styles = StyleSheet.create({
 
   arrowTop: {
     // marginLeft: sizes.screenWidth * 0.01,
-    marginTop: sizes.screenHeight * 0.06,
+    marginTop: sizes.screenHeight * 0.03,
   },
   headerText: {
     // backgroundColor: 'orange',
     fontSize: fontSize.h7,
     color: colors.black,
     width: sizes.screenWidth * 0.8,
-    marginTop: sizes.screenHeight * 0.06,
+    marginTop: sizes.screenHeight * 0.03,
     textAlign: 'center',
     fontWeight: '700',
   },
@@ -54,7 +90,7 @@ export const styles = StyleSheet.create({
   },
 
   rowcontainer: {
-    marginRight: sizes.screenWidth * 0.052,
+    // marginRight: sizes.screenWidth * 0.052,
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
@@ -79,8 +115,8 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.482,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth:sizes.screenWidth* 0.002,
-    borderRadius: sizes.screenWidth* 0.9,
+    borderWidth: sizes.screenWidth * 0.002,
+    borderRadius: sizes.screenWidth * 0.9,
     flex: 1,
   },
   days: {
@@ -99,15 +135,18 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.07,
     justifyContent: 'center',
     alignItems: 'center',
-    borderTopWidth:sizes.screenWidth* 0.002,
-    borderBottomWidth: sizes.screenWidth* 0.002,
+    borderTopWidth: sizes.screenWidth * 0.002,
+    borderBottomWidth: sizes.screenWidth * 0.002,
     borderColor: colors.lightBordercolor,
   },
 
   timeAlligment: {
     flexDirection: 'row',
-    gap: sizes.screenWidth * 0.07,
+    // gap: sizes.screenWidth * 0.07,
     alignItems: 'center',
+    justifyContent:'space-between',
+    // backgroundColor:'red',
+    width:sizes.screenWidth * 0.95
   },
   bookContainer: {
     marginTop: sizes.screenHeight * 0.04,
@@ -117,7 +156,7 @@ export const styles = StyleSheet.create({
     // flexDirection: 'row',
   },
   selected: {
-    borderWidth: sizes.screenWidth* 0.002,
+    borderWidth: sizes.screenWidth * 0.002,
     width: sizes.screenWidth * 0.16,
     justifyContent: 'center',
     alignItems: 'center',
@@ -145,7 +184,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   textBlack: {
-    color: colors.black,
+    color: colors.disabledBg2,
     fontWeight: '500',
   },
   change: {
@@ -192,7 +231,7 @@ export const styles = StyleSheet.create({
   },
   marginTop: {
     marginTop: sizes.screenHeight * 0.02,
-    borderWidth: sizes.screenWidth* 0.002,
+    borderWidth: sizes.screenWidth * 0.002,
     width: sizes.screenWidth * 0.16,
     alignItems: 'center',
     height: sizes.screenHeight * 0.03,
@@ -233,7 +272,7 @@ export const styles = StyleSheet.create({
   },
   paymentBorder: {
     marginTop: sizes.screenHeight * 0.03,
-    borderTopWidth: sizes.screenWidth* 0.002,
+    borderTopWidth: sizes.screenWidth * 0.002,
     borderColor: colors.lightBordercolor,
     gap: sizes.screenHeight * 0.02,
   },
@@ -269,7 +308,7 @@ export const styles = StyleSheet.create({
   cardDetailscontainer: {
     marginLeft: sizes.screenWidth * 0.08,
     marginRight: sizes.screenWidth * 0.08,
-    borderWidth: sizes.screenWidth* 0.002,
+    borderWidth: sizes.screenWidth * 0.002,
     height: sizes.screenHeight * 0.05,
     alignItems: 'center',
     flexDirection: 'row',
@@ -297,5 +336,23 @@ export const styles = StyleSheet.create({
     // backgroundColor: 'orange',
     marginTop: sizes.screenHeight * 0.01,
     width: sizes.screenWidth * 0.37,
+  },
+  flexRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems:'center',
+  },
+  flexRow1: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems:'center',
+  },
+  disabledText: {
+    color: colors.grayBorder,
+    fontWeight: '600',
+  },
+  disabledText1: {
+    color: colors.grayBorder,
+    fontWeight: '800',
   },
 });

@@ -147,16 +147,80 @@ export default function BookingProcess({ navigation, route }) {
     dispatch(deleteCartItem(item));
   };
 
+  // const handleDateSelected = (date) => {
+  //   const formatedDate = date?.format('MM-DD-YYYY')
+  //   setSelectedDate(date?.format('MM-DD-YYYY'));
+  //   const bookedTimesForSelectedDate = bookedTime
+  //     .filter(booking => booking.date === formatedDate)
+  //     .map(booking => booking.time);
+  //   const [startTime, endTime] = barber.time.split(' - ');
+  //   console.log(startTime, endTime);
+  //   const availableTimeSlot = handleCreateTimeSlotSecond(startTime, endTime, bookedTimesForSelectedDate)
+  //   setDatedata(availableTimeSlot)
+  // };
+
   const handleDateSelected = (date) => {
-    const formatedDate = date?.format('MM-DD-YYYY')
-    setSelectedDate(date?.format('MM-DD-YYYY'));
+    const formattedDate = date?.format('MM-DD-YYYY');
+    setSelectedDate(formattedDate);
+
     const bookedTimesForSelectedDate = bookedTime
-      .filter(booking => booking.date === formatedDate)
-      .map(booking => booking.time);
+    .filter(booking => booking.date === formattedDate)
+    .map(booking => booking.time);
+
+    console.log(bookedTimesForSelectedDate);
+
     const [startTime, endTime] = barber.time.split(' - ');
-    const availableTimeSlot = handleCreateTimeSlotSecond(startTime, endTime, bookedTimesForSelectedDate)
-    setDatedata(availableTimeSlot)
+
+    // Parse start and end times
+    let [startHour, startMinute, startPeriod] = parseTime(startTime);
+    let [endHour, endMinute, endPeriod] = parseTime(endTime);
+
+    // Round start time up to the nearest hour
+    if (startMinute > 0) {
+      startHour += 1;
+      if (startHour === 12 && startPeriod === 'AM') {
+        startPeriod = 'PM'; // Handle AM to PM transition at 12:00
+      }
+    }
+
+    // Round end time up to the nearest hour
+    if (endMinute > 0) {
+      endHour += 1;
+      if (endHour === 12 && endPeriod === 'AM') {
+        endPeriod = 'PM'; // Handle AM to PM transition at 12:00
+      }
+    }
+
+    // Convert rounded hours back to 12-hour format
+    startHour = startHour > 12 ? startHour - 12 : startHour;
+    endHour = endHour > 12 ? endHour - 12 : endHour;
+
+    // Format rounded times back to 'hh:mm AM/PM' format
+    const roundedStartTime = formatTime(startHour, startMinute, startPeriod);
+    const roundedEndTime = formatTime(endHour, endMinute, endPeriod);
+
+    console.log(roundedStartTime, roundedEndTime);
+
+    // Continue with your logic here
+
+
+
+    const availableTimeSlot = handleCreateTimeSlotSecond(roundedStartTime, roundedEndTime, bookedTimesForSelectedDate);
+    setDatedata(availableTimeSlot);
   };
+
+  const parseTime = (timeString) => {
+    const [time, period] = timeString.split(' ');
+    const [hour, minute] = time.split(':').map(Number);
+    return [hour, minute, period];
+  };
+
+  const formatTime = (hour, minute, period) => {
+    const formattedHour = (hour % 12 === 0 ? 12 : hour % 12).toString().padStart(2, '0');
+    const formattedMinute = minute === 0 ? '00' : '00';
+    return `${formattedHour}:${formattedMinute} ${period}`;
+  };
+
 
   const getOneHourLater = (selected) => {
     return moment(selected, "h:mm A").add(1, 'hour').format('h:mm A');
