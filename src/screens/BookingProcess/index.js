@@ -33,6 +33,7 @@ import Loader from '../../components/Loader/index.js';
 import { selectAuthToken } from '../../store/authToken/index.js';
 import { bookAppoinment, hanleGetBookedAppoinment } from '../../services/config/API/index.js';
 import { addAppoinment } from '../../store/userData/index.js';
+import { socket, socketService } from "../../services/Socket"
 
 export default function BookingProcess({ navigation, route }) {
   const dispatch = useDispatch();
@@ -193,8 +194,6 @@ export default function BookingProcess({ navigation, route }) {
     try {
       setLoader(true)
       const response = await bookAppoinment(obj, authToken)
-      console.log(response?.data);
-      console.log(response?.status);
       if (response.status == 200) {
         ErrorShow('success', 'Congratulation!', response?.data?.message, onHide)
         setLoader(false)
