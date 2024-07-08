@@ -7,22 +7,21 @@ import {
   Image,
   TextInput,
   ScrollView,
-  Modal,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { styles } from './style';
+import React, {useEffect, useState} from 'react';
+import {styles} from './style';
 import images from '../../services/utilities/images';
-import { colors, sizes } from '../../services';
+import {colors, sizes} from '../../services';
 import Timetable from 'react-native-calendar-timetable';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
-import { selectUserData } from '../../store/userData';
+import {useSelector} from 'react-redux';
+import {selectUserData} from '../../store/userData';
 import DatePicker from 'react-native-date-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
-export default function AppoinmentBarber({ navigation }) {
+import Modal from 'react-native-modal';
+export default function AppoinmentBarber({navigation}) {
   const barber = useSelector(selectUserData);
-
+  console.log(barber.appoinment[0].date);
   const [startTime, setStartTime] = useState(new Date());
   const [clientName, setClientName] = useState('John D.');
   const [clientDate, setClientDate] = useState('Mon, Aug 12');
@@ -38,6 +37,7 @@ export default function AppoinmentBarber({ navigation }) {
   const [currentLocation, setCurrentLocation] = useState(
     'Rachael McPhail Street...',
   );
+  const [modalItem, setModalItem] = useState();
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [appointmentTimeline2, setAppointmentTimeline2] = useState([]);
@@ -65,7 +65,7 @@ export default function AppoinmentBarber({ navigation }) {
 
   const formatDate = date => {
     const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'long' });
+    const month = date.toLocaleString('default', {month: 'long'});
     return `${day} ${month}`;
   };
 
@@ -88,38 +88,45 @@ export default function AppoinmentBarber({ navigation }) {
         startDate: startDate,
         endDate: endDate,
         duration: getOneHourLater(appointment.time),
+        status: appointment.status,
+        date: appointment.date,
+        id: appointment._id,
       };
     });
     setAppointmentTimeline2(transformedData);
   };
 
-  const RenderItem = ({ style, item }) => {
+  const RenderItem = ({style, item}) => {
     return (
-      <View
+      <TouchableOpacity
         style={{
           ...style,
           height: 'auto',
           left: sizes.screenWidth * 0.17,
           width: 'auto',
           marginTop: 6,
-
+        }}
+        onPress={() => {
+          setModalItem(item);
+          setModalVisible(true);
         }}>
         <Text style={styles.textBlack}>{item.clientName}</Text>
         <Text style={styles.textGray}>{item.service}</Text>
         <Text style={styles.textGray}>{item.duration}</Text>
-      </View>
+      </TouchableOpacity>
     );
   };
+  console.log(modalItem);
 
   const formatDateShort = dateString => {
-    const parts = dateString.split('-');
+    const parts = dateString?.split('-');
     const day = parseInt(parts[1], 10);
     const month = parseInt(parts[0], 10) - 1;
     const year = parseInt(parts[2], 10);
 
     const dateObj = new Date(year, month, day);
 
-    const options = { weekday: 'short', month: 'short', day: 'numeric' };
+    const options = {weekday: 'short', month: 'short', day: 'numeric'};
 
     return dateObj.toLocaleDateString('en-US', options);
   };
@@ -133,7 +140,6 @@ export default function AppoinmentBarber({ navigation }) {
       );
       return appointmentDateTime.isAfter(currentDate);
     });
-
 
     if (nextAppointment) {
       setClientName(nextAppointment.user.name);
@@ -150,13 +156,12 @@ export default function AppoinmentBarber({ navigation }) {
     mapBackendDataToAppointmentTimeline(barber.appoinment);
     setTimesFromDuration(barber.time);
     setNextAppointmentData();
-
   }, [barber]);
 
   const handleSetDate = async (event, selectedDate) => {
-    setOpen(false)
-    setDate(selectedDate)
-  }
+    setOpen(false);
+    setDate(selectedDate);
+  };
 
   return (
     <SafeAreaView>
@@ -169,7 +174,7 @@ export default function AppoinmentBarber({ navigation }) {
             <View style={styles.topIconRow}>
               <TouchableOpacity
                 style={styles.locationRow}
-              // onPress={() => navigation.navigate('WholeMap')}
+                // onPress={() => navigation.navigate('WholeMap')}
               >
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
@@ -296,22 +301,24 @@ export default function AppoinmentBarber({ navigation }) {
                 is12Hour
                 hourHeight={70}
                 style={{
-                  time: { color: colors.disabledBg2 },
-                  timeContainer: { backgroundColor: 'transparent', },
-                  contentContainer: { width: sizes.screenWidth * 0.88, },
-                  lines: { width: sizes.screenWidth * 0.75, marginLeft: sizes.screenWidth * 0.14 },
+                  time: {color: colors.disabledBg2},
+                  timeContainer: {backgroundColor: 'transparent'},
+                  contentContainer: {width: sizes.screenWidth * 0.88},
+                  lines: {
+                    width: sizes.screenWidth * 0.75,
+                    marginLeft: sizes.screenWidth * 0.14,
+                  },
                   nowLine: {
-                    dot: { backgroundColor: colors.red },
-                    line: { backgroundColor: colors.red  }
-                  }
+                    dot: {backgroundColor: colors.red},
+                    line: {backgroundColor: colors.red},
+                  },
                 }}
               />
             </View>
           </View>
           <View style={Platform.OS == 'ios' && styles.paddingBtm} />
         </ScrollView>
-        {
-          open &&
+        {open && (
           <DateTimePicker
             testID="startTimePicker"
             value={date}
@@ -320,59 +327,63 @@ export default function AppoinmentBarber({ navigation }) {
             display="spinner"
             // themeVariant="dark"
             // textColor="red"
-            positiveButton={{ label: 'Done' }}
-            negativeButton={{ label: 'Cancel' }}
+            positiveButton={{label: 'Done'}}
+            negativeButton={{label: 'Cancel'}}
             onChange={handleSetDate}
           />
-        }
+        )}
 
         <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
+          isVisible={modalVisible}
+          backdropOpacity={0.3}
+          onBackdropPress={() => {
+            setModalVisible(false);
           }}>
-          <View style={styles.modalBg}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalHeading}>
-                Service Completion Confirmation
+          <View style={styles.modalView}>
+            <Text style={styles.modalHeading}>
+              Service Completion Confirmation
+            </Text>
+            <View style={styles.modalRow}>
+              <Text style={styles.modalServiceTxt}>Service</Text>
+              <Text style={styles.modalServiceTxtTwo}>
+                {modalItem?.service}
               </Text>
-              <View style={styles.modalRow}>
-                <Text style={styles.modalServiceTxt}>Service</Text>
-                <Text style={styles.modalServiceTxtTwo}>
-                  {modalServiceName}
-                </Text>
-              </View>
-              <View style={styles.modalRow}>
-                <Text style={styles.modalServiceTxt}>Status</Text>
-                <Text style={styles.modalServiceTxtThree}>{modalStatus}</Text>
-              </View>
-              <View style={styles.modalRowTwo}>
-                <Image source={images.clockIconFill} />
-                <Text style={styles.modalServiceTxtFour}>
-                  {modalServiceDate} - {modalServiceTime}
-                </Text>
-              </View>
-              <View style={styles.modalRow}>
-                <Image source={images.profileIcon} />
-                <Text style={styles.modalServiceTxtFour}>
-                  {modalClientName}
-                </Text>
-              </View>
-              <TouchableOpacity
-                style={styles.modalBtnView}
-                onPress={() => {
-                  setModalVisible(false);
-                }}>
-                <Text style={styles.modalBtnText}>Confirm</Text>
-                <Image
-                  source={images.arrowIcon}
-                  style={styles.modalArrowIcon}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
             </View>
+            <View style={styles.modalRow}>
+              <Text style={styles.modalServiceTxt}>Status</Text>
+              <Text style={styles.modalServiceTxtThree}>
+                {modalItem?.status}
+              </Text>
+            </View>
+            <View style={styles.modalRowTwo}>
+              <Image source={images.clockIconFill} />
+              <Text style={styles.modalServiceTxtFour}>
+                {modalItem?.date
+                  ? `${formatDateShort(modalItem?.date)} - ${
+                      modalItem?.duration
+                    }`
+                  : null}
+              </Text>
+            </View>
+            <View style={styles.modalRow}>
+              <Image source={images.profileIcon} />
+              <Text style={styles.modalServiceTxtFour}>
+                {modalItem?.clientName}
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={styles.modalBtnView}
+              onPress={() => {
+                setModalVisible(false);
+                console.log(modalItem.id);
+              }}>
+              <Text style={styles.modalBtnText}>Confirm</Text>
+              <Image
+                source={images.arrowIcon}
+                style={styles.modalArrowIcon}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
           </View>
         </Modal>
       </View>

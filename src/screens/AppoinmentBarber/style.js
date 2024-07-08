@@ -214,13 +214,9 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.02,
     paddingHorizontal: sizes.screenWidth * 0.05,
     paddingVertical: sizes.screenHeight * 0.02,
+    alignSelf: 'center',
   },
-  modalBg: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.modalBg,
-  },
+
   modalHeading: {
     color: colors.black,
     textAlign: 'center',
