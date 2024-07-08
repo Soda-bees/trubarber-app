@@ -6,71 +6,36 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-import React, {useState} from 'react';
-import {styles} from './style.js';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
-import {Calendar, LocaleConfig} from 'react-native-calendars';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import BackArrow from '../../components/BackArrow';
 // import {colors, sizes} from '../../services/index.js';
 import Button from '../../components/Button';
 import CalendarStrip from 'react-native-calendar-strip';
 import 'moment';
 import moment from 'moment';
-import {colors} from '../../services/utilities/colors';
-import {sizes} from '../../services/index.js';
+import { colors } from '../../services/utilities/colors';
+import { sizes } from '../../services/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 
-export default function AppointmentDetails({navigation, route}) {
-  const {item} = route?.params;
-  console.log('wizzz bro', formatToJSON(item));
+export default function AppointmentDetails({ navigation, route }) {
+  const today = moment();
+  const { item } = route?.params;
   const [selected, setSelected] = useState(null);
 
   const currentDate = moment();
 
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  const [datesArray, setDatesArray] = useState([])
+  const [totalPrice , setTotlPrice] = useState(0)
 
   const handleMonthChange = newMonthIndex => {
     setSelectedMonth(newMonthIndex);
   };
 
-  const [dateData, setDatedata] = useState([
-    {
-      time: '1:00',
-    },
-    {
-      time: '1:30',
-    },
-    {
-      time: '2:00',
-    },
-    {
-      time: '2:30',
-    },
-    {
-      time: '3:00',
-    },
-    {
-      time: '3:30',
-    },
-    {
-      time: '4:00',
-    },
-    {
-      time: '4:30',
-    },
-    {
-      time: '5:00',
-    },
-    {
-      time: '5:30',
-    },
-    {
-      time: '6:00',
-    },
-    {
-      time: '6:30',
-    },
-  ]);
+  const [dateData, setDatedata] = useState([]);
 
   const maskCardNumber = cardNumber => {
     // Remove spaces from the card number
@@ -94,6 +59,70 @@ export default function AppointmentDetails({navigation, route}) {
     return moment(selected, 'h:mm A').add(1, 'hour').format('h:mm A');
   };
 
+  const handleSelectDate = async () => {
+    setSelected('2024-07-08T07:21:20.776Z')
+  }
+
+  useEffect(() => {
+    if (item) {
+      handleCreateDatesArray(item?.date)
+      handleCreateTimesArray(item?.time)
+      handleSetTotalPrice(item.services)
+    }
+  }, [item])
+
+
+  const handleCreateTimesArray = async (time) => {
+    const centerTime = moment(time, "hh:mm");
+
+    const timesArray = [];
+
+    timesArray.push({
+      time: centerTime.format('hh:mm')
+    });
+
+    for (let i = 1; i <= 2; i++) {
+      const previousTime = centerTime.clone().subtract(i * 60, 'minutes');
+      timesArray.unshift({
+        time: previousTime.format('hh:mm')
+      });
+    }
+
+    for (let i = 1; i <= 2; i++) {
+      const nextTime = centerTime.clone().add(i * 60, 'minutes');
+      timesArray.push({
+        time: nextTime.format('hh:mm')
+      });
+    }
+
+    setDatedata(timesArray)
+  }
+
+  const handleCreateDatesArray = async (date) => {
+    const centerDate = moment(date, "MM-DD-YYYY");
+
+    const datesArray = [];
+
+    for (let i = -2; i <= 2; i++) {
+      const currentDate = centerDate.clone().add(i, 'days');
+      datesArray.push({
+        day: currentDate.format('ddd'),
+        date: currentDate.format('DD'),
+        month: currentDate.format('MMMM')
+      });
+    }
+    setDatesArray(datesArray)
+  }
+
+  const handleSetTotalPrice = (services) => {
+    let totalPrice = 0;
+    services.forEach(service => {
+      totalPrice += parseFloat(service.price);
+    });
+    setTotlPrice(totalPrice);
+  };
+
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -108,118 +137,59 @@ export default function AppointmentDetails({navigation, route}) {
         <View style={styles.topContentcontainer}>
           <View style={styles.rowcontainer}>
             <Text style={styles.datesHeading}>Select Date</Text>
-            {/* <TouchableOpacity style={styles.row}>
-                <Text style={styles.datesHeading}>Feb</Text>
-                <Image
-                  style={styles.redTriangle}
-                  resizeMode="contain"
-                  source={images.redTriangle}
-                />
-              </TouchableOpacity> */}
+            <Text style={styles.datesHeading}>{datesArray && datesArray[2]?.month}</Text>
           </View>
-          {/* <View style={styles.row}>
-              <View style={styles.spaceTop}>
-                <Text style={styles.days}>Sat</Text>
-                <Text style={styles.dates}>31</Text>
-              </View>
-              <View style={styles.spaceTop}>
-                <Text style={styles.days}>Sat</Text>
-                <Text style={styles.dates}>31</Text>
-              </View>
-              <View style={styles.spaceTop}>
-                <Text style={styles.days}>Sat</Text>
-                <Text style={styles.dates}>31</Text>
-              </View>
-              <View style={styles.spaceTop}>
-                <Text style={styles.days}>Sat</Text>
-                <Text style={styles.dates}>31</Text>
-              </View>
-              <View style={styles.spaceTop}>
-                <Text style={styles.days}>Sat</Text>
-                <Text style={styles.dates}>31</Text>
-              </View>
-            </View> */}
           <View>
             <View style={styles.containerCheck}>
-              <CalendarStrip
-                daySelectionAnimation={{
-                  type: 'border',
-                  duration: 100,
-                  borderWidth: 1,
-                }}
-                style={{
-                  height: sizes.screenHeight * 0.16,
-                  paddingTop: sizes.screenHeight * 0.01,
-                  paddingBottom: sizes.screenHeight * 0.02,
-                }}
-                dayContainerStyle={{borderWidth: 1}}
-                scrollerPaging
-                useNativeDriver
-                scrollable
-                highlightDateNumberStyle={{color: colors.red}}
-                highlightDateNameStyle={{color: colors.red}}
-                highlightDateContainerStyle={{
-                  backgroundColor: colors.dateSelected,
-                  borderColor: colors.red,
-                }}
-                dateNameStyle={{color: colors.black}}
-                dateNumberStyle={{color: colors.black}}
-                leftSelector={[]}
-                rightSelector={[]}
-              />
+              {
+                datesArray?.length > 0 &&
+                datesArray?.map((item, index) => {
+                  return (
+                    <View key={index} style={index === 2 ? styles.dateRoundSelected : styles.dateRound}>
+                      <Text style={index === 2 ? styles.dateRoundTextSelected : styles.dateRoundText}>{item.day}</Text>
+                      <Text style={index === 2 ? styles.dateRoundTextSelected : styles.dateRoundText}>{item.date}</Text>
+                    </View>
+                  )
+                })
+              }
             </View>
           </View>
         </View>
         <View style={styles.timeContainer}>
           <ScrollView horizontal>
             <View style={styles.timeAlligment}>
-              {dateData.map((item, index) => {
+              {dateData?.length > 0 && dateData?.map((item, index) => {
                 return (
-                  <TouchableOpacity
+                  <View
                     key={index}
                     style={[
                       styles.selected,
-                      index === selected
+                      index === 2
                         ? styles.selectedItem
                         : styles.notSelected,
                     ]}
-                    onPress={() => setSelected(index)}>
+                    >
                     <Text
                       style={[
                         styles.selectedTextcolor,
-                        index === selected
+                        index === 2
                           ? styles.selectedTextcolor
                           : styles.textBlack,
                       ]}>
                       {item.time}
                     </Text>
-                  </TouchableOpacity>
+                  </View>
                 );
               })}
             </View>
           </ScrollView>
         </View>
         <View style={styles.bookContainer}>
-          <View style={styles.flexRow}>
-            <Text style={styles.textBlack}>Haircuts</Text>
-            {/* <View style={styles.directionRow}>
-              <TouchableOpacity>
-                <Text style={styles.change}>Change</Text>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Image
-                  source={images.crossbtn}
-                  resizeMode="contain"
-                  style={styles.crossbtn}
-                />
-              </TouchableOpacity>
-            </View> */}
-          </View>
           <View style={styles.barberContainer}>
             <View style={styles.barberNameImage}>
               <View style={styles.imageContainer}>
                 <Image
-                  source={images.barberHat}
+                  source={{uri:item?.barber?.profile}}
                   style={styles.imageContainer}
                 />
               </View>
@@ -230,52 +200,32 @@ export default function AppointmentDetails({navigation, route}) {
                 </Text>
               </View>
             </View>
-            <View style={styles.marginTop}>
-              <Text style={styles.priceSmalltext}>$25.00</Text>
-            </View>
           </View>
+          <View>
+                {item?.services?.map((item, index) => {
+                  return (
+                    <View style={styles.flexRow} key={index}>
+                      <View style={styles.flexRow1}>
+                        <Text style={styles.disabledText}>{item?.name}</Text>
+                        <Text
+                          style={
+                            styles.disabledText1
+                          }>{` (${item?.serviceName})`}</Text>
+                      </View>
+                      <Text
+                        style={styles.disabledText}>{`$ ${item.price}.00`}</Text>
+                    </View>
+                  );
+                })}
+              </View>
           <View style={styles.total}>
             <Text style={styles.totalText}>Total:</Text>
-            <Text style={styles.priceBlack}>$25.00</Text>
+            <Text style={styles.priceBlack}>{`$${parseFloat(
+                  totalPrice,
+                )?.toFixed(2)}`}</Text>
           </View>
-          {/* <TouchableOpacity style={styles.textContainer}>
-            <Text style={styles.addAnotherservice}>+ Add Another Service</Text>
-          </TouchableOpacity> */}
         </View>
-        <View style={styles.paymentBorder}>
-          <View style={styles.paymentTitle}>
-            <Text style={styles.title}>Payments</Text>
-          </View>
-          <View style={styles.credtDebit}>
-            <Text style={styles.creditText}>Credit / Debit Cards</Text>
-            {/* <TouchableOpacity style={styles.blackPlusbox}>
-              <Image
-                source={images.whiteCross}
-                style={styles.starSize}
-                resizeMode="contain"
-              />
-            </TouchableOpacity> */}
-          </View>
-          <TouchableOpacity style={styles.cardDetailscontainer}>
-            <View style={styles.row}>
-              <Image
-                source={images.masterCard}
-                resizeMode="contain"
-                style={styles.masterCard}
-              />
-              <Text style={styles.cardText}>************6489</Text>
-            </View>
-            <Image
-              source={images.arrowRight}
-              style={styles.arrowRight}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-        </View>
-        {/* <View style={styles.btnMargin}>
-          <Button title={'Book'} />
-        </View> */}
-      </View>
+         </View>
     </SafeAreaView>
   );
 }
