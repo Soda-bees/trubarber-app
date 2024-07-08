@@ -191,8 +191,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   arrowImg: {
-    height: sizes.screenHeight * 0.03,
-    width: sizes.screenWidth * 0.06,
+    height: 18,
+    width: 18,
+    marginLeft: 6,
     resizeMode: 'contain',
   },
   calenderHeaidng: {
@@ -267,7 +268,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-
   },
   modalBtnText: {
     color: colors.white,
@@ -279,16 +279,16 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.02,
     width: sizes.screenHeight * 0.02,
   },
-  textBlack:{
-    color:colors.black,
-    fontSize:fontSize.smallM
+  textBlack: {
+    color: colors.black,
+    fontSize: fontSize.smallM,
   },
-  textGray:{
-    color:colors.darkGray,
-    fontSize:fontSize.smallM
+  textGray: {
+    color: colors.darkGray,
+    fontSize: fontSize.smallM,
   },
 
-  paddingBtm:{
-    paddingBottom:sizes.screenHeight * 0.11
+  paddingBtm: {
+    paddingBottom: sizes.screenHeight * 0.11,
   },
 });

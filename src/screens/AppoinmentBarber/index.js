@@ -9,28 +9,57 @@ import {
   ScrollView,
   Modal,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {styles} from './style';
 import images from '../../services/utilities/images';
 import {colors, sizes} from '../../services';
 import Timetable from 'react-native-calendar-timetable';
 import moment from 'moment';
+import {useSelector} from 'react-redux';
+import {selectUserData} from '../../store/userData';
+import DatePicker from 'react-native-date-picker';
 
 export default function AppoinmentBarber({navigation}) {
-  const [currentLocation, setCurrentLocation] = useState(
-    'Rachael McPhail Street...',
-  );
+  const barber = useSelector(selectUserData);
+
   const [clientName, setClientName] = useState('John D.');
   const [clientDate, setClientDate] = useState('Mon, Aug 12');
   const [clientTime, setClientTime] = useState('1 PM');
   const [service, setService] = useState('Haircut');
   const [style, setStyle] = useState('Buzzcut');
-  const [modalVisible, setModalVisible] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
   const [modalServiceName, setModalServiceName] = useState('Beard Trim');
   const [modalStatus, setModalStatus] = useState('Pending');
   const [modalServiceDate, setModalServiceDate] = useState('20 Jan , 2024 ');
   const [modalServiceTime, setModalServiceTime] = useState('1:00 PM - 1:45PM');
   const [modalClientName, setModalClientName] = useState('John Doe');
+  const [currentLocation, setCurrentLocation] = useState(
+    'Rachael McPhail Street...',
+  );
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+  const [appointmentTimeline2, setAppointmentTimeline2] = useState([]);
+  const [from, setFrom] = useState();
+  const [to, setTo] = useState();
+
+  const roundUpTime = time => {
+    const hour = moment(time, 'h:mm A').hour();
+    const minute = moment(time, 'h:mm A').minute();
+    return minute > 0 ? hour + 1 : hour;
+  };
+
+  const setTimesFromDuration = duration => {
+    const [start, end] = duration.split(' - ');
+
+    const startHour = moment(start, 'h:mm A').hour();
+    const roundedStartHour =
+      moment(start, 'h:mm A').minute() > 0 ? startHour : startHour;
+
+    const endHour = roundUpTime(end);
+
+    setFrom(roundedStartHour);
+    setTo(endHour);
+  };
 
   const formatDate = date => {
     const day = date.getDate();
@@ -38,67 +67,30 @@ export default function AppoinmentBarber({navigation}) {
     return `${day} ${month}`;
   };
 
-  const currentDate = new Date();
+  const getOneHourLater = selected => {
+    return `${selected} - ${moment(selected, 'h:mm A')
+      .add(1, 'hour')
+      .format('h:mm A')}`;
+  };
 
-  const [date] = useState(new Date());
-  const [appointmentTimeline] = useState([
-    {
-      clientName: 'Sam',
-      service: 'Haircut & Beard',
-      startDate: moment().startOf('day').add(10, 'hours').toDate(),
-      endDate: moment().startOf('day').add(11, 'hours').toDate(),
-      duration: '10 AM - 11 AM',
-    },
-    {
-      clientName: 'John Doe',
-      service: 'Haircut',
-      startDate: moment().startOf('day').add(11, 'hours').toDate(),
-      endDate: moment().startOf('day').add(12, 'hours').toDate(),
-      duration: '11 AM - 12 PM',
-    },
-    {
-      clientName: 'Eil King',
-      service: 'Haircut & Beard',
-      startDate: moment().startOf('day').add(12, 'hours').toDate(),
-      endDate: moment().startOf('day').add(13, 'hours').toDate(),
-      duration: '12 PM - 1 PM',
-    },
-    {
-      clientName: 'Omron Samadi',
-      service: 'Haircut',
-      startDate: moment().startOf('day').add(13, 'hours').toDate(),
-      endDate: moment().startOf('day').add(14, 'hours').toDate(),
-      duration: '1 PM - 2 PM',
-    },
-    {
-      clientName: 'Arya',
-      service: 'Haircut & Beard',
-      startDate: moment().startOf('day').add(14, 'hours').toDate(),
-      endDate: moment().startOf('day').add(15, 'hours').toDate(),
-      duration: '2 PM - 3 PM',
-    },
-    {
-      clientName: 'Joseph De',
-      service: 'Haircut & Beard',
-      startDate: moment().startOf('day').add(15, 'hours').toDate(),
-      endDate: moment().startOf('day').add(16, 'hours').toDate(),
-      duration: '3 PM - 4 PM',
-    },
-    {
-      clientName: 'Osman Semedo',
-      service: 'Haircut',
-      startDate: moment().startOf('day').add(16, 'hours').toDate(),
-      endDate: moment().startOf('day').add(17, 'hours').toDate(),
-      duration: '4 PM - 5 PM',
-    },
-    {
-      clientName: 'Brooklyn Simons',
-      service: 'Haircut',
-      startDate: moment().startOf('day').add(17, 'hours').toDate(),
-      endDate: moment().startOf('day').add(18, 'hours').toDate(),
-      duration: '5 PM - 6 PM',
-    },
-  ]);
+  const mapBackendDataToAppointmentTimeline = backendData => {
+    const transformedData = backendData.map(appointment => {
+      const startDate = moment(
+        `${appointment.date} ${appointment.time}`,
+        'MM-DD-YYYY h:mm A',
+      ).toDate();
+      const endDate = moment(startDate).add(1, 'hour').toDate();
+      return {
+        clientName: appointment.user.name,
+        service: appointment.services[0].name,
+        startDate: startDate,
+        endDate: endDate,
+        duration: getOneHourLater(appointment.time),
+      };
+    });
+    setAppointmentTimeline2(transformedData);
+  };
+
   const RenderItem = ({style, item}) => {
     return (
       <View
@@ -107,7 +99,7 @@ export default function AppoinmentBarber({navigation}) {
           height: 'auto',
           left: sizes.screenWidth * 0.15,
           width: 'auto',
-          marginTop: sizes.screenHeight * 0.002,
+          marginTop: 6,
         }}>
         <Text style={styles.textBlack}>{item.clientName}</Text>
         <Text style={styles.textGray}>{item.service}</Text>
@@ -115,6 +107,51 @@ export default function AppoinmentBarber({navigation}) {
       </View>
     );
   };
+
+  const formatDateShort = dateString => {
+    const parts = dateString.split('-');
+    const day = parseInt(parts[1], 10);
+    const month = parseInt(parts[0], 10) - 1;
+    const year = parseInt(parts[2], 10);
+
+    const dateObj = new Date(year, month, day);
+
+    const options = {weekday: 'short', month: 'short', day: 'numeric'};
+
+    return dateObj.toLocaleDateString('en-US', options);
+  };
+
+  const setNextAppointmentData = () => {
+    const currentDate = moment();
+    const nextAppointment = barber.appoinment.find(appointment => {
+      const appointmentDateTime = moment(
+        `${appointment.date} ${appointment.time}`,
+        'MM-DD-YYYY h:mm A',
+      );
+      return appointmentDateTime.isAfter(currentDate);
+    });
+
+    console.log(nextAppointment);
+
+    if (nextAppointment) {
+      setClientName(nextAppointment.user.name);
+      setClientDate(formatDateShort(nextAppointment.date));
+      setClientTime(nextAppointment.time);
+      setService(nextAppointment.services[0].name);
+      setStyle(nextAppointment.services[0].serviceName);
+    } else {
+      console.log('No future appointments found.');
+    }
+  };
+
+  useEffect(() => {
+    mapBackendDataToAppointmentTimeline(barber.appoinment);
+    setTimesFromDuration(barber.time);
+    setNextAppointmentData();
+    setTimeout(() => {
+      console.log(appointmentTimeline2);
+    }, 2000);
+  }, [barber]);
 
   return (
     <SafeAreaView>
@@ -128,7 +165,7 @@ export default function AppoinmentBarber({navigation}) {
               <TouchableOpacity
                 style={styles.locationRow}
                 // onPress={() => navigation.navigate('WholeMap')}
-                >
+              >
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
                 </View>
@@ -232,27 +269,45 @@ export default function AppoinmentBarber({navigation}) {
             <View style={styles.calenderView}>
               <View style={styles.containerRow}>
                 <Text style={styles.calenderHeaidng}>Calender</Text>
-                <View style={styles.optionRow}>
+                <TouchableOpacity
+                  style={styles.optionRow}
+                  onPress={() => {
+                    setOpen(true);
+                  }}>
                   <Text style={styles.clientDetailTxtBlack}>
-                    {formatDate(currentDate)}
+                    {formatDate(date)}
                   </Text>
-                  <Image
-                    source={images.dropDownBlack}
-                    style={styles.arrowImg}
-                  />
-                </View>
+                  <Image source={images.calendar} style={styles.arrowImg} />
+                </TouchableOpacity>
               </View>
 
               <Timetable
-                items={appointmentTimeline}
+                items={appointmentTimeline2}
                 renderItem={props => <RenderItem {...props} />}
                 date={date}
+                timeStyle={{color: colors.black}}
+                fromHour={from ? from : 0}
+                toHour={to ? to : 24}
                 is12Hour
+                hourHeight={70}
               />
             </View>
           </View>
-        <View style={Platform.OS == 'ios' && styles.paddingBtm} />
+          <View style={Platform.OS == 'ios' && styles.paddingBtm} />
         </ScrollView>
+        <DatePicker
+          mode="date"
+          modal
+          open={open}
+          date={date}
+          onConfirm={date => {
+            setOpen(false);
+            setDate(date);
+          }}
+          onCancel={() => {
+            setOpen(false);
+          }}
+        />
         <Modal
           animationType="fade"
           transparent={true}
