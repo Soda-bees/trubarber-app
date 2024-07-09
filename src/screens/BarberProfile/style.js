@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight,
   },
   borderBottom: {
-    borderBottomWidth: sizes.screenWidth*0.002,
+    borderBottomWidth: sizes.screenWidth * 0.002,
     borderColor: colors.grayBorder,
   },
   arrowTop: {
@@ -38,30 +38,30 @@ export const styles = StyleSheet.create({
     marginLeft: sizes.screenWidth * 0.072,
     marginRight: sizes.screenWidth * 0.072,
     // height: sizes.screenHeight * 0.21,
-    borderWidth: sizes.screenWidth*0.002,
+    borderWidth: sizes.screenWidth * 0.002,
     borderColor: colors.selectorcolor,
     borderRadius: sizes.screenWidth * 0.042,
-    paddingVertical:sizes.screenWidth * 0.025
+    paddingVertical: sizes.screenWidth * 0.025
   },
   contentAlligment: {
     marginTop: sizes.screenHeight * 0.012,
     marginLeft: sizes.screenWidth * 0.042,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: sizes.screenWidth * 0.06,
   },
   youngMan: {
-    borderRadius: sizes.screenWidth * 200,
-    height: sizes.screenHeight * 0.11,
+    borderRadius: sizes.screenWidth * 0.3,
+    height: sizes.screenWidth * 0.22,
     width: sizes.screenWidth * 0.22,
   },
   nameContainer: {
-    // width: sizes.screenWidth * 0.24,
+    marginLeft: sizes.screenWidth * 0.02
   },
   firstName: {
     fontSize: fontSize.h6,
     fontWeight: '700',
     color: colors.black,
+    width: sizes.screenWidth * 0.5,
   },
   lastName: {
     fontSize: fontSize.h6,

@@ -21,6 +21,17 @@ export default function BaberCatalogue({ navigation }) {
     'Rachael McPhail Street...',
   );
   const [servicesData, setserviceData] = useState([]);
+  const [search, setSearch] = useState('');
+
+
+
+  const filteredServices = search
+    ? userData?.services?.filter(item => {
+        const searchLower = search.toLowerCase();
+        const nameMatches = item.name.toLowerCase().includes(searchLower);
+        return nameMatches;
+      })
+    : userData?.services;
 
 
   return (
@@ -32,7 +43,7 @@ export default function BaberCatalogue({ navigation }) {
             resizeMode="contain"
             style={styles.transparentBg}>
             <View style={styles.topIconRow}>
-              <TouchableOpacity
+              <View
                 style={styles.locationRow}
                 // onPress={() => navigation.navigate('WholeMap')}
                 >
@@ -45,7 +56,7 @@ export default function BaberCatalogue({ navigation }) {
                     {currentLocation}
                   </Text>
                 </View>
-              </TouchableOpacity>
+              </View>
               <View style={styles.otherIconRow}>
                 <TouchableOpacity
                   style={styles.notificationContainer}
@@ -75,6 +86,9 @@ export default function BaberCatalogue({ navigation }) {
                 placeholderTextColor={colors.placeholdertextgray}
                 style={styles.input}
                 placeholder="Search..."
+                onChangeText={(text)=>{
+                  setSearch(text)
+                }}
               />
             </View>
           </ImageBackground>
@@ -85,7 +99,7 @@ export default function BaberCatalogue({ navigation }) {
           <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
             <View>
               <View style={styles.serviceContainer}>
-                {userData?.services?.map((item, index) => (
+                {filteredServices?.map((item, index) => (
                   <TouchableOpacity
                     style={styles.serviceBox}
                     key={index}

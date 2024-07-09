@@ -5,19 +5,21 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
+  BackHandler,
+  ToastAndroid,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { styles } from './style.js';
+import React, {useEffect, useState} from 'react';
+import {styles} from './style.js';
 import images from '../../services/utilities/images';
-import { Calendar, LocaleConfig } from 'react-native-calendars';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
 import BackArrow from '../../components/BackArrow';
-import { colors } from '../../services/utilities/colors';
-import { sizes } from '../../services/index.js';
+import {colors} from '../../services/utilities/colors';
+import {sizes} from '../../services/index.js';
 import Button from '../../components/Button/index.js';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectbarber } from '../../store/barber/index.js';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectbarber} from '../../store/barber/index.js';
 import {
   deleteCartItem,
   removeCart,
@@ -26,21 +28,24 @@ import {
   updateCart,
 } from '../../store/cart/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
-import { ErrorShow } from '../../components/Error/index.js';
+import {ErrorShow} from '../../components/Error/index.js';
 import Toast from 'react-native-toast-message';
-import { selectPaymentCard } from '../../store/paymentCard/index.js';
+import {selectPaymentCard} from '../../store/paymentCard/index.js';
 import Loader from '../../components/Loader/index.js';
-import { selectAuthToken } from '../../store/authToken/index.js';
-import { bookAppoinment, hanleGetBookedAppoinment } from '../../services/config/API/index.js';
-import { addAppoinment } from '../../store/userData/index.js';
-import { socket, socketService } from "../../services/Socket"
+import {selectAuthToken} from '../../store/authToken/index.js';
+import {
+  bookAppoinment,
+  hanleGetBookedAppoinment,
+} from '../../services/config/API/index.js';
+import {addAppoinment} from '../../store/userData/index.js';
+import {socket, socketService} from '../../services/Socket';
 
-export default function BookingProcess({ navigation, route }) {
+export default function BookingProcess({navigation, route}) {
   const dispatch = useDispatch();
   const barbers = useSelector(selectbarber);
   const cart = useSelector(selectCart);
-  const paymentCard = useSelector(selectPaymentCard)
-  const authToken = useSelector(selectAuthToken)
+  const paymentCard = useSelector(selectPaymentCard);
+  const authToken = useSelector(selectAuthToken);
   const today = moment();
 
   const [selected, setSelected] = useState(null);
@@ -48,14 +53,31 @@ export default function BookingProcess({ navigation, route }) {
   const [barber, setBarber] = useState();
   const [dateData, setDatedata] = useState();
   const [selectedDate, setSelectedDate] = useState(null);
-  const [loader, setLoader] = useState(false)
-  const [bookedTime, setBookedTime] = useState([])
+  const [loader, setLoader] = useState(false);
+  const [bookedTime, setBookedTime] = useState([]);
+
+  useEffect(() => {
+    const backAction = () => {
+      if (loader) {
+        ToastAndroid.show('Please wait, loading...', ToastAndroid.SHORT);
+        return true; // Prevent default behavior
+      }
+      return false; // Allow default behavior
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, [loader]);
 
   const findBarber = async () => {
     const barber = await barbers.find(barber => barber._id === cart?.barber);
     setBarber(barber);
     // handleCreateTimeSlot(barber);
-    getBookedAppoinment(barber._id)
+    getBookedAppoinment(barber._id);
   };
   const setTotalPrice = () => {
     let totalPrice = 0;
@@ -72,14 +94,19 @@ export default function BookingProcess({ navigation, route }) {
     if (typeof time === 'string') {
       const [startTime, endTime] = time.split(' - ');
       const bookedSlots = ['2:00 PM', '4:00 PM', '8:00 PM'];
-      const availableTimeSlot = handleCreateTimeSlotSecond(startTime, endTime)
-      setDatedata(availableTimeSlot)
+      const availableTimeSlot = handleCreateTimeSlotSecond(startTime, endTime);
+      setDatedata(availableTimeSlot);
     } else {
       console.log('Invalid time format');
     }
   };
 
-  const handleCreateTimeSlotSecond = (startTime, endTime, timeToRemove) => {
+  const handleCreateTimeSlotSecond = (
+    startTime,
+    endTime,
+    timeToRemove,
+    formattedDate,
+  ) => {
     const timeSlots = [];
 
     const convertTo24HourFormat = time => {
@@ -95,12 +122,12 @@ export default function BookingProcess({ navigation, route }) {
       if (modifier === 'AM' && hour === 12) {
         hour = 0;
       }
-      return { hour, minutes };
+      return {hour, minutes};
     };
 
-    let { hour: startHour, minutes: startMinutes } =
+    let {hour: startHour, minutes: startMinutes} =
       convertTo24HourFormat(startTime);
-    let { hour: endHour, minutes: endMinutes } = convertTo24HourFormat(endTime);
+    let {hour: endHour, minutes: endMinutes} = convertTo24HourFormat(endTime);
 
     // Adjust the endHour to include the last slot
     if (endMinutes > 0) {
@@ -147,29 +174,31 @@ export default function BookingProcess({ navigation, route }) {
     dispatch(deleteCartItem(item));
   };
 
-  // const handleDateSelected = (date) => {
-  //   const formatedDate = date?.format('MM-DD-YYYY')
-  //   setSelectedDate(date?.format('MM-DD-YYYY'));
-  //   const bookedTimesForSelectedDate = bookedTime
-  //     .filter(booking => booking.date === formatedDate)
-  //     .map(booking => booking.time);
-  //   const [startTime, endTime] = barber.time.split(' - ');
-  //   console.log(startTime, endTime);
-  //   const availableTimeSlot = handleCreateTimeSlotSecond(startTime, endTime, bookedTimesForSelectedDate)
-  //   setDatedata(availableTimeSlot)
-  // };
+  const checkAndReturnTime = (startTime, formattedDate) => {
+    const dateTime = moment(
+      `${formattedDate} ${startTime}`,
+      'MM-DD-YYYY h:mm A',
+    );
+    const currentDateTime = moment();
+    if (dateTime.isAfter(currentDateTime)) {
+      return startTime;
+    } else {
+      return currentDateTime.format('hh:mm A');
+    }
+  };
 
-  const handleDateSelected = (date) => {
+  const handleDateSelected = date => {
     const formattedDate = date?.format('MM-DD-YYYY');
     setSelectedDate(formattedDate);
 
     const bookedTimesForSelectedDate = bookedTime
-    .filter(booking => booking.date === formattedDate)
-    .map(booking => booking.time);
+      .filter(booking => booking.date === formattedDate)
+      .map(booking => booking.time);
 
     console.log(bookedTimesForSelectedDate);
 
-    const [startTime, endTime] = barber.time.split(' - ');
+    const [startTime1, endTime] = barber.time.split(' - ');
+    const startTime = checkAndReturnTime(startTime1, formattedDate);
 
     // Parse start and end times
     let [startHour, startMinute, startPeriod] = parseTime(startTime);
@@ -203,39 +232,43 @@ export default function BookingProcess({ navigation, route }) {
 
     // Continue with your logic here
 
-
-
-    const availableTimeSlot = handleCreateTimeSlotSecond(roundedStartTime, roundedEndTime, bookedTimesForSelectedDate);
+    const availableTimeSlot = handleCreateTimeSlotSecond(
+      roundedStartTime,
+      roundedEndTime,
+      bookedTimesForSelectedDate,
+      formattedDate,
+    );
     setDatedata(availableTimeSlot);
   };
 
-  const parseTime = (timeString) => {
+  const parseTime = timeString => {
     const [time, period] = timeString.split(' ');
     const [hour, minute] = time.split(':').map(Number);
     return [hour, minute, period];
   };
 
   const formatTime = (hour, minute, period) => {
-    const formattedHour = (hour % 12 === 0 ? 12 : hour % 12).toString().padStart(2, '0');
+    const formattedHour = (hour % 12 === 0 ? 12 : hour % 12)
+      .toString()
+      .padStart(2, '0');
     const formattedMinute = minute === 0 ? '00' : '00';
     return `${formattedHour}:${formattedMinute} ${period}`;
   };
 
-
-  const getOneHourLater = (selected) => {
-    return moment(selected, "h:mm A").add(1, 'hour').format('h:mm A');
+  const getOneHourLater = selected => {
+    return moment(selected, 'h:mm A').add(1, 'hour').format('h:mm A');
   };
 
-  const getBookedAppoinment = async (id) => {
+  const getBookedAppoinment = async id => {
     try {
-      const response = await hanleGetBookedAppoinment(authToken, id)
+      const response = await hanleGetBookedAppoinment(authToken, id);
       if (response.status == 200) {
-        setBookedTime(response?.data?.appointments)
+        setBookedTime(response?.data?.appointments);
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const handleConfirm = async () => {
     if (!selectedDate) {
@@ -253,37 +286,44 @@ export default function BookingProcess({ navigation, route }) {
     const obj = {
       ...cart,
       date: selectedDate,
-      time: selected
-    }
+      time: selected,
+    };
     try {
-      setLoader(true)
-      const response = await bookAppoinment(obj, authToken)
+      setLoader(true);
+      const response = await bookAppoinment(obj, authToken);
       if (response.status == 200) {
-        ErrorShow('success', 'Congratulation!', response?.data?.message, onHide)
-        setLoader(false)
-        dispatch(addAppoinment(response?.data?.appoinment))
+        ErrorShow(
+          'success',
+          'Congratulation!',
+          response?.data?.message,
+          onHide,
+        );
+        dispatch(addAppoinment(response?.data?.appoinment));
       } else {
-        setLoader(false)
-        ErrorShow('error', 'Oops!', response?.data?.message)
+        setLoader(false);
+        ErrorShow('error', 'Oops!', response?.data?.message);
       }
     } catch (error) {
-      setLoader(false)
+      setLoader(false);
       console.log(error);
     }
-  }
+  };
 
   const onHide = () => {
-    navigation.navigate('Appointments')
-  }
+    navigation.navigate('Appointments');
+    setLoader(false);
+    dispatch(removeCart());
+  };
 
-  const maskCardNumber = (cardNumber) => {
+  const maskCardNumber = cardNumber => {
     // Remove spaces from the card number
     const cardNumberWithoutSpaces = cardNumber.replace(/\s+/g, '');
 
     // Check if the card number is 16 digits
     if (cardNumberWithoutSpaces.length === 16) {
       // Mask all but the last 4 digits
-      const maskedCardNumber = '************' + cardNumberWithoutSpaces.slice(-4);
+      const maskedCardNumber =
+        '************' + cardNumberWithoutSpaces.slice(-4);
 
       // Add spaces back to the masked card number
       return maskedCardNumber.replace(/(.{4})/g, '$1 ').trim();
@@ -298,14 +338,15 @@ export default function BookingProcess({ navigation, route }) {
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.allignment}>
-            <View style={styles.arrowTop}>
-              <BackArrow
-                onPress={() => {
-                  // dispatch(removeCart());
-                  navigation.goBack();
-                }}
-              />
-            </View>
+            {!loader && (
+              <View style={styles.arrowTop}>
+                <BackArrow
+                  onPress={() => {
+                    navigation.goBack();
+                  }}
+                />
+              </View>
+            )}
             <Text style={styles.headerText}>Book Appointment</Text>
           </View>
         </View>
@@ -327,19 +368,19 @@ export default function BookingProcess({ navigation, route }) {
                     paddingTop: sizes.screenHeight * 0.01,
                     // paddingBottom: sizes.screenHeight * 0.02,
                   }}
-                  dayContainerStyle={{ borderWidth: 1 }}
+                  dayContainerStyle={{borderWidth: 1}}
                   scrollerPaging
                   useNativeDriver
                   scrollable
-                  highlightDateNumberStyle={{ color: colors.red }}
-                  calendarHeaderStyle={{ color: colors.black }}
-                  highlightDateNameStyle={{ color: colors.red }}
+                  highlightDateNumberStyle={{color: colors.red}}
+                  calendarHeaderStyle={{color: colors.black}}
+                  highlightDateNameStyle={{color: colors.red}}
                   highlightDateContainerStyle={{
                     backgroundColor: colors.dateSelected,
                     borderColor: colors.red,
                   }}
-                  dateNameStyle={{ color: colors.black }}
-                  dateNumberStyle={{ color: colors.black }}
+                  dateNameStyle={{color: colors.black}}
+                  dateNumberStyle={{color: colors.black}}
                   leftSelector={[]}
                   rightSelector={[]}
                   onDateSelected={handleDateSelected}
@@ -348,10 +389,9 @@ export default function BookingProcess({ navigation, route }) {
               </View>
             </View>
           </View>
-          {
-            dateData?.length > 0 &&
+          {dateData?.length > 0 && (
             <View style={styles.timeContainer}>
-              <ScrollView horizontal>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.timeAlligment}>
                   {dateData?.map((item, index) => (
                     <TouchableOpacity
@@ -373,7 +413,7 @@ export default function BookingProcess({ navigation, route }) {
                 </View>
               </ScrollView>
             </View>
-          }
+          )}
 
           <View style={styles.bookContainer}>
             <ScrollView>
@@ -381,7 +421,7 @@ export default function BookingProcess({ navigation, route }) {
                 <View style={styles.barberNameImage}>
                   <View style={styles.imageContainer}>
                     <Image
-                      source={{ uri: barber?.profile }}
+                      source={{uri: barber?.profile}}
                       style={styles.imageContainer}
                     />
                   </View>
@@ -393,33 +433,36 @@ export default function BookingProcess({ navigation, route }) {
                   </View>
                 </View>
               </View>
-              <View style={{ marginTop: 20 }}>
-                {cart && cart?.services?.map((item, index) => {
-                  return (
-                    // <View key={index}>
-                    <View style={styles.flexRow} key={index}>
-                      <View style={styles.flexRow1}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            deleteOptions(item);
-                          }}>
-                          <Image
-                            source={images.crossIcon}
-                            style={styles.crossIcon}
-                          />
-                        </TouchableOpacity>
-                        <Text style={styles.disabledText}>{item?.name}</Text>
+              <View style={{marginTop: 20}}>
+                {cart &&
+                  cart?.services?.map((item, index) => {
+                    return (
+                      // <View key={index}>
+                      <View style={styles.flexRow} key={index}>
+                        <View style={styles.flexRow1}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              deleteOptions(item);
+                            }}>
+                            <Image
+                              source={images.crossIcon}
+                              style={styles.crossIcon}
+                            />
+                          </TouchableOpacity>
+                          <Text style={styles.disabledText}>{item?.name}</Text>
+                          <Text
+                            style={
+                              styles.disabledText1
+                            }>{` (${item?.serviceName})`}</Text>
+                        </View>
                         <Text
                           style={
-                            styles.disabledText1
-                          }>{` (${item?.serviceName})`}</Text>
+                            styles.disabledText
+                          }>{`$ ${item.price}.00`}</Text>
                       </View>
-                      <Text
-                        style={styles.disabledText}>{`$ ${item.price}.00`}</Text>
-                    </View>
-                    // </View>
-                  );
-                })}
+                      // </View>
+                    );
+                  })}
               </View>
               <View style={styles.total}>
                 <Text style={styles.totalText}>Total:</Text>
@@ -430,7 +473,7 @@ export default function BookingProcess({ navigation, route }) {
               <TouchableOpacity
                 style={styles.textContainer}
                 onPress={() =>
-                  navigation.navigate('BookAppointment', { item: barber })
+                  navigation.navigate('BookAppointment', {item: barber})
                 }>
                 <Text style={styles.addAnotherservice}>
                   + Add Another Service
@@ -454,8 +497,7 @@ export default function BookingProcess({ navigation, route }) {
                 />
               </TouchableOpacity>
             </View>
-            {
-              paymentCard &&
+            {paymentCard && (
               <View style={styles.cardDetailscontainer}>
                 <View style={styles.row}>
                   <Image
@@ -463,7 +505,9 @@ export default function BookingProcess({ navigation, route }) {
                     resizeMode="contain"
                     style={styles.masterCard}
                   />
-                  <Text style={styles.cardText}>{maskCardNumber(paymentCard?.number)}</Text>
+                  <Text style={styles.cardText}>
+                    {maskCardNumber(paymentCard?.number)}
+                  </Text>
                 </View>
                 <Image
                   source={images.arrowRight}
@@ -471,14 +515,15 @@ export default function BookingProcess({ navigation, route }) {
                   resizeMode="contain"
                 />
               </View>
-            }
+            )}
           </View>
         </ScrollView>
         <View style={styles.btnMargin}>
-          {
-            loader ? <Loader title={'Book'} /> :
-              <Button title={'Book'} onPress={handleConfirm} />
-          }
+          {loader ? (
+            <Loader title={'Book'} />
+          ) : (
+            <Button title={'Book'} onPress={handleConfirm} />
+          )}
         </View>
       </View>
       <Toast />

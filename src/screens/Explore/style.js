@@ -135,7 +135,6 @@ export const styles = StyleSheet.create({
   },
   cardRow: {
     marginStart: sizes.screenWidth * 0.05,
-    marginTop: sizes.screenHeight * 0.01,
     flexDirection: 'row',
     gap: sizes.screenWidth * 0.08,
     paddingRight: sizes.screenWidth * 0.08,

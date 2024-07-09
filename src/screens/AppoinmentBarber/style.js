@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.pinkishwhite,
   },
   transparentBg: {
-    height: sizes.screenHeight * 0.17,
+    height: sizes.screenHeight * 0.14,
     width: sizes.screenWidth,
   },
   inputContainer: {
@@ -105,7 +105,7 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.29,
   },
   containerBody: {
-    // marginTop: sizes.screenHeight * 0.05,
+    marginBottom: sizes.screenHeight * 0.02,
     paddingHorizontal: sizes.screenWidth * 0.06,
   },
   headingSchedule: {
@@ -161,7 +161,6 @@ export const styles = StyleSheet.create({
   serviceDetailTxt: {
     color: colors.black,
     fontWeight: '400',
-    marginStart: sizes.screenWidth * 0.01,
   },
   clientDetailTxtBlack: {
     color: colors.blackishGray,
@@ -172,8 +171,8 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
   },
   containerRowThree: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    // flexDirection: 'row',
+    // alignItems: 'center',
   },
   containerRowTwo: {
     marginTop: sizes.screenHeight * 0.02,
@@ -202,8 +201,10 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.medium,
   },
   scrollContianer: {
-    marginTop: sizes.screenHeight * 0.05,
+    // marginTop: sizes.screenHeight * 0.01,
+    paddingTop:sizes.screenWidth * 0.02,
     marginBottom: sizes.screenHeight * 0.08,
+    // paddingBottom: sizes.screenHeight*0.02
   },
   forwardArrow: {
     marginStart: sizes.screenWidth * 0.01,
@@ -265,11 +266,34 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  modalBtnViewDisable: {
+    marginTop: sizes.screenHeight * 0.025,
+    backgroundColor: colors.disabledBg,
+    paddingHorizontal: sizes.screenHeight * 0.015,
+    paddingVertical: sizes.screenHeight * 0.015,
+    width: sizes.screenWidth * 0.65,
+    alignSelf: 'center',
+    borderRadius: sizes.screenWidth * 0.03,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   modalBtnText: {
     color: colors.white,
     fontSize: fontSize.medium,
     fontWeight: '600',
     fontSize: fontSize.medium,
+  },
+  modalBtnTextDissable: {
+    color: colors.black,
+    fontSize: fontSize.medium,
+    fontWeight: '600',
+    fontSize: fontSize.medium,
+  },
+  modalArrowIconDsiable: {
+    height: sizes.screenHeight * 0.02,
+    width: sizes.screenHeight * 0.02,
+    tintColor:colors.black
   },
   modalArrowIcon: {
     height: sizes.screenHeight * 0.02,

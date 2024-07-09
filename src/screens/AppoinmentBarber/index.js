@@ -7,21 +7,30 @@ import {
   Image,
   TextInput,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style';
 import images from '../../services/utilities/images';
-import {colors, sizes} from '../../services';
+import { colors, sizes } from '../../services';
 import Timetable from 'react-native-calendar-timetable';
 import moment from 'moment';
-import {useSelector} from 'react-redux';
-import {selectUserData} from '../../store/userData';
+import { useSelector } from 'react-redux';
+import { selectUserData } from '../../store/userData';
 import DatePicker from 'react-native-date-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Modal from 'react-native-modal';
-export default function AppoinmentBarber({navigation}) {
+import Loader from '../../components/Loader';
+import { ErrorShow } from '../../components/Error';
+import { selectAuthToken } from '../../store/authToken';
+import { updateAppointmentStatus } from '../../services/config/API';
+import formatToJSON from '../../services/config/FormatToJson';
+import Toast from 'react-native-toast-message';
+export default function AppoinmentBarber({ navigation }) {
+
   const barber = useSelector(selectUserData);
-  // console.log(barber.appoinment[0].date);
+  const authToken = useSelector(selectAuthToken)
+
   const [startTime, setStartTime] = useState(new Date());
   const [clientName, setClientName] = useState('John D.');
   const [clientDate, setClientDate] = useState('Mon, Aug 12');
@@ -43,6 +52,7 @@ export default function AppoinmentBarber({navigation}) {
   const [appointmentTimeline2, setAppointmentTimeline2] = useState([]);
   const [from, setFrom] = useState();
   const [to, setTo] = useState();
+  const [loader, setLoader] = useState(false)
 
   const roundUpTime = time => {
     const hour = moment(time, 'h:mm A').hour();
@@ -51,6 +61,8 @@ export default function AppoinmentBarber({navigation}) {
   };
 
   const setTimesFromDuration = duration => {
+    if (!duration) return;
+
     const [start, end] = duration.split(' - ');
 
     const startHour = moment(start, 'h:mm A').hour();
@@ -64,39 +76,56 @@ export default function AppoinmentBarber({navigation}) {
   };
 
   const formatDate = date => {
+    if (!date) return '';
+
     const day = date.getDate();
-    const month = date.toLocaleString('default', {month: 'long'});
+    const month = date.toLocaleString('default', { month: 'long' });
     return `${day} ${month}`;
   };
 
   const getOneHourLater = selected => {
+    if (!selected) return '';
+
     return `${selected} - ${moment(selected, 'h:mm A')
       .add(1, 'hour')
       .format('h:mm A')}`;
   };
 
   const mapBackendDataToAppointmentTimeline = backendData => {
-    const transformedData = backendData.map(appointment => {
-      const startDate = moment(
-        `${appointment.date} ${appointment.time}`,
-        'MM-DD-YYYY h:mm A',
-      ).toDate();
-      const endDate = moment(startDate).add(1, 'hour').toDate();
-      return {
-        clientName: appointment.user.name,
-        service: appointment.services[0].name,
-        startDate: startDate,
-        endDate: endDate,
-        duration: getOneHourLater(appointment.time),
-        status: appointment.status,
-        date: appointment.date,
-        id: appointment._id,
-      };
-    });
+    if (!backendData) return;
+
+    const transformedData = backendData
+      .map(appointment => {
+        if (!appointment) return null;
+
+        const startDate = moment(
+          `${appointment?.date} ${appointment?.time}`,
+          'MM-DD-YYYY h:mm A',
+        ).toDate();
+        const endDate = moment(startDate).add(1, 'hour').toDate();
+        return {
+          clientName: appointment?.user?.name || '',
+          service:
+            appointment?.services
+              ?.map(service => service?.serviceName)
+              .join(' & ') || '',
+          startDate: startDate || new Date(),
+          endDate: endDate || new Date(),
+          duration: getOneHourLater(appointment?.time) || '',
+          status: appointment?.status || '',
+          date: appointment?.date || '',
+          id: appointment?._id || '',
+          time: appointment?.time
+        };
+      })
+      .filter(item => item !== null);
+
     setAppointmentTimeline2(transformedData);
   };
 
-  const RenderItem = ({style, item}) => {
+  const RenderItem = ({ style, item }) => {
+    if (!item) return null;
+
     return (
       <TouchableOpacity
         style={{
@@ -116,52 +145,112 @@ export default function AppoinmentBarber({navigation}) {
       </TouchableOpacity>
     );
   };
-  console.log(modalItem);
 
   const formatDateShort = dateString => {
-    const parts = dateString?.split('-');
+    if (!dateString) return '';
+
+    const parts = dateString.split('-');
+    if (parts.length !== 3) return '';
+
     const day = parseInt(parts[1], 10);
     const month = parseInt(parts[0], 10) - 1;
     const year = parseInt(parts[2], 10);
 
     const dateObj = new Date(year, month, day);
 
-    const options = {weekday: 'short', month: 'short', day: 'numeric'};
+    const options = { weekday: 'short', month: 'short', day: 'numeric' };
 
     return dateObj.toLocaleDateString('en-US', options);
   };
 
   const setNextAppointmentData = () => {
     const currentDate = moment();
-    const nextAppointment = barber.appoinment.find(appointment => {
-      const appointmentDateTime = moment(
-        `${appointment.date} ${appointment.time}`,
+
+    let appointments = barber?.appoinment ? [...barber.appoinment] : [];
+
+    const sortedAppointments = appointments.sort((a, b) => {
+      const aDateTime = moment(
+        `${a.date || ''} ${a.time || ''}`,
         'MM-DD-YYYY h:mm A',
       );
-      return appointmentDateTime.isAfter(currentDate);
+      const bDateTime = moment(
+        `${b.date || ''} ${b.time || ''}`,
+        'MM-DD-YYYY h:mm A',
+      );
+      return aDateTime - bDateTime;
+    });
+
+    const nextAppointment = sortedAppointments.find(appointment => {
+      const appointmentDateTime = moment(
+        `${appointment?.date} ${appointment?.time}`,
+        'MM-DD-YYYY h:mm A',
+      );
+      return appointmentDateTime?.isAfter(currentDate);
     });
 
     if (nextAppointment) {
-      setClientName(nextAppointment.user.name);
-      setClientDate(formatDateShort(nextAppointment.date));
-      setClientTime(nextAppointment.time);
-      setService(nextAppointment.services[0].name);
-      setStyle(nextAppointment.services[0].serviceName);
+      setClientName(nextAppointment?.user?.name);
+      setClientDate(formatDateShort(nextAppointment?.date));
+      setClientTime(nextAppointment?.time);
+      const allServices = nextAppointment?.services
+        ?.map(service => service?.name)
+        .join(' & ');
+      setStyle(allServices);
+
+      const allStyles = nextAppointment?.services
+        ?.map(service => service?.serviceName)
+        .join(' & ');
+      setService(allStyles);
     } else {
       console.log('No future appointments found.');
     }
   };
 
   useEffect(() => {
-    mapBackendDataToAppointmentTimeline(barber.appoinment);
-    setTimesFromDuration(barber.time);
+    if (barber?.appoinment) {
+      mapBackendDataToAppointmentTimeline(barber.appoinment);
+    }
+    if (barber?.time) {
+      setTimesFromDuration(barber.time);
+    }
     setNextAppointmentData();
   }, [barber]);
 
   const handleSetDate = async (event, selectedDate) => {
     setOpen(false);
-    setDate(selectedDate);
+    if (selectedDate) {
+      setDate(selectedDate);
+    }
   };
+
+  const isFutureTime = (startTime, formattedDate) => {
+    const dateTime = moment(
+      `${formattedDate} ${startTime}`,
+      'MM-DD-YYYY h:mm A',
+    );
+    const currentDateTime = moment();
+    return (dateTime.isAfter(currentDateTime));
+  };
+
+  const handleUpdateAppointmentStatus = async () => {
+    try {
+      setLoader(true)
+      const response = await updateAppointmentStatus(authToken, modalItem?.id)
+      if (response?.status == 200) {
+        setLoader(false)
+        setModalVisible(false)
+        ErrorShow('success', 'Congratulation!', response?.data?.message);
+      } else {
+        setLoader(false)
+        setModalVisible(false)
+        ErrorShow('error', 'Error!', response?.data?.message)
+      }
+    } catch (error) {
+      setLoader(false)
+      console.log(error?.message);
+      ErrorShow('error', 'Error!', error?.message)
+    }
+  }
 
   return (
     <SafeAreaView>
@@ -172,9 +261,9 @@ export default function AppoinmentBarber({navigation}) {
             resizeMode="contain"
             style={styles.transparentBg}>
             <View style={styles.topIconRow}>
-              <TouchableOpacity
+              <View
                 style={styles.locationRow}
-                // onPress={() => navigation.navigate('WholeMap')}
+              // onPress={() => navigation.navigate('WholeMap')}
               >
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
@@ -185,7 +274,7 @@ export default function AppoinmentBarber({navigation}) {
                     {currentLocation}
                   </Text>
                 </View>
-              </TouchableOpacity>
+              </View>
               <View style={styles.otherIconRow}>
                 <TouchableOpacity
                   style={styles.notificationContainer}
@@ -206,7 +295,7 @@ export default function AppoinmentBarber({navigation}) {
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={styles.inputContainer}>
+            {/* <View style={styles.inputContainer}>
               <Image
                 source={images.search}
                 resizeMode="contain"
@@ -217,7 +306,7 @@ export default function AppoinmentBarber({navigation}) {
                 style={styles.input}
                 placeholder="Search..."
               />
-            </View>
+            </View> */}
           </ImageBackground>
         </View>
         <ScrollView
@@ -259,18 +348,18 @@ export default function AppoinmentBarber({navigation}) {
                 <View style={styles.containerRowTwo}>
                   <View style={styles.containerRowThree}>
                     <Text style={styles.clientDetailTxtBlackTwo}>Service</Text>
-                    <Image
+                    {/* <Image
                       source={images.arrowForward}
                       style={styles.forwardArrow}
-                    />
+                    /> */}
                     <Text style={styles.serviceDetailTxt}>{service}</Text>
                   </View>
                   <View style={styles.containerRowThree}>
                     <Text style={styles.clientDetailTxtBlackTwo}>Style</Text>
-                    <Image
+                    {/* <Image
                       source={images.arrowForward}
                       style={styles.forwardArrow}
-                    />
+                    /> */}
                     <Text style={styles.serviceDetailTxt}>{style}</Text>
                   </View>
                 </View>
@@ -295,22 +384,24 @@ export default function AppoinmentBarber({navigation}) {
                 items={appointmentTimeline2}
                 renderItem={props => <RenderItem {...props} />}
                 date={date}
-                // timeStyle={colors}
-                fromHour={from ? from : 0}
-                toHour={to ? to : 24}
+                // // timeStyle={colors}
+                // fromHour={from ? from : 0}
+                // toHour={to ? to : 24}
+                fromHour={0}
+                toHour={24}
                 is12Hour
                 hourHeight={70}
                 style={{
-                  time: {color: colors.disabledBg2},
-                  timeContainer: {backgroundColor: 'transparent'},
-                  contentContainer: {width: sizes.screenWidth * 0.88},
+                  time: { color: colors.disabledBg2 },
+                  timeContainer: { backgroundColor: 'transparent' },
+                  contentContainer: { width: sizes.screenWidth * 0.88 },
                   lines: {
                     width: sizes.screenWidth * 0.75,
                     marginLeft: sizes.screenWidth * 0.14,
                   },
                   nowLine: {
-                    dot: {backgroundColor: colors.red},
-                    line: {backgroundColor: colors.red},
+                    dot: { backgroundColor: colors.red },
+                    line: { backgroundColor: colors.red },
                   },
                 }}
               />
@@ -327,8 +418,8 @@ export default function AppoinmentBarber({navigation}) {
             display="spinner"
             // themeVariant="dark"
             // textColor="red"
-            positiveButton={{label: 'Done'}}
-            negativeButton={{label: 'Cancel'}}
+            positiveButton={{ label: 'Done' }}
+            negativeButton={{ label: 'Cancel' }}
             onChange={handleSetDate}
           />
         )}
@@ -337,7 +428,9 @@ export default function AppoinmentBarber({navigation}) {
           isVisible={modalVisible}
           backdropOpacity={0.3}
           onBackdropPress={() => {
-            setModalVisible(false);
+            if (!loader) {
+              setModalVisible(false);
+            }
           }}>
           <View style={styles.modalView}>
             <Text style={styles.modalHeading}>
@@ -359,9 +452,8 @@ export default function AppoinmentBarber({navigation}) {
               <Image source={images.clockIconFill} />
               <Text style={styles.modalServiceTxtFour}>
                 {modalItem?.date
-                  ? `${formatDateShort(modalItem?.date)} - ${
-                      modalItem?.duration
-                    }`
+                  ? `${formatDateShort(modalItem?.date)} - ${modalItem?.duration
+                  }`
                   : null}
               </Text>
             </View>
@@ -371,22 +463,30 @@ export default function AppoinmentBarber({navigation}) {
                 {modalItem?.clientName}
               </Text>
             </View>
-            <TouchableOpacity
-              style={styles.modalBtnView}
-              onPress={() => {
-                setModalVisible(false);
-                console.log(modalItem.id);
-              }}>
-              <Text style={styles.modalBtnText}>Confirm</Text>
-              <Image
-                source={images.arrowIcon}
-                style={styles.modalArrowIcon}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
+            {
+              loader ?
+                <View style={styles.modalBtnView}>
+                  <Text style={styles.modalBtnText}>Confirm</Text>
+                  <ActivityIndicator color={colors.white} size={18} />
+                </View>
+                :
+                <TouchableOpacity
+                  disabled={isFutureTime(modalItem?.time, modalItem?.date)}
+                  style={isFutureTime(modalItem?.time, modalItem?.date) ? styles.modalBtnViewDisable : styles.modalBtnView}
+                  onPress={handleUpdateAppointmentStatus}>
+                  <Text style={isFutureTime(modalItem?.time, modalItem?.date) ? styles.modalBtnTextDissable : styles.modalBtnText}>Confirm</Text>
+                  <Image
+                    source={images.arrowIcon}
+                    style={isFutureTime(modalItem?.time, modalItem?.date) ? styles.modalArrowIconDsiable : styles.modalArrowIcon}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+            }
+
           </View>
         </Modal>
       </View>
+      <Toast />
     </SafeAreaView>
   );
 }

@@ -18,7 +18,7 @@ import {validateEmailAvailability} from '../../services/config/API';
 import Toast from 'react-native-toast-message';
 import {ErrorShow} from '../../components/Error';
 import Loader from '../../components/Loader';
-import { setAuthToken } from '../../store/authToken';
+import {setAuthToken} from '../../store/authToken';
 
 export default function Signup({navigation}) {
   const role = useSelector(selectRole);
@@ -38,19 +38,15 @@ export default function Signup({navigation}) {
   const handleEmailValidation = async () => {
     if (role !== null) {
       if (email && password && userName) {
-        if (password.length <= 8) {
+        if (password.length < 8) {
           return ErrorShow(
             'error',
             'Oops!',
             'Password must contain atleast 8 characters',
           );
         }
-        if(!checked){
-          return ErrorShow(
-            'error',
-            'Oops!',
-            'Please select the checkbox',
-          );
+        if (!checked) {
+          return ErrorShow('error', 'Oops!', 'Please select the checkbox');
         }
         try {
           setLoader(true);

@@ -1,6 +1,6 @@
 import io from "socket.io-client"
 import { BASE_URL } from "../config/AxiosInstance"
-import { addAppoinment } from "../../store/userData";
+import { addAppoinment, updateAppointmendStatus } from "../../store/userData";
 
 let socket;
 
@@ -18,14 +18,20 @@ const socketService = (dispatch, authToken, userData) => {
     connectSocket()
 
     const handleReceivedNewAppoinment = (data) => {
-        console.log("frontend handle Received New Appoinment" , data);
         dispatch(addAppoinment(data))
     }
 
-    socket.on('newAppoinment' , handleReceivedNewAppoinment)
+    const handleUpdateAppointmendStatus = (data) => {
+        console.log("frontend handle Received New status update", data);
+        dispatch(updateAppointmendStatus(data))
+    }
+
+    socket.on('newAppoinment', handleReceivedNewAppoinment)
+    socket.on('appointmentStatusUpdate', handleUpdateAppointmendStatus)
 
     const cleanup = () => {
         socket.off('newAppoinment', handleReceivedNewAppoinment);
+        socket.off('appointmentStatusUpdate', handleUpdateAppointmendStatus);
     }
     return cleanup
 }

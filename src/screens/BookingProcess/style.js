@@ -29,14 +29,14 @@ export const styles = StyleSheet.create({
 
   arrowTop: {
     // marginLeft: sizes.screenWidth * 0.01,
-    marginTop: sizes.screenHeight * 0.06,
+    marginTop: sizes.screenHeight * 0.03,
   },
   headerText: {
     // backgroundColor: 'orange',
     fontSize: fontSize.h7,
     color: colors.black,
     width: sizes.screenWidth * 0.87,
-    marginTop: sizes.screenHeight * 0.06,
+    marginTop: sizes.screenHeight * 0.03,
     textAlign: 'center',
     fontWeight: '700',
   },
