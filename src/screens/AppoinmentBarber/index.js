@@ -115,6 +115,7 @@ export default function AppoinmentBarber({ navigation }) {
           status: appointment?.status || '',
           date: appointment?.date || '',
           id: appointment?._id || '',
+          time: appointment?.time
         };
       })
       .filter(item => item !== null);
@@ -222,11 +223,17 @@ export default function AppoinmentBarber({ navigation }) {
     }
   };
 
+  const isFutureTime = (startTime, formattedDate) => {
+    const dateTime = moment(
+      `${formattedDate} ${startTime}`,
+      'MM-DD-YYYY h:mm A',
+    );
+    const currentDateTime = moment();
+    return (dateTime.isAfter(currentDateTime));
+  };
+
   const handleUpdateAppointmentStatus = async () => {
-    // setModalVisible(false);
-    // console.log(modalItem.id);
     try {
-      console.log(modalItem.id);
       setLoader(true)
       const response = await updateAppointmentStatus(authToken, modalItem?.id)
       if (response?.status == 200) {
@@ -254,7 +261,7 @@ export default function AppoinmentBarber({ navigation }) {
             resizeMode="contain"
             style={styles.transparentBg}>
             <View style={styles.topIconRow}>
-              <TouchableOpacity
+              <View
                 style={styles.locationRow}
               // onPress={() => navigation.navigate('WholeMap')}
               >
@@ -267,7 +274,7 @@ export default function AppoinmentBarber({ navigation }) {
                     {currentLocation}
                   </Text>
                 </View>
-              </TouchableOpacity>
+              </View>
               <View style={styles.otherIconRow}>
                 <TouchableOpacity
                   style={styles.notificationContainer}
@@ -288,7 +295,7 @@ export default function AppoinmentBarber({ navigation }) {
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={styles.inputContainer}>
+            {/* <View style={styles.inputContainer}>
               <Image
                 source={images.search}
                 resizeMode="contain"
@@ -299,7 +306,7 @@ export default function AppoinmentBarber({ navigation }) {
                 style={styles.input}
                 placeholder="Search..."
               />
-            </View>
+            </View> */}
           </ImageBackground>
         </View>
         <ScrollView
@@ -464,12 +471,13 @@ export default function AppoinmentBarber({ navigation }) {
                 </View>
                 :
                 <TouchableOpacity
-                  style={styles.modalBtnView}
+                  disabled={isFutureTime(modalItem?.time, modalItem?.date)}
+                  style={isFutureTime(modalItem?.time, modalItem?.date) ? styles.modalBtnViewDisable : styles.modalBtnView}
                   onPress={handleUpdateAppointmentStatus}>
-                  <Text style={styles.modalBtnText}>Confirm</Text>
+                  <Text style={isFutureTime(modalItem?.time, modalItem?.date) ? styles.modalBtnTextDissable : styles.modalBtnText}>Confirm</Text>
                   <Image
                     source={images.arrowIcon}
-                    style={styles.modalArrowIcon}
+                    style={isFutureTime(modalItem?.time, modalItem?.date) ? styles.modalArrowIconDsiable : styles.modalArrowIcon}
                     resizeMode="contain"
                   />
                 </TouchableOpacity>

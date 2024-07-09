@@ -41,7 +41,6 @@ const userDataSlice = createSlice({
         },
         updateAppointmendStatus: (state, action) => {
             const { _id, status } = action.payload
-            console.log("redux", _id, status);
             if (state.userData && state.userData.appoinment) {
                 state.userData.appoinment = state.userData.appoinment.map(appointment =>
                     appointment._id === _id ? { ...appointment, status } : appointment

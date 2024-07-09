@@ -80,7 +80,7 @@ export default function ServiceDetails({navigation, route}) {
     const obj = {
       barber: item?.barber,
       services: newArray,
-      status: 'pending',
+      status: 'Pending',
     };
     dispatch(setCart(obj));
     setModalopen(!modalOpen);
@@ -130,7 +130,7 @@ export default function ServiceDetails({navigation, route}) {
             barber: item?.barber,
             user: userData?._id,
             services: newArray,
-            status: 'pending',
+            status: 'Pending',
           };
           console.log(obj);
           dispatch(updateCart(obj));
@@ -163,7 +163,7 @@ export default function ServiceDetails({navigation, route}) {
       const obj = {
         barber: item?.barber,
         services: newArray,
-        status: 'pending',
+        status: 'Pending',
       };
       dispatch(setCart(obj));
       navigation.navigate('BookingProcess');
