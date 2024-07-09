@@ -149,7 +149,7 @@ export default function Appointments({navigation}) {
                   </View>
                 </ImageBackground>
                 <View style={styles.detailsContainer}>
-                  {item.services.map((item, index) => {
+                  {item?.services?.map((item, index) => {
                     return (
                       <View style={styles.contentAllignemnt} key={index}>
                         <View style={styles.directionRow}>
