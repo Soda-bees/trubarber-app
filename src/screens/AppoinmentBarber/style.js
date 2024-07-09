@@ -161,7 +161,6 @@ export const styles = StyleSheet.create({
   serviceDetailTxt: {
     color: colors.black,
     fontWeight: '400',
-    marginStart: sizes.screenWidth * 0.01,
   },
   clientDetailTxtBlack: {
     color: colors.blackishGray,
@@ -172,8 +171,8 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
   },
   containerRowThree: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    // flexDirection: 'row',
+    // alignItems: 'center',
   },
   containerRowTwo: {
     marginTop: sizes.screenHeight * 0.02,
