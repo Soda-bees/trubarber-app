@@ -34,14 +34,23 @@ const userDataSlice = createSlice({
             if (state.userData && appoinment.user._id === state.userData._id) {
                 state.userData.appoinment.push(appoinment)
             }
-            if(state.userData && appoinment.barber._id === state.userData._id) {
+            if (state.userData && appoinment.barber._id === state.userData._id) {
                 console.log("barber update");
                 state.userData.appoinment.push(appoinment)
+            }
+        },
+        updateAppointmendStatus: (state, action) => {
+            const { _id, status } = action.payload
+            console.log("redux", _id, status);
+            if (state.userData && state.userData.appoinment) {
+                state.userData.appoinment = state.userData.appoinment.map(appointment =>
+                    appointment._id === _id ? { ...appointment, status } : appointment
+                );
             }
         }
     }
 })
 
-export const { setUserData, removeUserData, updateServiceRedux, deleteServiceRedux, addAppoinment } = userDataSlice.actions
+export const { setUserData, removeUserData, updateServiceRedux, deleteServiceRedux, addAppoinment, updateAppointmendStatus } = userDataSlice.actions
 export const selectUserData = state => state.user.userData
 export default userDataSlice.reducer

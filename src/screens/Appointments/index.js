@@ -105,6 +105,14 @@ export default function Appointments({ navigation }) {
     // Format the date in "DD/MM" format
     return `${day}-${monthName}`;
   };
+
+  const truncateNameAtSpace = (name) => {
+    const indexOfSpace = name.indexOf(' ');
+    if (indexOfSpace !== -1) {
+      return `${name.substring(0, indexOfSpace)}...`;
+    }
+    return name;
+  };
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -131,7 +139,7 @@ export default function Appointments({ navigation }) {
                   resizeMode="cover">
                   <View style={styles.innerContainer}>
                     <View style={styles.nameView}>
-                      <Text style={styles.contextText}>{item?.barber?.name}</Text>
+                      <Text style={styles.contextText}>{truncateNameAtSpace(item?.barber?.name)}</Text>
                       <Text style={styles.statusText}>{item?.status}</Text>
                     </View>
                     <View style={styles.locationContainer}>

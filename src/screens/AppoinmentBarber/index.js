@@ -7,21 +7,30 @@ import {
   Image,
   TextInput,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style';
 import images from '../../services/utilities/images';
-import {colors, sizes} from '../../services';
+import { colors, sizes } from '../../services';
 import Timetable from 'react-native-calendar-timetable';
 import moment from 'moment';
-import {useSelector} from 'react-redux';
-import {selectUserData} from '../../store/userData';
+import { useSelector } from 'react-redux';
+import { selectUserData } from '../../store/userData';
 import DatePicker from 'react-native-date-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Modal from 'react-native-modal';
-export default function AppoinmentBarber({navigation}) {
+import Loader from '../../components/Loader';
+import { ErrorShow } from '../../components/Error';
+import { selectAuthToken } from '../../store/authToken';
+import { updateAppointmentStatus } from '../../services/config/API';
+import formatToJSON from '../../services/config/FormatToJson';
+import Toast from 'react-native-toast-message';
+export default function AppoinmentBarber({ navigation }) {
+
   const barber = useSelector(selectUserData);
-  console.log(barber.appoinment[4].services);
+  const authToken = useSelector(selectAuthToken)
+
   const [startTime, setStartTime] = useState(new Date());
   const [clientName, setClientName] = useState('John D.');
   const [clientDate, setClientDate] = useState('Mon, Aug 12');
@@ -43,6 +52,7 @@ export default function AppoinmentBarber({navigation}) {
   const [appointmentTimeline2, setAppointmentTimeline2] = useState([]);
   const [from, setFrom] = useState();
   const [to, setTo] = useState();
+  const [loader, setLoader] = useState(false)
 
   const roundUpTime = time => {
     const hour = moment(time, 'h:mm A').hour();
@@ -69,7 +79,7 @@ export default function AppoinmentBarber({navigation}) {
     if (!date) return '';
 
     const day = date.getDate();
-    const month = date.toLocaleString('default', {month: 'long'});
+    const month = date.toLocaleString('default', { month: 'long' });
     return `${day} ${month}`;
   };
 
@@ -112,7 +122,7 @@ export default function AppoinmentBarber({navigation}) {
     setAppointmentTimeline2(transformedData);
   };
 
-  const RenderItem = ({style, item}) => {
+  const RenderItem = ({ style, item }) => {
     if (!item) return null;
 
     return (
@@ -147,7 +157,7 @@ export default function AppoinmentBarber({navigation}) {
 
     const dateObj = new Date(year, month, day);
 
-    const options = {weekday: 'short', month: 'short', day: 'numeric'};
+    const options = { weekday: 'short', month: 'short', day: 'numeric' };
 
     return dateObj.toLocaleDateString('en-US', options);
   };
@@ -212,6 +222,29 @@ export default function AppoinmentBarber({navigation}) {
     }
   };
 
+  const handleUpdateAppointmentStatus = async () => {
+    // setModalVisible(false);
+    // console.log(modalItem.id);
+    try {
+      console.log(modalItem.id);
+      setLoader(true)
+      const response = await updateAppointmentStatus(authToken, modalItem?.id)
+      if (response?.status == 200) {
+        setLoader(false)
+        setModalVisible(false)
+        ErrorShow('success', 'Congratulation!', response?.data?.message);
+      } else {
+        setLoader(false)
+        setModalVisible(false)
+        ErrorShow('error', 'Error!', response?.data?.message)
+      }
+    } catch (error) {
+      setLoader(false)
+      console.log(error?.message);
+      ErrorShow('error', 'Error!', error?.message)
+    }
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -223,7 +256,7 @@ export default function AppoinmentBarber({navigation}) {
             <View style={styles.topIconRow}>
               <TouchableOpacity
                 style={styles.locationRow}
-                // onPress={() => navigation.navigate('WholeMap')}
+              // onPress={() => navigation.navigate('WholeMap')}
               >
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
@@ -352,16 +385,16 @@ export default function AppoinmentBarber({navigation}) {
                 is12Hour
                 hourHeight={70}
                 style={{
-                  time: {color: colors.disabledBg2},
-                  timeContainer: {backgroundColor: 'transparent'},
-                  contentContainer: {width: sizes.screenWidth * 0.88},
+                  time: { color: colors.disabledBg2 },
+                  timeContainer: { backgroundColor: 'transparent' },
+                  contentContainer: { width: sizes.screenWidth * 0.88 },
                   lines: {
                     width: sizes.screenWidth * 0.75,
                     marginLeft: sizes.screenWidth * 0.14,
                   },
                   nowLine: {
-                    dot: {backgroundColor: colors.red},
-                    line: {backgroundColor: colors.red},
+                    dot: { backgroundColor: colors.red },
+                    line: { backgroundColor: colors.red },
                   },
                 }}
               />
@@ -378,8 +411,8 @@ export default function AppoinmentBarber({navigation}) {
             display="spinner"
             // themeVariant="dark"
             // textColor="red"
-            positiveButton={{label: 'Done'}}
-            negativeButton={{label: 'Cancel'}}
+            positiveButton={{ label: 'Done' }}
+            negativeButton={{ label: 'Cancel' }}
             onChange={handleSetDate}
           />
         )}
@@ -388,7 +421,9 @@ export default function AppoinmentBarber({navigation}) {
           isVisible={modalVisible}
           backdropOpacity={0.3}
           onBackdropPress={() => {
-            setModalVisible(false);
+            if (!loader) {
+              setModalVisible(false);
+            }
           }}>
           <View style={styles.modalView}>
             <Text style={styles.modalHeading}>
@@ -410,9 +445,8 @@ export default function AppoinmentBarber({navigation}) {
               <Image source={images.clockIconFill} />
               <Text style={styles.modalServiceTxtFour}>
                 {modalItem?.date
-                  ? `${formatDateShort(modalItem?.date)} - ${
-                      modalItem?.duration
-                    }`
+                  ? `${formatDateShort(modalItem?.date)} - ${modalItem?.duration
+                  }`
                   : null}
               </Text>
             </View>
@@ -422,22 +456,29 @@ export default function AppoinmentBarber({navigation}) {
                 {modalItem?.clientName}
               </Text>
             </View>
-            <TouchableOpacity
-              style={styles.modalBtnView}
-              onPress={() => {
-                setModalVisible(false);
-                console.log(modalItem.id);
-              }}>
-              <Text style={styles.modalBtnText}>Confirm</Text>
-              <Image
-                source={images.arrowIcon}
-                style={styles.modalArrowIcon}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
+            {
+              loader ?
+                <View style={styles.modalBtnView}>
+                  <Text style={styles.modalBtnText}>Confirm</Text>
+                  <ActivityIndicator color={colors.white} size={18} />
+                </View>
+                :
+                <TouchableOpacity
+                  style={styles.modalBtnView}
+                  onPress={handleUpdateAppointmentStatus}>
+                  <Text style={styles.modalBtnText}>Confirm</Text>
+                  <Image
+                    source={images.arrowIcon}
+                    style={styles.modalArrowIcon}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+            }
+
           </View>
         </Modal>
       </View>
+      <Toast />
     </SafeAreaView>
   );
 }

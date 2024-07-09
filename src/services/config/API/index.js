@@ -256,3 +256,16 @@ export const hanleGetBookedAppoinment = async (token, id) => {
     return error;
   }
 };
+
+export const updateAppointmentStatus = async (token, id) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post(`barber/updateAppoinmentStatus/${id}`, {}, { headers });
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
