@@ -27,7 +27,7 @@ export default function Catalogue({navigation}) {
   // console.log('all barbers', formatToJSON(barbers));
   const [btnActive, setactive] = useState('barber');
   const location = useSelector(selectlocation);
-
+  const [search, setSearch] = useState('');
   const [barberData, setBarberdata] = useState([]);
   const [servicesData, setserviceData] = useState([]);
 
@@ -71,6 +71,32 @@ export default function Catalogue({navigation}) {
     setserviceData(extractServiceData());
   }, [barbers]);
 
+  // const filteredBarbers = search
+  //   ? (() => {
+  //       const searchLower = search.toLowerCase();
+  //       const filtered = barbers.filter(item =>
+  //         item.name.toLowerCase().includes(searchLower),
+  //       );
+  //       return filtered.length > 0 ? filtered : null;
+  //     })()
+  //   : null;
+
+  const filteredBarbers = search
+    ? barbers.filter(item => {
+        const searchLower = search.toLowerCase();
+        const nameMatches = item.name.toLowerCase().includes(searchLower);
+        return nameMatches;
+      })
+    : barbers;
+
+  const filteredServices = search
+    ? servicesData.filter(item => {
+        const searchLower = search.toLowerCase();
+        const nameMatches = item.name.toLowerCase().includes(searchLower);
+        return nameMatches;
+      })
+    : servicesData;
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -89,6 +115,9 @@ export default function Catalogue({navigation}) {
                 placeholderTextColor={colors.placeholdertextgray}
                 style={styles.input}
                 placeholder="Search..."
+                onChangeText={text => {
+                  setSearch(text);
+                }}
               />
             </View>
           </ImageBackground>
@@ -128,7 +157,7 @@ export default function Catalogue({navigation}) {
                   ? styles.contentMargin
                   : styles.contentMarginIOS
               }>
-              {barbers.map((item, index) => {
+              {filteredBarbers?.map((item, index) => {
                 const distance = calculateDistance(
                   location?.latitude,
                   location?.longitude,
@@ -203,7 +232,7 @@ export default function Catalogue({navigation}) {
         ) : btnActive === 'services' ? (
           <ScrollView>
             <View style={styles.services}>
-              {servicesData?.map((item, index) => {
+              {filteredServices?.map((item, index) => {
                 return (
                   <TouchableOpacity
                     key={index}

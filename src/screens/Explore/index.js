@@ -11,28 +11,28 @@ import {
   PermissionsAndroid,
   Alert,
 } from 'react-native';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import images from '../../services/utilities/images';
-import { styles } from './style';
-import { colors, sizes } from '../../services';
-import MapView, { Marker } from 'react-native-maps';
+import {styles} from './style';
+import {colors, sizes} from '../../services';
+import MapView, {Marker} from 'react-native-maps';
 import StarRating from 'react-native-star-rating-widget';
 import LottieView from 'lottie-react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectAuthToken } from '../../store/authToken';
-import { getAllBarber } from '../../services/config/API';
-import { ErrorShow } from '../../components/Error';
-import { selectlocation, setLocation } from '../../store/location';
-import { setBarber } from '../../store/barber';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectAuthToken} from '../../store/authToken';
+import {getAllBarber} from '../../services/config/API';
+import {ErrorShow} from '../../components/Error';
+import {selectlocation, setLocation} from '../../store/location';
+import {setBarber} from '../../store/barber';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import formatToJSON from '../../services/config/FormatToJson';
-import { socket, socketService } from "../../services/Socket"
-import { selectUserData } from '../../store/userData';
+import {socket, socketService} from '../../services/Socket';
+import {selectUserData} from '../../store/userData';
 
-export default function Explore({ navigation }) {
-  const userData = useSelector(selectUserData)
+export default function Explore({navigation}) {
+  const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const location = useSelector(selectlocation);
   // console.log(location);
@@ -42,17 +42,17 @@ export default function Explore({ navigation }) {
   const [currentLocation, setCurrentLocation] = useState(
     'Rachael McPhail Street...',
   );
-
+  const [search, setSearch] = useState('');
   const [categories, setCategories] = useState([]);
   const [barberData, setBarberdata] = useState([]);
 
   useEffect(() => {
-    const cleanup = socketService(dispatch, authToken, userData)
+    const cleanup = socketService(dispatch, authToken, userData);
 
     return () => {
-      cleanup()
-    }
-  }, [userData])
+      cleanup();
+    };
+  }, [userData]);
 
   let animation = React.createRef();
 
@@ -133,9 +133,9 @@ export default function Explore({ navigation }) {
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c;
     return distance;
@@ -203,7 +203,7 @@ export default function Explore({ navigation }) {
   const getCurrentLocation = (setRegion, dispatch) => {
     Geolocation.getCurrentPosition(
       position => {
-        const { latitude, longitude } = position.coords;
+        const {latitude, longitude} = position.coords;
         // console.log(
         //   position.coords,
         //   '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
@@ -235,8 +235,18 @@ export default function Explore({ navigation }) {
     useCallback(() => {
       handleRunEveryTime();
       console.log('meh chal rha hn bhaiiiii');
-    }, [])
+    }, []),
   );
+
+  const filteredBarbers = search
+    ? (() => {
+        const searchLower = search.toLowerCase();
+        const filtered = barberData.filter(item =>
+          item.name.toLowerCase().includes(searchLower),
+        );
+        return filtered.length > 0 ? filtered : null;
+      })()
+    : null;
 
   return (
     <SafeAreaView>
@@ -302,6 +312,9 @@ export default function Explore({ navigation }) {
                 />
                 <TextInput
                   placeholderTextColor={colors.placeholdertextgray}
+                  onChangeText={text => {
+                    setSearch(text);
+                  }}
                   style={styles.input}
                   placeholder="Search..."
                 />
@@ -309,6 +322,83 @@ export default function Explore({ navigation }) {
             </ImageBackground>
           </View>
           <ScrollView style={styles.scrollContainer}>
+            {filteredBarbers && (
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View style={styles.cardRow}>
+                  {filteredBarbers?.map((item, index) => {
+                    // const distance = location
+                    //   ? calculateDistance(location, item.location)
+                    //   : null;
+                    const distance = calculateDistance(
+                      location?.latitude,
+                      location?.longitude,
+                      item.location.latitude,
+                      item.location.longitude,
+                    );
+                    // console.log('barbar k items hain yeh',item.profile);
+                    return (
+                      <ImageBackground
+                        key={index}
+                        source={{uri: item?.profile}}
+                        imageStyle={styles.containerImage}
+                        // style={}
+                      >
+                        <View style={styles.row}>
+                          <Text style={styles.textWhite}>5.0</Text>
+                          <StarRating
+                            maxStars={1}
+                            starSize={12}
+                            color={colors.gold}
+                            rating={1}
+                          />
+                        </View>
+                        <View style={styles.marginCardtop}>
+                          <ImageBackground
+                            source={images.bluredImg}
+                            imageStyle={styles.bluredImg}>
+                            <View style={styles.appointmentContainer}>
+                              <Text style={styles.textDarkerblack}>
+                                {item?.name}
+                              </Text>
+                              <View style={styles.locationContainer}>
+                                <Image
+                                  source={images.Location}
+                                  resizeMode="contain"
+                                  style={styles.locationImg}
+                                />
+                                <Text style={styles.textBlack}>
+                                  {/* {`Lat: ${item.location.latitude}, Long: ${item.location.longitude}`} */}
+                                  {distance !== null && (
+                                    <Text style={styles.textBlack}>
+                                      {`${distance.toFixed(2)} km`}
+                                    </Text>
+                                  )}
+                                </Text>
+                              </View>
+                              <TouchableOpacity
+                                style={styles.bookBtn}
+                                onPress={() =>
+                                  navigation.navigate('BookAppointment', {item})
+                                }>
+                                <Text style={styles.btnText}>
+                                  Book Appointment
+                                </Text>
+                                <Image
+                                  source={images.arrowIcon}
+                                  resizeMode="contain"
+                                  style={styles.arrowStyle}
+                                />
+                              </TouchableOpacity>
+                            </View>
+                          </ImageBackground>
+                        </View>
+                      </ImageBackground>
+                    );
+                  })}
+                </View>
+              </ScrollView>
+            )}
+
             <View style={styles.mapContainer}>
               <MapView
                 style={styles.mapStyle}
@@ -330,14 +420,14 @@ export default function Explore({ navigation }) {
                         latitude: item?.location?.latitude,
                         longitude: item?.location?.longitude,
                       }}
-                    // onPress={() => handleSelectBarber(item)}
+                      // onPress={() => handleSelectBarber(item)}
                     >
                       <ImageBackground
                         source={images.locationIcon}
                         style={styles.locationImgIcon}
                         resizeMode="contain">
                         <Image
-                          source={{ uri: item.profile }}
+                          source={{uri: item.profile}}
                           style={styles.markerIngStyle}
                         />
                       </ImageBackground>
@@ -364,7 +454,7 @@ export default function Explore({ navigation }) {
                             })
                           }>
                           <Image
-                            source={{ uri: item?.icon }}
+                            source={{uri: item?.icon}}
                             style={styles.imageResize}
                             resizeMode="contain"
                           />
@@ -396,9 +486,9 @@ export default function Explore({ navigation }) {
                     return (
                       <ImageBackground
                         key={index}
-                        source={{ uri: item.profile }}
+                        source={{uri: item.profile}}
                         imageStyle={styles.containerImage}
-                      // style={}
+                        // style={}
                       >
                         <View style={styles.row}>
                           <Text style={styles.textWhite}>5.0</Text>
@@ -435,7 +525,7 @@ export default function Explore({ navigation }) {
                               <TouchableOpacity
                                 style={styles.bookBtn}
                                 onPress={() =>
-                                  navigation.navigate('BookAppointment', { item })
+                                  navigation.navigate('BookAppointment', {item})
                                 }>
                                 <Text style={styles.btnText}>
                                   Book Appointment
