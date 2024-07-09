@@ -117,6 +117,7 @@ import congoImg from '../../../assets/congoImg.png';
 import locationIcon from '../../../assets/locationIcon.png';
 import crossIcon from '../../../assets/crossIcon.png';
 import calendar from '../../../assets/calendar.png';
+import noAppointment from '../../../assets/noAppointment.png';
 
 const images = {
   whiteCrossexit,
@@ -238,6 +239,7 @@ const images = {
   locationIcon,
   crossIcon,
   calendar,
+  noAppointment,
 };
 
 export default images;

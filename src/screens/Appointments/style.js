@@ -177,8 +177,8 @@ export const styles = StyleSheet.create({
     marginRight: sizes.screenWidth * 0.042,
   },
   scrollContainer: {
-    marginTop: sizes.screenHeight * 0.02,
-    marginBottom: sizes.screenHeight * 0.09,
+    // marginTop: sizes.screenHeight * 0.02,
+    marginBottom: sizes.screenHeight * 0.07,   
   },
 
   optionsCart: {

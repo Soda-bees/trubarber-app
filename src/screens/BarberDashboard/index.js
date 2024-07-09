@@ -10,27 +10,33 @@ import {
   Animated,
   Platform,
   PermissionsAndroid,
-  Alert
+  Alert,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { styles } from './style';
+import React, {useEffect, useState} from 'react';
+import {styles} from './style';
 import images from '../../services/utilities/images';
-import { colors, sizes } from '../../services';
-import { StarRatingDisplay } from 'react-native-star-rating-widget';
+import {colors, sizes} from '../../services';
+import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import * as Progress from 'react-native-progress';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import { useDispatch, useSelector } from 'react-redux';
-import { setLocation } from '../../store/location';
-import { socket, socketService } from "../../services/Socket"
-import { selectUserData } from '../../store/userData';
-import { selectAuthToken } from '../../store/authToken';
+import {useDispatch, useSelector} from 'react-redux';
+import {setLocation} from '../../store/location';
+import {socket, socketService} from '../../services/Socket';
+import {selectUserData} from '../../store/userData';
+import {selectAuthToken} from '../../store/authToken';
+import formatToJSON from '../../services/config/FormatToJson';
 
-export default function BarberDashboard({ navigation }) {
+export default function BarberDashboard({navigation}) {
+  const dispatch = useDispatch();
+  const userData = useSelector(selectUserData);
+  const authToken = useSelector(selectAuthToken);
+  // console.log('barber pr data h yeh', formatToJSON(userData));
 
-  const dispatch = useDispatch()
-  const userData = useSelector(selectUserData)
-  const authToken = useSelector(selectAuthToken)
+  const [numberOfCompletedAppointments, setNumberOfCompletedAppointments] =
+    useState(0);
+  const [numberOfPendingAppointments, setNumberOfPendingAppointments] =
+    useState(0);
 
   const [appointmentDone, setAppointmentDone] = useState('03');
   const [appointmentCancelled, setAppointmentCancelled] = useState('03');
@@ -122,12 +128,12 @@ export default function BarberDashboard({ navigation }) {
   ]);
 
   useEffect(() => {
-    const cleanup = socketService(dispatch, authToken, userData)
+    const cleanup = socketService(dispatch, authToken, userData);
 
     return () => {
-      cleanup()
-    }
-  }, [userData])
+      cleanup();
+    };
+  }, [userData]);
 
   useEffect(() => {
     const initializeLocation = async () => {
@@ -191,7 +197,7 @@ export default function BarberDashboard({ navigation }) {
   const getCurrentLocation = (setRegion, dispatch) => {
     Geolocation.getCurrentPosition(
       position => {
-        const { latitude, longitude } = position.coords;
+        const {latitude, longitude} = position.coords;
         // console.log(
         //   position.coords,
         //   '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
@@ -219,6 +225,44 @@ export default function BarberDashboard({ navigation }) {
     );
   };
 
+  const formatDateShort = dateString => {
+    if (!dateString) return '';
+    const parts = dateString.split('-');
+    if (parts.length !== 3) return '';
+    const day = parseInt(parts[1], 10);
+    const month = parseInt(parts[0], 10) - 1;
+    const year = parseInt(parts[2], 10);
+    const dateObj = new Date(year, month, day);
+    // const options = {weekday: 'short', month: 'short', day: 'numeric'};
+    const options = {month: 'short', day: 'numeric'};
+
+    return dateObj.toLocaleDateString('en-US', options);
+  };
+
+  const calculateTotalAmount = services => {
+    return services.reduce(
+      (total, service) => total + parseFloat(service.price),
+      0,
+    );
+  };
+
+  const filterAndSetAppointments = appointments => {
+    const completedAppointments = appointments.filter(
+      appointment => appointment?.status.toLowerCase() === 'completed',
+    );
+    const pendingAppointments = appointments.filter(
+      appointment => appointment?.status.toLowerCase() === 'pending',
+    );
+
+    setNumberOfCompletedAppointments(completedAppointments.length);
+    setNumberOfPendingAppointments(pendingAppointments.length);
+  };
+
+  useEffect(() => {
+    if (userData?.appoinment) {
+      filterAndSetAppointments(userData?.appoinment);
+    }
+  }, [userData]);
 
   return (
     <SafeAreaView>
@@ -229,9 +273,9 @@ export default function BarberDashboard({ navigation }) {
             resizeMode="contain"
             style={styles.transparentBg}>
             <View style={styles.topIconRow}>
-              <TouchableOpacity
+              <View
                 style={styles.locationRow}
-              // onPress={() => navigation.navigate('WholeMap')}
+                // onPress={() => navigation.navigate('WholeMap')}
               >
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
@@ -242,7 +286,7 @@ export default function BarberDashboard({ navigation }) {
                     {currentLocation}
                   </Text>
                 </View>
-              </TouchableOpacity>
+              </View>
               <View style={styles.otherIconRow}>
                 <TouchableOpacity
                   style={styles.notificationContainer}
@@ -254,7 +298,8 @@ export default function BarberDashboard({ navigation }) {
                     source={images.notification}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.notificationContainer}
+                <TouchableOpacity
+                  style={styles.notificationContainer}
                   onPress={() => {
                     navigation.navigate('Chats');
                   }}>
@@ -262,7 +307,7 @@ export default function BarberDashboard({ navigation }) {
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={styles.inputContainer}>
+            {/* <View style={styles.inputContainer}>
               <Image
                 source={images.search}
                 resizeMode="contain"
@@ -273,55 +318,94 @@ export default function BarberDashboard({ navigation }) {
                 style={styles.input}
                 placeholder="Search..."
               />
-            </View>
+            </View> */}
           </ImageBackground>
         </View>
-        <ScrollView style={styles.ScrollViewContainer} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.ScrollViewContainer}
+          showsVerticalScrollIndicator={false}>
           <View style={styles.containerBody}>
             <View style={styles.detailRow}>
               <View style={styles.detailContainer}>
                 <Image style={styles.boxImg} source={images.appointment} />
                 <View>
                   <Text style={styles.appoitmentNumberTxt}>
-                    {appointmentDone}
+                    {numberOfCompletedAppointments}
                   </Text>
-                  <Text style={styles.detailTxt}>Done Appointments</Text>
+                  <Text style={styles.detailTxt}>Completed Appointments</Text>
                 </View>
               </View>
               <View style={styles.detailContainer}>
                 <Image style={styles.boxImg} source={images.appointment} />
                 <View>
                   <Text style={styles.appoitmentNumberTxt}>
-                    {appointmentCancelled}
+                    {numberOfPendingAppointments}
                   </Text>
-                  <Text style={styles.detailTxt}>Cancelled Appointments</Text>
+                  <Text style={styles.detailTxt}>Pending Appointments</Text>
                 </View>
               </View>
             </View>
-            <Text style={styles.headingSummary}>Last Services</Text>
-            <View style={styles.lastServicesContainer}>
-              <View style={styles.rowThree}>
-                <Text style={styles.serviceHeading}>Service</Text>
-                <Text style={styles.priceHeading}>Price</Text>
-                <Text style={styles.dateHeading}>Date & Time</Text>
-                <Text style={styles.statusHeading}>Status</Text>
+            {userData.appoinment?.length == 0 ? (
+              <View style={styles.noAppointmentMainView}>
+                <Image
+                  source={images.noAppointment}
+                  style={styles.appointmentStyle}
+                />
+                <Text style={styles.appointmentText}>
+                  You have no scheduled appointments at this moment.
+                </Text>
               </View>
-              <ScrollView>
-                {lastServices.map((item, index) => (
-                  <View key={index} style={styles.serviceDetailRow}>
-                    <Text style={styles.serviceHeading}>
-                      {item.serviceName}
-                    </Text>
-                    <Text style={styles.priceHeadingTwo}>${item.price}</Text>
-                    <View>
-                      <Text style={styles.dateHeadingTwo}>{item.date}</Text>
-                      <Text style={styles.timeHeading}>{item.time}</Text>
-                    </View>
-                    <Text style={Platform.OS == 'android' ? styles.statusHeadingTwo : styles.statusHeadingTwoIOS}>{item.status}</Text>
+            ) : (
+              <View style={{marginBottom: 15}}>
+                <View style={styles.appointmentBtn}>
+                  <Text style={styles.headingSummary}>Appointments</Text>
+                  <TouchableOpacity
+                    style={styles.viewAllBtn}
+                    onPress={() => navigation.navigate('AppoinmentBarber')}>
+                    <Text style={styles.viewAllText}>View All</Text>
+                    <Image
+                      style={styles.arrowImage}
+                      source={images.rightArrowRed}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.lastServicesContainer}>
+                  <View style={styles.rowThree}>
+                    <Text style={styles.serviceHeading}>Service</Text>
+                    <Text style={styles.priceHeading}>Price</Text>
+                    <Text style={styles.dateHeading}>Date & Time</Text>
+                    <Text style={styles.statusHeading}>Status</Text>
                   </View>
-                ))}
-              </ScrollView>
-            </View>
+                  {userData?.appoinment?.slice(0, 4).map((item, index) => {
+                    return (
+                      <View key={index} style={styles.serviceDetailRow}>
+                        <Text style={styles.serviceHeading}>
+                          {item?.services[0]?.serviceName}
+                        </Text>
+                        <Text style={styles.priceHeadingTwo}>
+                          ${calculateTotalAmount(item?.services)}
+                        </Text>
+                        <View>
+                          <Text style={styles.dateHeadingTwo}>
+                            {formatDateShort(item?.date)}
+                          </Text>
+                          <Text style={styles.timeHeading}>{item?.time}</Text>
+                        </View>
+                        <Text
+                          style={
+                            Platform.OS == 'android'
+                              ? styles.statusHeadingTwo
+                              : styles.statusHeadingTwoIOS
+                          }>
+                          {item?.status}
+                        </Text>
+                      </View>
+                    );
+                  })}
+                </View>
+              </View>
+            )}
+
             <View style={styles.rowFour}>
               <Text style={styles.reviewHeading}>Reviews</Text>
               <TouchableOpacity

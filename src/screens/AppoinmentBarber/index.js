@@ -21,7 +21,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Modal from 'react-native-modal';
 export default function AppoinmentBarber({navigation}) {
   const barber = useSelector(selectUserData);
-  console.log(barber.appoinment[0].date);
+  // console.log(barber.appoinment[0].date);
   const [startTime, setStartTime] = useState(new Date());
   const [clientName, setClientName] = useState('John D.');
   const [clientDate, setClientDate] = useState('Mon, Aug 12');

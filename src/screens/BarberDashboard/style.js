@@ -105,7 +105,7 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.29,
   },
   containerBody: {
-    // marginTop: sizes.screenHeight * 0.05,
+    marginTop: sizes.screenHeight * 0.01,
     paddingHorizontal: sizes.screenWidth * 0.06,
   },
   detailRow: {
@@ -115,7 +115,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   detailContainer: {
-    backgroundColor: colors.lightgray,
+    backgroundColor: colors.grayBg,
     width: sizes.screenWidth * 0.43,
     borderRadius: sizes.screenWidth * 0.02,
     flexDirection: 'row',
@@ -141,7 +141,7 @@ export const styles = StyleSheet.create({
     textAlign: 'right',
   },
   headingSummary: {
-    marginTop: sizes.screenHeight * 0.02,
+    // marginTop: sizes.screenHeight * 0.02,
     color: colors.black,
     fontSize: fontSize.medium,
     fontWeight: '500',
@@ -171,7 +171,7 @@ export const styles = StyleSheet.create({
   serviceHeading: {
     color: colors.black,
     fontSize: fontSize.smallM,
-    width:sizes.screenWidth* 0.21
+    width: sizes.screenWidth * 0.21,
   },
   priceHeading: {
     color: colors.black,
@@ -191,12 +191,13 @@ export const styles = StyleSheet.create({
   serviceDetailRow: {
     marginTop: sizes.screenHeight * 0.01,
     flexDirection: 'row',
-    backgroundColor: colors.lightgray,
+    backgroundColor: colors.grayBg,
     width: sizes.screenWidth * 0.88,
     paddingHorizontal: sizes.screenWidth * 0.03,
     paddingVertical: sizes.screenWidth * 0.02,
     alignItems: 'center',
     justifyContent: 'space-between',
+    borderRadius: sizes.screenWidth * 0.03,
   },
   dateHeadingTwo: {
     color: colors.black,
@@ -207,28 +208,27 @@ export const styles = StyleSheet.create({
     color: colors.gray,
     fontSize: fontSize.smallM,
     textAlign: 'center',
-
   },
   statusHeadingTwo: {
     color: colors.red,
     fontSize: fontSize.smallM,
-    width:sizes.screenWidth* 0.15,
-    textAlign:'right'
-
+    width: sizes.screenWidth * 0.17,
+    textAlign: 'right',
   },
   statusHeadingTwoIOS: {
     color: colors.red,
     fontSize: fontSize.smallM,
-    width:sizes.screenWidth* 0.17,
-    textAlign:'right',
+    width: sizes.screenWidth * 0.17,
+    textAlign: 'right',
     // backgroundColor:'white'
   },
   priceHeadingTwo: {
     color: colors.black,
     fontSize: fontSize.smallM,
-    width:sizes.screenWidth* 0.15,
-    textAlign:'center',
-    fontWeight:'500'
+    width: sizes.screenWidth * 0.1,
+    // textAlign:'left',
+    fontWeight: '500',
+    // backgroundColor:'red'
   },
   reviewHeading: {
     color: colors.black,
@@ -236,7 +236,8 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
   },
   rowFour: {
-    marginTop: sizes.screenHeight * 0.01,
+    marginTop: sizes.screenHeight * 0.02,
+    // marginTop: sizes.screenHeight * 0.04,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -246,7 +247,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: sizes.screenWidth * 0.003,
     width: sizes.screenWidth * 0.23,
-    paddingVertical: sizes.screenHeight * 0.01,
+    paddingVertical: sizes.screenHeight * 0.007,
     borderRadius: sizes.screenWidth * 0.05,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -364,11 +365,39 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   ScrollViewContainer: {
-    marginTop: sizes.screenHeight * 0.05,
-    marginBottom: sizes.screenHeight * 0.085,
+    // marginTop: sizes.screenHeight * 0.01,
+    marginBottom: sizes.screenHeight * 0.078,
   },
 
-  paddingBtm:{
-    paddingBottom:sizes.screenHeight * 0.1
+  paddingBtm: {
+    paddingBottom: sizes.screenHeight * 0.1,
+  },
+
+  appointmentStyle: {
+    resizeMode: 'contain',
+    width: sizes.screenWidth * 0.1,
+    height: sizes.screenWidth * 0.1,
+  },
+
+  noAppointmentMainView: {
+    // flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: sizes.screenHeight * 0.025,
+  },
+
+  appointmentText: {
+    color: colors.black,
+    fontSize: fontSize.medium,
+    marginLeft: 5,
+    textAlign:'center',
+    width:sizes.screenWidth * 0.7
+  },
+
+  appointmentBtn: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: sizes.screenHeight * 0.01,
   },
 });
