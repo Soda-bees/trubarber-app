@@ -16,8 +16,8 @@ export const styles = StyleSheet.create({
   inputContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    borderRadius: sizes.screenWidth*0.04,
-    borderWidth: sizes.screenWidth*0.004,
+    borderRadius: sizes.screenWidth * 0.04,
+    borderWidth: sizes.screenWidth * 0.004,
     borderColor: colors.darkerBordercolor,
     marginRight: sizes.screenWidth * 0.1,
     marginLeft: sizes.screenWidth * 0.1,
@@ -34,11 +34,11 @@ export const styles = StyleSheet.create({
   },
 
   toggleContainer: {
-    borderWidth: sizes.screenWidth*0.004,
+    borderWidth: sizes.screenWidth * 0.004,
     borderColor: colors.darkerBordercolor,
     height: sizes.screenHeight * 0.06,
     marginTop: sizes.screenHeight * 0.06,
-    borderRadius: sizes.screenWidth*0.04,
+    borderRadius: sizes.screenWidth * 0.04,
     width: sizes.screenWidth * 0.7,
     alignSelf: 'center',
     alignItems: 'center',
@@ -51,7 +51,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.044,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: sizes.screenWidth*0.03,
+    borderRadius: sizes.screenWidth * 0.03,
   },
 
   textColorwhite: {
@@ -75,11 +75,11 @@ export const styles = StyleSheet.create({
     marginLeft: sizes.screenWidth * 0.052,
     marginRight: sizes.screenWidth * 0.052,
     // marginTop: sizes.screenHeight * 0.02,
-    height: sizes.screenHeight,
+    // height: sizes.screenHeight,
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: sizes.screenWidth * 0.052,
-    marginBottom:sizes.screenHeight* 0.045
+    marginBottom: sizes.screenHeight * 0.045,
   },
   contentMarginIOS: {
     marginLeft: sizes.screenWidth * 0.04,
@@ -89,7 +89,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: sizes.screenWidth * 0.065,
-    marginBottom:sizes.screenHeight* 0.03,
+    marginBottom: sizes.screenHeight * 0.03,
   },
 
   containerImage: {
@@ -126,7 +126,7 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenHeight * 0.012,
     width: sizes.screenWidth * 0.392,
     opacity: 0.9,
-    marginHorizontal:sizes.screenWidth* 0.026
+    marginHorizontal: sizes.screenWidth * 0.026,
   },
 
   textDarkerblack: {
@@ -135,7 +135,7 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.small,
   },
   textBlack: {
-    color:colors.black,
+    color: colors.black,
     fontSize: fontSize.extraSmall,
     fontWeight: '700',
   },
@@ -171,7 +171,7 @@ export const styles = StyleSheet.create({
   },
 
   bottomNav: {
-    height: sizes.screenHeight * 0.102,   
+    height: sizes.screenHeight * 0.102,
   },
   bottonNavimg: {
     height: sizes.screenHeight * 0.032,
@@ -188,7 +188,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.182,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: sizes.screenHeight*0.02,
+    borderRadius: sizes.screenHeight * 0.02,
     gap: sizes.screenHeight * 0.012,
   },
   serviceImageresize: {
@@ -207,11 +207,10 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.022,
     flexWrap: 'wrap',
     gap: sizes.screenWidth * 0.042,
-
   },
-  scrollContainer:{
-    marginTop:sizes.screenHeight* 0.02,
-    marginBottom:sizes.screenHeight* 0.09,
+  scrollContainer: {
+    marginTop: sizes.screenHeight * 0.02,
+    marginBottom: sizes.screenHeight * 0.09,
     // backgroundColor:''
-  }
+  },
 });
