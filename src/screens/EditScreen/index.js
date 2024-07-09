@@ -222,7 +222,6 @@ export default function EditScreen({ navigation }) {
         time: `${formatTime(startTime)} - ${formatTime(endTime)}`
       }
       const response = await updateProfile(role == 'user' ? userBody : BarberBody, authToken)
-      console.log(formatToJSON(response));
       if (response.status == 200) {
         setLoader(false)
         ErrorShow('success', 'Congratulation!', response?.data?.message, onHide)

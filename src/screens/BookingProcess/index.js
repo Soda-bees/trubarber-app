@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
+  BackHandler, ToastAndroid
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { styles } from './style.js';
@@ -50,6 +51,20 @@ export default function BookingProcess({ navigation, route }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [loader, setLoader] = useState(false)
   const [bookedTime, setBookedTime] = useState([])
+
+  useEffect(() => {
+    const backAction = () => {
+      if (loader) {
+        ToastAndroid.show('Please wait, loading...', ToastAndroid.SHORT);
+        return true; // Prevent default behavior
+      }
+      return false; // Allow default behavior
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => backHandler.remove();
+  }, [loader])
 
   const findBarber = async () => {
     const barber = await barbers.find(barber => barber._id === cart?.barber);
@@ -138,6 +153,9 @@ export default function BookingProcess({ navigation, route }) {
     return timeSlots;
   };
 
+
+
+
   useEffect(() => {
     findBarber();
     setTotalPrice();
@@ -147,25 +165,13 @@ export default function BookingProcess({ navigation, route }) {
     dispatch(deleteCartItem(item));
   };
 
-  // const handleDateSelected = (date) => {
-  //   const formatedDate = date?.format('MM-DD-YYYY')
-  //   setSelectedDate(date?.format('MM-DD-YYYY'));
-  //   const bookedTimesForSelectedDate = bookedTime
-  //     .filter(booking => booking.date === formatedDate)
-  //     .map(booking => booking.time);
-  //   const [startTime, endTime] = barber.time.split(' - ');
-  //   console.log(startTime, endTime);
-  //   const availableTimeSlot = handleCreateTimeSlotSecond(startTime, endTime, bookedTimesForSelectedDate)
-  //   setDatedata(availableTimeSlot)
-  // };
-
   const handleDateSelected = (date) => {
     const formattedDate = date?.format('MM-DD-YYYY');
     setSelectedDate(formattedDate);
 
     const bookedTimesForSelectedDate = bookedTime
-    .filter(booking => booking.date === formattedDate)
-    .map(booking => booking.time);
+      .filter(booking => booking.date === formattedDate)
+      .map(booking => booking.time);
 
     console.log(bookedTimesForSelectedDate);
 
@@ -260,7 +266,6 @@ export default function BookingProcess({ navigation, route }) {
       const response = await bookAppoinment(obj, authToken)
       if (response.status == 200) {
         ErrorShow('success', 'Congratulation!', response?.data?.message, onHide)
-        setLoader(false)
         dispatch(addAppoinment(response?.data?.appoinment))
       } else {
         setLoader(false)
@@ -274,6 +279,8 @@ export default function BookingProcess({ navigation, route }) {
 
   const onHide = () => {
     navigation.navigate('Appointments')
+    setLoader(false)
+    dispatch(removeCart());
   }
 
   const maskCardNumber = (cardNumber) => {
@@ -298,14 +305,16 @@ export default function BookingProcess({ navigation, route }) {
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.allignment}>
-            <View style={styles.arrowTop}>
-              <BackArrow
-                onPress={() => {
-                  // dispatch(removeCart());
-                  navigation.goBack();
-                }}
-              />
-            </View>
+            {
+              !loader &&
+              <View style={styles.arrowTop}>
+                <BackArrow
+                  onPress={() => {
+                    navigation.goBack();
+                  }}
+                />
+              </View>
+            }
             <Text style={styles.headerText}>Book Appointment</Text>
           </View>
         </View>

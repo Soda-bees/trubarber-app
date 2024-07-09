@@ -9,23 +9,22 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style.js';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
-import {colors, sizes} from '../../services';
+import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
+import { colors, sizes } from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectUserData} from '../../store/userData/index.js';
-import {removeCart, selectCart} from '../../store/cart/index.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserData } from '../../store/userData/index.js';
+import { removeCart, selectCart } from '../../store/cart/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
-export default function Appointments({navigation}) {
+export default function Appointments({ navigation }) {
   const dispatch = useDispatch();
   const userData = useSelector(selectUserData);
-  // console.log(formatToJSON(userData?.appoinment));
 
   const [appointmentData, setappointmentData] = useState([
     {
@@ -73,10 +72,6 @@ export default function Appointments({navigation}) {
       location: 'Royal Ln. Mesa, New Jersey',
     },
   ]);
-
-  useEffect(() => {
-    dispatch(removeCart());
-  }, [userData]);
 
   const calculateTotalAmount = services => {
     return services.reduce(
@@ -131,13 +126,13 @@ export default function Appointments({navigation}) {
             return (
               <View key={index}>
                 <ImageBackground
-                  source={{uri: item?.barber?.profile}}
+                  source={{ uri: item?.barber?.profile }}
                   imageStyle={styles.barberHat}
                   resizeMode="cover">
                   <View style={styles.innerContainer}>
                     <View style={styles.nameView}>
-                    <Text style={styles.contextText}>{item?.barber?.name}</Text>
-                    <Text style={styles.statusText}>{item?.status}</Text>
+                      <Text style={styles.contextText}>{item?.barber?.name}</Text>
+                      <Text style={styles.statusText}>{item?.status}</Text>
                     </View>
                     <View style={styles.locationContainer}>
                       <Image
@@ -155,7 +150,7 @@ export default function Appointments({navigation}) {
                         <View style={styles.directionRow}>
                           <View style={styles.serviceImagecontainer}>
                             <Image
-                              source={{uri: item?.serviceIcon}}
+                              source={{ uri: item?.serviceIcon }}
                               style={styles.serviceImageresize}
                               resizeMode="contain"
                             />
@@ -191,7 +186,7 @@ export default function Appointments({navigation}) {
                   </View>
                   <TouchableOpacity
                     style={styles.bookBtn}
-                    onPress={() => navigation.navigate('AppointmentDetails', {item})}>
+                    onPress={() => navigation.navigate('AppointmentDetails', { item })}>
                     <Text style={styles.btnText}>See Details</Text>
                     <Image
                       source={images.arrowIcon}
