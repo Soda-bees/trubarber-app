@@ -87,7 +87,7 @@ export default function WholeMap({navigation}) {
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={styles.inputContainer}>
+            {/* <View style={styles.inputContainer}>
               <Image
                 source={images.search}
                 resizeMode="contain"
@@ -98,7 +98,7 @@ export default function WholeMap({navigation}) {
                 style={styles.input}
                 placeholder="Search..."
               />
-            </View>
+            </View> */}
           </ImageBackground>
         </View>
         <View style={[styles.mapContainer, {zIndex: 0}]}>
@@ -195,8 +195,12 @@ export default function WholeMap({navigation}) {
                   </View>
                   <TouchableOpacity
                     style={styles.bookBtn}
-                    onPress={() =>
-                      navigation.navigate('BookAppointment', {item:selectedBarber})}>
+                    onPress={() => {
+                      setModalopen(false);
+                      navigation.navigate('BookAppointment', {
+                        item: selectedBarber,
+                      });
+                    }}>
                     <Text style={styles.btnText}>Book Appointment</Text>
                     <Image
                       source={images.arrowIcon}

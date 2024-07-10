@@ -74,17 +74,16 @@ export const styles = StyleSheet.create({
   contentMargin: {
     marginLeft: sizes.screenWidth * 0.052,
     marginRight: sizes.screenWidth * 0.052,
-    // marginTop: sizes.screenHeight * 0.02,
+    marginTop: sizes.screenHeight * 0.02,
     // height: sizes.screenHeight,
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: sizes.screenWidth * 0.052,
-    marginBottom: sizes.screenHeight * 0.045,
+    marginBottom: sizes.screenHeight * 0.1,
   },
   contentMarginIOS: {
     marginLeft: sizes.screenWidth * 0.04,
     marginRight: sizes.screenWidth * 0.04,
-    // marginTop: sizes.screenHeight * 0.02,
     height: sizes.screenHeight,
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -209,8 +208,8 @@ export const styles = StyleSheet.create({
     gap: sizes.screenWidth * 0.042,
   },
   scrollContainer: {
-    marginTop: sizes.screenHeight * 0.02,
-    marginBottom: sizes.screenHeight * 0.09,
+    // marginTop: sizes.screenHeight * 0.02,
+    // marginBottom: sizes.screenHeight * 0.09,
     // backgroundColor:''
   },
 });

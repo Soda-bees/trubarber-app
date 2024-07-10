@@ -219,7 +219,15 @@ export default function Appointments({navigation}) {
               })
               .reverse()
           ) : (
-            <Text style={{color: 'red'}}>nh appointment</Text>
+            <View style={styles.noAppointmentMainView}>
+              <Image
+                source={images.noAppointment}
+                style={styles.appointmentStyle}
+              />
+              <Text style={styles.appointmentText}>
+                You have not booked any appointments yet.
+              </Text>
+            </View>
           )}
           <View
             style={{

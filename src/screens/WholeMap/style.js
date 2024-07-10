@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.pinkishwhite,
   },
   transparentBg: {
-    height: sizes.screenHeight * 0.17,
+    // height: sizes.screenHeight * 0.17,
     width: sizes.screenWidth,
     // position: 'absolute',
     // top: sizes.screenHeight * 0.2
@@ -37,7 +37,6 @@ export const styles = StyleSheet.create({
     color: colors.black,
   },
   mapContainer: {
-    // marginTop: sizes.screenHeight * 0.07,
     height: sizes.screenHeight,
     width: sizes.screenWidth,
     alignSelf: 'center',
@@ -46,8 +45,9 @@ export const styles = StyleSheet.create({
   topIconRow: {
     flexDirection: 'row',
     marginHorizontal: sizes.screenWidth * 0.05,
-    height: sizes.screenHeight * 0.064,
-    marginTop: sizes.screenHeight * 0.05,
+    // height: sizes.screenHeight * 0.064,
+    // marginTop: sizes.screenHeight * 0.05,
+    marginVertical:sizes.screenHeight * 0.03,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
