@@ -118,7 +118,7 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.04,
   },
   marginTop: {
-    marginTop: sizes.screenHeight * 0.02,
+    marginTop: sizes.screenHeight * 0.015,
   },
   heading: {
     color: colors.black,
@@ -251,7 +251,7 @@ export const styles = StyleSheet.create({
   },
   scrollContainer: {
     marginTop: sizes.screenHeight * 0.05,
-    marginBottom: sizes.screenHeight * 0.02,
+    marginBottom: sizes.screenHeight * 0.025,
   },
 
   paddingBtm: {

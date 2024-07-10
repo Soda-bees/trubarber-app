@@ -27,6 +27,6 @@ export const styles = StyleSheet.create({
   },
 
   Nextbtn: {
-    marginTop: sizes.screenHeight * 0.33,
+    marginTop: sizes.screenHeight * 0.4,
   },
 });

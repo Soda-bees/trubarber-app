@@ -72,14 +72,12 @@ export const styles = StyleSheet.create({
   },
 
   contentMargin: {
-    marginLeft: sizes.screenWidth * 0.052,
-    marginRight: sizes.screenWidth * 0.052,
+    marginLeft: sizes.screenWidth * 0.04,
     marginTop: sizes.screenHeight * 0.02,
-    // height: sizes.screenHeight,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: sizes.screenWidth * 0.052,
-    marginBottom: sizes.screenHeight * 0.1,
+    gap: sizes.screenWidth * 0.075,
+    marginBottom: sizes.screenHeight * 0.13,
   },
   contentMarginIOS: {
     marginLeft: sizes.screenWidth * 0.04,
@@ -92,7 +90,7 @@ export const styles = StyleSheet.create({
   },
 
   containerImage: {
-    marginTop: sizes.screenHeight * 0.012,
+    // marginTop: sizes.screenHeight * 0.012,
     width: sizes.screenHeight * 0.22,
     height: sizes.screenHeight * 0.24,
     borderRadius: sizes.screenWidth * 0.042,
@@ -106,7 +104,7 @@ export const styles = StyleSheet.create({
   },
 
   row: {
-    marginTop: sizes.screenHeight * 0.019,
+    // marginTop: sizes.screenHeight * 0.019,
     alignItems: 'center',
     flexDirection: 'row',
     marginLeft: sizes.screenWidth * 0.03,

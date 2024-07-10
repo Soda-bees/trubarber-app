@@ -116,7 +116,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     alignSelf: 'center',
-    // flex:1
   },
   textInputContainer: {
     width: sizes.screenWidth * 0.72,
@@ -127,5 +126,17 @@ export const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: sizes.screenWidth * 0.05,
     height: sizes.screenWidth * 0.05,
+  },
+  laoderContainer: {
+    backgroundColor: '#FBFAFA',
+    height: sizes.screenHeight,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  lottie: {
+    width: sizes.screenWidth,
+    height: sizes.screenHeight,
+    // marginBottom: sizes.screenHeight * 0.06,
   },
 });

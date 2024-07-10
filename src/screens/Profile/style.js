@@ -4,11 +4,11 @@ import {colors, fontSize, sizes} from '../../services';
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.lightgray,
-    height: sizes.screenHeight * 0.92,
-    justifyContent:'space-between'
+    height: sizes.screenHeight,
+    justifyContent: 'space-between',
   },
   borderBottom: {
-    borderBottomWidth: sizes.screenWidth*0.002,
+    borderBottomWidth: sizes.screenWidth * 0.002,
     borderColor: colors.grayBorder,
   },
   arrowTop: {
@@ -38,10 +38,10 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.042,
     marginLeft: sizes.screenWidth * 0.072,
     marginRight: sizes.screenWidth * 0.072,
-    borderWidth: sizes.screenWidth*0.002,
+    borderWidth: sizes.screenWidth * 0.002,
     borderColor: colors.selectorcolor,
     borderRadius: sizes.screenWidth * 0.042,
-    paddingVertical:sizes.screenWidth * 0.02
+    paddingVertical: sizes.screenWidth * 0.02,
   },
   contentAlligment: {
     marginTop: sizes.screenHeight * 0.012,
@@ -56,7 +56,7 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.22,
   },
   nameContainer: {
-    width: sizes.screenWidth ,
+    width: sizes.screenWidth,
   },
   firstName: {
     fontSize: fontSize.h6,
@@ -106,6 +106,8 @@ export const styles = StyleSheet.create({
   },
 
   btn: {
-    // top: sizes.screenHeight * 0.21,
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: sizes.screenHeight * 0.12,
   },
 });

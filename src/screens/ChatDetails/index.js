@@ -8,6 +8,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   Dimensions,
+  Keyboard,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {styles} from './style';
@@ -17,9 +18,12 @@ import {TextInput} from 'react-native-gesture-handler';
 import {colors, sizes} from '../../services';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import LottieView from 'lottie-react-native';
 
 export default function ChatDetails({navigation}) {
   const scrollViewRef = useRef();
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   const scrollToBottom = () => {
     if (scrollViewRef.current) {
@@ -37,9 +41,33 @@ export default function ChatDetails({navigation}) {
     scrollToBottom();
   }, []);
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        console.log('Keyboard is open');
+        setKeyboardOpen(true);
+      },
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        console.log('Keyboard is closed');
+        setKeyboardOpen(false);
+      },
+    );
+  }, []);
+
+  let animation = React.createRef();
+
+  useEffect(() => {
+    animation.current?.play();
+  }, []);
+
   const [conversation, setConversation] = useState([
     {
-      chat: 'Top Top Start start start start start start start start start start start start start start start start',
+      chat: 'Top Top Start start start start start start start start start start start start start start start start.......',
       user: 'Duis aute irure dolor.',
     },
     {
@@ -71,7 +99,7 @@ export default function ChatDetails({navigation}) {
       user: 'Duis aute irure dolor.',
     },
     {
-      chat: 'End End Start start start start start start start start start start start start start start start start',
+      chat: 'End End Start start start start start start start start start start start start start start start start...',
       user: 'Duis aute irure dolor.',
     },
   ]);
@@ -133,60 +161,75 @@ export default function ChatDetails({navigation}) {
 
   return (
     <SafeAreaView>
-      <View style={styles.container}>
-        <View style={styles.row}>
-          <BackArrow onPress={() => navigation.goBack()} />
-          <Text style={styles.headerText}>{chatName}</Text>
-          {/* <TouchableOpacity style={styles.phoneIcon}>
+      {loader ? (
+        <View style={styles.laoderContainer}>
+          <LottieView
+            ref={animation}
+            source={require('../../assestsAnimation/chatAnimatedLoader.json')}
+            autoPlay
+            loop
+            style={styles.lottie}
+          />
+        </View>
+      ) : (
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <BackArrow onPress={() => navigation.goBack()} />
+            <Text style={styles.headerText}>{chatName}</Text>
+            {/* <TouchableOpacity style={styles.phoneIcon}>
             <Image source={images.phoneIcon} />
           </TouchableOpacity> */}
-        </View>
-        <View style={styles.chatSubContianer}>
-          <View>
-            <ScrollView
-              contentContainerStyle={styles.scrollContianer}
-              ref={scrollViewRef}
-              onContentSizeChange={() => scrollToBottom()}
-              onLayout={handleLayout}>
-                <View style={{height: 10 }} />
-              <View style={styles.containerBody}>
-                {/* <View style={styles.chatContianer}> */}
-                {conversation.map((item, index) => (
-                  <View style={styles.chatRecieved} key={index}>
-                    <Text style={styles.chatText}>{item.chat}</Text>
-                  </View>
-                ))}
-                {/* </View> */}
-              </View>
-            </ScrollView>
+          </View>
+          <View style={styles.chatSubContianer}>
+            <View>
+              <ScrollView
+                contentContainerStyle={styles.scrollContianer}
+                ref={scrollViewRef}
+                onContentSizeChange={() => scrollToBottom()}
+                onLayout={handleLayout}>
+                <View
+                  style={
+                    keyboardOpen
+                      ? {height: sizes.screenHeight * 0.46}
+                      : {height: 25}
+                  }
+                />
+                <View style={styles.containerBody}>
+                  {conversation.map((item, index) => (
+                    <View style={styles.chatRecieved} key={index}>
+                      <Text style={styles.chatText}>{item.chat}</Text>
+                    </View>
+                  ))}
+                </View>
+              </ScrollView>
+            </View>
+            <View
+              style={
+                Platform.OS === 'android'
+                  ? styles.texInputView
+                  : styles.texInputViewIOS
+              }>
+              <TextInput
+                placeholder="Write Message.."
+                placeholderTextColor={colors.black}
+                multiline={true}
+                numberOfLines={2}
+                style={styles.textInputContainer}
+              />
+              <TouchableOpacity style={styles.arrowBlackIcon}>
+                <Image source={images.arrowBlackIcon} />
+              </TouchableOpacity>
+            </View>
+            <KeyboardSpacer topSpacing={sizes.screenHeight * 0.045} />
           </View>
 
-          <View
-            style={
-              Platform.OS === 'android'
-                ? styles.texInputView
-                : styles.texInputViewIOS
-            }>
-            <TextInput
-              placeholder="Write Message.."
-              placeholderTextColor={colors.black}
-              multiline={true}
-              numberOfLines={2}
-              style={styles.textInputContainer}
-            />
-            <TouchableOpacity style={styles.arrowBlackIcon}>
-              <Image source={images.arrowBlackIcon} />
-            </TouchableOpacity>
-          </View>
-          <KeyboardSpacer topSpacing={sizes.screenHeight * 0.03} />
-        </View>
-
-        {/* <KeyboardAvoidingView
+          {/* <KeyboardAvoidingView
           behavior="padding" keyboardVerticalOffset={sizes.screenHeight * 0.03}
         > */}
 
-        {/* </KeyboardAvoidingView> */}
-      </View>
+          {/* </KeyboardAvoidingView> */}
+        </View>
+      )}
     </SafeAreaView>
   );
 }

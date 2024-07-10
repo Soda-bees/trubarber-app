@@ -163,8 +163,9 @@ export const styles = StyleSheet.create({
   },
   btn: {
     position:'absolute',
-    top:sizes.screenHeight * 0.3,
-    left:sizes.screenWidth * 0.08,
+    top:sizes.screenHeight * 0.27,
+    alignSelf:'center'
+    // left:sizes.screenWidth * 0.08,
   },
 
   servicesContainer: {
