@@ -153,7 +153,7 @@ export const styles = StyleSheet.create({
   },
   dateAndtimeView: {
     // width:sizes.screenWidth * 0.3,
-    marginLeft:sizes.screenWidth * 0.03
+    marginLeft: sizes.screenWidth * 0.03,
   },
 
   bookBtn: {
@@ -178,7 +178,7 @@ export const styles = StyleSheet.create({
   },
   scrollContainer: {
     // marginTop: sizes.screenHeight * 0.02,
-    marginBottom: sizes.screenHeight * 0.07,   
+    marginBottom: sizes.screenHeight * 0.07,
   },
 
   optionsCart: {
@@ -191,13 +191,37 @@ export const styles = StyleSheet.create({
     marginTop: 10,
     paddingTop: 10,
   },
-  nameView:{flexDirection:'row' , width:sizes.screenWidth * 0.8 , justifyContent:'space-between'},
-  statusText:{
-    backgroundColor:colors.red,
-    paddingHorizontal:sizes.screenWidth * 0.05,
-    fontSize:fontSize.medium,
-    fontWeight:'500',
-    color:colors.white,
-    borderRadius:sizes.screenWidth * 0.02,
-  }
+  nameView: {
+    flexDirection: 'row',
+    width: sizes.screenWidth * 0.8,
+    justifyContent: 'space-between',
+  },
+  statusText: {
+    backgroundColor: colors.red,
+    paddingHorizontal: sizes.screenWidth * 0.05,
+    fontSize: fontSize.medium,
+    fontWeight: '500',
+    color: colors.white,
+    borderRadius: sizes.screenWidth * 0.02,
+  },
+
+  appointmentStyle: {
+    resizeMode: 'contain',
+    width: sizes.screenWidth * 0.1,
+    height: sizes.screenWidth * 0.1,
+  },
+
+  noAppointmentMainView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: sizes.screenHeight * 0.75,
+  },
+
+  appointmentText: {
+    color: colors.black,
+    fontSize: fontSize.medium,
+    marginLeft: 5,
+    textAlign: 'center',
+    width: sizes.screenWidth * 0.7,
+  },
 });

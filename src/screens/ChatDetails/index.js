@@ -39,7 +39,7 @@ export default function ChatDetails({navigation}) {
 
   const [conversation, setConversation] = useState([
     {
-      chat: 'Start start start start start start start start start start start start start start start start',
+      chat: 'Top Top Start start start start start start start start start start start start start start start start',
       user: 'Duis aute irure dolor.',
     },
     {
@@ -71,7 +71,7 @@ export default function ChatDetails({navigation}) {
       user: 'Duis aute irure dolor.',
     },
     {
-      chat: 'Start start start start start start start start start start start start start start start start',
+      chat: 'End End Start start start start start start start start start start start start start start start start',
       user: 'Duis aute irure dolor.',
     },
   ]);
