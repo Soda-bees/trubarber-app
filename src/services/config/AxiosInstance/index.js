@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-export const BASE_URL = 'http://192.168.100.112:6000/';
-// export const BASE_URL = 'https://cinoo-74e73c7be9e5.herokuapp.com/'
+// export const BASE_URL = 'http://192.168.100.112:6000/';
+export const BASE_URL = 'https://tru-barber-2515ddfdb32f.herokuapp.com/';
+
 
 export const axiosInstance = axios.create({
   baseURL: BASE_URL,
