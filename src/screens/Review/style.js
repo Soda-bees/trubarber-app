@@ -285,16 +285,7 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.h5,
     fontWeight: '900',
   },
-  ratingContainer: {
-    alignItems: 'center',
-    borderStyle: 'solid',
-    marginLeft: sizes.screenWidth * 0.0312,
-    marginRight: sizes.screenWidth * 0.0312,
-    borderWidth: sizes.screenWidth * 0.005,
-    borderColor: colors.bordercolorgray,
-    borderRadius: sizes.screenWidth * 0.02,
-    marginTop: sizes.screenHeight * 0.012,
-  },
+
   ratingData: {
     marginRight: sizes.screenWidth * 0.122,
     marginLeft: sizes.screenWidth * 0.122,
@@ -349,7 +340,66 @@ export const styles = StyleSheet.create({
     // flex: 1,
   },
 
-  // reviewContainer: {
-  //   height : sizes.screenHeight
-  // },
+  ratingContainer: {
+    width: sizes.screenWidth * 0.8,
+    alignSelf: 'center',
+    marginTop: 16,
+    alignItems: 'center',
+  },
+
+  profile: {
+    height: 70,
+    width: 70,
+    borderRadius: 70,
+  },
+
+  userRow: {
+    width: sizes.screenWidth * 0.9,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+
+  userRowLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  userName: {
+    fontSize: fontSize.regular,
+    color: colors.black,
+    fontWeight: '500',
+    marginLeft: 8,
+  },
+
+  deleteIconn: {
+    height: 40,
+    width: 40,
+    resizeMode: 'contain',
+  },
+
+  disabledText2: {
+    fontSize: fontSize.regular,
+    color: colors.black,
+    marginVertical: 8,
+  },
+
+  instructionsContainer: {
+    height: sizes.screenHeight * 0.1,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.disabledBg,
+    marginTop: sizes.screenHeight * 0.02,
+    marginBottom: sizes.screenHeight * 0.01,
+    width: sizes.screenWidth * 0.9,
+  },
+
+  descriptionInput: {
+    fontFamily: 'Satoshi-Medium',
+    fontSize: fontSize.smallM,
+    color: colors.black,
+    maxWidth: sizes.screenWidth * 0.86,
+  },
 });
