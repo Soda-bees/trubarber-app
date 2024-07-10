@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
   nextBtn: {
     position:'absolute',
     alignSelf:'center',
-    bottom: sizes.screenHeight * 0.02,
+    bottom: sizes.screenHeight * 0.035,
   },
   nextBtnIOS: {
     top: sizes.screenHeight * 0.16,

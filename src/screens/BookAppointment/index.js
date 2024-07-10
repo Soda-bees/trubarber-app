@@ -156,7 +156,6 @@ export default function BookAppointment({ navigation, route }) {
             <View style={styles.arrowTop}>
               <BackArrow light={true} onPress={handleGoback} />
             </View>
-            {}
             <View style={styles.openButtonborder}>
               <ImageBackground
                 style={styles.openBg}
@@ -204,16 +203,6 @@ export default function BookAppointment({ navigation, route }) {
               <Text style={styles.btnText}>Direction</Text>
             </TouchableOpacity>
           </View>
-          {/* <View style={styles.call}>
-            <TouchableOpacity style={styles.btnColor}>
-              <Image
-                style={styles.direction}
-                source={images.redCall}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-            <Text style={styles.btnText}>Call</Text>
-          </View> */}
           <View>
             <TouchableOpacity style={styles.btnColor}>
               <Image

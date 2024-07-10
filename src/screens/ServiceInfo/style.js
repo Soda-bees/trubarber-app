@@ -172,7 +172,7 @@ export const styles = StyleSheet.create({
     textAlignVertical:"top",
   },
   saveChangeBtn: {
-    paddingBottom:sizes.screenHeight * 0.02
+    marginBottom:sizes.screenHeight * 0.035
   },
 
   saveChangeBtnIOS: {

@@ -71,7 +71,7 @@ export const styles = StyleSheet.create({
   },
 
   Nextbtn: {
-    top: sizes.screenHeight * 0.37,
+    top: sizes.screenHeight * 0.29,
   },
 
   NextbtnIOS: {

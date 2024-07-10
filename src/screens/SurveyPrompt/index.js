@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import images from '../../services/utilities/images';
-import {styles} from '../ProfilePrompt/style.js';
 import Button from '../../components/Button';
+import { styles } from './style';
 
 export default function SurveyPrompt({navigation, route}) {
   const {userData} = route.params;
