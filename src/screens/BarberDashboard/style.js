@@ -155,7 +155,7 @@ export const styles = StyleSheet.create({
   },
   lastServicesContainer: {
     marginTop: sizes.screenHeight * 0.01,
-    height: sizes.screenHeight * 0.35,
+    // height: sizes.screenHeight * 0.35,
   },
   rowThree: {
     flexDirection: 'row',

@@ -7,54 +7,69 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import BackArrow from '../../components/BackArrow';
-import {styles} from './style';
+import { styles } from './style';
 import images from '../../services/utilities/images';
-import {colors} from '../../services';
-import { format, parse} from 'date-fns';
+import { colors } from '../../services';
+import { format, parse } from 'date-fns';
 import {
   SwipeButtonsContainer,
   SwipeItem,
   SwipeProvider,
 } from 'react-native-swipe-item';
+import { useSelector } from 'react-redux';
+import { selectUserData } from '../../store/userData';
+import formatToJSON from '../../services/config/FormatToJson';
+import moment from 'moment';
 
-export default function Chats({navigation}) {
+export default function Chats({ navigation }) {
+  const userData = useSelector(selectUserData)
   const [chatDetails, setChatDetails] = useState([
     {
-        image: images.youngMan,
-        name: 'Cameron Wilson',
-        time: format(new Date(), 'MM-dd-yyyy hh:mm a'),
-        message: 'Lorem ipsum dolor sit amet, consecteture',
-      },
-      {
-        image: images.youngMan,
-        name: 'Cameron Wilson',
-        time: format(new Date(), 'MM-dd-yyyy hh:mm a'),
-        message: 'Lorem ipsum dolor sit amet, consecteture',
-      },
-    
+      image: images.youngMan,
+      name: 'Cameron Wilson',
+      time: format(new Date(), 'MM-dd-yyyy hh:mm a'),
+      message: 'Lorem ipsum dolor sit amet, consecteture',
+    },
+    {
+      image: images.youngMan,
+      name: 'Cameron Wilson',
+      time: format(new Date(), 'MM-dd-yyyy hh:mm a'),
+      message: 'Lorem ipsum dolor sit amet, consecteture',
+    },
+
   ]);
 
-  const calculateTimeAgo = postTime => {
-    const inputFormat = 'MM-dd-yyyy hh:mm a';
-    const parsedDate = parse(postTime, inputFormat, new Date());
-    const outputFormat = 'yyyy-MM-dd HH:mm';
-    const targetDate1 = format(parsedDate, outputFormat);
-    const targetDate = new Date(targetDate1);
-    const currentDate = new Date();
-    const timeDifference = currentDate - targetDate;
-    const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-    const hoursAgo = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
-    const minutesAgo = Math.floor((timeDifference / (1000 * 60)) % 60);
-    if (daysAgo > 0) {
-      return `${daysAgo} day ago`;
-    } else if (hoursAgo > 0) {
-      return `${hoursAgo} hour ago`;
-    } else if (minutesAgo > 0) {
-      return `${minutesAgo} min ago`;
+  const calculateTimeAgo = time => {
+    // const inputFormat = 'MM-dd-yyyy hh:mm a';
+    // const parsedDate = parse(postTime, inputFormat, new Date());
+    // const outputFormat = 'yyyy-MM-dd HH:mm';
+    // const targetDate1 = format(parsedDate, outputFormat);
+    // const targetDate = new Date(targetDate1);
+    // const currentDate = new Date();
+    // const timeDifference = currentDate - targetDate;
+    // const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    // const hoursAgo = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
+    // const minutesAgo = Math.floor((timeDifference / (1000 * 60)) % 60);
+    // if (daysAgo > 0) {
+    //   return `${daysAgo} day ago`;
+    // } else if (hoursAgo > 0) {
+    //   return `${hoursAgo} hour ago`;
+    // } else if (minutesAgo > 0) {
+    //   return `${minutesAgo} min ago`;
+    // } else {
+    //   return 'Just now';
+    // }
+    const now = moment();
+    const timeMoment = moment(time);
+
+    if (now.isSame(timeMoment, 'day')) {
+      return timeMoment.format('h:mm A'); // 4:20 PM
+    } else if (now.subtract(1, 'days').isSame(timeMoment, 'day')) {
+      return 'Yesterday';
     } else {
-      return 'Just now';
+      return timeMoment.format('DD/MMM'); // 04/Apr
     }
   };
 
@@ -100,9 +115,54 @@ export default function Chats({navigation}) {
           />
         </View>
         <ScrollView style={styles.scrollContianer}>
-          <View>
-            {chatDetails.map((item, index) => {
-                const timeAgo = calculateTimeAgo(item.time);
+          {
+            userData?.chat?.length > 0 ? (
+              <View >
+                {
+                  userData?.chat?.map((item, index) => {
+                    const timeAgo = calculateTimeAgo(item?.createdAt)
+                    const lastMessage = item?.messages?.length > 0 ? item?.messages[item?.messages?.length - 1]?.text : ''
+                    return (
+                      <SwipeProvider key={index}>
+                        <SwipeItem
+                          style={styles.chatSwipeContainer}
+                          swipeContainerStyle={{}}
+                          leftButtons={leftButton(index)}>
+                          <View style={styles.chatContainer} key={index}>
+                            <TouchableOpacity
+                              style={styles.chatDetailContainer}
+                              onPress={() => {
+                                navigation.navigate('ChatDetails', { chatRoomId: item?._id });
+                              }}>
+                              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Image
+                                  source={userData?.role == 'user' ? { uri: item?.barber?.profile } : { uri: item?.user?.profile }}
+                                  style={styles.profileImage} />
+                                <View style={styles.chatDetailsColumn}>
+                                  <Text style={styles.chatName}>
+                                    {userData?.role == 'user' ? item?.barber.name : item?.user?.name}
+                                  </Text>
+                                  <Text style={styles.chatDetail}>
+                                    {lastMessage}
+                                  </Text>
+                                </View>
+                              </View>
+                              <Text style={styles.chatTime}>
+                                {timeAgo}
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </SwipeItem>
+                      </SwipeProvider>
+                    )
+                  })
+                }
+              </View>
+            ) : (<Text></Text>)
+          }
+          {/* <View>
+            {userData?.chat?.length > 0 && userData?.chat?.map((item, index) => {
+              const timeAgo = calculateTimeAgo(item.time);
               return (
                 <SwipeProvider key={index}>
                   <SwipeItem
@@ -113,11 +173,11 @@ export default function Chats({navigation}) {
                       <TouchableOpacity
                         style={styles.chatDetailContainer}
                         onPress={() => {
-                            navigation.navigate('ChatDetails');
-                          }}>
-                        <Image 
-                        source={item.image} 
-                        style={styles.profileImage} />
+                          navigation.navigate('ChatDetails');
+                        }}>
+                        <Image
+                          source={item.image}
+                          style={styles.profileImage} />
                         <View style={styles.chatDetailsColumn}>
                           <Text style={styles.chatName}>
                             {item.name}
@@ -127,8 +187,8 @@ export default function Chats({navigation}) {
                           </Text>
                         </View>
                         <Text style={styles.chatTime}>
-                            {timeAgo}
-                         
+                          {timeAgo}
+
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -136,7 +196,7 @@ export default function Chats({navigation}) {
                 </SwipeProvider>
               );
             })}
-          </View>
+          </View> */}
         </ScrollView>
       </View>
     </SafeAreaView>

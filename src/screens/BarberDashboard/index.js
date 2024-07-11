@@ -50,37 +50,6 @@ export default function BarberDashboard({navigation}) {
     'Rachael McPhail Street...',
   );
 
-  const [lastServices, setLastServices] = useState([
-    {
-      serviceName: 'Haircut',
-      price: '25.0',
-      date: 'Oct 30',
-      time: '10:00 AM',
-      status: 'Done',
-    },
-    {
-      serviceName: 'Haircut',
-      price: '25.0',
-      date: 'Oct 30',
-      time: '10:00 AM',
-      status: 'Done',
-    },
-    {
-      serviceName: 'Beard',
-      price: '25.0',
-      date: 'Oct 30',
-      time: '10:00 AM',
-      status: 'Cancelled',
-    },
-    {
-      serviceName: 'Beard',
-      price: '25.0',
-      date: 'Oct 30',
-      time: '10:00 AM',
-      status: 'Cancelled',
-    },
-  ]);
-
   const [totalRating, setTotalRating] = useState([
     {
       star: '5',

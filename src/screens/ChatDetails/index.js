@@ -9,25 +9,56 @@ import {
   KeyboardAvoidingView,
   Dimensions,
   Keyboard,
+  ToastAndroid,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {styles} from './style';
+import React, { useEffect, useRef, useState } from 'react';
+import { styles } from './style';
 import BackArrow from '../../components/BackArrow';
 import images from '../../services/utilities/images';
-import {TextInput} from 'react-native-gesture-handler';
-import {colors, sizes} from '../../services';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { TextInput } from 'react-native-gesture-handler';
+import { colors, sizes } from '../../services';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import LottieView from 'lottie-react-native';
+import { useSelector } from 'react-redux';
+import { selectUserData } from '../../store/userData';
+import { selectAuthToken } from '../../store/authToken';
+import { sendMessage } from '../../services/config/API';
+import formatToJSON from '../../services/config/FormatToJson';
 
-export default function ChatDetails({navigation}) {
+export default function ChatDetails({ navigation, route }) {
+
+  const chatRoomId = route?.params?.chatRoomId
+  const userData = useSelector(selectUserData)
+  const authToken = useSelector(selectAuthToken)
+
+  console.log("chatRoomId", chatRoomId);
+
+  useEffect(() => {
+    if (chatRoomId) {
+      setChatId(chatRoomId)
+      handleSetChatName(chatRoomId)
+    }
+  }, [route.params])
+
   const scrollViewRef = useRef();
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [chatId, setChatId] = useState(null)
+  const [text, setText] = useState('')
+
+  const handleSetChatName = (_id) => {
+    const chat = userData?.chat?.find((chat => chat?._id === _id))
+    if (userData?.role === 'user') {
+      setChatName(chat?.barber?.name)
+    } else {
+      setChatName(chat?.user?.name)
+    }
+  }
 
   const scrollToBottom = () => {
     if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToEnd({animated: false});
+      scrollViewRef.current.scrollToEnd({ animated: false });
     } else {
       console.log('scrollViewRef.current is undefined');
     }
@@ -103,7 +134,7 @@ export default function ChatDetails({navigation}) {
       user: 'Duis aute irure dolor.',
     },
   ]);
-  const [chatName, setChatName] = useState('Cameron Wilson');
+  const [chatName, setChatName] = useState('');
   const [chatRecieve, setChatRecieve] = useState([
     {
       chat: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor 111',
@@ -150,12 +181,25 @@ export default function ChatDetails({navigation}) {
   let sendIndex = 0;
   while (receiveIndex < chatRecieve.length || sendIndex < chatSend.length) {
     if (receiveIndex < chatRecieve.length) {
-      mergedChats.push({type: 'receive', chat: chatRecieve[receiveIndex]});
+      mergedChats.push({ type: 'receive', chat: chatRecieve[receiveIndex] });
       receiveIndex++;
     }
     if (sendIndex < chatSend.length) {
-      mergedChats.push({type: 'send', chat: chatSend[sendIndex]});
+      mergedChats.push({ type: 'send', chat: chatSend[sendIndex] });
       sendIndex++;
+    }
+  }
+
+  const handlesendMessage = async () => {
+    try {
+      // console.log(text);
+      // console.log(chatId);
+      setText('')
+      const body = { text }
+      const response = await sendMessage(authToken, chatId, body)
+      console.log(response?.status);
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -175,7 +219,7 @@ export default function ChatDetails({navigation}) {
         <View style={styles.container}>
           <View style={styles.row}>
             <BackArrow onPress={() => navigation.goBack()} />
-            <Text style={styles.headerText}>{chatName}</Text>
+            <Text style={styles.headerText}>{chatName ? chatName : ''}</Text>
             {/* <TouchableOpacity style={styles.phoneIcon}>
             <Image source={images.phoneIcon} />
           </TouchableOpacity> */}
@@ -190,16 +234,33 @@ export default function ChatDetails({navigation}) {
                 <View
                   style={
                     keyboardOpen
-                      ? {height: sizes.screenHeight * 0.46}
-                      : {height: 25}
+                      ? { height: sizes.screenHeight * 0.46 }
+                      : { height: 25 }
                   }
                 />
                 <View style={styles.containerBody}>
-                  {conversation.map((item, index) => (
-                    <View style={styles.chatRecieved} key={index}>
-                      <Text style={styles.chatText}>{item.chat}</Text>
-                    </View>
-                  ))}
+                  {/* {chatId &&
+                    userData?.chat?.length > 0 &&
+                    userData?.chat?.filter(chat => chat?._id === chatId)
+                      .messages?.map((item, index) => (
+                        <View style={styles.chatRecieved} key={index}>
+                          <Text style={styles.chatText}>{item.chat}</Text>
+                        </View>
+                      ))} */}
+                  {chatId &&
+                    userData?.chat?.length > 0 &&
+                    userData?.chat
+                      .filter(chat => chat?._id === chatId)
+                      .map((chat) =>
+                        chat?.messages?.map((item, index) => {
+                          // console.log(item);
+                          return (
+                            <View style={item?.sender === userData?._id ? styles.chatSend : styles.chatRecieved} key={index}>
+                              <Text style={styles.chatText}>{item.text}</Text>
+                            </View>
+                          )
+                        })
+                      )}
                 </View>
               </ScrollView>
             </View>
@@ -215,8 +276,12 @@ export default function ChatDetails({navigation}) {
                 multiline={true}
                 numberOfLines={2}
                 style={styles.textInputContainer}
+                value={text}
+                onChangeText={(text) => setText(text)}
               />
-              <TouchableOpacity style={styles.arrowBlackIcon}>
+              <TouchableOpacity style={styles.arrowBlackIcon}
+                onPress={handlesendMessage}
+              >
                 <Image source={images.arrowBlackIcon} />
               </TouchableOpacity>
             </View>

@@ -62,7 +62,6 @@ export default function Signup({navigation}) {
             console.log(userData);
 
             if (role === 'user') {
-              console.log('clicked');
               navigation.navigate('ProfilePrompt', {userData});
             } else {
               navigation.navigate('SetUpOutlet', {userData});

@@ -431,7 +431,8 @@ export default function ServiceInfo({ navigation, route }) {
                 servicesData[currentIndex]?.options?.length > 0 && (
                   <View style={styles.tableHeadingRow}>
                     <Text style={styles.tableServiceHeading}>
-                      {serviceName}
+                      {/* {serviceName} */}
+                      {services[currentIndex]?.name}
                     </Text>
                     <Text style={styles.tablePriceHeading}>Price</Text>
                   </View>

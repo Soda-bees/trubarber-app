@@ -68,7 +68,7 @@ export const styles = StyleSheet.create({
   chatContainer: {
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: colors.lightgray,
+    backgroundColor: colors.disabledBg,
     height: sizes.screenHeight * 0.1,
     borderRadius: sizes.screenWidth * 0.03,
     flexDirection: 'row',
@@ -80,7 +80,9 @@ export const styles = StyleSheet.create({
   chatDetailContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-
+    // backgroundColor:'red',
+    flex:1,
+    justifyContent:'space-between'
   },
   chatName: {
     fontSize: fontSize.medium,

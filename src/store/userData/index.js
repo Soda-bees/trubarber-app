@@ -35,7 +35,6 @@ const userDataSlice = createSlice({
                 state.userData.appoinment.push(appoinment)
             }
             if (state.userData && appoinment.barber._id === state.userData._id) {
-                console.log("barber update");
                 state.userData.appoinment.push(appoinment)
             }
         },
@@ -46,10 +45,27 @@ const userDataSlice = createSlice({
                     appointment._id === _id ? { ...appointment, status } : appointment
                 );
             }
+        },
+        addMessageInChatRoom: (state, action) => {
+            const { chatRoomId, newMessage } = action.payload
+            console.log("new message redux", chatRoomId, newMessage);
+            const chatIndex = state.userData.chat.findIndex(chat => chat._id === chatRoomId);
+            if (chatIndex !== -1) {
+                // Update the chat room with the new message
+                state.userData.chat[chatIndex].messages.push(newMessage);
+            }
         }
     }
 })
 
-export const { setUserData, removeUserData, updateServiceRedux, deleteServiceRedux, addAppoinment, updateAppointmendStatus } = userDataSlice.actions
+export const {
+    setUserData,
+    removeUserData,
+    updateServiceRedux,
+    deleteServiceRedux,
+    addAppoinment,
+    updateAppointmendStatus,
+    addMessageInChatRoom
+} = userDataSlice.actions
 export const selectUserData = state => state.user.userData
 export default userDataSlice.reducer

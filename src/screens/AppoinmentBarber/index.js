@@ -32,11 +32,11 @@ export default function AppoinmentBarber({ navigation }) {
   const authToken = useSelector(selectAuthToken)
 
   const [startTime, setStartTime] = useState(new Date());
-  const [clientName, setClientName] = useState('John D.');
-  const [clientDate, setClientDate] = useState('Mon, Aug 12');
-  const [clientTime, setClientTime] = useState('1 PM');
-  const [service, setService] = useState('Haircut');
-  const [style, setStyle] = useState('Buzzcut');
+  const [clientName, setClientName] = useState('');
+  const [clientDate, setClientDate] = useState('');
+  const [clientTime, setClientTime] = useState('');
+  const [service, setService] = useState('');
+  const [style, setStyle] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [modalServiceName, setModalServiceName] = useState('Beard Trim');
   const [modalStatus, setModalStatus] = useState('Pending');
@@ -318,53 +318,55 @@ export default function AppoinmentBarber({ navigation }) {
               Your Schedule Overview: Keep track of upcoming and completed
               appointments here.
             </Text>
-
-            <View style={styles.clientView}>
-              <Text style={styles.clientHeading}>Next client</Text>
-              <View style={styles.clientContianer}>
-                <View style={styles.containerRow}>
-                  <View style={styles.clientRowBox}>
-                    <Image
-                      source={images.profileSmall}
-                      style={styles.clientBoxImg}
-                    />
-                    <Text style={styles.clientDetailTxt}>{clientName}</Text>
+            {
+              clientName || clientDate ?
+                <View style={styles.clientView}>
+                  <Text style={styles.clientHeading}>Next client</Text>
+                  <View style={styles.clientContianer}>
+                    <View style={styles.containerRow}>
+                      <View style={styles.clientRowBox}>
+                        <Image
+                          source={images.profileSmall}
+                          style={styles.clientBoxImg}
+                        />
+                        <Text style={styles.clientDetailTxt}>{clientName}</Text>
+                      </View>
+                      <View style={styles.clientRowBox}>
+                        <Image
+                          source={images.calendarSmall}
+                          style={styles.clientBoxImg}
+                        />
+                        <Text style={styles.clientDetailTxt}>{clientDate}</Text>
+                      </View>
+                      <View style={styles.clientRowBox}>
+                        <Image
+                          source={images.clockSmall}
+                          style={styles.clientBoxImg}
+                        />
+                        <Text style={styles.clientDetailTxt}>{clientTime}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.containerRowTwo}>
+                      <View style={styles.containerRowThree}>
+                        <Text style={styles.clientDetailTxtBlackTwo}>Service</Text>
+                        {/* <Image
+                        source={images.arrowForward}
+                        style={styles.forwardArrow}
+                      /> */}
+                        <Text style={styles.serviceDetailTxt}>{service}</Text>
+                      </View>
+                      <View style={styles.containerRowThree}>
+                        <Text style={styles.clientDetailTxtBlackTwo}>Style</Text>
+                        {/* <Image
+                        source={images.arrowForward}
+                        style={styles.forwardArrow}
+                      /> */}
+                        <Text style={styles.serviceDetailTxt}>{style}</Text>
+                      </View>
+                    </View>
                   </View>
-                  <View style={styles.clientRowBox}>
-                    <Image
-                      source={images.calendarSmall}
-                      style={styles.clientBoxImg}
-                    />
-                    <Text style={styles.clientDetailTxt}>{clientDate}</Text>
-                  </View>
-                  <View style={styles.clientRowBox}>
-                    <Image
-                      source={images.clockSmall}
-                      style={styles.clientBoxImg}
-                    />
-                    <Text style={styles.clientDetailTxt}>{clientTime}</Text>
-                  </View>
-                </View>
-                <View style={styles.containerRowTwo}>
-                  <View style={styles.containerRowThree}>
-                    <Text style={styles.clientDetailTxtBlackTwo}>Service</Text>
-                    {/* <Image
-                      source={images.arrowForward}
-                      style={styles.forwardArrow}
-                    /> */}
-                    <Text style={styles.serviceDetailTxt}>{service}</Text>
-                  </View>
-                  <View style={styles.containerRowThree}>
-                    <Text style={styles.clientDetailTxtBlackTwo}>Style</Text>
-                    {/* <Image
-                      source={images.arrowForward}
-                      style={styles.forwardArrow}
-                    /> */}
-                    <Text style={styles.serviceDetailTxt}>{style}</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
+                </View> : null
+            }
             <View style={styles.calenderView}>
               <View style={styles.containerRow}>
                 <Text style={styles.calenderHeaidng}>Calender</Text>

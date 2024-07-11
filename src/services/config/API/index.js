@@ -269,3 +269,16 @@ export const updateAppointmentStatus = async (token, id) => {
     return error;
   }
 };
+
+export const sendMessage = async (token, chatId, body) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post(`user/sendMessage/${chatId}`, body, { headers });
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
