@@ -298,7 +298,6 @@ export default function BookingProcess({navigation, route}) {
           response?.data?.message,
           onHide,
         );
-        dispatch(addAppoinment(response?.data?.appoinment));
       } else {
         setLoader(false);
         ErrorShow('error', 'Oops!', response?.data?.message);
