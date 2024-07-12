@@ -48,12 +48,61 @@ const userDataSlice = createSlice({
         },
         addMessageInChatRoom: (state, action) => {
             const { chatRoomId, newMessage } = action.payload
-            console.log("new message redux", chatRoomId, newMessage);
             const chatIndex = state.userData.chat.findIndex(chat => chat._id === chatRoomId);
             if (chatIndex !== -1) {
                 // Update the chat room with the new message
                 state.userData.chat[chatIndex].messages.push(newMessage);
             }
+        },
+        addNewChatInRedux: (state, action) => {
+            const newChat = action.payload;
+            if (state.userData && newChat.user._id === state.userData._id || newChat.barber._id === state.userData._id) {
+                state.userData.chat.push(newChat)
+            }
+        },
+        addAndUpdateNewChatInRedux: (state, action) => {
+            const newChat = action.payload;
+            console.log("addAndUpdateNewChat redux", formatToJSON(newChat));
+            if (state.userData && newChat.user._id === state.userData._id || newChat.barber._id === state.userData._id) {
+                const existingChatIndex = state.userData.chat.findIndex(chat => chat._id === newChat._id);
+                if (existingChatIndex !== -1) {
+                    // Replace the existing chat with newChat
+                    state.userData.chat[existingChatIndex] = newChat;
+                } else {
+                    // Add newChat to userData.chat
+                    state.userData.chat.push(newChat);
+                }
+            }
+        },
+        setSeenTrueRedux: (state, action) => {
+            const { chatRoomId, messageIds } = action.payload;
+            const updatedChats = state.userData.chat.map(chat => {
+                if (chat._id === chatRoomId) {
+                  const updatedMessages = chat.messages.map(message => {
+                    if (messageIds.includes(message._id)) {
+                      return {
+                        ...message,
+                        seen: true,
+                      };
+                    }
+                    return message; 
+                  });
+            
+                  return {
+                    ...chat,
+                    messages: updatedMessages,
+                  };
+                }
+                return chat; 
+              });
+            
+              return {
+                ...state,
+                userData: {
+                  ...state.userData,
+                  chat: updatedChats,
+                },
+              };
         }
     }
 })
@@ -65,7 +114,10 @@ export const {
     deleteServiceRedux,
     addAppoinment,
     updateAppointmendStatus,
-    addMessageInChatRoom
+    addMessageInChatRoom,
+    addNewChatInRedux,
+    addAndUpdateNewChatInRedux,
+    setSeenTrueRedux
 } = userDataSlice.actions
 export const selectUserData = state => state.user.userData
 export default userDataSlice.reducer

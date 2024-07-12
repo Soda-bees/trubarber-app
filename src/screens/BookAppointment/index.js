@@ -7,6 +7,7 @@ import {
   ScrollView,
   SafeAreaView,
   Platform,
+  ToastAndroid,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { styles } from './style.js';
@@ -17,11 +18,18 @@ import { colors, sizes } from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
+import { selectUserData } from '../../store/userData/index.js';
+import { selectAuthToken } from '../../store/authToken/index.js';
+import { createChatRoom } from '../../services/config/API/index.js';
 
 export default function BookAppointment({ navigation, route }) {
   const barbar = route?.params?.item;
+  const userData = useSelector(selectUserData)
+  const authToken = useSelector(selectAuthToken)
   // console.log('param wala data h yeh', formatToJSON(barbar));
   const [services, setServices] = useState([]);
+  const [chatRoomId, setChatRoomId] = useState(null)
 
   const [rating, setRatings] = useState([
     {
@@ -111,7 +119,7 @@ export default function BookAppointment({ navigation, route }) {
   ]);
 
   const [tab, setTabs] = useState('About');
-  const [status , setStatus] = useState(null)
+  const [status, setStatus] = useState(null)
 
   const handleGoback = () => {
     navigation.goBack();
@@ -119,9 +127,46 @@ export default function BookAppointment({ navigation, route }) {
 
   useEffect(() => {
     setServices(barbar?.services);
-    console.log(barbar.time);
     handleStatus(barbar.time)
+    findChat()
   }, [barbar]);
+
+  const findChat = async () => {
+    try {
+      const isChat = await findChatInRedux()
+      console.log("isChat", isChat);
+      if (!isChat) {
+        const body = {
+          user: userData?._id,
+          barber: barbar?._id
+        }
+        console.log("api hit hog i chat room baner g");
+        const response = await createChatRoom(authToken, body)
+        console.log(response?.status , response?.data?.message);
+        if (response?.status == 201) {
+          setChatRoomId(response?.data?.newChat?._id)
+        } else {
+          setChatRoomId(null)
+          console.log(response?.data?.message);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const findChatInRedux = async () => {
+    const name = barbar?._id + userData?._id
+    const name2 = userData?._id + barbar?._id
+    const chat = await userData?.chat?.find(chat => chat.name === name || chat.name === name2)
+    if (chat) {
+      setChatRoomId(chat?._id)
+      return true
+    } else {
+      setChatRoomId(null)
+      return false
+    }
+  }
 
   const handleStatus = openHours => {
     const [startTime, endTime] = openHours.split(' - ');
@@ -143,6 +188,14 @@ export default function BookAppointment({ navigation, route }) {
       setStatus('close')
     }
   };
+
+  const handleNavigateToChat = async () => {
+    if (chatRoomId) {
+      navigation.navigate('ChatDetails', { chatRoomId });
+    } else {
+      ToastAndroid.show('Something wents wrong, Please try again', ToastAndroid.LONG);
+    }
+  }
 
   return (
     <SafeAreaView>
@@ -204,7 +257,9 @@ export default function BookAppointment({ navigation, route }) {
             </TouchableOpacity>
           </View>
           <View>
-            <TouchableOpacity style={styles.btnColor}>
+            <TouchableOpacity style={styles.btnColor}
+              onPress={handleNavigateToChat}
+            >
               <Image
                 style={styles.direction}
                 source={images.Send}

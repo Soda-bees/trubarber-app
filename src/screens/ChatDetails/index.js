@@ -10,6 +10,7 @@ import {
   Dimensions,
   Keyboard,
   ToastAndroid,
+  BackHandler,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { styles } from './style';
@@ -20,10 +21,10 @@ import { colors, sizes } from '../../services';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import LottieView from 'lottie-react-native';
-import { useSelector } from 'react-redux';
-import { selectUserData } from '../../store/userData';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserData, setSeenTrueRedux } from '../../store/userData';
 import { selectAuthToken } from '../../store/authToken';
-import { sendMessage } from '../../services/config/API';
+import { sendMessage, setSeenTrue } from '../../services/config/API';
 import formatToJSON from '../../services/config/FormatToJson';
 
 export default function ChatDetails({ navigation, route }) {
@@ -31,13 +32,13 @@ export default function ChatDetails({ navigation, route }) {
   const chatRoomId = route?.params?.chatRoomId
   const userData = useSelector(selectUserData)
   const authToken = useSelector(selectAuthToken)
-
-  console.log("chatRoomId", chatRoomId);
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (chatRoomId) {
       setChatId(chatRoomId)
       handleSetChatName(chatRoomId)
+      handleUpdateSeen(chatRoomId)
     }
   }, [route.params])
 
@@ -203,6 +204,46 @@ export default function ChatDetails({ navigation, route }) {
     }
   }
 
+  const handleUpdateSeen = async (chatRoomId) => {
+    try {
+      // const chat = userData?.chat?.find(chat => chat?._id === chatRoomId);
+      // let filteredMessages = [];
+      // if (chat) {
+      //   filteredMessages = chat.messages.filter(message => message?.sender !== userData?._id && message.seen === false)
+      //     .map(message => message._id);
+      // }
+
+      let filteredMessages = [];
+
+      filteredMessages = userData?.chat
+        ?.find(chat => chat?._id === chatRoomId)
+        ?.messages
+        ?.filter(message => message?.sender !== userData?._id && message.seen === false)
+        ?.map(message => message._id) || [];
+      console.log(filteredMessages);
+      if(filteredMessages?.length > 0){
+        dispatch(setSeenTrueRedux({chatRoomId , messageIds:filteredMessages}))
+        const response = await setSeenTrue(authToken, filteredMessages)
+        console.log(response?.data?.message);
+      }
+      } catch (error) {
+      console.log("-=-==--= ", error);
+    }
+  }
+
+  const handleBackButtonClick = () => {
+    handleUpdateSeen(chatRoomId);
+    navigation.goBack();
+    return true; // Ensure the back press is handled
+  };
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+
+    // Cleanup function to remove the event listener
+    return () => backHandler.remove();
+  }, [userData]);
+
   return (
     <SafeAreaView>
       {loader ? (
@@ -218,11 +259,11 @@ export default function ChatDetails({ navigation, route }) {
       ) : (
         <View style={styles.container}>
           <View style={styles.row}>
-            <BackArrow onPress={() => navigation.goBack()} />
+            <BackArrow onPress={() => {
+              handleUpdateSeen(chatRoomId)
+              navigation.goBack()
+            }} />
             <Text style={styles.headerText}>{chatName ? chatName : ''}</Text>
-            {/* <TouchableOpacity style={styles.phoneIcon}>
-            <Image source={images.phoneIcon} />
-          </TouchableOpacity> */}
           </View>
           <View style={styles.chatSubContianer}>
             <View>
@@ -239,14 +280,6 @@ export default function ChatDetails({ navigation, route }) {
                   }
                 />
                 <View style={styles.containerBody}>
-                  {/* {chatId &&
-                    userData?.chat?.length > 0 &&
-                    userData?.chat?.filter(chat => chat?._id === chatId)
-                      .messages?.map((item, index) => (
-                        <View style={styles.chatRecieved} key={index}>
-                          <Text style={styles.chatText}>{item.chat}</Text>
-                        </View>
-                      ))} */}
                   {chatId &&
                     userData?.chat?.length > 0 &&
                     userData?.chat

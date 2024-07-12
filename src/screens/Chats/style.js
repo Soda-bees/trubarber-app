@@ -94,13 +94,14 @@ export const styles = StyleSheet.create({
     color: colors.gratsText,
     lineHeight: sizes.screenHeight * 0.03,
     fontWeight: '500',
+    // backgroundColor:'red',
+    width:sizes.screenWidth * 0.6
   },
   chatTime: {
     fontSize: fontSize.small,
-    color: colors.gratsText,
+    color: colors.black,
     fontWeight: '500',
     alignSelf: 'flex-start',
-    right:sizes.screenWidth*0.04,
   },
   profileImage: {
     height: sizes.screenHeight * 0.06,
@@ -112,4 +113,15 @@ export const styles = StyleSheet.create({
     marginStart: sizes.screenWidth * 0.02,
     flexDirection: 'column',
   },
+
+  newMsgsContainer:{
+    backgroundColor: colors.white,
+    height: sizes.screenWidth*0.05,
+    width: sizes.screenWidth*0.05,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop:sizes.screenWidth * 0.015,
+    marginRight:sizes.screenWidth * 0.02,
+  }
 });

@@ -270,6 +270,19 @@ export const updateAppointmentStatus = async (token, id) => {
   }
 };
 
+export const createChatRoom = async (token,  body) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post("user/createChatRoom", body, { headers });
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
 export const sendMessage = async (token, chatId, body) => {
   try {
     const headers = {
@@ -277,6 +290,20 @@ export const sendMessage = async (token, chatId, body) => {
       Authorization: `Bearer ${token}`,
     };
     const response = await axiosInstance.post(`user/sendMessage/${chatId}`, body, { headers });
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+
+export const setSeenTrue = async (token, messageIds) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post(`user/setSeenTrue`, {messageIds}, { headers });
     return response;
   } catch (error) {
     return error;

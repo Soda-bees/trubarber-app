@@ -26,6 +26,7 @@ import { selectAuthToken } from '../../store/authToken';
 import { updateAppointmentStatus } from '../../services/config/API';
 import formatToJSON from '../../services/config/FormatToJson';
 import Toast from 'react-native-toast-message';
+import ChatConponent from '../../components/ChatComponent';
 export default function AppoinmentBarber({ navigation }) {
 
   const barber = useSelector(selectUserData);
@@ -286,13 +287,14 @@ export default function AppoinmentBarber({ navigation }) {
                     source={images.notification}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   style={styles.notificationContainer}
                   onPress={() => {
                     navigation.navigate('Chats');
                   }}>
                   <Image style={styles.iconImage} source={images.chat} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+                <ChatConponent />
               </View>
             </View>
             {/* <View style={styles.inputContainer}>

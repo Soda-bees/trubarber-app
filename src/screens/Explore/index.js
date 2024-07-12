@@ -30,6 +30,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import formatToJSON from '../../services/config/FormatToJson';
 import {socket, socketService} from '../../services/Socket';
 import {selectUserData} from '../../store/userData';
+import ChatConponent from '../../components/ChatComponent';
 
 export default function Explore({navigation}) {
   const userData = useSelector(selectUserData);
@@ -295,13 +296,14 @@ export default function Explore({navigation}) {
                       source={images.notification}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity
+                  <ChatConponent />
+                  {/* <TouchableOpacity
                     style={styles.notificationContainer}
                     onPress={() => {
                       navigation.navigate('Chats');
                     }}>
                     <Image style={styles.iconImage} source={images.chat} />
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </View>
               </View>
               <View style={styles.inputContainer}>

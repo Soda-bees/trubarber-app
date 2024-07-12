@@ -1,6 +1,6 @@
 import io from "socket.io-client"
 import { BASE_URL } from "../config/AxiosInstance"
-import { addAppoinment, addMessageInChatRoom, updateAppointmendStatus } from "../../store/userData";
+import { addAndUpdateNewChatInRedux, addAppoinment, addMessageInChatRoom, addNewChatInRedux, updateAppointmendStatus } from "../../store/userData";
 
 let socket;
 
@@ -30,14 +30,28 @@ const socketService = (dispatch, authToken, userData) => {
         dispatch(addMessageInChatRoom(data))
     }
 
+    const handleAddNewChatRoom = async (data) => {
+        console.log("new chat socket");
+        dispatch(addNewChatInRedux(data))
+    }
+
+    const handleAddAndUpdateNewChat = async (data) => {
+        console.log("handleAddAndUpdateNewChat socket");
+        dispatch(addAndUpdateNewChatInRedux(data))
+    }
+
     socket.on('newAppoinment', handleReceivedNewAppoinment)
     socket.on('appointmentStatusUpdate', handleUpdateAppointmendStatus)
     socket.on('newMessage', handleAddNewMessage)
+    socket.on('newChatRoom', handleAddNewChatRoom)
+    socket.on('existingChatRoomUpdate', handleAddAndUpdateNewChat)
 
     const cleanup = () => {
         socket.off('newAppoinment', handleReceivedNewAppoinment);
         socket.off('appointmentStatusUpdate', handleUpdateAppointmendStatus);
         socket.off('newMessage', handleAddNewMessage);
+        socket.off('newChatRoom', handleAddNewChatRoom);
+        socket.off('existingChatRoomUpdate', handleAddAndUpdateNewChat);
     }
     return cleanup
 }

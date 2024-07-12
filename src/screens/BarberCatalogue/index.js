@@ -14,6 +14,7 @@ import { colors } from '../../services';
 import { useSelector } from 'react-redux';
 import { selectUserData } from '../../store/userData';
 import formatToJSON from '../../services/config/FormatToJson';
+import ChatConponent from '../../components/ChatComponent';
 
 export default function BaberCatalogue({ navigation }) {
   const userData = useSelector(selectUserData)
@@ -68,12 +69,13 @@ export default function BaberCatalogue({ navigation }) {
                     source={images.notification}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.notificationContainer}
+                {/* <TouchableOpacity style={styles.notificationContainer}
                   onPress={() => {
                     navigation.navigate('Chats');
                   }}>
                   <Image style={styles.iconImage} source={images.chat} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+                <ChatConponent />
               </View>
             </View>
             <View style={styles.inputContainer}>

@@ -9,7 +9,8 @@ export const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: sizes.screenHeight * 0.04,
+    marginTop: sizes.screenHeight * 0.02,
+    paddingBottom: sizes.screenHeight * 0.02,
     paddingHorizontal: sizes.screenWidth * 0.04,
   },
 
@@ -90,7 +91,7 @@ export const styles = StyleSheet.create({
     borderTopLeftRadius: sizes.screenWidth * 0.05,
     borderTopRightRadius: sizes.screenWidth * 0.05,
     borderBottomStartRadius: sizes.screenWidth * 0.05,
-    marginBottom: sizes.screenHeight * 0.02,
+    marginBottom: sizes.screenHeight * 0.03,
     marginStart: sizes.screenWidth * 0.15,
   },
   texInputView: {
@@ -101,6 +102,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    width:sizes.screenWidth * 0.95,
+    alignSelf:'center',
+    bottom:sizes.screenWidth * 0.015
     // marginBottom:sizes.screenHeight * 0,
     // bottom:sizes.screenHeight* 0.1,
     // backgroundColor:colors.black
@@ -118,7 +122,8 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   textInputContainer: {
-    width: sizes.screenWidth * 0.72,
+    backgroundColor:'white',
+    width: sizes.screenWidth * 0.75,
     height: sizes.screenHeight * 0.07,
     color: colors.black,
   },
@@ -126,6 +131,7 @@ export const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: sizes.screenWidth * 0.05,
     height: sizes.screenWidth * 0.05,
+    marginRight:sizes.screenWidth * 0.01
   },
   laoderContainer: {
     backgroundColor: '#FBFAFA',

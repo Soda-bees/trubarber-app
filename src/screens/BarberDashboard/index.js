@@ -12,26 +12,28 @@ import {
   PermissionsAndroid,
   Alert,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style';
 import images from '../../services/utilities/images';
-import {colors, sizes} from '../../services';
-import {StarRatingDisplay} from 'react-native-star-rating-widget';
+import { colors, sizes } from '../../services';
+import { StarRatingDisplay } from 'react-native-star-rating-widget';
 import * as Progress from 'react-native-progress';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import {useDispatch, useSelector} from 'react-redux';
-import {setLocation} from '../../store/location';
-import {socket, socketService} from '../../services/Socket';
-import {selectUserData} from '../../store/userData';
-import {selectAuthToken} from '../../store/authToken';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLocation } from '../../store/location';
+import { socket, socketService } from '../../services/Socket';
+import { selectUserData } from '../../store/userData';
+import { selectAuthToken } from '../../store/authToken';
 import formatToJSON from '../../services/config/FormatToJson';
+import ChatConponent from '../../components/ChatComponent';
 
-export default function BarberDashboard({navigation}) {
+export default function BarberDashboard({ navigation }) {
   const dispatch = useDispatch();
   const userData = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken);
   // console.log('barber pr data h yeh', formatToJSON(userData));
+
 
   const [numberOfCompletedAppointments, setNumberOfCompletedAppointments] =
     useState(0);
@@ -166,7 +168,7 @@ export default function BarberDashboard({navigation}) {
   const getCurrentLocation = (setRegion, dispatch) => {
     Geolocation.getCurrentPosition(
       position => {
-        const {latitude, longitude} = position.coords;
+        const { latitude, longitude } = position.coords;
         // console.log(
         //   position.coords,
         //   '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
@@ -203,7 +205,7 @@ export default function BarberDashboard({navigation}) {
     const year = parseInt(parts[2], 10);
     const dateObj = new Date(year, month, day);
     // const options = {weekday: 'short', month: 'short', day: 'numeric'};
-    const options = {month: 'short', day: 'numeric'};
+    const options = { month: 'short', day: 'numeric' };
 
     return dateObj.toLocaleDateString('en-US', options);
   };
@@ -233,6 +235,24 @@ export default function BarberDashboard({navigation}) {
     }
   }, [userData]);
 
+  // const handleCelculateTotalUnseenMessage = async () => {
+  //   let totalUnseenMessages = 0;
+
+  //   // Assuming `chats` is your array of chat rooms
+  //   userData?.chat?.forEach(chatRoom => {
+  //     // Count unseen messages not sent by the current user in the current chat room
+  //     const unseenMessagesCount = chatRoom.messages.filter(message => !message.seen && message.sender !== userData._id).length;
+
+  //     // Add to the total count
+  //     totalUnseenMessages += unseenMessagesCount;
+  //   });
+
+  //   console.log("Total unseen messages:", totalUnseenMessages);
+
+  // }
+
+
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -244,7 +264,7 @@ export default function BarberDashboard({navigation}) {
             <View style={styles.topIconRow}>
               <View
                 style={styles.locationRow}
-                // onPress={() => navigation.navigate('WholeMap')}
+              // onPress={() => navigation.navigate('WholeMap')}
               >
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
@@ -267,13 +287,14 @@ export default function BarberDashboard({navigation}) {
                     source={images.notification}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity
+                <ChatConponent />
+                {/* <TouchableOpacity
                   style={styles.notificationContainer}
                   onPress={() => {
                     navigation.navigate('Chats');
                   }}>
                   <Image style={styles.iconImage} source={images.chat} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </View>
             {/* <View style={styles.inputContainer}>
@@ -325,7 +346,7 @@ export default function BarberDashboard({navigation}) {
                 </Text>
               </View>
             ) : (
-              <View style={{marginBottom: 15}}>
+              <View style={{ marginBottom: 15 }}>
                 <View style={styles.appointmentBtn}>
                   <Text style={styles.headingSummary}>Appointments</Text>
                   <TouchableOpacity
