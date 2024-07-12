@@ -1,55 +1,131 @@
-import { createSlice } from "@reduxjs/toolkit";
-import formatToJSON from "../../services/config/FormatToJson";
+import {createSlice} from '@reduxjs/toolkit';
+import formatToJSON from '../../services/config/FormatToJson';
 
 const userDataSlice = createSlice({
-    name: "userData",
-    initialState: {
-        userData: null
+  name: 'userData',
+  initialState: {
+    userData: null,
+  },
+  reducers: {
+    setUserData: (state, action) => {
+      state.userData = action.payload;
     },
-    reducers: {
-        setUserData: (state, action) => {
-            state.userData = action.payload
-        },
-        removeUserData: (state) => {
-            state.userData = null
-        },
-        updateServiceRedux: (state, action) => {
-            const updatedService = action.payload;
-            if (state.userData && state.userData.services) {
-                state.userData.services = state.userData.services.map(service =>
-                    service._id === updatedService._id ? updatedService : service
-                );
-            }
-        },
-        deleteServiceRedux: (state, action) => {
-            const deletedService = action.payload;
-            if (state.userData && state.userData.services) {
-                state.userData.services = state.userData.services.filter(
-                    service => service._id !== deletedService
-                );
-            }
-        },
-        addAppoinment: (state, action) => {
-            const appoinment = action.payload;
-            if (state.userData && appoinment.user._id === state.userData._id) {
-                state.userData.appoinment.push(appoinment)
-            }
-            if (state.userData && appoinment.barber._id === state.userData._id) {
-                console.log("barber update");
-                state.userData.appoinment.push(appoinment)
-            }
-        },
-        updateAppointmendStatus: (state, action) => {
-            const { _id, status } = action.payload
-            if (state.userData && state.userData.appoinment) {
-                state.userData.appoinment = state.userData.appoinment.map(appointment =>
-                    appointment._id === _id ? { ...appointment, status } : appointment
-                );
-            }
-        }
-    }
-})
+    removeUserData: state => {
+      state.userData = null;
+    },
+    updateServiceRedux: (state, action) => {
+      const updatedService = action.payload;
+      if (state.userData && state.userData.services) {
+        state.userData.services = state.userData.services.map(service =>
+          service._id === updatedService._id ? updatedService : service,
+        );
+      }
+    },
+    deleteServiceRedux: (state, action) => {
+      const deletedService = action.payload;
+      if (state.userData && state.userData.services) {
+        state.userData.services = state.userData.services.filter(
+          service => service._id !== deletedService,
+        );
+      }
+    },
+    addAppoinment: (state, action) => {
+      const appoinment = action.payload;
+      if (state.userData && appoinment.user._id === state.userData._id) {
+        state.userData.appoinment.push(appoinment);
+      }
+      if (state.userData && appoinment.barber._id === state.userData._id) {
+        console.log('barber update');
+        state.userData.appoinment.push(appoinment);
+      }
+    },
+    updateAppointmendStatus: (state, action) => {
+      const {_id, status} = action.payload;
+      if (state.userData && state.userData.appoinment) {
+        state.userData.appoinment = state.userData.appoinment.map(appointment =>
+          appointment._id === _id ? {...appointment, status} : appointment,
+        );
+      }
+    },
+    addReview: (state, action) => {
+      const review = action.payload;
+      if (state.userData && review.userData._id === state.userData._id) {
+        console.log('Userrrrrrrrrrrrr', review);
+        return {
+          ...state,
+          userData: {
+            ...state.userData,
+            reviews: [...state.userData.reviews, review],
+          },
+        };
+      }
+      if (state.userData && review.barberData === state.userData._id) {
+        console.log('Barberrrrrrrrrr', review);
+        return {
+          ...state,
+          userData: {
+            ...state.userData,
+            reviews: [...state.userData.reviews, review],
+          },
+        };
+      }
+    },
+    updateReview: (state, action) => {
+      const updatedReview = action.payload;
 
-export const { setUserData, removeUserData, updateServiceRedux, deleteServiceRedux, addAppoinment, updateAppointmendStatus } = userDataSlice.actions
-export const selectUserData = state => state.user.userData
-export default userDataSlice.reducer
+      if (state.userData) {
+        if (
+          updatedReview.userData._id === state.userData._id ||
+          updatedReview.barberData === state.userData._id
+        ) {
+          console.log('Review update:', updatedReview);
+
+          const reviewIndex = state.userData.reviews.findIndex(
+            review => review._id === updatedReview._id,
+          );
+
+          if (reviewIndex !== -1) {
+            state.userData.reviews[reviewIndex] = updatedReview;
+          }
+        }
+      }
+    },
+
+    deleteReview: (state, action) => {
+      const deletedReview = action.payload;
+
+      if (state.userData) {
+        if (
+          deletedReview.userData._id === state.userData._id ||
+          deletedReview.barberData === state.userData._id
+        ) {
+          console.log('Review delete:', deletedReview);
+
+          const reviewIndex = state.userData.reviews.findIndex(
+            review => review._id === deletedReview._id,
+          );
+
+          if (reviewIndex !== -1) {
+            state.userData.reviews.splice(reviewIndex, 1);
+          }
+        }
+      }
+
+      return state;
+    },
+  },
+});
+
+export const {
+  setUserData,
+  removeUserData,
+  updateServiceRedux,
+  deleteServiceRedux,
+  addAppoinment,
+  updateAppointmendStatus,
+  addReview,
+  updateReview,
+  deleteReview,
+} = userDataSlice.actions;
+export const selectUserData = state => state.user.userData;
+export default userDataSlice.reducer;

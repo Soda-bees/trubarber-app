@@ -22,15 +22,31 @@ import moment from 'moment';
 import {useSelector} from 'react-redux';
 import {selectUserData} from '../../store/userData/index.js';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import {selectAuthToken} from '../../store/authToken/index.js';
+import Modal from 'react-native-modal';
+import {
+  deleteReview,
+  postReview,
+  updateReview,
+} from '../../services/config/API/index.js';
+import {ErrorShow} from '../../components/Error';
+import Toast from 'react-native-toast-message';
+import Loader from '../../components/Loader/index.js';
 
 export default function Review({navigation, route}) {
   const barber = route?.params.barbar;
   const user = useSelector(selectUserData);
+  const token = useSelector(selectAuthToken);
+  const [showModal1, setShowModal1] = useState(false);
 
   const [services, setServices] = useState([]);
   const [comment, setComment] = useState('');
   const [status, setStatus] = useState(null);
   const [rating, setRating] = useState(0);
+  const [loader, setLoader] = useState(false);
+  const [loader2, setLoader2] = useState(false);
+  const [review, setReview] = useState();
+  const [errMsg, setErrMsg] = useState('');
 
   const handleGoback = () => {
     navigation.goBack();
@@ -40,6 +56,7 @@ export default function Review({navigation, route}) {
     setServices(barber?.services);
     console.log(barber.time);
     handleStatus(barber.time);
+    setReview();
   }, [barber]);
 
   const handleStatus = openHours => {
@@ -67,6 +84,141 @@ export default function Review({navigation, route}) {
       setStatus('close');
     }
   };
+
+  const handlePostReview = async () => {
+    try {
+      setLoader(true);
+
+      if (comment && rating !== 0) {
+        const body = {
+          barberData: barber?._id,
+          comment,
+          rating,
+        };
+        const response = await postReview(body, token);
+        if (response.data.success) {
+          setReview(response?.data?.review);
+          setLoader(false);
+          ErrorShow('success', 'Congratulation!', response?.data?.message);
+        } else {
+          console.log(response.data.message);
+          setLoader(false);
+          ErrorShow('error', 'Error!', response?.data?.message);
+        }
+      } else {
+        ErrorShow(
+          'error',
+          'Error!',
+          'Please provide rating and some comments to post your review',
+        );
+        setLoader(false);
+      }
+    } catch (error) {
+      console.log(error);
+      ErrorShow('error', 'Error!', error);
+      setLoader(false);
+    }
+  };
+
+  const handleUpdateReview = async () => {
+    try {
+      setLoader(true);
+
+      if (comment && rating !== 0) {
+        const body = {
+          reviewId: review?._id,
+          comment,
+          rating,
+        };
+        console.log(body);
+        const response = await updateReview(body, token);
+
+        if (response.data.success) {
+          setReview(response?.data?.review);
+          setLoader(false);
+          ErrorShow('success', 'Review Updated!', response?.data?.message);
+        } else {
+          console.log(response.data.message);
+          setLoader(false);
+          ErrorShow('error', 'Error!', response?.data?.message);
+        }
+      } else {
+        ErrorShow(
+          'error',
+          'Error!',
+          'Please provide rating and some comments to update your review',
+        );
+        setLoader(false);
+      }
+    } catch (error) {
+      console.log(error);
+      ErrorShow('error', 'Error!', error);
+      setLoader(false);
+    }
+  };
+
+  const handleDeleteReview = async () => {
+    try {
+      setLoader2(true);
+      const reviewId = review._id;
+      const response = await deleteReview(reviewId, token);
+
+      if (response.data.success) {
+        console.log(response.data);
+        setLoader2(false);
+        setReview(null);
+        setComment('');
+        setRating(0);
+        ErrorShow('success', 'Congratulation!', response?.data?.message);
+        setShowModal1(false);
+      } else {
+        console.log(response.data.message);
+        setLoader2(false);
+        ErrorShow('error', 'Error!', response?.data?.message);
+      }
+    } catch (error) {
+      console.log(error);
+      ErrorShow('error', 'Error!', error);
+      setLoader2(false);
+    }
+  };
+
+  const findAndSetReview = (userReviews, barberReviews) => {
+    console.log('===========', barberReviews);
+    if (
+      !userReviews ||
+      !barberReviews ||
+      !userReviews.length ||
+      !barberReviews.length
+    ) {
+      setReview(null);
+      setComment('');
+      setRating(0);
+      return;
+    }
+
+    const matchingReview = userReviews.find(userReview =>
+      barberReviews.some(barberReview => barberReview._id === userReview._id),
+    );
+    console.log(matchingReview, '========');
+    if (matchingReview) {
+      setReview(matchingReview);
+      setComment(matchingReview.comment);
+      setRating(matchingReview.rating);
+    } else {
+      setReview(null);
+      setComment('');
+      setRating(0);
+    }
+  };
+
+  useEffect(() => {
+    if (user && user.reviews && barber && barber.reviews) {
+      findAndSetReview(user?.reviews, barber?.reviews);
+    } else {
+      setReview(null);
+    }
+  }, []);
 
   return (
     <SafeAreaView>
@@ -131,9 +283,14 @@ export default function Review({navigation, route}) {
               <Image source={{uri: user.profile}} style={styles.profile} />
               <Text style={styles.userName}>{user.name}</Text>
             </View>
-            <TouchableOpacity>
-              <Image source={images.deleteIconn} style={styles.deleteIconn} />
-            </TouchableOpacity>
+            {review ? (
+              <TouchableOpacity
+                onPress={() => {
+                  setShowModal1(true);
+                }}>
+                <Image source={images.deleteIconn} style={styles.deleteIconn} />
+              </TouchableOpacity>
+            ) : null}
           </View>
           <View style={styles.instructionsContainer}>
             <TextInput
@@ -149,7 +306,42 @@ export default function Review({navigation, route}) {
           </View>
         </View>
         <KeyboardSpacer />
+        <TouchableOpacity style={styles.buttonContainer}>
+          {loader ? (
+            <Loader title={'Submit'} />
+          ) : (
+            <Button
+              title={'Submit'}
+              onPress={() => {
+                review ? handleUpdateReview() : handlePostReview();
+              }}
+            />
+          )}
+        </TouchableOpacity>
+        <Toast />
       </View>
+
+      <Modal
+        isVisible={showModal1}
+        onBackdropPress={() => setShowModal1(false)}>
+        <View style={styles.modalMainView}>
+          <Text style={styles.modalMessage}>
+            Are you sure want to delete this service ?
+          </Text>
+          <View style={styles.btnMainView}>
+            <TouchableOpacity
+              style={styles.btnView1}
+              onPress={handleDeleteReview}>
+              <Text style={styles.btnText1}>Confirm</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.btnView}
+              onPress={() => setShowModal1(false)}>
+              <Text style={styles.btnText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }

@@ -402,4 +402,56 @@ export const styles = StyleSheet.create({
     color: colors.black,
     maxWidth: sizes.screenWidth * 0.86,
   },
+
+  buttonContainer: {
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: sizes.screenHeight * 0.08,
+  },
+
+  modalMainView: {
+    backgroundColor: colors.white,
+    width: sizes.screenWidth * 0.9,
+    borderRadius: sizes.screenWidth * 0.05,
+    paddingVertical: 15,
+  },
+  modalMessage: {
+    color: colors.black,
+    alignSelf: 'center',
+    paddingHorizontal: 15,
+    fontSize: fontSize.medium,
+    width: sizes.screenWidth * 0.85,
+    textAlign: 'center',
+  },
+  btnMainView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+    marginTop: 15,
+  },
+  btnView1: {
+    borderRadius: sizes.screenWidth * 0.03,
+    height: sizes.screenHeight * 0.05,
+    width: sizes.screenWidth * 0.4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.btnColor,
+  },
+  btnText1: {
+    color: colors.white,
+    fontSize: fontSize.h6,
+  },
+  btnView: {
+    borderWidth: 1,
+    borderRadius: sizes.screenWidth * 0.03,
+    height: sizes.screenHeight * 0.05,
+    width: sizes.screenWidth * 0.4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  btnText: {
+    color: colors.black,
+    fontSize: fontSize.h6,
+  },
 });

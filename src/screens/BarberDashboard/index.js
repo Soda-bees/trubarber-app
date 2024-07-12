@@ -26,10 +26,12 @@ import {socket, socketService} from '../../services/Socket';
 import {selectUserData} from '../../store/userData';
 import {selectAuthToken} from '../../store/authToken';
 import formatToJSON from '../../services/config/FormatToJson';
+import moment from 'moment';
 
 export default function BarberDashboard({navigation}) {
   const dispatch = useDispatch();
   const userData = useSelector(selectUserData);
+  console.log('barber loggggggggg', userData.reviews);
   const authToken = useSelector(selectAuthToken);
   // console.log('barber pr data h yeh', formatToJSON(userData));
 
@@ -264,6 +266,10 @@ export default function BarberDashboard({navigation}) {
     }
   }, [userData]);
 
+  const formatDate = createdAt => {
+    return moment(createdAt).format('DD MMMM YYYY');
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -450,30 +456,33 @@ export default function BarberDashboard({navigation}) {
                 ))}
               </View>
             </View>
-            {rating.map((item, index) => (
+            {userData.reviews.map((item, index) => (
               <View key={index} style={styles.ratingContainer}>
                 <View style={styles.ratingData}>
                   <View style={styles.rowAndmargin}>
-                    <Image source={item.profilePic} style={styles.profilePic} />
+                    <Image
+                      source={{uri: item?.userData?.profile}}
+                      style={styles.profilePic}
+                    />
                     <View style={styles.alignItems}>
                       <Text style={styles.usernameAllignment}>
-                        {item.username}
+                        {item?.userData?.name}
                       </Text>
-                      <Text style={styles.time}>{item.time}</Text>
+                      <Text style={styles.time}>
+                        {formatDate(item?.createdAt)}
+                      </Text>
                     </View>
                   </View>
                   <View>
                     <StarRatingDisplay
-                      rating={item.rating}
+                      rating={item?.rating}
                       color={colors.gold}
                       starSize={sizes.screenHeight * 0.025}
                       starStyle={styles.startContainer}
                     />
                   </View>
                 </View>
-                <Text style={styles.descriptionContainer}>
-                  {item.description}
-                </Text>
+                <Text style={styles.descriptionContainer}>{item?.comment}</Text>
               </View>
             ))}
           </View>
