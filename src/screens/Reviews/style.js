@@ -10,7 +10,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: sizes.screenHeight * 0.04,
-
   },
   arrowTop: {
     marginLeft: sizes.screenWidth * 0.04,
@@ -33,8 +32,9 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.03,
     borderColor: colors.emptyStar,
     borderWidth: sizes.screenWidth * 0.003,
-    marginTop: sizes.screenHeight * 0.012,
-    flex:1
+    marginTop: sizes.screenHeight * 0.01,
+    paddingBottom: sizes.screenHeight * 0.01,
+    flex: 1,
   },
   ratingData: {
     justifyContent: 'space-between',
@@ -72,7 +72,7 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontSize: fontSize.small,
     marginTop: sizes.screenHeight * 0.012,
-    marginHorizontal:sizes.screenWidth*0.027,
+    marginHorizontal: sizes.screenWidth * 0.027,
     fontWeight: '500',
   },
   rowAndmargin: {
@@ -101,6 +101,7 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.68,
   },
 
-  paddingBottom:{
-    marginBottom:sizes.screenHeight * 0.09}
+  paddingBottom: {
+    marginBottom: sizes.screenHeight * 0.09,
+  },
 });
