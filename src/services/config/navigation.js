@@ -51,6 +51,7 @@ import Congratulation from '../../screens/Congratulation';
 import {useSelector} from 'react-redux';
 import {selectAuthToken} from '../../store/authToken';
 import {selectRole} from '../../store/role';
+import Review from '../../screens/Review';
 
 const Stack = createStackNavigator();
 export default function MainNavigator() {
@@ -190,6 +191,7 @@ const UserStack = () => {
       <Stack.Screen name="Chats" component={Chats} />
       <Stack.Screen name="ChatDetails" component={ChatDetails} />
       <Stack.Screen name="AddServices" component={AddServices} />
+      <Stack.Screen name="Review" component={Review} />
     </Stack.Navigator>
   );
 };

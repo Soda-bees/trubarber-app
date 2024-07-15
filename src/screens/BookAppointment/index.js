@@ -9,12 +9,12 @@ import {
   Platform,
   ToastAndroid,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { styles } from './style.js';
+import React, {useEffect, useState} from 'react';
+import {styles} from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import { StarRatingDisplay } from 'react-native-star-rating-widget';
-import { colors, sizes } from '../../services';
+import {StarRatingDisplay} from 'react-native-star-rating-widget';
+import {colors, sizes} from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import moment from 'moment';
@@ -23,7 +23,7 @@ import { selectUserData } from '../../store/userData/index.js';
 import { selectAuthToken } from '../../store/authToken/index.js';
 import { createChatRoom } from '../../services/config/API/index.js';
 
-export default function BookAppointment({ navigation, route }) {
+export default function BookAppointment({navigation, route}) {
   const barbar = route?.params?.item;
   const userData = useSelector(selectUserData)
   const authToken = useSelector(selectAuthToken)
@@ -119,7 +119,7 @@ export default function BookAppointment({ navigation, route }) {
   ]);
 
   const [tab, setTabs] = useState('About');
-  const [status, setStatus] = useState(null)
+  const [status, setStatus] = useState(null);
 
   const handleGoback = () => {
     navigation.goBack();
@@ -180,12 +180,15 @@ export default function BookAppointment({ navigation, route }) {
       closeTime.add(1, 'day');
     }
 
-    if (currentTime.isBetween(openTime, closeTime) || currentTime.isSame(openTime)) {
+    if (
+      currentTime.isBetween(openTime, closeTime) ||
+      currentTime.isSame(openTime)
+    ) {
       // return 'open';
-      setStatus('open')
+      setStatus('open');
     } else {
       // return 'close';
-      setStatus('close')
+      setStatus('close');
     }
   };
 
@@ -202,8 +205,8 @@ export default function BookAppointment({ navigation, route }) {
       <View style={styles.container}>
         <ImageBackground
           imageStyle={styles.headerImage}
-          source={{ uri: barbar?.profile }}
-        // style={}
+          source={{uri: barbar?.profile}}
+          // style={}
         >
           <View style={styles.headerContainer}>
             <View style={styles.arrowTop}>
@@ -214,9 +217,7 @@ export default function BookAppointment({ navigation, route }) {
                 style={styles.openBg}
                 source={images.openBg}
                 resizeMode="cover">
-                <Text style={styles.openButton}>
-                  {status}
-                </Text>
+                <Text style={styles.openButton}>{status}</Text>
               </ImageBackground>
             </View>
           </View>
@@ -296,7 +297,7 @@ export default function BookAppointment({ navigation, route }) {
                 title={'Book Appointment'}
                 onPress={() => {
                   // navigation.navigate('BookingProcess')
-                  setTabs('Services')
+                  setTabs('Services');
                 }}
               />
             </View>
@@ -309,7 +310,7 @@ export default function BookAppointment({ navigation, route }) {
                   <View style={styles.servicesContainer}>
                     <View style={styles.serviceImagecontainer}>
                       <Image
-                        source={{ uri: item?.icon }}
+                        source={{uri: item?.icon}}
                         style={styles.serviceImageresize}
                         resizeMode="contain"
                       />
@@ -326,7 +327,9 @@ export default function BookAppointment({ navigation, route }) {
                     <View style={styles.endContainer}>
                       <TouchableOpacity
                         style={styles.bookButton}
-                        onPress={() => navigation.navigate('ServiceDetails', { item })}>
+                        onPress={() =>
+                          navigation.navigate('ServiceDetails', {item})
+                        }>
                         <Text style={styles.bookWhite}>Book</Text>
                       </TouchableOpacity>
                       {/* <Text style={styles.title}>{item.Price}</Text> */}
@@ -349,27 +352,39 @@ export default function BookAppointment({ navigation, route }) {
                 marginTop: sizes.screenHeight * 0.014,
                 paddingBottom: sizes.screenHeight * 0.162,
               }}>
-              <View
-                style={{
-                  marginBottom: sizes.screenHeight * 0.02,
-                  alignItems: 'center',
-                }}>
-                <Text style={styles.starNumber}>4.8</Text>
-                <StarRatingDisplay
-                  rating={4}
-                  color={colors.gold}
-                  emptyColor={colors.emptyStar}
-                  starSize={20}
-                  starStyle={styles.startContainer}
-                />
-                <Text
-                  style={{
-                    color: colors.grayText,
-                    marginTop: sizes.screenHeight * 0.013,
-                  }}>
-                  783 Reviews
-                </Text>
+              <View style={styles.row3}>
+                <View>
+                  <View style={styles.row2}>
+                    <Text style={styles.starNumber}>4.8</Text>
+                    <StarRatingDisplay
+                      rating={4}
+                      color={colors.gold}
+                      emptyColor={colors.emptyStar}
+                      starSize={20}
+                      starStyle={styles.startContainer}
+                    />
+                  </View>
+
+                  <Text style={styles.disabledText}>783 Reviews</Text>
+                </View>
+                <View>
+                  {tab === 'Reviews' ? (
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('Review', {barbar});
+                      }}
+                      style={styles.reviewBtn}>
+                      <Image source={images.pencil} style={styles.pencil} />
+                      {/* {userReview ? (
+                <Text style={styles.reviewBtnText}>Edit review</Text>
+              ) : ( */}
+                      <Text style={styles.reviewBtnText}>Write a review</Text>
+                      {/* )} */}
+                    </TouchableOpacity>
+                  ) : null}
+                </View>
               </View>
+
               {rating.map((item, index) => (
                 <View key={index} style={styles.ratingContainer}>
                   <View style={styles.ratingData}>
@@ -391,7 +406,7 @@ export default function BookAppointment({ navigation, route }) {
                         color={colors.gold}
                         starSize={20}
                         starStyle={styles.startContainer}
-                      // style={styles.startContainer}
+                        // style={styles.startContainer}
                       />
                     </View>
                   </View>

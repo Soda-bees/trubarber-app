@@ -27,10 +27,12 @@ import { selectUserData } from '../../store/userData';
 import { selectAuthToken } from '../../store/authToken';
 import formatToJSON from '../../services/config/FormatToJson';
 import ChatConponent from '../../components/ChatComponent';
+import moment from 'moment';
 
 export default function BarberDashboard({ navigation }) {
   const dispatch = useDispatch();
   const userData = useSelector(selectUserData);
+  console.log('barber loggggggggg', userData.reviews);
   const authToken = useSelector(selectAuthToken);
   // console.log('barber pr data h yeh', formatToJSON(userData));
 
@@ -235,23 +237,9 @@ export default function BarberDashboard({ navigation }) {
     }
   }, [userData]);
 
-  // const handleCelculateTotalUnseenMessage = async () => {
-  //   let totalUnseenMessages = 0;
-
-  //   // Assuming `chats` is your array of chat rooms
-  //   userData?.chat?.forEach(chatRoom => {
-  //     // Count unseen messages not sent by the current user in the current chat room
-  //     const unseenMessagesCount = chatRoom.messages.filter(message => !message.seen && message.sender !== userData._id).length;
-
-  //     // Add to the total count
-  //     totalUnseenMessages += unseenMessagesCount;
-  //   });
-
-  //   console.log("Total unseen messages:", totalUnseenMessages);
-
-  // }
-
-
+  const formatDate = createdAt => {
+    return moment(createdAt).format('DD MMMM YYYY');
+  };
 
   return (
     <SafeAreaView>
@@ -440,30 +428,33 @@ export default function BarberDashboard({ navigation }) {
                 ))}
               </View>
             </View>
-            {rating.map((item, index) => (
+            {userData.reviews.map((item, index) => (
               <View key={index} style={styles.ratingContainer}>
                 <View style={styles.ratingData}>
                   <View style={styles.rowAndmargin}>
-                    <Image source={item.profilePic} style={styles.profilePic} />
+                    <Image
+                      source={{uri: item?.userData?.profile}}
+                      style={styles.profilePic}
+                    />
                     <View style={styles.alignItems}>
                       <Text style={styles.usernameAllignment}>
-                        {item.username}
+                        {item?.userData?.name}
                       </Text>
-                      <Text style={styles.time}>{item.time}</Text>
+                      <Text style={styles.time}>
+                        {formatDate(item?.createdAt)}
+                      </Text>
                     </View>
                   </View>
                   <View>
                     <StarRatingDisplay
-                      rating={item.rating}
+                      rating={item?.rating}
                       color={colors.gold}
                       starSize={sizes.screenHeight * 0.025}
                       starStyle={styles.startContainer}
                     />
                   </View>
                 </View>
-                <Text style={styles.descriptionContainer}>
-                  {item.description}
-                </Text>
+                <Text style={styles.descriptionContainer}>{item?.comment}</Text>
               </View>
             ))}
           </View>

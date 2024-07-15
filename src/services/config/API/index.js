@@ -105,12 +105,14 @@ export const updateProfile = async (body, token) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post('auth/updateProfile', body, { headers });
+    const response = await axiosInstance.post('auth/updateProfile', body, {
+      headers,
+    });
     return response;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
 export const updatePassword = async (body, token) => {
   try {
@@ -118,49 +120,57 @@ export const updatePassword = async (body, token) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post('auth/updatePassword', body, { headers });
+    const response = await axiosInstance.post('auth/updatePassword', body, {
+      headers,
+    });
     return response;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
-export const handleForgotPass = async (body) => {
+export const handleForgotPass = async body => {
   try {
     const headers = {
       'Content-Type': 'application/json',
     };
-    const response = await axiosInstance.post('auth/forgotPassword', body, { headers });
+    const response = await axiosInstance.post('auth/forgotPassword', body, {
+      headers,
+    });
     return response;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
-export const resetPassword = async (body) => {
+export const resetPassword = async body => {
   try {
     const headers = {
       'Content-Type': 'application/json',
     };
-    const response = await axiosInstance.post('auth/resetPassword', body, { headers });
+    const response = await axiosInstance.post('auth/resetPassword', body, {
+      headers,
+    });
     return response;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
 export const addServices = async (body, token) => {
   try {
     const headers = {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post('barber/addService', body, { headers });
+    const response = await axiosInstance.post('barber/addService', body, {
+      headers,
+    });
     return response;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
 export const getAddressFromCoordinates = async (latitude, longitude) => {
   const GOOGLE_MAPS_API_KEY = 'AIzaSyCbWOArVUIn-uRQ8S3fsvayHrep5El4ab4';
@@ -178,71 +188,82 @@ export const getAddressFromCoordinates = async (latitude, longitude) => {
         addressComponents.find(component =>
           component.types.includes('locality'),
         )?.long_name || '';
-      return { area, city }
+      return { area, city };
       // setAddress({ area, city });
       // console.log(area, city);
     } else {
       console.log('Error fetching address:', response.data.status);
-      return response?.data?.status
+      return response?.data?.status;
     }
   } catch (error) {
     console.log('Error in geocoding:', error);
-    return error
+    return error;
   }
 };
-
 
 export const updateService = async (body, token) => {
   try {
     const headers = {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post('barber/updateService', body, { headers });
+    const response = await axiosInstance.post('barber/updateService', body, {
+      headers,
+    });
     return response;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
 export const deleteService = async (token, id) => {
   try {
     const headers = {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post(`barber/deleteService/${id}`, {}, { headers });
+    const response = await axiosInstance.post(
+      `barber/deleteService/${id}`,
+      {},
+      { headers },
+    );
     return response;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
 export const handleAddPaymentCard = async (card, token) => {
   try {
     const headers = {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post('user/addPaymentCard', { card }, { headers });
+    const response = await axiosInstance.post(
+      'user/addPaymentCard',
+      { card },
+      { headers },
+    );
     return response;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
 export const bookAppoinment = async (body, token) => {
   try {
     const headers = {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post('user/bookAppoinment', body, { headers });
+    const response = await axiosInstance.post('user/bookAppoinment', body, {
+      headers,
+    });
     return response;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
 export const hanleGetBookedAppoinment = async (token, id) => {
   try {
@@ -250,7 +271,10 @@ export const hanleGetBookedAppoinment = async (token, id) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.get(`user/getBookedAppoinmentTime/${id}`, { headers });
+    const response = await axiosInstance.get(
+      `user/getBookedAppoinmentTime/${id}`,
+      { headers },
+    );
     return response;
   } catch (error) {
     return error;
@@ -263,14 +287,18 @@ export const updateAppointmentStatus = async (token, id) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post(`barber/updateAppoinmentStatus/${id}`, {}, { headers });
+    const response = await axiosInstance.post(
+      `barber/updateAppoinmentStatus/${id}`,
+      {},
+      { headers },
+    );
     return response;
   } catch (error) {
     return error;
   }
 };
 
-export const createChatRoom = async (token,  body) => {
+export const createChatRoom = async (token, body) => {
   try {
     const headers = {
       'Content-Type': 'application/json',
@@ -303,9 +331,54 @@ export const setSeenTrue = async (token, messageIds) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post(`user/setSeenTrue`, {messageIds}, { headers });
+    const response = await axiosInstance.post(`user/setSeenTrue`, { messageIds }, { headers });
     return response;
   } catch (error) {
     return error;
   }
 };
+
+export const postReview = async (body, token) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post('user/postReview', body, { headers, });
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+export const updateReview = async (body, token) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post('user/updateReview', body, { headers, });
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+export const deleteReview = async (reviewId, token) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post(`user/deleteReview/${reviewId}`, {}, { headers, },
+    );
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+
+
+
+
+
+

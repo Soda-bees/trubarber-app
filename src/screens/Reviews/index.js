@@ -16,8 +16,14 @@ import images from '../../services/utilities/images';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import {colors, sizes} from '../../services';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useSelector} from 'react-redux';
+import {selectUserData} from '../../store/userData';
+import moment from 'moment';
 
 export default function Reviews({navigation}) {
+  const userData = useSelector(selectUserData);
+  console.log(userData);
+
   const [rating, setRatings] = useState([
     {
       profilePic: images.profilePic,
@@ -60,6 +66,10 @@ export default function Reviews({navigation}) {
       rating: '4.5',
     },
   ]);
+
+  const formatDate = createdAt => {
+    return moment(createdAt).format('DD MMMM YYYY');
+  };
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -101,7 +111,7 @@ export default function Reviews({navigation}) {
                   <Text style={styles.descriptionContainer}>
                     {item.description}
                   </Text>
-                  <View style={styles.inputContainer}>
+                  {/* <View style={styles.inputContainer}>
                     <TextInput
                       placeholderTextColor={colors.gratsText}
                       style={styles.input}
@@ -112,13 +122,13 @@ export default function Reviews({navigation}) {
                     <TouchableOpacity>
                       <Image source={images.sendRed} />
                     </TouchableOpacity>
-                  </View>
+                  </View> */}
                 </View>
               ))}
             </View>
           </KeyboardAwareScrollView>
         </ScrollView>
-        <View style={Platform.OS == 'ios' && styles.paddingBottom }/>
+        <View style={Platform.OS == 'ios' && styles.paddingBottom} />
       </View>
     </SafeAreaView>
   );

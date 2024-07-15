@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.pinkishwhite,
   },
   transparentBg: {
-    paddingVertical:sizes.screenWidth * 0.06,
+    paddingVertical: sizes.screenWidth * 0.06,
     // height: sizes.screenHeight * 0.1,
     width: sizes.screenWidth,
   },
@@ -329,9 +329,9 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.012,
   },
   profilePic: {
-    borderRadius: sizes.screenWidth * 0.3,
-    height: sizes.screenHeight * 0.052,
-    width: sizes.screenWidth * 0.11,
+    borderRadius: 60,
+    height: 50,
+    width: 50,
     resizeMode: 'contain',
   },
   alignItems: {
@@ -360,6 +360,7 @@ export const styles = StyleSheet.create({
     marginRight: sizes.screenWidth * 0.022,
     marginLeft: sizes.screenWidth * 0.03,
     marginBottom: sizes.screenHeight * 0.02,
+    alignSelf: 'flex-start',
   },
   rowAndmargin: {
     flexDirection: 'row',
@@ -391,8 +392,8 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontSize: fontSize.medium,
     marginLeft: 5,
-    textAlign:'center',
-    width:sizes.screenWidth * 0.7
+    textAlign: 'center',
+    width: sizes.screenWidth * 0.7,
   },
 
   appointmentBtn: {

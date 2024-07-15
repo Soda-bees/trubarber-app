@@ -1,59 +1,86 @@
 import io from "socket.io-client"
 import { BASE_URL } from "../config/AxiosInstance"
-import { addAndUpdateNewChatInRedux, addAppoinment, addMessageInChatRoom, addNewChatInRedux, updateAppointmendStatus } from "../../store/userData";
+import {
+  addAndUpdateNewChatInRedux,
+  addAppoinment,
+  addMessageInChatRoom,
+  addNewChatInRedux,
+  updateAppointmendStatus,
+  addReview, deleteReview, updateReview
+} from "../../store/userData";
 
 let socket;
 
 const connectSocket = () => {
-    if (!socket) {
-        socket = io(BASE_URL)
+  if (!socket) {
+    socket = io(BASE_URL);
 
-        socket.on('connect', () => {
-            console.log("connected to server");
-        })
-    }
-}
+    socket.on('connect', () => {
+      console.log('connected to server');
+    });
+  }
+};
 
 const socketService = (dispatch, authToken, userData) => {
-    connectSocket()
+  connectSocket();
 
-    const handleReceivedNewAppoinment = (data) => {
-        dispatch(addAppoinment(data))
-    }
+  const handleReceivedNewAppoinment = data => {
+    dispatch(addAppoinment(data));
+  };
 
-    const handleUpdateAppointmendStatus = (data) => {
-        dispatch(updateAppointmendStatus(data))
-    }
+  const handleUpdateAppointmendStatus = (data) => {
+    dispatch(updateAppointmendStatus(data))
+  }
 
-    const handleAddNewMessage = async (data) => {
-        // console.log("handleAddNewMessage", data)
-        dispatch(addMessageInChatRoom(data))
-    }
+  const handleAddNewMessage = async (data) => {
+    // console.log("handleAddNewMessage", data)
+    dispatch(addMessageInChatRoom(data))
+  }
 
-    const handleAddNewChatRoom = async (data) => {
-        console.log("new chat socket");
-        dispatch(addNewChatInRedux(data))
-    }
+  const handleAddNewChatRoom = async (data) => {
+    console.log("new chat socket");
+    dispatch(addNewChatInRedux(data))
+  }
 
-    const handleAddAndUpdateNewChat = async (data) => {
-        console.log("handleAddAndUpdateNewChat socket");
-        dispatch(addAndUpdateNewChatInRedux(data))
-    }
+  const handleAddAndUpdateNewChat = async (data) => {
+    console.log("handleAddAndUpdateNewChat socket");
+    dispatch(addAndUpdateNewChatInRedux(data))
+  }
 
-    socket.on('newAppoinment', handleReceivedNewAppoinment)
-    socket.on('appointmentStatusUpdate', handleUpdateAppointmendStatus)
-    socket.on('newMessage', handleAddNewMessage)
-    socket.on('newChatRoom', handleAddNewChatRoom)
-    socket.on('existingChatRoomUpdate', handleAddAndUpdateNewChat)
+  const handleAddNewReview = data => {
+    console.log('=-----------handleAddNewReview', data);
+    dispatch(addReview(data));
+  };
+  const handleUpdateReview = data => {
+    console.log('=-----------handleUpdateReview', data);
+    dispatch(updateReview(data));
+  };
+  const handleDeleteReview = data => {
+    console.log(data);
+    dispatch(deleteReview(data));
+  };
 
-    const cleanup = () => {
-        socket.off('newAppoinment', handleReceivedNewAppoinment);
-        socket.off('appointmentStatusUpdate', handleUpdateAppointmendStatus);
-        socket.off('newMessage', handleAddNewMessage);
-        socket.off('newChatRoom', handleAddNewChatRoom);
-        socket.off('existingChatRoomUpdate', handleAddAndUpdateNewChat);
-    }
-    return cleanup
+  socket.on('newAppoinment', handleReceivedNewAppoinment)
+  socket.on('appointmentStatusUpdate', handleUpdateAppointmendStatus)
+  socket.on('newMessage', handleAddNewMessage)
+  socket.on('newChatRoom', handleAddNewChatRoom)
+  socket.on('existingChatRoomUpdate', handleAddAndUpdateNewChat)
+  socket.on('newReview', handleAddNewReview);
+  socket.on('updateReview', handleUpdateReview);
+  socket.on('deleteReview', handleDeleteReview);
+
+  const cleanup = () => {
+    socket.off('newAppoinment', handleReceivedNewAppoinment);
+    socket.off('appointmentStatusUpdate', handleUpdateAppointmendStatus);
+    socket.off('newMessage', handleAddNewMessage);
+    socket.off('newChatRoom', handleAddNewChatRoom);
+    socket.off('existingChatRoomUpdate', handleAddAndUpdateNewChat);
+    socket.off('newReview', handleAddNewReview);
+    socket.off('updateReview', handleUpdateReview);
+    socket.off('deleteReview', handleDeleteReview);
+  }
+  return cleanup
 }
 
-export { socket, socketService }
+
+export { socket, socketService };

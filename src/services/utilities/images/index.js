@@ -118,6 +118,8 @@ import locationIcon from '../../../assets/locationIcon.png';
 import crossIcon from '../../../assets/crossIcon.png';
 import calendar from '../../../assets/calendar.png';
 import noAppointment from '../../../assets/noAppointment.png';
+import pencil from '../../../assets/pencil.png';
+import deleteIconn from '../../../assets/deleteIconn.png';
 
 const images = {
   whiteCrossexit,
@@ -240,6 +242,8 @@ const images = {
   crossIcon,
   calendar,
   noAppointment,
+  pencil,
+  deleteIconn,
 };
 
 export default images;
