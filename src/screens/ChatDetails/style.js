@@ -27,8 +27,8 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.01,
   },
   containerBody: {
-    marginTop: sizes.screenHeight * 0.05,
-    paddingHorizontal: sizes.screenWidth * 0.06,
+    marginTop: sizes.screenHeight * 0.03,
+    // paddingHorizontal: sizes.screenWidth * 0.06,
     // height: sizes.screenHeight,
     // marginBottom: 40,
   },
@@ -104,7 +104,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width:sizes.screenWidth * 0.95,
     alignSelf:'center',
-    bottom:sizes.screenWidth * 0.015
+    // bottom:sizes.screenWidth * 0.015
     // marginBottom:sizes.screenHeight * 0,
     // bottom:sizes.screenHeight* 0.1,
     // backgroundColor:colors.black
@@ -131,7 +131,7 @@ export const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: sizes.screenWidth * 0.05,
     height: sizes.screenWidth * 0.05,
-    marginRight:sizes.screenWidth * 0.01
+    marginRight:sizes.screenWidth * 0.01,
   },
   laoderContainer: {
     backgroundColor: '#FBFAFA',

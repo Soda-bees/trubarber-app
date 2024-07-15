@@ -26,6 +26,7 @@ import { selectUserData, setSeenTrueRedux } from '../../store/userData';
 import { selectAuthToken } from '../../store/authToken';
 import { sendMessage, setSeenTrue } from '../../services/config/API';
 import formatToJSON from '../../services/config/FormatToJson';
+import ImageGrid from '../../components/ImageGrid';
 
 export default function ChatDetails({ navigation, route }) {
 
@@ -221,12 +222,12 @@ export default function ChatDetails({ navigation, route }) {
         ?.filter(message => message?.sender !== userData?._id && message.seen === false)
         ?.map(message => message._id) || [];
       console.log(filteredMessages);
-      if(filteredMessages?.length > 0){
-        dispatch(setSeenTrueRedux({chatRoomId , messageIds:filteredMessages}))
+      if (filteredMessages?.length > 0) {
+        dispatch(setSeenTrueRedux({ chatRoomId, messageIds: filteredMessages }))
         const response = await setSeenTrue(authToken, filteredMessages)
         console.log(response?.data?.message);
       }
-      } catch (error) {
+    } catch (error) {
       console.log("-=-==--= ", error);
     }
   }
@@ -243,6 +244,24 @@ export default function ChatDetails({ navigation, route }) {
     // Cleanup function to remove the event listener
     return () => backHandler.remove();
   }, [userData]);
+
+  const messageImg = [
+    'https://res.cloudinary.com/doohobw9k/image/upload/v1720719767/TruBarber/Profile/ouah1gf7mkzfvqmq39dm.jpg',
+    'https://res.cloudinary.com/doohobw9k/image/upload/v1720777075/TruBarber/Profile/qp0jveoic2jgwmxohphf.jpg',
+    'https://res.cloudinary.com/doohobw9k/image/upload/v1720719917/TruBarber/Profile/yc7skgeaqjwchmd8hvjd.jpg',
+    'https://res.cloudinary.com/doohobw9k/image/upload/v1720680304/TruBarber/Profile/lotsw0nruoc9dtxmmnnm.jpg',
+    'https://res.cloudinary.com/doohobw9k/image/upload/v1720677251/TruBarber/Profile/ve2kpmlrvevficutqc9p.png',
+    'https://res.cloudinary.com/doohobw9k/image/upload/v1720612266/TruBarber/Profile/nv2onajlj8ylirkqk9lc.jpg',
+    'https://res.cloudinary.com/doohobw9k/image/upload/v1720444074/TruBarber/Profile/swyf6pgrpg3vfhjed8yv.jpg',
+    'https://res.cloudinary.com/doohobw9k/image/upload/v1719387448/TruBarber/Profile/a5rrl9kmojhogja23x86.png'
+  ];
+
+  const messageImgSecond = [
+    'https://res.cloudinary.com/doohobw9k/image/upload/v1720719767/TruBarber/Profile/ouah1gf7mkzfvqmq39dm.jpg',
+    'https://res.cloudinary.com/doohobw9k/image/upload/v1720777075/TruBarber/Profile/qp0jveoic2jgwmxohphf.jpg',
+    'https://res.cloudinary.com/doohobw9k/image/upload/v1720719917/TruBarber/Profile/yc7skgeaqjwchmd8hvjd.jpg',
+
+  ];
 
   return (
     <SafeAreaView>
@@ -294,6 +313,8 @@ export default function ChatDetails({ navigation, route }) {
                           )
                         })
                       )}
+                  <ImageGrid images={messageImg} />
+                  <ImageGrid images={messageImgSecond} />
                 </View>
               </ScrollView>
             </View>
@@ -315,17 +336,11 @@ export default function ChatDetails({ navigation, route }) {
               <TouchableOpacity style={styles.arrowBlackIcon}
                 onPress={handlesendMessage}
               >
-                <Image source={images.arrowBlackIcon} />
+                <Image source={images.arrowBlackIcon}  />
               </TouchableOpacity>
             </View>
             <KeyboardSpacer topSpacing={sizes.screenHeight * 0.045} />
           </View>
-
-          {/* <KeyboardAvoidingView
-          behavior="padding" keyboardVerticalOffset={sizes.screenHeight * 0.03}
-        > */}
-
-          {/* </KeyboardAvoidingView> */}
         </View>
       )}
     </SafeAreaView>
