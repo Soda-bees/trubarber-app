@@ -31,7 +31,8 @@ export const styles = StyleSheet.create({
     paddingHorizontal: sizes.screenWidth * 0.02,
     // height: sizes.screenHeight,
     // marginBottom: 40,
-    paddingBottom: sizes.screenWidth * 0.02
+    paddingBottom: sizes.screenWidth * 0.02,
+    backgroundColor:'red',
   },
   containerBody1: {
     marginTop: sizes.screenHeight * 0.02,

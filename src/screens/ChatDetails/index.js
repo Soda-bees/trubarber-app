@@ -242,7 +242,8 @@ export default function ChatDetails({ navigation, route }) {
     setShowImgScreen(false)
     setSelectedImages([])
   }
-
+  console.log("-=-=-==-", userData?.chat
+    .filter(chat => chat?._id === chatId));
   return (
     <SafeAreaView>
       {showImgScreen ? (
@@ -258,7 +259,7 @@ export default function ChatDetails({ navigation, route }) {
             loader ? <ActivityIndicator color={colors.white} size={40} /> :
               selectedImages?.length > 0 &&
               <View style={{ width: sizes.screenWidth, height: sizes.screenHeight, alignItems: 'flex-start' }}>
-                <TouchableOpacity style={{ top: 20, left: 20 , zIndex:10 }} onPress={handleCancelImage}>
+                <TouchableOpacity style={{ top: 20, left: 20, zIndex: 10 }} onPress={handleCancelImage}>
                   <Image source={images.cancel} style={{ width: sizes.screenWidth * 0.1, height: sizes.screenWidth * 0.1, }} />
                 </TouchableOpacity>
                 <ScrollView
@@ -295,6 +296,13 @@ export default function ChatDetails({ navigation, route }) {
             }} />
             <Text style={styles.headerText}>{chatName ? chatName : ''}</Text>
           </View>
+          {
+            chatId &&
+            userData?.chat?.length == [] &&
+            <View style={{ backgroundColor: 'red' }}>
+              <Text>no chat</Text>
+            </View>
+          }
           <View style={styles.chatSubContianer}>
             <View>
               <ScrollView
@@ -330,7 +338,8 @@ export default function ChatDetails({ navigation, route }) {
                             </View>
                           )
                         })
-                      )}
+                      )
+                  }
                 </View>
               </ScrollView>
             </View>

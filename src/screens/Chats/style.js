@@ -124,5 +124,20 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: sizes.screenWidth * 0.015,
     marginRight: sizes.screenWidth * 0.02,
+  },
+  noChatView:{
+    flexDirection:'column',
+    alignItems:'center',
+    justifyContent:'center',
+    height:sizes.screenHeight * 0.7
+  },
+  noChatImg:{
+    width:sizes.screenWidth * 0.15,
+    height:sizes.screenWidth * 0.15,
+  },
+  noChatText:{
+    color:colors.black,
+    textAlign:'center',
+    fontWeight:'500'
   }
 });

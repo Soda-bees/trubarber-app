@@ -123,8 +123,10 @@ import deleteIconn from '../../../assets/deleteIconn.png';
 import chatImg from "../../../assets/chatImg.png"
 import cancel from "../../../assets/cancel.png"
 import sendSecond from "../../../assets/sendSecond.png"
+import noChatImg from "../../../assets/noChatImg.png"
 
 const images = {
+  noChatImg,
   sendSecond,
   cancel,
   chatImg,

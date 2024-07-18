@@ -194,7 +194,10 @@ export default function Chats({ navigation }) {
                     })
                 }
               </View>
-            ) : (<Text style={{ color: colors.red }}>No chat</Text>)
+            ) : (<View style={styles.noChatView}>
+              <Image source={images.noChatImg} style={styles.noChatImg}/>
+              <Text style={styles.noChatText}>There is currently no chat to show</Text>
+            </View>)
           }
 
         </ScrollView>
