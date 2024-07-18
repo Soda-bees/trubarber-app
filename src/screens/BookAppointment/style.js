@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { colors, fontSize, sizes } from '../../services';
+import {StyleSheet} from 'react-native';
+import {colors, fontSize, sizes} from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
@@ -341,6 +341,7 @@ export const styles = StyleSheet.create({
     marginRight: sizes.screenWidth * 0.022,
     marginLeft: sizes.screenWidth * 0.03,
     marginBottom: sizes.screenHeight * 0.02,
+    alignSelf: 'flex-start',
   },
 
   scrollView: {
