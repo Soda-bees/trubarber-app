@@ -141,16 +141,18 @@ export default function Chats({ navigation }) {
                     })
                     ?.map((item, index) => {
                       const lastMessage = item?.messages?.length > 0 ? item?.messages[item?.messages?.length - 1] : ''
+                      // const lastMessageImg = ite?.me
+                      console.log("last message", lastMessage);
                       const timeAgo = calculateTimeAgo(lastMessage?.createdAt ? lastMessage?.createdAt : item?.createdAt)
                       const messages = item?.messages || []
                       const oppositeMessage = messages.filter(obj => obj?.sender !== userData?._id);
                       const unseenMessages = oppositeMessage.filter(obj => obj.seen === false);
                       return (
-                        <SwipeProvider key={index}>
-                          <SwipeItem
-                            style={styles.chatSwipeContainer}
-                            swipeContainerStyle={{}}
-                            leftButtons={leftButton(index)}>
+                        // <SwipeProvider key={index}>
+                        //   <SwipeItem
+                        //     style={styles.chatSwipeContainer}
+                        //     swipeContainerStyle={{}}
+                        //     leftButtons={leftButton(index)}>
                             <View style={styles.chatContainer} key={index}>
                               <TouchableOpacity
                                 style={styles.chatDetailContainer}
@@ -166,7 +168,7 @@ export default function Chats({ navigation }) {
                                       {userData?.role == 'user' ? item?.barber.name : item?.user?.name}
                                     </Text>
                                     <Text style={styles.chatDetail} numberOfLines={1}>
-                                      {lastMessage?.text}
+                                      {lastMessage?.image?.length > 0 ? "Photo" : lastMessage?.text}
                                     </Text>
                                   </View>
                                 </View>
@@ -177,7 +179,7 @@ export default function Chats({ navigation }) {
                                   {
                                     unseenMessages?.length > 0 ?
                                       <View style={styles.newMsgsContainer}>
-                                        <Text style={{ color: 'black', fontSize:fontSize.small , fontWeight:'500'}}>
+                                        <Text style={{ color: 'black', fontSize: fontSize.small, fontWeight: '500' }}>
                                           {unseenMessages?.length > 0 && unseenMessages?.length}
                                         </Text>
                                       </View> : null
@@ -186,8 +188,8 @@ export default function Chats({ navigation }) {
                                 </View>
                               </TouchableOpacity>
                             </View>
-                          </SwipeItem>
-                        </SwipeProvider>
+                        //   </SwipeItem>
+                        // </SwipeProvider>
                       )
                     })
                 }

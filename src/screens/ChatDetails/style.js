@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
@@ -28,9 +28,10 @@ export const styles = StyleSheet.create({
   },
   containerBody: {
     marginTop: sizes.screenHeight * 0.03,
-    // paddingHorizontal: sizes.screenWidth * 0.06,
+    paddingHorizontal: sizes.screenWidth * 0.02,
     // height: sizes.screenHeight,
     // marginBottom: 40,
+    paddingBottom: sizes.screenWidth * 0.02
   },
   containerBody1: {
     marginTop: sizes.screenHeight * 0.02,
@@ -70,44 +71,41 @@ export const styles = StyleSheet.create({
   chatRecieved: {
     backgroundColor: colors.chatRecievedBg,
     alignSelf: 'flex-start',
-    paddingVertical: sizes.screenHeight * 0.022,
-    paddingHorizontal: sizes.screenWidth * 0.035,
-    borderBottomEndRadius: sizes.screenWidth * 0.05,
-    borderTopLeftRadius: sizes.screenWidth * 0.05,
-    borderTopRightRadius: sizes.screenWidth * 0.05,
-    marginBottom: sizes.screenHeight * 0.02,
-    marginEnd: sizes.screenWidth * 0.15,
+    padding: sizes.screenWidth * 0.01,
+    borderBottomEndRadius: sizes.screenWidth * 0.02,
+    borderTopLeftRadius: sizes.screenWidth * 0.02,
+    borderTopRightRadius: sizes.screenWidth * 0.02,
+    marginBottom: sizes.screenWidth * 0.015,
+    maxWidth: sizes.screenWidth * 0.8
   },
   chatText: {
     color: colors.black,
-    fontSize: fontSize.small,
+    fontSize: fontSize.smallM,
     lineHeight: sizes.screenHeight * 0.019,
   },
   chatSend: {
     backgroundColor: colors.white,
     alignSelf: 'flex-end',
-    paddingVertical: sizes.screenHeight * 0.022,
-    paddingHorizontal: sizes.screenWidth * 0.035,
-    borderTopLeftRadius: sizes.screenWidth * 0.05,
-    borderTopRightRadius: sizes.screenWidth * 0.05,
-    borderBottomStartRadius: sizes.screenWidth * 0.05,
-    marginBottom: sizes.screenHeight * 0.03,
-    marginStart: sizes.screenWidth * 0.15,
+    padding: sizes.screenWidth * 0.01,
+    borderTopLeftRadius: sizes.screenWidth * 0.02,
+    borderTopRightRadius: sizes.screenWidth * 0.02,
+    borderBottomLeftRadius: sizes.screenWidth * 0.02,
+    marginBottom: sizes.screenWidth * 0.015,
+    maxWidth: sizes.screenWidth * 0.8,
+    borderWidth: 0.5,
+    borderColor: colors.disabledBg
   },
   texInputView: {
     backgroundColor: colors.white,
-    // marginTop:sizes.screenHeight* 0.15,
     borderRadius: sizes.screenWidth * 0.03,
-    paddingHorizontal: sizes.screenWidth * 0.03,
+    paddingHorizontal: sizes.screenWidth * 0.02,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width:sizes.screenWidth * 0.95,
-    alignSelf:'center',
-    // bottom:sizes.screenWidth * 0.015
-    // marginBottom:sizes.screenHeight * 0,
-    // bottom:sizes.screenHeight* 0.1,
-    // backgroundColor:colors.black
+    width: sizes.screenWidth * 0.97,
+    alignSelf: 'center',
+    borderColor: colors.disabledBg,
+    borderWidth: 1,
   },
   texInputViewIOS: {
     backgroundColor: colors.white,
@@ -122,19 +120,14 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   textInputContainer: {
-    backgroundColor:'white',
+    backgroundColor: 'white',
     width: sizes.screenWidth * 0.75,
     height: sizes.screenHeight * 0.07,
     color: colors.black,
   },
-  arrowBlackIcon: {
-    resizeMode: 'contain',
-    width: sizes.screenWidth * 0.05,
-    height: sizes.screenWidth * 0.05,
-    marginRight:sizes.screenWidth * 0.01,
-  },
+
   laoderContainer: {
-    backgroundColor: '#FBFAFA',
+    backgroundColor: 'black',
     height: sizes.screenHeight,
     flexDirection: 'row',
     alignItems: 'center',
@@ -144,5 +137,33 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth,
     height: sizes.screenHeight,
     // marginBottom: sizes.screenHeight * 0.06,
+  },
+  imageIconTouchable: {
+    // backgroundColor:'red'
+  },
+  imgIcon: {
+    width: sizes.screenWidth * 0.07,
+    height: sizes.screenWidth * 0.07,
+    resizeMode: 'contain',
+  },
+  sendBtnIcon: {
+    width: sizes.screenWidth * 0.07,
+    height: sizes.screenWidth * 0.07,
+    resizeMode: 'contain',
+  },
+  sendBtnIconSecond: {
+    width: sizes.screenWidth * 0.12,
+    height: sizes.screenWidth * 0.12,
+    resizeMode: 'contain',
+  },
+  arrowBlackIcon: {
+    alignSelf: 'flex-end',
+    bottom: 40,
+    right: 20,
+    // resizeMode: 'contain',
+    // width: sizes.screenWidth * 0.05,
+    // height: sizes.screenWidth * 0.05,
+    // marginRight:sizes.screenWidth * 0.01,
+    // backgroundColor:'yellow'
   },
 });

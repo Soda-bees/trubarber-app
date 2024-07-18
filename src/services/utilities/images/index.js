@@ -120,8 +120,14 @@ import calendar from '../../../assets/calendar.png';
 import noAppointment from '../../../assets/noAppointment.png';
 import pencil from '../../../assets/pencil.png';
 import deleteIconn from '../../../assets/deleteIconn.png';
+import chatImg from "../../../assets/chatImg.png"
+import cancel from "../../../assets/cancel.png"
+import sendSecond from "../../../assets/sendSecond.png"
 
 const images = {
+  sendSecond,
+  cancel,
+  chatImg,
   whiteCrossexit,
   marketBarber,
   markerCutter,

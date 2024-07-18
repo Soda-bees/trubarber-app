@@ -11,6 +11,8 @@ import {
   Keyboard,
   ToastAndroid,
   BackHandler,
+  ActivityIndicator,
+  PermissionsAndroid,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { styles } from './style';
@@ -24,9 +26,10 @@ import LottieView from 'lottie-react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUserData, setSeenTrueRedux } from '../../store/userData';
 import { selectAuthToken } from '../../store/authToken';
-import { sendMessage, setSeenTrue } from '../../services/config/API';
+import { sendMessage, setSeenTrue, uploadMultiplesChatImages } from '../../services/config/API';
 import formatToJSON from '../../services/config/FormatToJson';
 import ImageGrid from '../../components/ImageGrid';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 export default function ChatDetails({ navigation, route }) {
 
@@ -34,6 +37,15 @@ export default function ChatDetails({ navigation, route }) {
   const userData = useSelector(selectUserData)
   const authToken = useSelector(selectAuthToken)
   const dispatch = useDispatch()
+  const scrollViewRef = useRef();
+
+  const [chatName, setChatName] = useState('');
+  const [selectedImages, setSelectedImages] = useState([])
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [chatId, setChatId] = useState(null)
+  const [text, setText] = useState('')
+  const [showImgScreen, setShowImgScreen] = useState(false)
 
   useEffect(() => {
     if (chatRoomId) {
@@ -42,12 +54,6 @@ export default function ChatDetails({ navigation, route }) {
       handleUpdateSeen(chatRoomId)
     }
   }, [route.params])
-
-  const scrollViewRef = useRef();
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
-  const [loader, setLoader] = useState(false);
-  const [chatId, setChatId] = useState(null)
-  const [text, setText] = useState('')
 
   const handleSetChatName = (_id) => {
     const chat = userData?.chat?.find((chat => chat?._id === _id))
@@ -98,106 +104,15 @@ export default function ChatDetails({ navigation, route }) {
     animation.current?.play();
   }, []);
 
-  const [conversation, setConversation] = useState([
-    {
-      chat: 'Top Top Start start start start start start start start start start start start start start start start.......',
-      user: 'Duis aute irure dolor.',
-    },
-    {
-      chat: 'Start start start start start start start start start start start start start start start start',
-      user: 'Duis aute irure dolor.',
-    },
-    {
-      chat: 'Start start start start start start start start start start start start start start start start',
-      user: 'Duis aute irure dolor.',
-    },
-    {
-      chat: 'Start start start start start start start start start start start start start start start start',
-      user: 'Duis aute irure dolor.',
-    },
-    {
-      chat: 'Start start start start start start start start start start start start start start start start',
-      user: 'Duis aute irure dolor.',
-    },
-    {
-      chat: 'Start start start start start start start start start start start start start start start start',
-      user: 'Duis aute irure dolor.',
-    },
-    {
-      chat: 'Start start start start start start start start start start start start start start start start',
-      user: 'Duis aute irure dolor.',
-    },
-    {
-      chat: 'Start start start start start start start start start start start start start start start start',
-      user: 'Duis aute irure dolor.',
-    },
-    {
-      chat: 'End End Start start start start start start start start start start start start start start start start...',
-      user: 'Duis aute irure dolor.',
-    },
-  ]);
-  const [chatName, setChatName] = useState('');
-  const [chatRecieve, setChatRecieve] = useState([
-    {
-      chat: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor 111',
-    },
-    {
-      chat: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia',
-    },
-    {
-      chat: 'Excepteur sint occaecat cupidatat non proident',
-    },
-    {
-      chat: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor',
-    },
-    {
-      chat: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia',
-    },
-    {
-      chat: 'Excepteur sint occaecat cupidatat non proident',
-    },
-  ]);
-  const [chatSend, setChatSend] = useState([
-    {
-      chat: 'Duis aute irure dolor.',
-    },
-    {
-      chat: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat',
-    },
-    {
-      chat: 'Sed do eiusmod tempor',
-    },
-    {
-      chat: 'Duis aute irure dolor.',
-    },
-    {
-      chat: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat',
-    },
-    {
-      chat: 'Sed do eiusmod tempor',
-    },
-  ]);
-
-  const mergedChats = [];
-  let receiveIndex = 0;
-  let sendIndex = 0;
-  while (receiveIndex < chatRecieve.length || sendIndex < chatSend.length) {
-    if (receiveIndex < chatRecieve.length) {
-      mergedChats.push({ type: 'receive', chat: chatRecieve[receiveIndex] });
-      receiveIndex++;
-    }
-    if (sendIndex < chatSend.length) {
-      mergedChats.push({ type: 'send', chat: chatSend[sendIndex] });
-      sendIndex++;
-    }
-  }
 
   const handlesendMessage = async () => {
     try {
       // console.log(text);
       // console.log(chatId);
       setText('')
-      const body = { text }
+      setSelectedImages([])
+      setShowImgScreen(false)
+      const body = { text, image: selectedImages }
       const response = await sendMessage(authToken, chatId, body)
       console.log(response?.status);
     } catch (error) {
@@ -207,13 +122,6 @@ export default function ChatDetails({ navigation, route }) {
 
   const handleUpdateSeen = async (chatRoomId) => {
     try {
-      // const chat = userData?.chat?.find(chat => chat?._id === chatRoomId);
-      // let filteredMessages = [];
-      // if (chat) {
-      //   filteredMessages = chat.messages.filter(message => message?.sender !== userData?._id && message.seen === false)
-      //     .map(message => message._id);
-      // }
-
       let filteredMessages = [];
 
       filteredMessages = userData?.chat
@@ -233,9 +141,16 @@ export default function ChatDetails({ navigation, route }) {
   }
 
   const handleBackButtonClick = () => {
-    handleUpdateSeen(chatRoomId);
-    navigation.goBack();
-    return true; // Ensure the back press is handled
+    // console.log(showImgScreen);
+    if (showImgScreen) {
+      setSelectedImages([])
+      setShowImgScreen(false)
+      return true
+    } else {
+      handleUpdateSeen(chatRoomId);
+      navigation.goBack();
+      return true; // Ensure the back press is handled
+    }
   };
 
   useEffect(() => {
@@ -243,37 +158,133 @@ export default function ChatDetails({ navigation, route }) {
 
     // Cleanup function to remove the event listener
     return () => backHandler.remove();
-  }, [userData]);
+  }, [userData, showImgScreen]);
 
-  const messageImg = [
-    'https://res.cloudinary.com/doohobw9k/image/upload/v1720719767/TruBarber/Profile/ouah1gf7mkzfvqmq39dm.jpg',
-    'https://res.cloudinary.com/doohobw9k/image/upload/v1720777075/TruBarber/Profile/qp0jveoic2jgwmxohphf.jpg',
-    'https://res.cloudinary.com/doohobw9k/image/upload/v1720719917/TruBarber/Profile/yc7skgeaqjwchmd8hvjd.jpg',
-    'https://res.cloudinary.com/doohobw9k/image/upload/v1720680304/TruBarber/Profile/lotsw0nruoc9dtxmmnnm.jpg',
-    'https://res.cloudinary.com/doohobw9k/image/upload/v1720677251/TruBarber/Profile/ve2kpmlrvevficutqc9p.png',
-    'https://res.cloudinary.com/doohobw9k/image/upload/v1720612266/TruBarber/Profile/nv2onajlj8ylirkqk9lc.jpg',
-    'https://res.cloudinary.com/doohobw9k/image/upload/v1720444074/TruBarber/Profile/swyf6pgrpg3vfhjed8yv.jpg',
-    'https://res.cloudinary.com/doohobw9k/image/upload/v1719387448/TruBarber/Profile/a5rrl9kmojhogja23x86.png'
-  ];
 
-  const messageImgSecond = [
-    'https://res.cloudinary.com/doohobw9k/image/upload/v1720719767/TruBarber/Profile/ouah1gf7mkzfvqmq39dm.jpg',
-    'https://res.cloudinary.com/doohobw9k/image/upload/v1720777075/TruBarber/Profile/qp0jveoic2jgwmxohphf.jpg',
-    'https://res.cloudinary.com/doohobw9k/image/upload/v1720719917/TruBarber/Profile/yc7skgeaqjwchmd8hvjd.jpg',
+  const requestCameraPermission = async () => {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('Camera permission granted');
+    } else {
+      console.log('Camera permission denied');
+    }
+  };
 
-  ];
+  const uploadPhoto = async sourceType => {
+    let options = {
+      mediaType: 'photo',
+      quality: 1,
+      maxWidth: 800,
+      maxHeight: 600,
+      includeBase64: false,
+      saveToPhotos: true,
+      selectionLimit: 0, // 0 for unlimited selection
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+
+    const handleResponse = response => {
+      try {
+        const assets = response.assets || [];
+        if (assets.length > 0) {
+          // console.log("call function");
+          handleUploadImage(assets);
+        } else {
+          console.warn('No images found in response');
+        }
+      } catch (error) {
+        console.error('Error processing response:', error);
+      }
+    };
+
+    if (sourceType === 'library') {
+      launchImageLibrary(options, handleResponse);
+    } else if (sourceType === 'camera') {
+      await requestCameraPermission();
+      launchCamera(options, handleResponse);
+    }
+  };
+
+  const handleUploadImage = async (images) => {
+    try {
+      setShowImgScreen(true)
+      setLoader(true)
+      const formData = new FormData();
+      images.forEach(image => {
+        formData.append('images', {
+          uri: image.uri,
+          type: image.type,
+          name: image.fileName,
+        });
+      });
+      const response = await uploadMultiplesChatImages(formData, authToken);
+      console.log("for data", formatToJSON(response?.data));
+      console.log("for status", response?.status);
+      if (response?.status == 200) {
+        setSelectedImages(response?.data?.images)
+        setLoader(false)
+        return
+      }
+      setLoader(false)
+      setShowImgScreen(false)
+    } catch (error) {
+      setLoader(false)
+      setShowImgScreen(false)
+      console.log(error);
+    }
+  }
+
+  const handleCancelImage = () => {
+    setShowImgScreen(false)
+    setSelectedImages([])
+  }
 
   return (
     <SafeAreaView>
-      {loader ? (
+      {showImgScreen ? (
         <View style={styles.laoderContainer}>
-          <LottieView
+          {/* <LottieView
             ref={animation}
             source={require('../../assestsAnimation/chatAnimatedLoader.json')}
             autoPlay
             loop
             style={styles.lottie}
-          />
+          /> */}
+          {
+            loader ? <ActivityIndicator color={colors.white} size={40} /> :
+              selectedImages?.length > 0 &&
+              <View style={{ width: sizes.screenWidth, height: sizes.screenHeight, alignItems: 'flex-start' }}>
+                <TouchableOpacity style={{ top: 20, left: 20 , zIndex:10 }} onPress={handleCancelImage}>
+                  <Image source={images.cancel} style={{ width: sizes.screenWidth * 0.1, height: sizes.screenWidth * 0.1, }} />
+                </TouchableOpacity>
+                <ScrollView
+                  horizontal
+                  pagingEnabled
+                  showsHorizontalScrollIndicator={false}
+                >
+                  {
+                    selectedImages?.map((item, index) => {
+                      return (
+                        <Image
+                          key={index}
+                          source={{ uri: item }}
+                          style={{ width: sizes.screenWidth, height: sizes.screenHeight, resizeMode: 'contain' }}
+                        />
+                      )
+                    })
+                  }
+                </ScrollView>
+                <TouchableOpacity style={styles.arrowBlackIcon}
+                  onPress={handlesendMessage}
+                >
+                  <Image source={images.sendSecond} style={styles.sendBtnIconSecond} />
+                </TouchableOpacity>
+              </View>
+          }
         </View>
       ) : (
         <View style={styles.container}>
@@ -287,6 +298,7 @@ export default function ChatDetails({ navigation, route }) {
           <View style={styles.chatSubContianer}>
             <View>
               <ScrollView
+                showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContianer}
                 ref={scrollViewRef}
                 onContentSizeChange={() => scrollToBottom()}
@@ -305,16 +317,20 @@ export default function ChatDetails({ navigation, route }) {
                       .filter(chat => chat?._id === chatId)
                       .map((chat) =>
                         chat?.messages?.map((item, index) => {
-                          // console.log(item);
                           return (
-                            <View style={item?.sender === userData?._id ? styles.chatSend : styles.chatRecieved} key={index}>
-                              <Text style={styles.chatText}>{item.text}</Text>
+                            <View
+                              style={item?.sender === userData?._id ? styles.chatSend : styles.chatRecieved}
+                              key={index}>
+                              {
+                                item?.image?.length > 0 ?
+                                  <ImageGrid images={item?.image} />
+                                  :
+                                  <Text style={styles.chatText}>{item.text}</Text>
+                              }
                             </View>
                           )
                         })
                       )}
-                  <ImageGrid images={messageImg} />
-                  <ImageGrid images={messageImgSecond} />
                 </View>
               </ScrollView>
             </View>
@@ -333,11 +349,19 @@ export default function ChatDetails({ navigation, route }) {
                 value={text}
                 onChangeText={(text) => setText(text)}
               />
-              <TouchableOpacity style={styles.arrowBlackIcon}
-                onPress={handlesendMessage}
-              >
-                <Image source={images.arrowBlackIcon}  />
-              </TouchableOpacity>
+              {
+                text ?
+                  <TouchableOpacity
+                    onPress={handlesendMessage}
+                  >
+                    <Image source={images.arrowBlackIcon} style={styles.sendBtnIcon} />
+                  </TouchableOpacity> :
+                  <TouchableOpacity style={styles.imageIconTouchable}
+                    onPress={() => uploadPhoto('library')}
+                  >
+                    <Image source={images.chatImg} style={styles.imgIcon} />
+                  </TouchableOpacity>
+              }
             </View>
             <KeyboardSpacer topSpacing={sizes.screenHeight * 0.045} />
           </View>

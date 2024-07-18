@@ -5,7 +5,6 @@ import Modal from 'react-native-modal';
 
 const ImageGrid = ({ images }) => {
     const scrollViewRef = useRef(null);
-    const imageZoomRef = useRef(null)
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -31,7 +30,8 @@ const ImageGrid = ({ images }) => {
         if (index < 4) {
             return (
                 <TouchableOpacity onPress={() => openModal(index)}
-                    style={{ marginTop: sizes.screenWidth * 0.01, marginLeft: sizes.screenWidth * 0.01 }}>
+                    style={{ marginTop: sizes.screenWidth * 0.005, marginLeft: sizes.screenWidth * 0.005 }}
+                    >
                     <Image source={{ uri: item }} style={styles.image} />
                 </TouchableOpacity>
             );
@@ -124,7 +124,12 @@ const ImageGrid = ({ images }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
+        // marginTop:sizes.screenHeight * 0.01,
+        // backgroundColor:'red',
+        width: sizes.screenWidth * 0.65,
+        height: sizes.screenHeight * 0.4,
+        
     },
     gridContainer: {
         flexDirection: 'row',
@@ -133,14 +138,14 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         position: 'relative',
-        width: sizes.screenWidth * 0.3,
-        height: sizes.screenWidth * 0.3,
-        marginTop: sizes.screenWidth * 0.01,
-        marginLeft: sizes.screenWidth * 0.01
+        width: sizes.screenWidth * 0.32,
+        height: sizes.screenWidth * 0.39,
+        marginTop: sizes.screenWidth * 0.005,
+        marginLeft: sizes.screenWidth * 0.005
     },
     image: {
-        width: sizes.screenWidth * 0.3,
-        height: sizes.screenWidth * 0.3,
+        width: sizes.screenWidth * 0.32,
+        height: sizes.screenWidth * 0.39,
         borderRadius: 8,
     },
     modalContainer: {
@@ -158,7 +163,7 @@ const styles = StyleSheet.create({
     fullImage: {
         width: sizes.screenWidth,
         height: sizes.screenHeight * 0.8,
-        resizeMode: 'contain',
+        resizeMode:'cover',
         borderRadius: 8,
     },
     closeButton: {
@@ -189,7 +194,7 @@ const styles = StyleSheet.create({
     },
     singleImageContainer: {
         position: 'relative',
-        margin: 4,
+        // margin: 4,
         width: sizes.screenWidth * 0.65,
         height: sizes.screenHeight * 0.4,
         marginBottom: 10,

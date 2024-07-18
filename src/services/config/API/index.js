@@ -377,6 +377,25 @@ export const deleteReview = async (reviewId, token) => {
 };
 
 
+export const uploadMultiplesChatImages = async (formData, token) => {
+  try {
+    const axiosConfig = {
+      method: 'post',
+      url: `${BASE_URL}barber/uploadMultiplesChatImages`,
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const data = await axios(axiosConfig);
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+
+
 
 
 

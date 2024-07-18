@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '700',
   },
-  
+
   inputContainer: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -76,13 +76,14 @@ export const styles = StyleSheet.create({
     paddingVertical: sizes.screenHeight * 0.02,
     width: sizes.screenWidth * 0.9,
     alignSelf: 'center',
-},
+    marginTop: sizes.screenHeight * 0.015
+  },
   chatDetailContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     // backgroundColor:'red',
-    flex:1,
-    justifyContent:'space-between'
+    flex: 1,
+    justifyContent: 'space-between'
   },
   chatName: {
     fontSize: fontSize.medium,
@@ -95,7 +96,7 @@ export const styles = StyleSheet.create({
     lineHeight: sizes.screenHeight * 0.03,
     fontWeight: '500',
     // backgroundColor:'red',
-    width:sizes.screenWidth * 0.6
+    width: sizes.screenWidth * 0.6
   },
   chatTime: {
     fontSize: fontSize.small,
@@ -114,14 +115,14 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
   },
 
-  newMsgsContainer:{
+  newMsgsContainer: {
     backgroundColor: colors.white,
-    height: sizes.screenWidth*0.05,
-    width: sizes.screenWidth*0.05,
+    height: sizes.screenWidth * 0.05,
+    width: sizes.screenWidth * 0.05,
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop:sizes.screenWidth * 0.015,
-    marginRight:sizes.screenWidth * 0.02,
+    marginTop: sizes.screenWidth * 0.015,
+    marginRight: sizes.screenWidth * 0.02,
   }
 });
