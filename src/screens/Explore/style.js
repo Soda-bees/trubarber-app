@@ -118,13 +118,14 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.04,
   },
   marginTop: {
-    marginTop: sizes.screenHeight * 0.015,
+    marginVertical: 4,
   },
   heading: {
     color: colors.black,
     fontSize: fontSize.extraLarge,
     fontWeight: '700',
     marginHorizontal: sizes.screenWidth * 0.05,
+    marginBottom: 4,
   },
   categoryRow: {
     marginStart: sizes.screenWidth * 0.05,

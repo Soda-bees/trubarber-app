@@ -249,6 +249,8 @@ export default function Explore({navigation}) {
       })()
     : null;
 
+  console.log(filteredBarbers);
+
   return (
     <SafeAreaView>
       {loader ? (

@@ -12,30 +12,27 @@ import {
   PermissionsAndroid,
   Alert,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { styles } from './style';
+import React, {useEffect, useState} from 'react';
+import {styles} from './style';
 import images from '../../services/utilities/images';
-import { colors, sizes } from '../../services';
-import { StarRatingDisplay } from 'react-native-star-rating-widget';
+import {colors, sizes} from '../../services';
+import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import * as Progress from 'react-native-progress';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import { useDispatch, useSelector } from 'react-redux';
-import { setLocation } from '../../store/location';
-import { socket, socketService } from '../../services/Socket';
-import { selectUserData } from '../../store/userData';
-import { selectAuthToken } from '../../store/authToken';
+import {useDispatch, useSelector} from 'react-redux';
+import {setLocation} from '../../store/location';
+import {socket, socketService} from '../../services/Socket';
+import {selectUserData} from '../../store/userData';
+import {selectAuthToken} from '../../store/authToken';
 import formatToJSON from '../../services/config/FormatToJson';
 import ChatConponent from '../../components/ChatComponent';
 import moment from 'moment';
 
-export default function BarberDashboard({ navigation }) {
+export default function BarberDashboard({navigation}) {
   const dispatch = useDispatch();
   const userData = useSelector(selectUserData);
-  console.log('barber loggggggggg', userData.reviews);
   const authToken = useSelector(selectAuthToken);
-  // console.log('barber pr data h yeh', formatToJSON(userData));
-
 
   const [numberOfCompletedAppointments, setNumberOfCompletedAppointments] =
     useState(0);
@@ -49,6 +46,7 @@ export default function BarberDashboard({ navigation }) {
   const [lossAmount, setLossAmount] = useState('1,760.00');
   const [lossPercent, setLossPercent] = useState('10%');
   const [region, setRegion] = useState(null);
+  const [barberReviews, setBarberReviews] = useState([]);
 
   const [currentLocation, setCurrentLocation] = useState(
     'Rachael McPhail Street...',
@@ -79,24 +77,6 @@ export default function BarberDashboard({ navigation }) {
       star: '1',
       progress: '0.0',
       percentage: '0',
-    },
-  ]);
-  const [rating, setRatings] = useState([
-    {
-      profilePic: images.profilePic,
-      username: 'Kita Chihoko',
-      time: '02 February 2023',
-      description:
-        'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id es',
-      rating: '5',
-    },
-    {
-      profilePic: images.profilePic,
-      username: 'Kita Chihoko',
-      time: '02 February 2023',
-      description:
-        'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id es',
-      rating: '4',
     },
   ]);
 
@@ -170,7 +150,7 @@ export default function BarberDashboard({ navigation }) {
   const getCurrentLocation = (setRegion, dispatch) => {
     Geolocation.getCurrentPosition(
       position => {
-        const { latitude, longitude } = position.coords;
+        const {latitude, longitude} = position.coords;
         // console.log(
         //   position.coords,
         //   '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
@@ -207,7 +187,7 @@ export default function BarberDashboard({ navigation }) {
     const year = parseInt(parts[2], 10);
     const dateObj = new Date(year, month, day);
     // const options = {weekday: 'short', month: 'short', day: 'numeric'};
-    const options = { month: 'short', day: 'numeric' };
+    const options = {month: 'short', day: 'numeric'};
 
     return dateObj.toLocaleDateString('en-US', options);
   };
@@ -235,10 +215,42 @@ export default function BarberDashboard({ navigation }) {
     if (userData?.appoinment) {
       filterAndSetAppointments(userData?.appoinment);
     }
+    if (userData?.reviews) {
+      const sortedReviews = [...userData.reviews].sort((a, b) =>
+        moment(b.createdAt).diff(moment(a.createdAt)),
+      );
+      setBarberReviews(sortedReviews);
+    }
   }, [userData]);
 
   const formatDate = createdAt => {
     return moment(createdAt).format('DD MMMM YYYY');
+  };
+
+  const calculateAverageRating = reviews => {
+    if (reviews && reviews.length > 0) {
+      const totalRating = reviews.reduce(
+        (sum, review) => sum + parseFloat(review.rating),
+        0,
+      );
+      return totalRating / reviews.length;
+    } else {
+      return 0;
+    }
+  };
+
+  const calculateStarPercentage = (barberReviews, numberOfStars) => {
+    if (!barberReviews || barberReviews.length === 0) {
+      return 0;
+    }
+
+    const totalReviews = barberReviews.length;
+    const matchingReviews = barberReviews.filter(
+      review => Number(review.rating) == numberOfStars,
+    ).length;
+
+    const percentage = (matchingReviews / totalReviews) * 100;
+    return percentage.toFixed(1);
   };
 
   return (
@@ -252,7 +264,7 @@ export default function BarberDashboard({ navigation }) {
             <View style={styles.topIconRow}>
               <View
                 style={styles.locationRow}
-              // onPress={() => navigation.navigate('WholeMap')}
+                // onPress={() => navigation.navigate('WholeMap')}
               >
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
@@ -334,7 +346,7 @@ export default function BarberDashboard({ navigation }) {
                 </Text>
               </View>
             ) : (
-              <View style={{ marginBottom: 15 }}>
+              <View style={{marginBottom: 15}}>
                 <View style={styles.appointmentBtn}>
                   <Text style={styles.headingSummary}>Appointments</Text>
                   <TouchableOpacity
@@ -384,79 +396,98 @@ export default function BarberDashboard({ navigation }) {
               </View>
             )}
 
-            <View style={styles.rowFour}>
-              <Text style={styles.reviewHeading}>Reviews</Text>
-              <TouchableOpacity
-                style={styles.viewAllBtn}
-                onPress={() => navigation.navigate('Reviews')}>
-                <Text style={styles.viewAllText}>View All</Text>
-                <Image
-                  style={styles.arrowImage}
-                  source={images.rightArrowRed}
-                />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.reviewContainer}>
-              <View style={styles.reviewInsideContainer}>
-                <Text style={styles.ratingNumber}>4.0</Text>
-                <StarRatingDisplay
-                  rating={4}
-                  color={colors.gold}
-                  emptyColor={colors.emptyStar}
-                  starSize={sizes.screenHeight * 0.025}
-                  starStyle={styles.startContainer}
-                />
-                <Text style={styles.totalReview}>783 Reviews</Text>
-              </View>
-              <View style={styles.reviewBarContainer}>
-                {totalRating.map((item, index) => (
-                  <View style={styles.reviewBarRow} key={index}>
-                    <Text style={styles.ratingGoldenText}>{item.star}</Text>
-                    <Image source={images.star} style={styles.starImage} />
-                    <Progress.Bar
-                      width={sizes.screenWidth * 0.28}
-                      unfilledColor={colors.white}
-                      borderColor={colors.white}
-                      color={colors.goldText}
-                      progress={parseFloat(item.progress)}
-                      height={sizes.screenHeight * 0.006}
-                    />
-                    <Text style={styles.percentGoldenText}>
-                      {item.percentage} %
-                    </Text>
-                  </View>
-                ))}
-              </View>
-            </View>
-            {userData.reviews.map((item, index) => (
-              <View key={index} style={styles.ratingContainer}>
-                <View style={styles.ratingData}>
-                  <View style={styles.rowAndmargin}>
+            {barberReviews ? (
+              <>
+                <View style={styles.rowFour}>
+                  <Text style={styles.reviewHeading}>Reviews</Text>
+                  <TouchableOpacity
+                    style={styles.viewAllBtn}
+                    onPress={() => navigation.navigate('Reviews')}>
+                    <Text style={styles.viewAllText}>View All</Text>
                     <Image
-                      source={{uri: item?.userData?.profile}}
-                      style={styles.profilePic}
+                      style={styles.arrowImage}
+                      source={images.rightArrowRed}
                     />
-                    <View style={styles.alignItems}>
-                      <Text style={styles.usernameAllignment}>
-                        {item?.userData?.name}
-                      </Text>
-                      <Text style={styles.time}>
-                        {formatDate(item?.createdAt)}
-                      </Text>
-                    </View>
-                  </View>
-                  <View>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.reviewContainer}>
+                  <View style={styles.reviewInsideContainer}>
+                    <Text style={styles.ratingNumber}>
+                      {calculateAverageRating(barberReviews)}
+                    </Text>
                     <StarRatingDisplay
-                      rating={item?.rating}
+                      rating={calculateAverageRating(barberReviews)}
                       color={colors.gold}
+                      emptyColor={colors.emptyStar}
                       starSize={sizes.screenHeight * 0.025}
                       starStyle={styles.startContainer}
                     />
+                    <Text style={styles.totalReview}>
+                      {barberReviews?.length} Reviews
+                    </Text>
+                  </View>
+                  <View style={styles.reviewBarContainer}>
+                    {totalRating.map((item, index) => (
+                      <View style={styles.reviewBarRow} key={index}>
+                        <Text style={styles.ratingGoldenText}>{item.star}</Text>
+                        <Image source={images.star} style={styles.starImage} />
+                        <Progress.Bar
+                          width={sizes.screenWidth * 0.28}
+                          unfilledColor={colors.white}
+                          borderColor={colors.white}
+                          color={colors.goldText}
+                          progress={
+                            calculateStarPercentage(
+                              userData?.reviews,
+                              item?.star,
+                            ) / 100
+                          }
+                          height={sizes.screenHeight * 0.006}
+                        />
+                        <Text style={styles.percentGoldenText}>
+                          {calculateStarPercentage(
+                            userData?.reviews,
+                            item?.star,
+                          )}{' '}
+                          %
+                        </Text>
+                      </View>
+                    ))}
                   </View>
                 </View>
-                <Text style={styles.descriptionContainer}>{item?.comment}</Text>
-              </View>
-            ))}
+                {barberReviews?.map((item, index) => (
+                  <View key={index} style={styles.ratingContainer}>
+                    <View style={styles.ratingData}>
+                      <View style={styles.rowAndmargin}>
+                        <Image
+                          source={{uri: item?.userData?.profile}}
+                          style={styles.profilePic}
+                        />
+                        <View style={styles.alignItems}>
+                          <Text style={styles.usernameAllignment}>
+                            {item?.userData?.name}
+                          </Text>
+                          <Text style={styles.time}>
+                            {formatDate(item?.createdAt)}
+                          </Text>
+                        </View>
+                      </View>
+                      <View>
+                        <StarRatingDisplay
+                          rating={item?.rating}
+                          color={colors.gold}
+                          starSize={sizes.screenHeight * 0.025}
+                          starStyle={styles.startContainer}
+                        />
+                      </View>
+                    </View>
+                    <Text style={styles.descriptionContainer}>
+                      {item?.comment}
+                    </Text>
+                  </View>
+                ))}
+              </>
+            ) : null}
           </View>
         </ScrollView>
         <View style={Platform.OS == 'ios' && styles.paddingBtm} />

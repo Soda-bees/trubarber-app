@@ -9,7 +9,7 @@ import {
   Platform,
   ToastAndroid,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {styles} from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
@@ -18,19 +18,26 @@ import {colors, sizes} from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
-import { selectUserData } from '../../store/userData/index.js';
-import { selectAuthToken } from '../../store/authToken/index.js';
-import { createChatRoom } from '../../services/config/API/index.js';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectUserData} from '../../store/userData/index.js';
+import {selectAuthToken} from '../../store/authToken/index.js';
+import {createChatRoom, getAllBarber} from '../../services/config/API/index.js';
+import {selectbarber, setBarber} from '../../store/barber/index.js';
+import {useFocusEffect} from '@react-navigation/native';
 
 export default function BookAppointment({navigation, route}) {
-  const barbar = route?.params?.item;
-  const userData = useSelector(selectUserData)
-  const authToken = useSelector(selectAuthToken)
-  // console.log('param wala data h yeh', formatToJSON(barbar));
+  const barbarId = route?.params?.item._id;
+  const allBarbers = useSelector(selectbarber);
+  const dispatch = useDispatch();
+  const barbar = allBarbers?.find(barber => barber?._id === barbarId);
+  console.log(barbar);
+  const userData = useSelector(selectUserData);
+  const authToken = useSelector(selectAuthToken);
   const [services, setServices] = useState([]);
-  const [chatRoomId, setChatRoomId] = useState(null)
-
+  const [chatRoomId, setChatRoomId] = useState(null);
+  const [barberReviews, setBarberReviews] = useState([]);
+  const [userReview, setUserReview] = useState(null);
+  console.log('==========', userReview, '==========', barberReviews);
   const [rating, setRatings] = useState([
     {
       profilePic: images.profilePic,
@@ -125,80 +132,141 @@ export default function BookAppointment({navigation, route}) {
     navigation.goBack();
   };
 
+  const handleGetAllBarber = async () => {
+    try {
+      const response = await getAllBarber(authToken);
+      if (response?.status == 200) {
+        dispatch(setBarber(response?.data?.barbers));
+      } else {
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      handleGetAllBarber();
+    }, []),
+  );
   useEffect(() => {
     setServices(barbar?.services);
-    handleStatus(barbar.time)
-    findChat()
+    handleStatus(barbar.time);
+    findChat();
   }, [barbar]);
 
   const findChat = async () => {
     try {
-      const isChat = await findChatInRedux()
-      console.log("isChat", isChat);
+      const isChat = await findChatInRedux();
+      console.log('isChat', isChat);
       if (!isChat) {
         const body = {
           user: userData?._id,
-          barber: barbar?._id
-        }
-        console.log("api hit hog i chat room baner g");
-        const response = await createChatRoom(authToken, body)
-        console.log(response?.status , response?.data?.message);
+          barber: barbar?._id,
+        };
+        console.log('api hit hog i chat room baner g');
+        const response = await createChatRoom(authToken, body);
+        console.log(response?.status, response?.data?.message);
         if (response?.status == 201) {
-          setChatRoomId(response?.data?.newChat?._id)
+          setChatRoomId(response?.data?.newChat?._id);
         } else {
-          setChatRoomId(null)
+          setChatRoomId(null);
           console.log(response?.data?.message);
         }
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const findChatInRedux = async () => {
-    const name = barbar?._id + userData?._id
-    const name2 = userData?._id + barbar?._id
-    const chat = await userData?.chat?.find(chat => chat.name === name || chat.name === name2)
+    const name = barbar?._id + userData?._id;
+    const name2 = userData?._id + barbar?._id;
+    const chat = await userData?.chat?.find(
+      chat => chat.name === name || chat.name === name2,
+    );
     if (chat) {
-      setChatRoomId(chat?._id)
-      return true
+      setChatRoomId(chat?._id);
+      return true;
     } else {
-      setChatRoomId(null)
-      return false
+      setChatRoomId(null);
+      return false;
     }
-  }
+  };
 
   const handleStatus = openHours => {
     const [startTime, endTime] = openHours.split(' - ');
     const currentTime = moment();
-
     const openTime = moment(startTime, 'hh:mm A');
     let closeTime = moment(endTime, 'hh:mm A');
-
-    // If the close time is earlier than the open time, it means the shop closes past midnight
     if (closeTime.isBefore(openTime)) {
       closeTime.add(1, 'day');
     }
-
     if (
       currentTime.isBetween(openTime, closeTime) ||
       currentTime.isSame(openTime)
     ) {
-      // return 'open';
       setStatus('open');
     } else {
-      // return 'close';
       setStatus('close');
     }
   };
 
   const handleNavigateToChat = async () => {
     if (chatRoomId) {
-      navigation.navigate('ChatDetails', { chatRoomId });
+      navigation.navigate('ChatDetails', {chatRoomId});
     } else {
-      ToastAndroid.show('Something wents wrong, Please try again', ToastAndroid.LONG);
+      ToastAndroid.show(
+        'Something wents wrong, Please try again',
+        ToastAndroid.LONG,
+      );
     }
-  }
+  };
+
+  useEffect(() => {
+    if (barbar && userData) {
+      setReviews(barbar.reviews, userData._id);
+    }
+  }, [barbar, userData]);
+
+  const setReviews = (reviews, userId) => {
+    if (reviews && userId) {
+      const sortedReviews = [...reviews].sort((a, b) =>
+        moment(b.createdAt).diff(moment(a.createdAt)),
+      );
+
+      const userReview = sortedReviews.find(
+        review => review.userData._id === userId,
+      );
+
+      if (userReview) {
+        const filteredReviews = sortedReviews.filter(
+          review => review._id !== userReview._id,
+        );
+        setBarberReviews([userReview, ...filteredReviews]);
+      } else {
+        setBarberReviews(sortedReviews);
+      }
+
+      setUserReview(userReview || null);
+    }
+  };
+
+  const formatCreatedAt = dateString => {
+    return moment(dateString).format('DD MMMM YYYY');
+  };
+
+  const calculateAverageRating = reviews => {
+    if (reviews && reviews.length > 0) {
+      const totalRating = reviews.reduce(
+        (sum, review) => sum + parseFloat(review.rating),
+        0,
+      );
+      return totalRating / reviews.length;
+    } else {
+      return 0;
+    }
+  };
 
   return (
     <SafeAreaView>
@@ -258,9 +326,9 @@ export default function BookAppointment({navigation, route}) {
             </TouchableOpacity>
           </View>
           <View>
-            <TouchableOpacity style={styles.btnColor}
-              onPress={handleNavigateToChat}
-            >
+            <TouchableOpacity
+              style={styles.btnColor}
+              onPress={handleNavigateToChat}>
               <Image
                 style={styles.direction}
                 source={images.Send}
@@ -355,9 +423,11 @@ export default function BookAppointment({navigation, route}) {
               <View style={styles.row3}>
                 <View>
                   <View style={styles.row2}>
-                    <Text style={styles.starNumber}>4.8</Text>
+                    <Text style={styles.starNumber}>
+                      {calculateAverageRating(barberReviews)}
+                    </Text>
                     <StarRatingDisplay
-                      rating={4}
+                      rating={calculateAverageRating(barberReviews)}
                       color={colors.gold}
                       emptyColor={colors.emptyStar}
                       starSize={20}
@@ -365,7 +435,9 @@ export default function BookAppointment({navigation, route}) {
                     />
                   </View>
 
-                  <Text style={styles.disabledText}>783 Reviews</Text>
+                  <Text style={styles.disabledText}>
+                    {barberReviews ? barberReviews?.length : 0} Reviews
+                  </Text>
                 </View>
                 <View>
                   {tab === 'Reviews' ? (
@@ -375,34 +447,36 @@ export default function BookAppointment({navigation, route}) {
                       }}
                       style={styles.reviewBtn}>
                       <Image source={images.pencil} style={styles.pencil} />
-                      {/* {userReview ? (
-                <Text style={styles.reviewBtnText}>Edit review</Text>
-              ) : ( */}
-                      <Text style={styles.reviewBtnText}>Write a review</Text>
-                      {/* )} */}
+                      {userReview ? (
+                        <Text style={styles.reviewBtnText}>Edit review</Text>
+                      ) : (
+                        <Text style={styles.reviewBtnText}>Write a review</Text>
+                      )}
                     </TouchableOpacity>
                   ) : null}
                 </View>
               </View>
 
-              {rating.map((item, index) => (
+              {barberReviews.map((item, index) => (
                 <View key={index} style={styles.ratingContainer}>
                   <View style={styles.ratingData}>
                     <View style={styles.rowAndmargin}>
                       <Image
-                        source={item.profilePic}
+                        source={{uri: item?.userData?.profile}}
                         style={styles.profilePic}
                       />
                       <View style={styles.alignItems}>
                         <Text style={styles.usernameAllignment}>
-                          {item.username}
+                          {item?.userData?.name}
                         </Text>
-                        <Text style={styles.time}>{item.time}</Text>
+                        <Text style={styles.time}>
+                          {formatCreatedAt(item?.createdAt)}
+                        </Text>
                       </View>
                     </View>
                     <View>
                       <StarRatingDisplay
-                        rating={5}
+                        rating={item?.rating}
                         color={colors.gold}
                         starSize={20}
                         starStyle={styles.startContainer}
@@ -411,7 +485,7 @@ export default function BookAppointment({navigation, route}) {
                     </View>
                   </View>
                   <Text style={styles.descriptionContainer}>
-                    {item.description}
+                    {item?.comment}
                   </Text>
                 </View>
               ))}

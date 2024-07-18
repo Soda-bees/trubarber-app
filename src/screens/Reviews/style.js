@@ -74,6 +74,7 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.012,
     marginHorizontal: sizes.screenWidth * 0.027,
     fontWeight: '500',
+    alignSelf: 'flex-start',
   },
   rowAndmargin: {
     flexDirection: 'row',

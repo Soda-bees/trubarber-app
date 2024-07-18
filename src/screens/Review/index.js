@@ -274,6 +274,7 @@ export default function Review({navigation, route}) {
             color={colors.gold}
             emptyColor={colors.gold}
             starSize={36}
+            enableHalfStar={false}
           />
           <Text style={styles.disabledText2}>
             Tell us about your experience at {barber.name}

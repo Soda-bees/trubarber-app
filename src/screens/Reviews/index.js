@@ -9,7 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {styles} from './style';
 import BackArrow from '../../components/BackArrow';
 import images from '../../services/utilities/images';
@@ -67,6 +67,17 @@ export default function Reviews({navigation}) {
     },
   ]);
 
+  const [barberReviews, setBarberReviews] = useState([]);
+
+  useEffect(() => {
+    if (userData?.reviews) {
+      const sortedReviews = [...userData.reviews].sort((a, b) =>
+        moment(b.createdAt).diff(moment(a.createdAt)),
+      );
+      setBarberReviews(sortedReviews);
+    }
+  }, [userData]);
+
   const formatDate = createdAt => {
     return moment(createdAt).format('DD MMMM YYYY');
   };
@@ -84,24 +95,26 @@ export default function Reviews({navigation}) {
         <ScrollView>
           <KeyboardAwareScrollView extraHeight={sizes.screenHeight * 0.18}>
             <View style={styles.containerBody}>
-              {rating.map((item, index) => (
+              {barberReviews?.map((item, index) => (
                 <View key={index} style={styles.ratingContainer}>
                   <View style={styles.ratingData}>
                     <View style={styles.rowAndmargin}>
                       <Image
-                        source={item.profilePic}
+                        source={{uri: item?.userData?.profile}}
                         style={styles.profilePic}
                       />
                       <View style={styles.alignItems}>
                         <Text style={styles.usernameAllignment}>
-                          {item.username}
+                          {item?.userData?.name}
                         </Text>
-                        <Text style={styles.time}>{item.time}</Text>
+                        <Text style={styles.time}>
+                          {formatDate(item?.createdAt)}
+                        </Text>
                       </View>
                     </View>
                     <View>
                       <StarRatingDisplay
-                        rating={item.rating}
+                        rating={item?.rating}
                         color={colors.gold}
                         starSize={sizes.screenHeight * 0.025}
                         starStyle={styles.startContainer}
@@ -109,7 +122,7 @@ export default function Reviews({navigation}) {
                     </View>
                   </View>
                   <Text style={styles.descriptionContainer}>
-                    {item.description}
+                    {item?.comment}
                   </Text>
                   {/* <View style={styles.inputContainer}>
                     <TextInput
