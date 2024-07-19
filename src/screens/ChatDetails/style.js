@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
     // height: sizes.screenHeight,
     // marginBottom: 40,
     paddingBottom: sizes.screenWidth * 0.02,
-    backgroundColor:'red',
+    // backgroundColor:'red',
   },
   containerBody1: {
     marginTop: sizes.screenHeight * 0.02,
@@ -73,24 +73,24 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.chatRecievedBg,
     alignSelf: 'flex-start',
     padding: sizes.screenWidth * 0.01,
-    borderBottomEndRadius: sizes.screenWidth * 0.02,
-    borderTopLeftRadius: sizes.screenWidth * 0.02,
-    borderTopRightRadius: sizes.screenWidth * 0.02,
+    borderBottomEndRadius: sizes.screenWidth * 0.015,
+    borderTopLeftRadius: sizes.screenWidth * 0.015,
+    borderTopRightRadius: sizes.screenWidth * 0.015,
     marginBottom: sizes.screenWidth * 0.015,
     maxWidth: sizes.screenWidth * 0.8
   },
   chatText: {
     color: colors.black,
-    fontSize: fontSize.smallM,
-    lineHeight: sizes.screenHeight * 0.019,
+    fontSize: fontSize.medium,
+    // lineHeight: sizes.screenHeight * 0.019,
   },
   chatSend: {
     backgroundColor: colors.white,
     alignSelf: 'flex-end',
     padding: sizes.screenWidth * 0.01,
-    borderTopLeftRadius: sizes.screenWidth * 0.02,
-    borderTopRightRadius: sizes.screenWidth * 0.02,
-    borderBottomLeftRadius: sizes.screenWidth * 0.02,
+    borderTopLeftRadius: sizes.screenWidth * 0.015,
+    borderTopRightRadius: sizes.screenWidth * 0.015,
+    borderBottomLeftRadius: sizes.screenWidth * 0.015,
     marginBottom: sizes.screenWidth * 0.015,
     maxWidth: sizes.screenWidth * 0.8,
     borderWidth: 0.5,
@@ -167,4 +167,13 @@ export const styles = StyleSheet.create({
     // marginRight:sizes.screenWidth * 0.01,
     // backgroundColor:'yellow'
   },
+  scrollImg: {
+    width: sizes.screenWidth * 0.1,
+    height: sizes.screenWidth * 0.1,
+  },
+  scrollTouchable: {
+    position: 'absolute',
+    right: 15,
+    bottom: 20
+  }
 });

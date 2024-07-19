@@ -20,7 +20,7 @@ import StarRating from 'react-native-star-rating-widget';
 import LottieView from 'lottie-react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAuthToken } from '../../store/authToken';
-import { getAllBarber } from '../../services/config/API';
+import { getAllBarber, handleGetUserDetails } from '../../services/config/API';
 import { ErrorShow } from '../../components/Error';
 import { selectlocation, setLocation } from '../../store/location';
 import { setBarber } from '../../store/barber';
@@ -29,7 +29,7 @@ import LocationServicesDialogBox from 'react-native-android-location-services-di
 import { useFocusEffect } from '@react-navigation/native';
 import formatToJSON from '../../services/config/FormatToJson';
 import { socket, socketService } from '../../services/Socket';
-import { selectUserData } from '../../store/userData';
+import { selectUserData, setUserData } from '../../store/userData';
 import ChatConponent from '../../components/ChatComponent';
 
 export default function Explore({ navigation }) {
@@ -232,10 +232,21 @@ export default function Explore({ navigation }) {
     );
   };
 
+  const getUserDetails = async () => {
+    try {
+      const response = await handleGetUserDetails(authToken)
+      if (response?.status == 200) {
+        dispatch(setUserData(response?.data?.userData));
+      }
+    } catch (error) {
+      console.log("error in user details", error);
+    }
+  }
+
   useFocusEffect(
     useCallback(() => {
       handleRunEveryTime();
-      console.log('meh chal rha hn bhaiiiii');
+      getUserDetails()
     }, []),
   );
 

@@ -368,7 +368,7 @@ export const deleteReview = async (reviewId, token) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post(`user/deleteReview/${reviewId}`, {}, { headers, },
+    const response = await axiosInstance.post(`user/deleteReview/${reviewId}`, {}, { headers },
     );
     return response;
   } catch (error) {
@@ -390,6 +390,21 @@ export const uploadMultiplesChatImages = async (formData, token) => {
     };
     const data = await axios(axiosConfig);
     return data;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const handleGetUserDetails = async (token) => {
+  try {
+    console.log(token);
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.get("user/userData", { headers },
+    );
+    return response;
   } catch (error) {
     return error;
   }

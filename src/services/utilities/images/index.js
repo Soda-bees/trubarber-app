@@ -124,8 +124,10 @@ import chatImg from "../../../assets/chatImg.png"
 import cancel from "../../../assets/cancel.png"
 import sendSecond from "../../../assets/sendSecond.png"
 import noChatImg from "../../../assets/noChatImg.png"
+import chatScroll from "../../../assets/chatScroll.png"
 
 const images = {
+  chatScroll,
   noChatImg,
   sendSecond,
   cancel,

@@ -19,7 +19,7 @@ import { styles } from './style';
 import BackArrow from '../../components/BackArrow';
 import images from '../../services/utilities/images';
 import { TextInput } from 'react-native-gesture-handler';
-import { colors, sizes } from '../../services';
+import { colors, fontSize, sizes } from '../../services';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import LottieView from 'lottie-react-native';
@@ -46,6 +46,7 @@ export default function ChatDetails({ navigation, route }) {
   const [chatId, setChatId] = useState(null)
   const [text, setText] = useState('')
   const [showImgScreen, setShowImgScreen] = useState(false)
+  const [showScrollToBottom, setShowScrollToBottom] = useState(false);
 
   useEffect(() => {
     if (chatRoomId) {
@@ -160,6 +161,16 @@ export default function ChatDetails({ navigation, route }) {
     return () => backHandler.remove();
   }, [userData, showImgScreen]);
 
+  const handleScroll = (event) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    const contentHeight = event.nativeEvent.contentSize.height;
+    const layoutHeight = event.nativeEvent.layoutMeasurement.height;
+    if (offsetY < contentHeight - layoutHeight - 20) {
+      setShowScrollToBottom(true);
+    } else {
+      setShowScrollToBottom(false);
+    }
+  }
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
@@ -242,8 +253,7 @@ export default function ChatDetails({ navigation, route }) {
     setShowImgScreen(false)
     setSelectedImages([])
   }
-  console.log("-=-=-==-", userData?.chat
-    .filter(chat => chat?._id === chatId));
+  const selectedChat = userData?.chat?.find(chat => chat?._id === chatId)
   return (
     <SafeAreaView>
       {showImgScreen ? (
@@ -296,21 +306,24 @@ export default function ChatDetails({ navigation, route }) {
             }} />
             <Text style={styles.headerText}>{chatName ? chatName : ''}</Text>
           </View>
-          {
-            chatId &&
-            userData?.chat?.length == [] &&
-            <View style={{ backgroundColor: 'red' }}>
-              <Text>no chat</Text>
-            </View>
-          }
+
           <View style={styles.chatSubContianer}>
+            {
+              selectedChat?.messages?.length === 0 &&
+              <Text style={{ color: 'black', bottom: sizes.screenHeight * 0.35, textAlign: 'center', fontSize: fontSize.smallM, fontWeight: '500' }}>
+                You're starting a new conversation. Say hi!
+              </Text>
+            }
             <View>
               <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContianer}
                 ref={scrollViewRef}
                 onContentSizeChange={() => scrollToBottom()}
-                onLayout={handleLayout}>
+                onLayout={handleLayout}
+                onScroll={handleScroll}
+                scrollEventThrottle={16}
+              >
                 <View
                   style={
                     keyboardOpen
@@ -342,6 +355,18 @@ export default function ChatDetails({ navigation, route }) {
                   }
                 </View>
               </ScrollView>
+              {showScrollToBottom && (
+              <TouchableOpacity
+                style={styles.scrollTouchable}
+                onPress={() => {
+                  setShowScrollToBottom(false)
+                  scrollToBottom()
+                }}
+              >
+                <Image source={images.chatScroll} style={styles.scrollImg} />
+                {/* <Text style={styles.scrollToBottomButtonText}>⬇</Text> */}
+              </TouchableOpacity>
+               )}
             </View>
             <View
               style={
@@ -374,6 +399,7 @@ export default function ChatDetails({ navigation, route }) {
             </View>
             <KeyboardSpacer topSpacing={sizes.screenHeight * 0.045} />
           </View>
+
         </View>
       )}
     </SafeAreaView>
