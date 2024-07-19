@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "831160766549",
+    "project_id": "trubarber-eca1f",
+    "storage_bucket": "trubarber-eca1f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831160766549:android:d2a3f6a1a19f8b333ac4dc",
+        "android_client_info": {
+          "package_name": "com.trubarber"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtUfr7NDqFkSaowyfz5EGR1kp51atKVss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
