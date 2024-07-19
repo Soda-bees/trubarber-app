@@ -20,6 +20,7 @@ import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import {useDispatch, useSelector} from 'react-redux';
 import {selectlocation, setLocation} from '../../store/location/index.js';
+import { notificationListners, requestUserPermission } from '../../services/config/NotificationService/index.js';
 
 export default function WelcomeScreen({navigation}) {
   const dispatch = useDispatch();
@@ -51,25 +52,62 @@ export default function WelcomeScreen({navigation}) {
   };
 
   useEffect(() => {
-    const initializeLocation = async () => {
-      const hasPermission = await requestLocationPermission();
-      if (hasPermission) {
-        checkLocationServices()
-          .then(() => {
-            getCurrentLocation(setRegion, dispatch);
-          })
-          .catch(error => {
-            console.log('Location services not enabled', error.message);
-            Alert.alert(
-              'Location Services Disabled',
-              'Please enable location services to use this feature.',
-            );
-          });
-      }
-    };
+    if (Platform.OS === 'android') {
+      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS).then((res) => {
+        console.log('res===>', res);
+        if (!!res && res === 'granted') {
+          requestUserPermission()
+          notificationListners()
+          initializeLocation()
+        }
+        notificationListners()
+        initializeLocation()
+      }).catch((error) => {
+        initializeLocation()
+        console.log('error in get permission in app.js')
+      })
+    } else {
 
-    initializeLocation();
-  }, []);
+    }
+  }, [])
+
+  const initializeLocation = async () => {
+    const hasPermission = await requestLocationPermission();
+    if (hasPermission) {
+      checkLocationServices()
+        .then(() => {
+          getCurrentLocation(setRegion, dispatch);
+        })
+        .catch(error => {
+          console.log('Location services not enabled', error.message);
+          Alert.alert(
+            'Location Services Disabled',
+            'Please enable location services to use this feature.',
+          );
+        });
+    }
+  };
+
+  // useEffect(() => {
+  //   const initializeLocation = async () => {
+  //     const hasPermission = await requestLocationPermission();
+  //     if (hasPermission) {
+  //       checkLocationServices()
+  //         .then(() => {
+  //           getCurrentLocation(setRegion, dispatch);
+  //         })
+  //         .catch(error => {
+  //           console.log('Location services not enabled', error.message);
+  //           Alert.alert(
+  //             'Location Services Disabled',
+  //             'Please enable location services to use this feature.',
+  //           );
+  //         });
+  //     }
+  //   };
+
+  //   initializeLocation();
+  // }, []);
 
   const requestLocationPermission = async () => {
     if (Platform.OS === 'android') {

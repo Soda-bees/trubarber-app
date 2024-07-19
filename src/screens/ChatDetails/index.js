@@ -50,6 +50,7 @@ export default function ChatDetails({ navigation, route }) {
 
   useEffect(() => {
     if (chatRoomId) {
+      console.log("chatRoomId-====",chatRoomId);
       setChatId(chatRoomId)
       handleSetChatName(chatRoomId)
       handleUpdateSeen(chatRoomId)

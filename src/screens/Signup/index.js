@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {styles} from './style';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
@@ -19,6 +19,7 @@ import Toast from 'react-native-toast-message';
 import {ErrorShow} from '../../components/Error';
 import Loader from '../../components/Loader';
 import {setAuthToken} from '../../store/authToken';
+import messaging from '@react-native-firebase/messaging';
 
 export default function Signup({navigation}) {
   const role = useSelector(selectRole);
@@ -30,6 +31,7 @@ export default function Signup({navigation}) {
   const [password, setPassword] = useState('');
   const [loader, setLoader] = useState(false);
   const [checked, setChecked] = useState(false);
+  const [deviceToken, setDeviceToken] = useState(null);
 
   const handleSignIn = () => {
     navigation.navigate('Login');
@@ -57,6 +59,7 @@ export default function Signup({navigation}) {
               email,
               password,
               role,
+              deviceToken,
             };
 
             console.log(userData);
@@ -86,7 +89,20 @@ export default function Signup({navigation}) {
   const handleChangeRole = r => {
     dispatch(setRole(r));
   };
-  // console.log(role);
+  const getFcmToken = async () => {
+    try {
+      const token = await messaging().getToken();
+      setDeviceToken(token);
+      console.log('Notification token Login=', token);
+      return token;
+    } catch (error) {
+      console.log('Error in generating token:', error);
+    }
+  };
+
+  useEffect(() => {
+    getFcmToken();
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.toggleContainer}>

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {styles} from './style';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
@@ -20,7 +20,8 @@ import Toast from 'react-native-toast-message';
 import {setUserData} from '../../store/userData';
 import {setAuthToken} from '../../store/authToken';
 import Loader from '../../components/Loader';
-import { addPaymentCard } from '../../store/paymentCard';
+import {addPaymentCard} from '../../store/paymentCard';
+import messaging from '@react-native-firebase/messaging';
 
 export default function Login({navigation}) {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ export default function Login({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loader, setLoader] = useState(false);
+  const [deviceToken, setDeviceToken] = useState(null);
 
   // const handleLogin = () => {
   //   if (role) {
@@ -46,18 +48,18 @@ export default function Login({navigation}) {
   // };
 
   const handleForgotPassword = () => {
-    if(!role){
+    if (!role) {
       return ErrorShow('error', 'Oops', 'Please select role');
     }
     navigation.navigate('ForgotPass');
-    setEmail('')
-    setPassword('')
+    setEmail('');
+    setPassword('');
   };
 
   const handleSignUP = () => {
     navigation.navigate('Signup');
-    setEmail('')
-    setPassword('')
+    setEmail('');
+    setPassword('');
   };
 
   const handleChangeRole = role => {
@@ -74,6 +76,7 @@ export default function Login({navigation}) {
         email,
         password,
         role,
+        deviceToken,
       };
       const response = await signin(body);
       console.log(response?.data?.user?.role);
@@ -82,7 +85,7 @@ export default function Login({navigation}) {
         dispatch(setUserData(response?.data?.user));
         dispatch(setAuthToken(response?.data?.token));
         dispatch(setRole(response?.data?.user?.role));
-        dispatch(addPaymentCard(response?.data?.user?.card))
+        dispatch(addPaymentCard(response?.data?.user?.card));
       } else {
         setLoader(false);
         ErrorShow('error', 'Oops', response?.data?.message);
@@ -92,6 +95,21 @@ export default function Login({navigation}) {
       ErrorShow('error', 'Oops', error?.message);
     }
   };
+
+  const getFcmToken = async () => {
+    try {
+      const token = await messaging().getToken();
+      setDeviceToken(token);
+      console.log('Notification token Login=', token);
+      return token;
+    } catch (error) {
+      console.log('Error in generating token:', error);
+    }
+  };
+
+  useEffect(() => {
+    getFcmToken();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
