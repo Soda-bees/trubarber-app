@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 import { selectUserData } from '../../store/userData';
 import formatToJSON from '../../services/config/FormatToJson';
 import ChatConponent from '../../components/ChatComponent';
+import NotificationComponent from '../../components/NotificationComponent';
 
 export default function BaberCatalogue({ navigation }) {
   const userData = useSelector(selectUserData)
@@ -59,7 +60,7 @@ export default function BaberCatalogue({ navigation }) {
                 </View>
               </View>
               <View style={styles.otherIconRow}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   style={styles.notificationContainer}
                   onPress={() => {
                     navigation.navigate('Notifications');
@@ -68,7 +69,8 @@ export default function BaberCatalogue({ navigation }) {
                     style={styles.iconImage}
                     source={images.notification}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+                <NotificationComponent />
                 {/* <TouchableOpacity style={styles.notificationContainer}
                   onPress={() => {
                     navigation.navigate('Chats');
@@ -123,7 +125,7 @@ export default function BaberCatalogue({ navigation }) {
           </ScrollView>
           {
             userData?.services?.length < 2 &&
-            <TouchableOpacity onPress={() => navigation.navigate('SetUpServices', { previousServices: userData?.services })}>
+            <TouchableOpacity style={styles.plusBtn} onPress={() => navigation.navigate('SetUpServices', { previousServices: userData?.services })}>
               <Image style={styles.addService} source={images.addBtn} />
             </TouchableOpacity>
           }

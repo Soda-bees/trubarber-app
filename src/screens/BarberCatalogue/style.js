@@ -122,12 +122,8 @@ export const styles = StyleSheet.create({
     fontWeight: '400',
   },
   addService: {
-    height: sizes.screenHeight * 0.061,
-    width: sizes.screenWidth * 0.125,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-    justifyContent: 'center',
-    bottom: sizes.screenHeight * 0.1,
+    height: 50 ,
+    width:  50,
     resizeMode: 'contain',
   },
   serviceContainer: {
@@ -172,4 +168,9 @@ export const styles = StyleSheet.create({
   paddingBtm: {
     paddingBottom: sizes.screenHeight * 0.1,
   },
+  plusBtn:{
+    position: 'absolute',
+    bottom: sizes.screenHeight*0.12,
+    right: sizes.screenWidth*0.06,
+  }
 });

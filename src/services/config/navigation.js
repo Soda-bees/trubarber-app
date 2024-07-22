@@ -49,11 +49,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectAuthToken } from '../../store/authToken';
 import { selectRole } from '../../store/role';
 import Review from '../../screens/Review';
-import NavigationService from './NavigationService';
 import { Linking } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import { sizes } from '../utilities/sizes';
 import { colors } from '../utilities/colors';
+import formatToJSON from './FormatToJson';
+import { addAppoinment, setUserData } from '../../store/userData';
+import { handleGetUserDetails } from './API';
+import AuthSetUpServices from '../../screens/AuthSetUpServices';
+import AuthServiceInfo from '../../screens/AuthServiceInfo';
 
 
 
@@ -66,8 +70,23 @@ export default function MainNavigator() {
 
   const NAVIGATION_IDS = ['Notifications', 'Appointments', "AppoinmentBarber"];
 
+  const getDetails = async () => {
+    try {
+      const response = await handleGetUserDetails(authToken)
+      if (response?.status == 200) {
+        console.log("get barber details navigation");
+        dispatch(setUserData(response?.data?.userData));
+      }
+    } catch (error) {
+      console.log("error in barber details", error);
+    }
+  }
+
   function buildDeepLinkFromNotificationData(data) {
-    console.log("notification data-=-=>", data);
+    // console.log("notification data-=-=>", formatToJSON(data));
+    if (data?.type === 'Appointment') {
+      getDetails()
+    }
     const navigationId = data?.navigationId;
     if (!NAVIGATION_IDS.includes(navigationId)) {
       console.warn('Unverified navigationId', navigationId)
@@ -141,7 +160,34 @@ export default function MainNavigator() {
   return (
     <NavigationContainer linking={linking}    >
       {
-        authToken ? (
+        !authToken ? (
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="ForgotPass" component={ForgotPass} />
+            <Stack.Screen name="Otp" component={Otp} />
+            <Stack.Screen name="ResetPass" component={ResetPass} />
+            <Stack.Screen name="Signup" component={Signup} />
+            <Stack.Screen name="AccountSetup" component={AccountSetup} />
+            <Stack.Screen name="ProfilePrompt" component={ProfilePrompt} />
+            <Stack.Screen name="UploadProfilepic" component={UploadProfilepic} />
+            <Stack.Screen name="ProfileSetupPrompt" component={ProfileSetupPrompt} />
+            <Stack.Screen name="SurveyPrompt" component={SurveyPrompt} />
+            <Stack.Screen name="CustomerPrefences" component={CustomerPrefences} />
+            <Stack.Screen name="SetUpOutlet" component={SetUpOutlet} />
+            <Stack.Screen name="TagSelection" component={TagSelection} />
+            <Stack.Screen name="Congratulation" component={Congratulation} />
+            <Stack.Screen name="AuthSetUpServices" component={AuthSetUpServices} />
+            <Stack.Screen name="AuthServiceInfo" component={AuthServiceInfo} />
+            <Stack.Screen name="OutletTags" component={OutletTags} />
+            <Stack.Screen
+              name="BusinessVerfication"
+              component={BusinessVerfication}
+            />
+            <Stack.Screen name="OutletCreated" component={OutletCreated} />
+
+          </Stack.Navigator>
+        ) : (
           role === 'user' ? (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
               <Stack.Screen name="MyTabs" component={MyTabs} />
@@ -155,8 +201,6 @@ export default function MainNavigator() {
               <Stack.Screen name="EditScreen" component={EditScreen} />
               <Stack.Screen name="ProfileSecurity" component={ProfileSecurity} />
               <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
-              <Stack.Screen name="SetUpServices" component={SetUpServices} />
-              <Stack.Screen name="ServiceInfo" component={ServiceInfo} />
               <Stack.Screen
                 name="BarberSevriceDetails"
                 component={BarberSevriceDetails}
@@ -191,33 +235,6 @@ export default function MainNavigator() {
               <Stack.Screen name="AddServices" component={AddServices} />
             </Stack.Navigator>
           )
-        ) : (
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="ForgotPass" component={ForgotPass} />
-            <Stack.Screen name="Otp" component={Otp} />
-            <Stack.Screen name="ResetPass" component={ResetPass} />
-            <Stack.Screen name="Signup" component={Signup} />
-            <Stack.Screen name="AccountSetup" component={AccountSetup} />
-            <Stack.Screen name="ProfilePrompt" component={ProfilePrompt} />
-            <Stack.Screen name="UploadProfilepic" component={UploadProfilepic} />
-            <Stack.Screen name="ProfileSetupPrompt" component={ProfileSetupPrompt} />
-            <Stack.Screen name="SurveyPrompt" component={SurveyPrompt} />
-            <Stack.Screen name="CustomerPrefences" component={CustomerPrefences} />
-            <Stack.Screen name="SetUpOutlet" component={SetUpOutlet} />
-            <Stack.Screen name="TagSelection" component={TagSelection} />
-            <Stack.Screen name="Congratulation" component={Congratulation} />
-            <Stack.Screen name="SetUpServices" component={SetUpServices} />
-            <Stack.Screen name="ServiceInfo" component={ServiceInfo} />
-            <Stack.Screen name="OutletTags" component={OutletTags} />
-            <Stack.Screen
-              name="BusinessVerfication"
-              component={BusinessVerfication}
-            />
-            <Stack.Screen name="OutletCreated" component={OutletCreated} />
-
-          </Stack.Navigator>
         )
       }
 

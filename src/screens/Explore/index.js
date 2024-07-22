@@ -31,6 +31,7 @@ import formatToJSON from '../../services/config/FormatToJson';
 import { socket, socketService } from '../../services/Socket';
 import { selectUserData, setUserData } from '../../store/userData';
 import ChatConponent from '../../components/ChatComponent';
+import NotificationComponent from '../../components/NotificationComponent';
 
 export default function Explore({ navigation }) {
   const userData = useSelector(selectUserData);
@@ -236,6 +237,7 @@ export default function Explore({ navigation }) {
     try {
       const response = await handleGetUserDetails(authToken)
       if (response?.status == 200) {
+        console.log("userDetails in explore");
         dispatch(setUserData(response?.data?.userData));
       }
     } catch (error) {
@@ -309,7 +311,7 @@ export default function Explore({ navigation }) {
                   </View>
                 </TouchableOpacity>
                 <View style={styles.otherIconRow}>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     style={styles.notificationContainer}
                     onPress={() => {
                       navigation.navigate('Notifications');
@@ -318,7 +320,8 @@ export default function Explore({ navigation }) {
                       style={styles.iconImage}
                       source={images.notification}
                     />
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
+                  <NotificationComponent />
                   <ChatConponent />
                   {/* <TouchableOpacity
                     style={styles.notificationContainer}

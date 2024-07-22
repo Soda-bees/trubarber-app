@@ -27,10 +27,12 @@ import { updateAppointmentStatus } from '../../services/config/API';
 import formatToJSON from '../../services/config/FormatToJson';
 import Toast from 'react-native-toast-message';
 import ChatConponent from '../../components/ChatComponent';
+import NotificationComponent from '../../components/NotificationComponent';
 export default function AppoinmentBarber({ navigation }) {
 
   const barber = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken)
+  // console.log(formatToJSON(barber?.appoinment?.length));
 
   const [startTime, setStartTime] = useState(new Date());
   const [clientName, setClientName] = useState('');
@@ -277,7 +279,7 @@ export default function AppoinmentBarber({ navigation }) {
                 </View>
               </View>
               <View style={styles.otherIconRow}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   style={styles.notificationContainer}
                   onPress={() => {
                     navigation.navigate('Notifications');
@@ -286,7 +288,8 @@ export default function AppoinmentBarber({ navigation }) {
                     style={styles.iconImage}
                     source={images.notification}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+                <NotificationComponent />
                 {/* <TouchableOpacity
                   style={styles.notificationContainer}
                   onPress={() => {

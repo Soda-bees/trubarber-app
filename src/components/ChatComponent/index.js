@@ -29,7 +29,6 @@ export default function ChatConponent() {
         });
 
         setTotalUnseenMessage(totalUnseenMessages)
-        console.log("Total unseen messages:", totalUnseenMessages);
 
     }
 

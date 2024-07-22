@@ -6,7 +6,8 @@ import {
   addMessageInChatRoom,
   addNewChatInRedux,
   updateAppointmendStatus,
-  addReview, deleteReview, updateReview
+  addReview, deleteReview, updateReview,
+  addNewNotificationRedux
 } from "../../store/userData";
 
 let socket;
@@ -33,32 +34,32 @@ const socketService = (dispatch, authToken, userData) => {
   }
 
   const handleAddNewMessage = async (data) => {
-    // console.log("handleAddNewMessage", data)
     dispatch(addMessageInChatRoom(data))
   }
 
   const handleAddNewChatRoom = async (data) => {
-    console.log("new chat socket");
     dispatch(addNewChatInRedux(data))
   }
 
   const handleAddAndUpdateNewChat = async (data) => {
-    console.log("handleAddAndUpdateNewChat socket");
     dispatch(addAndUpdateNewChatInRedux(data))
   }
 
   const handleAddNewReview = data => {
-    console.log('=-----------handleAddNewReview', data);
     dispatch(addReview(data));
   };
   const handleUpdateReview = data => {
-    console.log('=-----------handleUpdateReview', data);
     dispatch(updateReview(data));
   };
   const handleDeleteReview = data => {
     console.log(data);
     dispatch(deleteReview(data));
   };
+
+  const handleNewNotification = data =>{
+    dispatch(addNewNotificationRedux(data))
+  }
+
 
   socket.on('newAppoinment', handleReceivedNewAppoinment)
   socket.on('appointmentStatusUpdate', handleUpdateAppointmendStatus)
@@ -68,6 +69,9 @@ const socketService = (dispatch, authToken, userData) => {
   socket.on('newReview', handleAddNewReview);
   socket.on('updateReview', handleUpdateReview);
   socket.on('deleteReview', handleDeleteReview);
+  socket.on('newNotification', handleNewNotification);
+
+  
 
   const cleanup = () => {
     socket.off('newAppoinment', handleReceivedNewAppoinment);
@@ -78,6 +82,8 @@ const socketService = (dispatch, authToken, userData) => {
     socket.off('newReview', handleAddNewReview);
     socket.off('updateReview', handleUpdateReview);
     socket.off('deleteReview', handleDeleteReview);
+    socket.off('newNotification', handleNewNotification);
+    
   }
   return cleanup
 }

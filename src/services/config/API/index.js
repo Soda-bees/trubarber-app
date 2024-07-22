@@ -410,6 +410,18 @@ export const handleGetUserDetails = async (token) => {
   }
 };
 
+export const handleNotificationSeenTrue = async (token, notificationsIds) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post("user/setNotificationTrue", { notificationsIds }, { headers },);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
 
 
 

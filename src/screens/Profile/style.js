@@ -52,7 +52,7 @@ export const styles = StyleSheet.create({
   },
   youngMan: {
     borderRadius: sizes.screenWidth * 200,
-    height: sizes.screenHeight * 0.11,
+    height: sizes.screenWidth * 0.22,
     width: sizes.screenWidth * 0.22,
   },
   nameContainer: {

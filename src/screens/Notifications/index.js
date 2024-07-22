@@ -6,8 +6,8 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style';
 import BackArrow from '../../components/BackArrow';
 import images from '../../services/utilities/images';
 import {
@@ -21,8 +21,16 @@ import {
   formatDistanceToNow,
   parse,
 } from 'date-fns';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserData, setNotificationSeenTrueRedux } from '../../store/userData';
+import formatToJSON from '../../services/config/FormatToJson';
+import moment from 'moment';
+import { handleNotificationSeenTrue } from '../../services/config/API';
+import { selectAuthToken } from '../../store/authToken';
 
-export default function Notifications({navigation}) {
+export default function Notifications({ navigation }) {
+  const authToken = useSelector(selectAuthToken)
+  const dispatch = useDispatch()
   const [notification, setNotification] = useState([
     {
       title: 'Booking Done!',
@@ -40,26 +48,26 @@ export default function Notifications({navigation}) {
       time: format(new Date(), 'MM-dd-yyyy hh:mm a'),
     },
   ]);
-  const calculateTimeAgo = postTime => {
-    const inputFormat = 'MM-dd-yyyy hh:mm a';
-    const parsedDate = parse(postTime, inputFormat, new Date());
-    const outputFormat = 'yyyy-MM-dd HH:mm';
-    const targetDate1 = format(parsedDate, outputFormat);
-    const targetDate = new Date(targetDate1);
+  const userData = useSelector(selectUserData)
+  // console.log(formatToJSON(userData?.notification[0]));
+
+  const calculateTimeAgo = createdAt => {
     const currentDate = new Date();
-    const timeDifference = currentDate - targetDate;
-    const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-    const hoursAgo = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
-    const minutesAgo = Math.floor((timeDifference / (1000 * 60)) % 60);
-    if (daysAgo > 0) {
-      return `${daysAgo} day ago`;
-    } else if (hoursAgo > 0) {
-      return `${hoursAgo} hour ago`;
-    } else if (minutesAgo > 0) {
-      return `${minutesAgo} min ago`;
+    const timestamp = new Date(createdAt);
+    const timeDifference = Math.abs(currentDate - timestamp);
+
+    const minutes = Math.floor(timeDifference / 60000);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (minutes < 60) {
+      return `${minutes}m ago`;
+    } else if (hours < 24) {
+      return `${hours}h ago`;
     } else {
-      return 'Just now';
+      return `${days}d ago`;
     }
+
   };
 
 
@@ -68,6 +76,27 @@ export default function Notifications({navigation}) {
       return prevList.filter((_, index) => index !== indexToRemove);
     });
   };
+
+  useEffect(() => {
+    setSeenTrue()
+  }, [])
+
+  const setSeenTrue = async () => {
+    try {
+      let notificationsIds = []
+      if (userData?.role == 'user') {
+        notificationsIds = userData?.notification.filter(notification => notification?.userSeen === false)
+      } else {
+        notificationsIds = userData?.notification.filter(notification => notification?.barberSeen === false)
+      }
+      if(notificationsIds?.length > 0){
+        const response = await handleNotificationSeenTrue(authToken, notificationsIds)
+        dispatch(setNotificationSeenTrueRedux())
+      }
+    } catch (error) {
+      console.log("Error in update notification", error);
+    }
+  }
 
   const leftButton = index => (
     <SwipeButtonsContainer style={styles.swipeItem}>
@@ -95,32 +124,39 @@ export default function Notifications({navigation}) {
         </View>
         <ScrollView style={styles.scrollContianer}>
           <View style={styles.containerBody}>
-            {notification.map((item, index) => {
-              const timeAgo = calculateTimeAgo(item.time);
-              return (
-                <SwipeProvider key={index}>
-                  <SwipeItem
-                    style={styles.notificationSwipeContainer}
-                    swipeContainerStyle={{}}
-                    leftButtons={leftButton(index)}>
-                    <View style={styles.notficationContainer} key={index}>
-                      <Image source={images.calendarIcon} />
-                      <View style={styles.notficationDetailContainer}>
-                        <Text style={styles.notificationTitle}>
-                          {item.title}
-                        </Text>
-                        <Text style={styles.notificationDetail}>
-                          {item.detail}
-                        </Text>
-                        <Text style={styles.notificationTime}>
+            {userData?.notification?.length > 0 ?
+              userData?.notification?.map((item, index) => {
+                const timeAgo = calculateTimeAgo(item.createdAt);
+                return (
+                  // <SwipeProvider key={index}>
+                  //   <SwipeItem
+                  //     style={styles.notificationSwipeContainer}
+                  //     swipeContainerStyle={{}}
+                  //     leftButtons={leftButton(index)}>
+                  <View style={styles.notficationContainer} key={index}>
+                    <Image source={images.calendarIcon} />
+                    <View style={styles.notficationDetailContainer}>
+                      <Text style={styles.notificationTitle}>
+                        {item.title}
+                      </Text>
+                      <Text style={styles.notificationDetail}>
+                        {item.body}
+                      </Text>
+                      <Text style={styles.notificationTime}>
                         {timeAgo}
-                        </Text>
-                      </View>
+                      </Text>
                     </View>
-                  </SwipeItem>
-                </SwipeProvider>
-              );
-            })}
+                  </View>
+                  //   </SwipeItem>
+                  // </SwipeProvider>
+                );
+              }).reverse()
+              :
+              <View style={styles.noChatView}>
+                <Image style={styles.noChatImg} source={images.noNotification} />
+                <Text style={styles.noChatText}>You don't have any notifications yet</Text>
+              </View>
+            }
           </View>
         </ScrollView>
       </View>

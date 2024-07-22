@@ -41,6 +41,7 @@ export const styles = StyleSheet.create({
     paddingVertical: sizes.screenHeight * 0.02,
     width: sizes.screenWidth * 0.9,
     alignSelf: 'center',
+    marginTop:sizes.screenHeight * 0.01
   },
   notficationDetailContainer: {
     flexDirection: 'column',
@@ -53,9 +54,9 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
   },
   notificationDetail: {
-    fontSize: fontSize.smallM,
+    fontSize: fontSize.small,
     color: colors.black,
-    lineHeight: sizes.screenHeight * 0.03,
+    width:sizes.screenWidth * 0.7,
   },
   notificationTime: {
     fontSize: fontSize.small,
@@ -82,4 +83,19 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: sizes.screenHeight * 0.02,
   },
+  noChatView:{
+    flexDirection:'column',
+    alignItems:'center',
+    justifyContent:'center',
+    height:sizes.screenHeight * 0.7
+  },
+  noChatImg:{
+    width:sizes.screenWidth * 0.15,
+    height:sizes.screenWidth * 0.15,
+  },
+  noChatText:{
+    color:colors.black,
+    textAlign:'center',
+    fontWeight:'500'
+  }
 });

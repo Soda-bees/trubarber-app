@@ -43,25 +43,6 @@ export default function Chats({ navigation }) {
   const [search, setSearch] = useState('')
 
   const calculateTimeAgo = time => {
-    // const inputFormat = 'MM-dd-yyyy hh:mm a';
-    // const parsedDate = parse(postTime, inputFormat, new Date());
-    // const outputFormat = 'yyyy-MM-dd HH:mm';
-    // const targetDate1 = format(parsedDate, outputFormat);
-    // const targetDate = new Date(targetDate1);
-    // const currentDate = new Date();
-    // const timeDifference = currentDate - targetDate;
-    // const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-    // const hoursAgo = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
-    // const minutesAgo = Math.floor((timeDifference / (1000 * 60)) % 60);
-    // if (daysAgo > 0) {
-    //   return `${daysAgo} day ago`;
-    // } else if (hoursAgo > 0) {
-    //   return `${hoursAgo} hour ago`;
-    // } else if (minutesAgo > 0) {
-    //   return `${minutesAgo} min ago`;
-    // } else {
-    //   return 'Just now';
-    // }
     const now = moment();
     const timeMoment = moment(time);
 

@@ -146,7 +146,8 @@ export default function SetUpOutlet({ navigation, route }) {
     }
     const time = `${formatTime(startTime)} - ${formatTime(endTime)}`;
     Object.assign(userData, { profile: imgUri, description, time });
-    navigation.navigate('SetUpServices', { userData });
+    // navigation.navigate('SetUpServices', { userData });
+    navigation.navigate('AuthSetUpServices', { userData });
   };
 
   const formatTime = date => {

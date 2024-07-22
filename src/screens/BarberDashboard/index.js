@@ -12,7 +12,7 @@ import {
   PermissionsAndroid,
   Alert,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { styles } from './style';
 import images from '../../services/utilities/images';
 import { colors, sizes } from '../../services';
@@ -23,11 +23,14 @@ import LocationServicesDialogBox from 'react-native-android-location-services-di
 import { useDispatch, useSelector } from 'react-redux';
 import { setLocation } from '../../store/location';
 import { socket, socketService } from '../../services/Socket';
-import { selectUserData } from '../../store/userData';
+import { selectUserData, setUserData } from '../../store/userData';
 import { selectAuthToken } from '../../store/authToken';
 import formatToJSON from '../../services/config/FormatToJson';
 import ChatConponent from '../../components/ChatComponent';
 import moment from 'moment';
+import { handleGetUserDetails } from '../../services/config/API';
+import { useFocusEffect } from '@react-navigation/native';
+import NotificationComponent from '../../components/NotificationComponent';
 
 export default function BarberDashboard({ navigation }) {
   const dispatch = useDispatch();
@@ -213,6 +216,24 @@ export default function BarberDashboard({ navigation }) {
     }
   }, [userData]);
 
+  useFocusEffect(
+    useCallback(() => {
+      getBarberDetails()
+    }, []),
+  );
+
+  const getBarberDetails = async () => {
+    try {
+      const response = await handleGetUserDetails(authToken)
+      if (response?.status == 200) {
+        console.log("get barber details");
+        dispatch(setUserData(response?.data?.userData));
+      }
+    } catch (error) {
+      console.log("error in barber details", error);
+    }
+  }
+
   const formatDate = createdAt => {
     return moment(createdAt).format('DD MMMM YYYY');
   };
@@ -267,7 +288,7 @@ export default function BarberDashboard({ navigation }) {
                 </View>
               </View>
               <View style={styles.otherIconRow}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   style={styles.notificationContainer}
                   onPress={() => {
                     navigation.navigate('Notifications');
@@ -276,15 +297,9 @@ export default function BarberDashboard({ navigation }) {
                     style={styles.iconImage}
                     source={images.notification}
                   />
-                </TouchableOpacity>
-                <ChatConponent />
-                {/* <TouchableOpacity
-                  style={styles.notificationContainer}
-                  onPress={() => {
-                    navigation.navigate('Chats');
-                  }}>
-                  <Image style={styles.iconImage} source={images.chat} />
                 </TouchableOpacity> */}
+                <NotificationComponent />
+                <ChatConponent />
               </View>
             </View>
             {/* <View style={styles.inputContainer}>

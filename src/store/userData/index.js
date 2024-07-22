@@ -62,14 +62,11 @@ const userDataSlice = createSlice({
     },
     addAndUpdateNewChatInRedux: (state, action) => {
       const newChat = action.payload;
-      console.log("addAndUpdateNewChat redux", formatToJSON(newChat));
       if (state.userData && newChat.user._id === state.userData._id || newChat.barber._id === state.userData._id) {
         const existingChatIndex = state.userData.chat.findIndex(chat => chat._id === newChat._id);
         if (existingChatIndex !== -1) {
-          // Replace the existing chat with newChat
           state.userData.chat[existingChatIndex] = newChat;
         } else {
-          // Add newChat to userData.chat
           state.userData.chat.push(newChat);
         }
       }
@@ -162,6 +159,37 @@ const userDataSlice = createSlice({
       }
       return state;
     },
+    addNewNotificationRedux: (state, action) => {
+      const newNotification = action.payload;
+      if (state.userData && newNotification.user === state.userData._id || newNotification.barber === state.userData._id) {
+        state.userData.notification.push(newNotification);
+      }
+    },
+    setNotificationSeenTrueRedux: (state, action) => {
+      if (state.userData && state.userData.role === 'user') {
+        const updatedNotifications = state.userData.notification.map((notif) => ({
+          ...notif,
+          userSeen: true,
+        }));
+
+        const updatedUserData = {
+          ...state.userData,
+          notification: updatedNotifications,
+        };
+        state.userData = updatedUserData;
+      } else {
+        const updatedNotifications = state.userData.notification.map((notif) => ({
+          ...notif,
+          barberSeen: true,
+        }));
+
+        const updatedUserData = {
+          ...state.userData,
+          notification: updatedNotifications,
+        };
+        state.userData = updatedUserData;
+      }
+    }
   }
 })
 
@@ -178,7 +206,9 @@ export const {
   setSeenTrueRedux,
   addReview,
   updateReview,
-  deleteReview
+  deleteReview,
+  addNewNotificationRedux,
+  setNotificationSeenTrueRedux
 } = userDataSlice.actions
 export const selectUserData = state => state.user.userData
 export default userDataSlice.reducer

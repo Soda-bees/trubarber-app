@@ -125,8 +125,10 @@ import cancel from "../../../assets/cancel.png"
 import sendSecond from "../../../assets/sendSecond.png"
 import noChatImg from "../../../assets/noChatImg.png"
 import chatScroll from "../../../assets/chatScroll.png"
+import noNotification from "../../../assets/noNotification.png"
 
 const images = {
+  noNotification,
   chatScroll,
   noChatImg,
   sendSecond,
