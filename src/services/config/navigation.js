@@ -50,9 +50,11 @@ import { selectAuthToken } from '../../store/authToken';
 import { selectRole } from '../../store/role';
 import Review from '../../screens/Review';
 import NavigationService from './NavigationService';
-import { ActivityIndicator, Text } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { Linking } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
+import { sizes } from '../utilities/sizes';
+import { colors } from '../utilities/colors';
 
 
 
@@ -63,7 +65,7 @@ export default function MainNavigator() {
   const role = useSelector(selectRole);
   const dispatch = useDispatch();
 
-  const NAVIGATION_IDS = ['Notifications', 'EditScreen', "AppoinmentBarber"];
+  const NAVIGATION_IDS = ['Notifications', 'Appointments', "AppoinmentBarber"];
 
   function buildDeepLinkFromNotificationData(data) {
     console.log("notification data-=-=>", data);
@@ -138,10 +140,7 @@ export default function MainNavigator() {
 
 
   return (
-    <NavigationContainer
-      linking={linking}
-      fallback={<Text>Loading...</Text>}
-    >
+    <NavigationContainer linking={linking}    >
       {
         authToken ? (
           role === 'user' ? (

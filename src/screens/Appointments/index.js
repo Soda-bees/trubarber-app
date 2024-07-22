@@ -25,7 +25,6 @@ import formatToJSON from '../../services/config/FormatToJson/index.js';
 export default function Appointments({navigation}) {
   const dispatch = useDispatch();
   const userData = useSelector(selectUserData);
-
   const [appointmentData, setappointmentData] = useState([
     {
       image: images.largerBarberhat,

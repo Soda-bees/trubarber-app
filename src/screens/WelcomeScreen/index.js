@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,18 +11,18 @@ import {
   PermissionsAndroid,
   Alert,
 } from 'react-native';
-import {styles} from './style.js';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
-import {colors, sizes} from '../../services';
+import { colors, sizes } from '../../services';
 import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectlocation, setLocation} from '../../store/location/index.js';
-import { notificationListners, requestUserPermission } from '../../services/config/NotificationService/index.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectlocation, setLocation } from '../../store/location/index.js';
+import messaging from "@react-native-firebase/messaging"
 
-export default function WelcomeScreen({navigation}) {
+export default function WelcomeScreen({ navigation }) {
   const dispatch = useDispatch();
   const location = useSelector(selectlocation);
 
@@ -57,10 +57,8 @@ export default function WelcomeScreen({navigation}) {
         console.log('res===>', res);
         if (!!res && res === 'granted') {
           requestUserPermission()
-          notificationListners()
           initializeLocation()
         }
-        notificationListners()
         initializeLocation()
       }).catch((error) => {
         initializeLocation()
@@ -70,6 +68,17 @@ export default function WelcomeScreen({navigation}) {
 
     }
   }, [])
+
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  }
 
   const initializeLocation = async () => {
     const hasPermission = await requestLocationPermission();
@@ -150,7 +159,7 @@ export default function WelcomeScreen({navigation}) {
   const getCurrentLocation = (setRegion, dispatch) => {
     Geolocation.getCurrentPosition(
       position => {
-        const {latitude, longitude} = position.coords;
+        const { latitude, longitude } = position.coords;
         // console.log(
         //   position.coords,
         //   '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
@@ -182,12 +191,12 @@ export default function WelcomeScreen({navigation}) {
     <SafeAreaView>
       <View style={styles.container}>
         <ScrollView
-          style={{flex: 1}}
+          style={{ flex: 1 }}
           horizontal={true}
           scrollEventThrottle={16}
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
-          onScroll={({nativeEvent}) => onchange(nativeEvent)}>
+          onScroll={({ nativeEvent }) => onchange(nativeEvent)}>
           <View style={Platform.OS == 'android' ? styles.body : styles.bodyIOS}>
             <ImageBackground
               style={styles.letsGetStartedImg1}
