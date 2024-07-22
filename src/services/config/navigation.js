@@ -50,7 +50,6 @@ import { selectAuthToken } from '../../store/authToken';
 import { selectRole } from '../../store/role';
 import Review from '../../screens/Review';
 import NavigationService from './NavigationService';
-import { ActivityIndicator, Text, View } from 'react-native';
 import { Linking } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import { sizes } from '../utilities/sizes';
