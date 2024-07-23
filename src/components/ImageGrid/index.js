@@ -165,8 +165,8 @@ const styles = StyleSheet.create({
         // marginTop:sizes.screenHeight * 0.01,
         // backgroundColor:'red',
         width: sizes.screenWidth * 0.65,
-        height: sizes.screenHeight * 0.4,
-
+        // height: sizes.screenHeight * 0.4,
+        // backgroundColor:'pink'
     },
     gridContainer: {
         flexDirection: 'row',
@@ -233,13 +233,14 @@ const styles = StyleSheet.create({
         width: sizes.screenWidth * 0.65,
         height: sizes.screenHeight * 0.4,
         borderRadius: 8,
+        resizeMode:'contain'
     },
     singleImageContainer: {
         position: 'relative',
         // margin: 4,
         width: sizes.screenWidth * 0.65,
-        height: sizes.screenHeight * 0.4,
-        marginBottom: 10,
+        // height: sizes.screenHeight * 0.4,
+        // marginBottom: 10,
         borderRadius: 8,
     },
 });
