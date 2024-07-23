@@ -6,8 +6,9 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BackArrow from '../../components/BackArrow';
 import { styles } from './style';
 import images from '../../services/utilities/images';
@@ -73,12 +74,32 @@ export default function Chats({ navigation }) {
       </View>
     </SwipeButtonsContainer>
   );
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackNavigation);
+
+    // Cleanup function to remove the event listener
+    return () => backHandler.remove();
+  }, [userData]);
+
+  const handleBackNavigation = () => {
+   
+      if (userData?.role === 'user') {
+        navigation.navigate('MyTabs');
+        return true
+      }
+      else{
+        navigation.navigate('BarberTabs')
+        return true
+      }
+    }
+  
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <View style={styles.row}>
           <View style={styles.arrowTop}>
-            <BackArrow onPress={() => navigation.goBack()} />
+            <BackArrow onPress={() => handleBackNavigation()} />
           </View>
           <View style={styles.headerContainer}>
             <Text style={styles.headerText}>Chats</Text>

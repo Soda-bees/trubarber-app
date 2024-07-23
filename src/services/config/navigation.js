@@ -68,7 +68,7 @@ export default function MainNavigator() {
   const role = useSelector(selectRole);
   const dispatch = useDispatch();
 
-  const NAVIGATION_IDS = ['Notifications', 'Appointments', "AppoinmentBarber"];
+  const NAVIGATION_IDS = ['Notifications', 'Appointments', "AppoinmentBarber", 'ChatDetails'];
 
   const getDetails = async () => {
     try {
@@ -84,9 +84,7 @@ export default function MainNavigator() {
 
   function buildDeepLinkFromNotificationData(data) {
     // console.log("notification data-=-=>", formatToJSON(data));
-    if (data?.type === 'Appointment') {
-      getDetails()
-    }
+    getDetails()
     const navigationId = data?.navigationId;
     if (!NAVIGATION_IDS.includes(navigationId)) {
       console.warn('Unverified navigationId', navigationId)
@@ -101,7 +99,10 @@ export default function MainNavigator() {
     if (navigationId === 'Appointments') {
       return 'myapp://Appointments';
     }
-
+    if (navigationId === 'ChatDetails') {
+      const { chatRoomId } = data
+      return `myapp://ChatDetails/${chatRoomId}`;
+    }
     return null
   }
 
@@ -110,6 +111,7 @@ export default function MainNavigator() {
     config: {
       screens: {
         Notifications: 'Notifications',
+        ChatDetails: 'ChatDetails/:chatRoomId',
         BarberTabs: {
           screens: {
             AppoinmentBarber: 'AppoinmentBarber',
@@ -185,7 +187,6 @@ export default function MainNavigator() {
               component={BusinessVerfication}
             />
             <Stack.Screen name="OutletCreated" component={OutletCreated} />
-
           </Stack.Navigator>
         ) : (
           role === 'user' ? (

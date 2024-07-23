@@ -55,20 +55,22 @@ export default function Notifications({ navigation }) {
     const currentDate = new Date();
     const timestamp = new Date(createdAt);
     const timeDifference = Math.abs(currentDate - timestamp);
-
+  
     const minutes = Math.floor(timeDifference / 60000);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
-
-    if (minutes < 60) {
+  
+    if (minutes < 1) {
+      return "just now";
+    } else if (minutes < 60) {
       return `${minutes}m ago`;
     } else if (hours < 24) {
       return `${hours}h ago`;
     } else {
       return `${days}d ago`;
     }
-
   };
+  
 
 
   const removeItemAtIndex = indexToRemove => {

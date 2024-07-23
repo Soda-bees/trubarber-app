@@ -50,7 +50,7 @@ export default function ChatDetails({ navigation, route }) {
 
   useEffect(() => {
     if (chatRoomId) {
-      console.log("chatRoomId-====",chatRoomId);
+      console.log("chatRoomId-====", chatRoomId);
       setChatId(chatRoomId)
       handleSetChatName(chatRoomId)
       handleUpdateSeen(chatRoomId)
@@ -150,8 +150,13 @@ export default function ChatDetails({ navigation, route }) {
       return true
     } else {
       handleUpdateSeen(chatRoomId);
-      navigation.goBack();
-      return true; // Ensure the back press is handled
+      if (navigation.canGoBack()) {
+        navigation.goBack();
+        return true;
+      } else {
+        navigation.navigate('Chats');
+        return true;
+      }
     }
   };
 
@@ -303,7 +308,11 @@ export default function ChatDetails({ navigation, route }) {
           <View style={styles.row}>
             <BackArrow onPress={() => {
               handleUpdateSeen(chatRoomId)
-              navigation.goBack()
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                navigation.navigate('Chats');
+              }
             }} />
             <Text style={styles.headerText}>{chatName ? chatName : ''}</Text>
           </View>
@@ -357,17 +366,17 @@ export default function ChatDetails({ navigation, route }) {
                 </View>
               </ScrollView>
               {showScrollToBottom && (
-              <TouchableOpacity
-                style={styles.scrollTouchable}
-                onPress={() => {
-                  setShowScrollToBottom(false)
-                  scrollToBottom()
-                }}
-              >
-                <Image source={images.chatScroll} style={styles.scrollImg} />
-                {/* <Text style={styles.scrollToBottomButtonText}>⬇</Text> */}
-              </TouchableOpacity>
-               )}
+                <TouchableOpacity
+                  style={styles.scrollTouchable}
+                  onPress={() => {
+                    setShowScrollToBottom(false)
+                    scrollToBottom()
+                  }}
+                >
+                  <Image source={images.chatScroll} style={styles.scrollImg} />
+                  {/* <Text style={styles.scrollToBottomButtonText}>⬇</Text> */}
+                </TouchableOpacity>
+              )}
             </View>
             <View
               style={

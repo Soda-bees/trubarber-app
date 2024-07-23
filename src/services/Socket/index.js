@@ -34,6 +34,7 @@ const socketService = (dispatch, authToken, userData) => {
   }
 
   const handleAddNewMessage = async (data) => {
+    console.log("new message" , data);
     dispatch(addMessageInChatRoom(data))
   }
 

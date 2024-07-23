@@ -7,6 +7,7 @@ const ImageGrid = ({ images }) => {
     const scrollViewRef = useRef(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [imageHeights, setImageHeights] = useState([]);
 
     const openModal = (index) => {
         setSelectedIndex(index);
@@ -31,7 +32,7 @@ const ImageGrid = ({ images }) => {
             return (
                 <TouchableOpacity onPress={() => openModal(index)}
                     style={{ marginTop: sizes.screenWidth * 0.005, marginLeft: sizes.screenWidth * 0.005 }}
-                    >
+                >
                     <Image source={{ uri: item }} style={styles.image} />
                 </TouchableOpacity>
             );
@@ -68,6 +69,36 @@ const ImageGrid = ({ images }) => {
             }, 0);
         }
     }, [modalVisible, selectedIndex]);
+
+    const checkHeight = (imgUri, index) => {
+        return new Promise((resolve, reject) => {
+            Image.getSize(imgUri, (width, height) => {
+                const aspectRatio = height / width;
+                const calculatedHeight = sizes.screenWidth * aspectRatio;
+                resolve({ index, height: calculatedHeight });
+            }, (error) => {
+                reject(error);
+            });
+        });
+    };
+
+    const calculateHeights = async () => {
+        try {
+            const heightsPromises = images.map((image, index) => checkHeight(image, index));
+            const heights = await Promise.all(heightsPromises);
+            const heightsArray = Array(images.length).fill(0);
+            heights.forEach(({ index, height }) => {
+                heightsArray[index] = height;
+            });
+            setImageHeights(heightsArray);
+        } catch (error) {
+            console.error('Error calculating image heights:', error);
+        }
+    };
+
+    useEffect(() => {
+        calculateHeights();
+    }, [images]);
 
     return (
         <View style={styles.container}>
@@ -107,10 +138,16 @@ const ImageGrid = ({ images }) => {
                         contentContainerStyle={styles.fullImageContainer}
                     >
                         {images.map((image, index) => (
+
                             <Image
                                 key={index}
                                 source={{ uri: image }}
-                                style={styles.fullImage}
+                                style={{
+                                    width: sizes.screenWidth,
+                                    height: imageHeights[index] || sizes.screenHeight * 0.4, // Use the height from the state
+                                    resizeMode: 'contain',
+                                    borderRadius: 8,
+                                }}
                             />
                         ))}
                     </ScrollView>
@@ -129,7 +166,7 @@ const styles = StyleSheet.create({
         // backgroundColor:'red',
         width: sizes.screenWidth * 0.65,
         height: sizes.screenHeight * 0.4,
-        
+
     },
     gridContainer: {
         flexDirection: 'row',
@@ -160,10 +197,15 @@ const styles = StyleSheet.create({
     fullImageContainer: {
         alignItems: 'center',
     },
+    imgContainer: {
+        height: sizes.screenHeight * 0.8,
+        width: sizes.screenWidth,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     fullImage: {
         width: sizes.screenWidth,
-        height: sizes.screenHeight * 0.8,
-        resizeMode:'cover',
+        resizeMode: 'contain',
         borderRadius: 8,
     },
     closeButton: {

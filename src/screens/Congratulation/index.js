@@ -52,7 +52,7 @@ export default function Congratulation({route}) {
           <Text style={styles.textStyle}>“Enhance Your Experience”</Text>
           <View style={styles.centerView}>
             <Image source={images.congoImg} style={styles.imgStyle} />
-            <Text style={styles.textStyle}>Congratulation!</Text>
+            <Text style={styles.textStyle}>Congratulations!</Text>
             <Text style={styles.textStyle1}>
               Your profile creation is now complete and ready to go.
             </Text>
