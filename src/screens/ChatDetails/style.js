@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
   scrollContianer: {
     flexGrow: 1,
     justifyContent: 'flex-end',
-    paddingHorizontal:sizes.screenWidth * 0.02
+    paddingHorizontal:sizes.screenWidth * 0.02,
     // backgroundColor:'red'
     // marginTop: sizes.screenHeight * 0.01,
     // backgroundColor:'green'

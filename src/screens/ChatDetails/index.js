@@ -27,6 +27,7 @@ import { sendMessage, setSeenTrue, uploadMultiplesChatImages } from '../../servi
 import formatToJSON from '../../services/config/FormatToJson';
 import ImageGrid from '../../components/ImageGrid';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import moment from 'moment';
 
 const ChatDetails = ({ navigation, route }) => {
   const chatRoomId = route?.params?.chatRoomId
@@ -239,6 +240,22 @@ const ChatDetails = ({ navigation, route }) => {
   }
   const selectedChat = userData?.chat?.find(chat => chat?._id === chatId)
 
+  const getDateHeader = (date) => {
+    const today = moment().startOf('day');
+    const messageDate = moment(date).startOf('day');
+
+    if (today.isSame(messageDate, 'day')) {
+      return 'TODAY';
+    }
+
+    const yesterday = today.clone().subtract(1, 'day');
+
+    if (yesterday.isSame(messageDate, 'day')) {
+      return 'YESTERDAY';
+    }
+
+    return messageDate.format('MMM D, YYYY');
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -289,6 +306,7 @@ const ChatDetails = ({ navigation, route }) => {
             }} />
             <Text style={styles.headerText}>{chatName ? chatName : ''}</Text>
           </View>
+
           {showScrollToBottom && (
             <TouchableOpacity
               style={styles.scrollTouchable}
@@ -300,6 +318,12 @@ const ChatDetails = ({ navigation, route }) => {
               <Image source={images.chatScroll} style={styles.scrollImg} />
             </TouchableOpacity>
           )}
+          {
+            selectedChat?.messages?.length === 0 &&
+            <Text style={{ color: 'black', position: 'absolute', alignSelf: 'center', top: sizes.screenHeight * 0.4, textAlign: 'center', fontSize: fontSize.smallM, fontWeight: '500' }}>
+              You're starting a new conversation. Say hi!
+            </Text>
+          }
           <ScrollView
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.scrollContianer}
@@ -310,7 +334,8 @@ const ChatDetails = ({ navigation, route }) => {
             scrollEventThrottle={16}
             style={{ flex: 1 }}
           >
-            {chatId &&
+
+            {/* {chatId &&
               userData?.chat?.length > 0 &&
               userData?.chat
                 .filter(chat => chat?._id === chatId)
@@ -330,6 +355,48 @@ const ChatDetails = ({ navigation, route }) => {
                     )
                   })
                 )
+            } */}
+            {chatId &&
+              userData?.chat?.length > 0 &&
+              userData?.chat
+                .filter(chat => chat?._id === chatId)
+                .flatMap(chat => chat?.messages)
+                .reduce((acc, message, index, arr) => {
+                  const prevDate = arr[index - 1]?.createdAt;
+                  const currentDate = message?.createdAt;
+                  const currentHeader = getDateHeader(currentDate);
+                  const prevHeader = getDateHeader(prevDate);
+
+                  if (currentHeader !== prevHeader) {
+                    acc.push({ type: 'header', header: currentHeader });
+                  }
+                  acc.push({ type: 'message', ...message });
+                  return acc;
+                }, [])
+                .map((item, index) => {
+                  if (item.type === 'header') {
+                    return (
+                      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' , paddingHorizontal:sizes.screenWidth * 0.02 , marginBottom:sizes.screenWidth * 0.01}}>
+                        <View style={{ backgroundColor: colors.disabledBg, borderRadius: 10, flex: 1, height: 2 }}></View>
+                        <Text key={index} style={{ color: colors.disabledBg2, fontSize: fontSize.smallM, paddingHorizontal: sizes.screenWidth * 0.03 }}>
+                          {item.header}
+                        </Text>
+                        <View style={{ backgroundColor: colors.disabledBg, borderRadius: 10, flex: 1, height: 2 }}></View>
+                      </View>
+                    );
+                  }
+                  return (
+                    <View
+                      style={item.sender === userData?._id ? styles.chatSend : styles.chatRecieved}
+                      key={index}>
+                      {item.image?.length > 0 ?
+                        <ImageGrid images={item.image} />
+                        :
+                        <Text style={styles.chatText}>{item.text}</Text>
+                      }
+                    </View>
+                  );
+                })
             }
           </ScrollView>
 
