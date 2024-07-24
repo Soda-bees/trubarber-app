@@ -3,8 +3,9 @@ import { colors, fontSize, sizes } from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: colors.bluishWhite,
-    height: sizes.screenHeight,
+    paddingBottom:sizes.screenWidth * 0.01
   },
   row: {
     flexDirection: 'row',
@@ -24,7 +25,12 @@ export const styles = StyleSheet.create({
     marginStart: sizes.screenWidth * 0.4,
   },
   scrollContianer: {
-    marginTop: sizes.screenHeight * 0.01,
+    flexGrow: 1,
+    justifyContent: 'flex-end',
+    paddingHorizontal:sizes.screenWidth * 0.02
+    // backgroundColor:'red'
+    // marginTop: sizes.screenHeight * 0.01,
+    // backgroundColor:'green'
   },
   containerBody: {
     marginTop: sizes.screenHeight * 0.03,
@@ -67,17 +73,20 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.92,
     justifyContent: 'flex-end',
     overflow: 'hidden',
+    backgroundColor:'red'
   },
 
   chatRecieved: {
     backgroundColor: colors.chatRecievedBg,
     alignSelf: 'flex-start',
-    padding: sizes.screenWidth * 0.01,
-    borderBottomEndRadius: sizes.screenWidth * 0.015,
-    borderTopLeftRadius: sizes.screenWidth * 0.015,
-    borderTopRightRadius: sizes.screenWidth * 0.015,
+    paddingLeft: 5,
+    paddingRight: 6,
+    paddingVertical: 4,
+    borderBottomEndRadius: 8,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
     marginBottom: sizes.screenWidth * 0.015,
-    maxWidth: sizes.screenWidth * 0.8
+    maxWidth: sizes.screenWidth * 0.8,
   },
   chatText: {
     color: colors.black,
@@ -87,14 +96,16 @@ export const styles = StyleSheet.create({
   chatSend: {
     backgroundColor: colors.white,
     alignSelf: 'flex-end',
-    padding: sizes.screenWidth * 0.01,
-    borderTopLeftRadius: sizes.screenWidth * 0.015,
-    borderTopRightRadius: sizes.screenWidth * 0.015,
-    borderBottomLeftRadius: sizes.screenWidth * 0.015,
+    paddingLeft: 5,
+    paddingRight: 6,
+    paddingVertical: 4,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    borderBottomLeftRadius: 8,
     marginBottom: sizes.screenWidth * 0.015,
     maxWidth: sizes.screenWidth * 0.8,
     borderWidth: 0.5,
-    borderColor: colors.disabledBg
+    borderColor: colors.disabledBg,
   },
   texInputView: {
     backgroundColor: colors.white,
@@ -174,6 +185,7 @@ export const styles = StyleSheet.create({
   scrollTouchable: {
     position: 'absolute',
     right: 15,
-    bottom: 20
+    bottom: sizes.screenHeight*0.1,
+    zIndex:10
   }
 });
