@@ -8,6 +8,7 @@ const ImageGrid = ({ images }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [imageHeights, setImageHeights] = useState([]);
+    const [singleImageHeights, setSingleImageHeights] = useState([]);
 
     const openModal = (index) => {
         setSelectedIndex(index);
@@ -43,13 +44,22 @@ const ImageGrid = ({ images }) => {
 
     const renderSingleImage = ({ item, index }) => {
         if (index === 0) {
+            const imageDimensions = singleImageHeights[index] || { width: 0, height: 0 }; // Fallback in case dimensions are not available yet
             return (
                 <TouchableOpacity
                     key={index}
                     style={styles.singleImageContainer}
                     onPress={() => openModal(index)}
                 >
-                    <Image source={{ uri: item }} style={styles.imageSecond} />
+                    <Image
+                        source={{ uri: item }}
+                        style={{
+                            width: imageDimensions.width,
+                            height: imageDimensions.height,
+                            borderRadius: 8,
+                            // resizeMode: 'contain'
+                        }}
+                    />
                     {
                         images.length > 1 &&
                         <View style={styles.overlay}>
@@ -96,9 +106,62 @@ const ImageGrid = ({ images }) => {
         }
     };
 
+    
+    const checkDimensions = (imgUri, index) => {
+        return new Promise((resolve, reject) => {
+            Image.getSize(imgUri, (width, height) => {
+                
+                const aspectRatio = width / height;
+                
+                let calculatedWidth, calculatedHeight;
+    
+                if (width > sizes.screenWidth*0.64) {
+                    calculatedWidth = sizes.screenWidth*0.65;
+                    calculatedHeight = calculatedWidth / aspectRatio;
+                } else {
+                    calculatedWidth = width;
+                    calculatedHeight = height;
+                }
+    
+                if (calculatedHeight > sizes.screenHeight) {
+                    calculatedHeight = sizes.screenHeight*0.65;
+                    calculatedWidth = calculatedHeight * aspectRatio;
+                }
+    
+                
+                resolve({ index, width: calculatedWidth, height: calculatedHeight });
+            }, (error) => {
+                reject(error);
+            });
+        });
+    };
+    
+    
+const calculateDimensions = async () => {
+    try {
+        const dimensionsPromises = images.map((image, index) => checkDimensions(image, index));
+        const dimensions = await Promise.all(dimensionsPromises);
+        const dimensionsArray = Array(images.length).fill({ width: 0, height: 0 });
+        dimensions.forEach(({ index, width, height }) => {
+            dimensionsArray[index] = { width, height };
+        });
+        setSingleImageHeights(dimensionsArray);
+    } catch (error) {
+        console.error('Error calculating image dimensions:', error);
+    }
+};
+
+    useEffect(() => {
+
+        calculateDimensions();
+    }, [images]);
+
+
     useEffect(() => {
         calculateHeights();
     }, [images]);
+
+
 
     return (
         <View style={styles.container}>
@@ -161,12 +224,7 @@ const ImageGrid = ({ images }) => {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
-        // marginTop:sizes.screenHeight * 0.01,
-        // backgroundColor:'red',
         width: sizes.screenWidth * 0.65,
-        // height: sizes.screenHeight * 0.4,
-        // backgroundColor:'pink'
     },
     gridContainer: {
         flexDirection: 'row',
@@ -233,15 +291,16 @@ const styles = StyleSheet.create({
         width: sizes.screenWidth * 0.65,
         height: sizes.screenHeight * 0.4,
         borderRadius: 8,
-        resizeMode:'contain'
+        resizeMode: 'contain'
     },
     singleImageContainer: {
         position: 'relative',
         // margin: 4,
-        width: sizes.screenWidth * 0.65,
-        // height: sizes.screenHeight * 0.4,
+        // width: sizes.screenWidth * 0.65,
+        maxHeight: sizes.screenHeight * 0.4,
         // marginBottom: 10,
         borderRadius: 8,
+        overflow: 'hidden'
     },
 });
 

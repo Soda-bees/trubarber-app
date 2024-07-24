@@ -20,9 +20,6 @@ import BackArrow from '../../components/BackArrow';
 import images from '../../services/utilities/images';
 import { TextInput } from 'react-native-gesture-handler';
 import { colors, fontSize, sizes } from '../../services';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
-import LottieView from 'lottie-react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUserData, setSeenTrueRedux } from '../../store/userData';
 import { selectAuthToken } from '../../store/authToken';
@@ -30,9 +27,9 @@ import { sendMessage, setSeenTrue, uploadMultiplesChatImages } from '../../servi
 import formatToJSON from '../../services/config/FormatToJson';
 import ImageGrid from '../../components/ImageGrid';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import moment from 'moment';
 
-export default function ChatDetails({ navigation, route }) {
-
+const ChatDetails = ({ navigation, route }) => {
   const chatRoomId = route?.params?.chatRoomId
   const userData = useSelector(selectUserData)
   const authToken = useSelector(selectAuthToken)
@@ -80,24 +77,6 @@ export default function ChatDetails({ navigation, route }) {
 
   useEffect(() => {
     scrollToBottom();
-  }, []);
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => {
-        console.log('Keyboard is open');
-        setKeyboardOpen(true);
-      },
-    );
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {
-        console.log('Keyboard is closed');
-        setKeyboardOpen(false);
-      },
-    );
   }, []);
 
   let animation = React.createRef();
@@ -260,17 +239,28 @@ export default function ChatDetails({ navigation, route }) {
     setSelectedImages([])
   }
   const selectedChat = userData?.chat?.find(chat => chat?._id === chatId)
+
+  const getDateHeader = (date) => {
+    const today = moment().startOf('day');
+    const messageDate = moment(date).startOf('day');
+
+    if (today.isSame(messageDate, 'day')) {
+      return 'TODAY';
+    }
+
+    const yesterday = today.clone().subtract(1, 'day');
+
+    if (yesterday.isSame(messageDate, 'day')) {
+      return 'YESTERDAY';
+    }
+
+    return messageDate.format('MMM D, YYYY');
+  };
+
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       {showImgScreen ? (
         <View style={styles.laoderContainer}>
-          {/* <LottieView
-            ref={animation}
-            source={require('../../assestsAnimation/chatAnimatedLoader.json')}
-            autoPlay
-            loop
-            style={styles.lottie}
-          /> */}
           {
             loader ? <ActivityIndicator color={colors.white} size={40} /> :
               selectedImages?.length > 0 &&
@@ -317,101 +307,186 @@ export default function ChatDetails({ navigation, route }) {
             <Text style={styles.headerText}>{chatName ? chatName : ''}</Text>
           </View>
 
-          <View style={styles.chatSubContianer}>
-            {
-              selectedChat?.messages?.length === 0 &&
-              <Text style={{ color: 'black', bottom: sizes.screenHeight * 0.35, textAlign: 'center', fontSize: fontSize.smallM, fontWeight: '500' }}>
-                You're starting a new conversation. Say hi!
-              </Text>
-            }
-            <View>
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.scrollContianer}
-                ref={scrollViewRef}
-                onContentSizeChange={() => scrollToBottom()}
-                onLayout={handleLayout}
-                onScroll={handleScroll}
-                scrollEventThrottle={16}
-              >
-                <View
-                  style={
-                    keyboardOpen
-                      ? { height: sizes.screenHeight * 0.46 }
-                      : { height: 25 }
-                  }
-                />
-                <View style={styles.containerBody}>
-                  {chatId &&
-                    userData?.chat?.length > 0 &&
-                    userData?.chat
-                      .filter(chat => chat?._id === chatId)
-                      .map((chat) =>
-                        chat?.messages?.map((item, index) => {
-                          return (
-                            <View
-                              style={item?.sender === userData?._id ? styles.chatSend : styles.chatRecieved}
-                              key={index}>
-                              {
-                                item?.image?.length > 0 ?
-                                  <ImageGrid images={item?.image} />
-                                  :
-                                  <Text style={styles.chatText}>{item.text}</Text>
-                              }
-                            </View>
-                          )
-                        })
-                      )
-                  }
-                </View>
-              </ScrollView>
-              {showScrollToBottom && (
-                <TouchableOpacity
-                  style={styles.scrollTouchable}
-                  onPress={() => {
-                    setShowScrollToBottom(false)
-                    scrollToBottom()
-                  }}
-                >
-                  <Image source={images.chatScroll} style={styles.scrollImg} />
-                  {/* <Text style={styles.scrollToBottomButtonText}>⬇</Text> */}
-                </TouchableOpacity>
-              )}
-            </View>
-            <View
-              style={
-                Platform.OS === 'android'
-                  ? styles.texInputView
-                  : styles.texInputViewIOS
-              }>
-              <TextInput
-                placeholder="Write Message.."
-                placeholderTextColor={colors.black}
-                multiline={true}
-                numberOfLines={2}
-                style={styles.textInputContainer}
-                value={text}
-                onChangeText={(text) => setText(text)}
-              />
-              {
-                text ?
-                  <TouchableOpacity
-                    onPress={handlesendMessage}
-                  >
-                    <Image source={images.arrowBlackIcon} style={styles.sendBtnIcon} />
-                  </TouchableOpacity> :
-                  <TouchableOpacity style={styles.imageIconTouchable}
-                    onPress={() => uploadPhoto('library')}
-                  >
-                    <Image source={images.chatImg} style={styles.imgIcon} />
-                  </TouchableOpacity>
-              }
-            </View>
-            <KeyboardSpacer topSpacing={sizes.screenHeight * 0.045} />
-          </View>
+          {showScrollToBottom && (
+            <TouchableOpacity
+              style={styles.scrollTouchable}
+              onPress={() => {
+                setShowScrollToBottom(false)
+                scrollToBottom()
+              }}
+            >
+              <Image source={images.chatScroll} style={styles.scrollImg} />
+            </TouchableOpacity>
+          )}
+          {
+            selectedChat?.messages?.length === 0 &&
+            <Text style={{ color: 'black', position: 'absolute', alignSelf: 'center', top: sizes.screenHeight * 0.4, textAlign: 'center', fontSize: fontSize.smallM, fontWeight: '500' }}>
+              You're starting a new conversation. Say hi!
+            </Text>
+          }
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.scrollContianer}
+            ref={scrollViewRef}
+            onContentSizeChange={() => scrollToBottom()}
+            onLayout={handleLayout}
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+            style={{ flex: 1 }}
+          >
 
+            {/* {chatId &&
+              userData?.chat?.length > 0 &&
+              userData?.chat
+                .filter(chat => chat?._id === chatId)
+                .map((chat) =>
+                  chat?.messages?.map((item, index) => {
+                    return (
+                      <View
+                        style={item?.sender === userData?._id ? styles.chatSend : styles.chatRecieved}
+                        key={index}>
+                        {
+                          item?.image?.length > 0 ?
+                            <ImageGrid images={item?.image} />
+                            :
+                            <Text style={styles.chatText}>{item.text}</Text>
+                        }
+                      </View>
+                    )
+                  })
+                )
+            } */}
+            {chatId &&
+              userData?.chat?.length > 0 &&
+              userData?.chat
+                .filter(chat => chat?._id === chatId)
+                .flatMap(chat => chat?.messages)
+                .reduce((acc, message, index, arr) => {
+                  const prevDate = arr[index - 1]?.createdAt;
+                  const currentDate = message?.createdAt;
+                  const currentHeader = getDateHeader(currentDate);
+                  const prevHeader = getDateHeader(prevDate);
+
+                  if (currentHeader !== prevHeader) {
+                    acc.push({ type: 'header', header: currentHeader });
+                  }
+                  acc.push({ type: 'message', ...message });
+                  return acc;
+                }, [])
+                .map((item, index) => {
+                  if (item.type === 'header') {
+                    return (
+                      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' , paddingHorizontal:sizes.screenWidth * 0.02 , marginBottom:sizes.screenWidth * 0.01}}>
+                        <View style={{ backgroundColor: colors.disabledBg, borderRadius: 10, flex: 1, height: 2 }}></View>
+                        <Text key={index} style={{ color: colors.disabledBg2, fontSize: fontSize.smallM, paddingHorizontal: sizes.screenWidth * 0.03 }}>
+                          {item.header}
+                        </Text>
+                        <View style={{ backgroundColor: colors.disabledBg, borderRadius: 10, flex: 1, height: 2 }}></View>
+                      </View>
+                    );
+                  }
+                  return (
+                    <View
+                      style={item.sender === userData?._id ? styles.chatSend : styles.chatRecieved}
+                      key={index}>
+                      {item.image?.length > 0 ?
+                        <ImageGrid images={item.image} />
+                        :
+                        <Text style={styles.chatText}>{item.text}</Text>
+                      }
+                    </View>
+                  );
+                })
+            }
+          </ScrollView>
+
+          <View
+            style={
+              Platform.OS === 'android'
+                ? styles.texInputView
+                : styles.texInputViewIOS
+            }>
+            <TextInput
+              placeholder="Write Message.."
+              placeholderTextColor={colors.black}
+              multiline={true}
+              numberOfLines={2}
+              style={styles.textInputContainer}
+              value={text}
+              onChangeText={(text) => setText(text)}
+            />
+            {
+              text ?
+                <TouchableOpacity
+                  onPress={handlesendMessage}
+                >
+                  <Image source={images.arrowBlackIcon} style={styles.sendBtnIcon} />
+                </TouchableOpacity> :
+                <TouchableOpacity style={styles.imageIconTouchable}
+                  onPress={() => uploadPhoto('library')}
+                >
+                  <Image source={images.chatImg} style={styles.imgIcon} />
+                </TouchableOpacity>
+            }
+          </View>
         </View>
       )}
     </SafeAreaView>
   );
-}
+};
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#fff',
+//   },
+//   header: {
+//     padding: 15,
+//     backgroundColor: '#007bff',
+//   },
+//   headerText: {
+//     fontSize: 18,
+//     color: '#fff',
+//     fontWeight: 'bold',
+//   },
+//   messageContainer: {
+//     flex: 1,
+//     padding: 10,
+//     backgroundColor: 'pink',
+//   },
+//   message: {
+//     marginVertical: 5,
+//     padding: 10,
+//     borderRadius: 10,
+//     maxWidth: screenWidth * 0.7,
+//   },
+//   userMessage: {
+//     alignSelf: 'flex-end',
+//     backgroundColor: '#007bff',
+//   },
+//   friendMessage: {
+//     alignSelf: 'flex-start',
+//     backgroundColor: '#f1f1f1',
+//   },
+//   messageText: {
+//     color: '#fff',
+//   },
+//   inputContainer: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     padding: 10,
+//     borderTopWidth: 1,
+//     borderTopColor: '#ddd',
+//   },
+//   input: {
+//     flex: 1,
+//     borderColor: '#ddd',
+//     borderWidth: 1,
+//     borderRadius: 20,
+//     padding: 10,
+//     marginRight: 10,
+//   },
+// });
+
+export default ChatDetails;
+
