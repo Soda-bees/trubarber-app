@@ -16,6 +16,7 @@ import Button from '../../components/Button/index.js';
 import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
 import BackArrow from '../../components/BackArrow/index.js';
 import {colors} from '../../services/index.js';
+import Header from '../../components/Header/index.js';
 // import {colors, sizes} from 'borderBottomcomponents/BackArrow/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
@@ -24,12 +25,7 @@ export default function PrivacyPolicy({navigation}) {
     <SafeAreaView>
       <View style={styles.container}>
         <View style={styles.borderBottom}>
-          <View style={styles.row}>
-            <View style={styles.arrowTop}>
-              <BackArrow onPress={() =>navigation.goBack()}/>
-            </View>
-            <Text style={styles.headerText}>Privacy Policy</Text>
-          </View>
+          <Header title={'Privacy Policy'} />
         </View>
 
         <View style={styles.inputContainer}>
@@ -61,7 +57,9 @@ export default function PrivacyPolicy({navigation}) {
             </Text>
           </View>
           <View style={styles.gapText}>
-            <Text style={styles.title}>3. Disclosure of your personal data</Text>
+            <Text style={styles.title}>
+              3. Disclosure of your personal data
+            </Text>
             <Text style={styles.textBlack}>
               At vero eos et accusamus et iusto odio dignissimos ducimus qui
               blanditiis praesentium voluptatum deleniti atque corrupti quos

@@ -24,11 +24,11 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
   },
   containerBody: {
-    marginTop: sizes.screenHeight * 0.02,
+    // marginTop: sizes.screenHeight * 0.02,
     // paddingHorizontal: sizes.screenWidth * 0.06,
   },
   scrollContianer: {
-    marginTop: sizes.screenHeight * 0.03,
+    marginTop: sizes.screenHeight * 0.02,
   },
   notficationContainer: {
     justifyContent: 'flex-start',
@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
     paddingVertical: sizes.screenHeight * 0.02,
     width: sizes.screenWidth * 0.9,
     alignSelf: 'center',
-    marginTop:sizes.screenHeight * 0.01
+    marginTop: sizes.screenHeight * 0.01,
   },
   notficationDetailContainer: {
     flexDirection: 'column',
@@ -56,7 +56,7 @@ export const styles = StyleSheet.create({
   notificationDetail: {
     fontSize: fontSize.small,
     color: colors.black,
-    width:sizes.screenWidth * 0.7,
+    width: sizes.screenWidth * 0.7,
   },
   notificationTime: {
     fontSize: fontSize.small,
@@ -83,19 +83,19 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: sizes.screenHeight * 0.02,
   },
-  noChatView:{
-    flexDirection:'column',
-    alignItems:'center',
-    justifyContent:'center',
-    height:sizes.screenHeight * 0.7
+  noChatView: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: sizes.screenHeight * 0.7,
   },
-  noChatImg:{
-    width:sizes.screenWidth * 0.15,
-    height:sizes.screenWidth * 0.15,
+  noChatImg: {
+    width: sizes.screenWidth * 0.15,
+    height: sizes.screenWidth * 0.15,
   },
-  noChatText:{
-    color:colors.black,
-    textAlign:'center',
-    fontWeight:'500'
-  }
+  noChatText: {
+    color: colors.black,
+    textAlign: 'center',
+    fontWeight: '500',
+  },
 });

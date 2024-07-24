@@ -97,6 +97,18 @@ export default function Catalogue({navigation}) {
       })
     : servicesData;
 
+  const calculateAverageRating = reviews => {
+    if (reviews && reviews.length > 0) {
+      const totalRating = reviews.reduce(
+        (sum, review) => sum + parseFloat(review.rating),
+        0,
+      );
+      return totalRating / reviews.length;
+    } else {
+      return 0;
+    }
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -174,7 +186,9 @@ export default function Catalogue({navigation}) {
                         : styles.containerImageIOS
                     }>
                     <View style={styles.row}>
-                      <Text style={styles.textWhite}>5.0</Text>
+                      <Text style={styles.textWhite}>
+                        {calculateAverageRating(item.reviews)}
+                      </Text>
                       <StarRating
                         maxStars={1}
                         starSize={12}

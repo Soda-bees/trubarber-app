@@ -6,30 +6,31 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { styles } from './style.js';
+import React, {useEffect, useState} from 'react';
+import {styles} from './style.js';
 import images from '../../services/utilities/images';
-import { Calendar, LocaleConfig } from 'react-native-calendars';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
 import BackArrow from '../../components/BackArrow';
 // import {colors, sizes} from '../../services/index.js';
 import Button from '../../components/Button';
 import CalendarStrip from 'react-native-calendar-strip';
 import 'moment';
 import moment from 'moment';
-import { colors } from '../../services/utilities/colors';
-import { sizes } from '../../services/index.js';
+import {colors} from '../../services/utilities/colors';
+import {sizes} from '../../services/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
+import Header from '../../components/Header/index.js';
 
-export default function AppointmentDetails({ navigation, route }) {
+export default function AppointmentDetails({navigation, route}) {
   const today = moment();
-  const { item } = route?.params;
+  const {item} = route?.params;
   const [selected, setSelected] = useState(null);
 
   const currentDate = moment();
 
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-  const [datesArray, setDatesArray] = useState([])
-  const [totalPrice , setTotlPrice] = useState(0)
+  const [datesArray, setDatesArray] = useState([]);
+  const [totalPrice, setTotlPrice] = useState(0);
 
   const handleMonthChange = newMonthIndex => {
     setSelectedMonth(newMonthIndex);
@@ -60,46 +61,45 @@ export default function AppointmentDetails({ navigation, route }) {
   };
 
   const handleSelectDate = async () => {
-    setSelected('2024-07-08T07:21:20.776Z')
-  }
+    setSelected('2024-07-08T07:21:20.776Z');
+  };
 
   useEffect(() => {
     if (item) {
-      handleCreateDatesArray(item?.date)
-      handleCreateTimesArray(item?.time)
-      handleSetTotalPrice(item.services)
+      handleCreateDatesArray(item?.date);
+      handleCreateTimesArray(item?.time);
+      handleSetTotalPrice(item.services);
     }
-  }, [item])
+  }, [item]);
 
-
-  const handleCreateTimesArray = async (time) => {
-    const centerTime = moment(time, "hh:mm");
+  const handleCreateTimesArray = async time => {
+    const centerTime = moment(time, 'hh:mm');
 
     const timesArray = [];
 
     timesArray.push({
-      time: centerTime.format('hh:mm')
+      time: centerTime.format('hh:mm'),
     });
 
     for (let i = 1; i <= 2; i++) {
       const previousTime = centerTime.clone().subtract(i * 60, 'minutes');
       timesArray.unshift({
-        time: previousTime.format('hh:mm')
+        time: previousTime.format('hh:mm'),
       });
     }
 
     for (let i = 1; i <= 2; i++) {
       const nextTime = centerTime.clone().add(i * 60, 'minutes');
       timesArray.push({
-        time: nextTime.format('hh:mm')
+        time: nextTime.format('hh:mm'),
       });
     }
 
-    setDatedata(timesArray)
-  }
+    setDatedata(timesArray);
+  };
 
-  const handleCreateDatesArray = async (date) => {
-    const centerDate = moment(date, "MM-DD-YYYY");
+  const handleCreateDatesArray = async date => {
+    const centerDate = moment(date, 'MM-DD-YYYY');
 
     const datesArray = [];
 
@@ -108,13 +108,13 @@ export default function AppointmentDetails({ navigation, route }) {
       datesArray.push({
         day: currentDate.format('ddd'),
         date: currentDate.format('DD'),
-        month: currentDate.format('MMMM')
+        month: currentDate.format('MMMM'),
       });
     }
-    setDatesArray(datesArray)
-  }
+    setDatesArray(datesArray);
+  };
 
-  const handleSetTotalPrice = (services) => {
+  const handleSetTotalPrice = services => {
     let totalPrice = 0;
     services.forEach(service => {
       totalPrice += parseFloat(service.price);
@@ -122,65 +122,75 @@ export default function AppointmentDetails({ navigation, route }) {
     setTotlPrice(totalPrice);
   };
 
-
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.allignment}>
-            <View style={styles.arrowTop}>
-              <BackArrow onPress={() => navigation.goBack()} />
-            </View>
-            <Text style={styles.headerText}>Appoinment Details</Text>
-          </View>
-        </View>
+        <Header title={'Appointment Details'} />
         <View style={styles.topContentcontainer}>
           <View style={styles.rowcontainer}>
             <Text style={styles.datesHeading}>Select Date</Text>
-            <Text style={styles.datesHeading}>{datesArray && datesArray[2]?.month}</Text>
+            <Text style={styles.datesHeading}>
+              {datesArray && datesArray[2]?.month}
+            </Text>
           </View>
           <View>
             <View style={styles.containerCheck}>
-              {
-                datesArray?.length > 0 &&
+              {datesArray?.length > 0 &&
                 datesArray?.map((item, index) => {
                   return (
-                    <View key={index} style={index === 2 ? styles.dateRoundSelected : styles.dateRound}>
-                      <Text style={index === 2 ? styles.dateRoundTextSelected : styles.dateRoundText}>{item.day}</Text>
-                      <Text style={index === 2 ? styles.dateRoundTextSelected : styles.dateRoundText}>{item.date}</Text>
+                    <View
+                      key={index}
+                      style={
+                        index === 2
+                          ? styles.dateRoundSelected
+                          : styles.dateRound
+                      }>
+                      <Text
+                        style={
+                          index === 2
+                            ? styles.dateRoundTextSelected
+                            : styles.dateRoundText
+                        }>
+                        {item.day}
+                      </Text>
+                      <Text
+                        style={
+                          index === 2
+                            ? styles.dateRoundTextSelected
+                            : styles.dateRoundText
+                        }>
+                        {item.date}
+                      </Text>
                     </View>
-                  )
-                })
-              }
+                  );
+                })}
             </View>
           </View>
         </View>
         <View style={styles.timeContainer}>
           <ScrollView horizontal>
             <View style={styles.timeAlligment}>
-              {dateData?.length > 0 && dateData?.map((item, index) => {
-                return (
-                  <View
-                    key={index}
-                    style={[
-                      styles.selected,
-                      index === 2
-                        ? styles.selectedItem
-                        : styles.notSelected,
-                    ]}
-                    >
-                    <Text
+              {dateData?.length > 0 &&
+                dateData?.map((item, index) => {
+                  return (
+                    <View
+                      key={index}
                       style={[
-                        styles.selectedTextcolor,
-                        index === 2
-                          ? styles.selectedTextcolor
-                          : styles.textBlack,
+                        styles.selected,
+                        index === 2 ? styles.selectedItem : styles.notSelected,
                       ]}>
-                      {item.time}
-                    </Text>
-                  </View>
-                );
-              })}
+                      <Text
+                        style={[
+                          styles.selectedTextcolor,
+                          index === 2
+                            ? styles.selectedTextcolor
+                            : styles.textBlack,
+                        ]}>
+                        {item.time}
+                      </Text>
+                    </View>
+                  );
+                })}
             </View>
           </ScrollView>
         </View>
@@ -189,7 +199,7 @@ export default function AppointmentDetails({ navigation, route }) {
             <View style={styles.barberNameImage}>
               <View style={styles.imageContainer}>
                 <Image
-                  source={{uri:item?.barber?.profile}}
+                  source={{uri: item?.barber?.profile}}
                   style={styles.imageContainer}
                 />
               </View>
@@ -202,30 +212,30 @@ export default function AppointmentDetails({ navigation, route }) {
             </View>
           </View>
           <View>
-                {item?.services?.map((item, index) => {
-                  return (
-                    <View style={styles.flexRow} key={index}>
-                      <View style={styles.flexRow1}>
-                        <Text style={styles.disabledText}>{item?.name}</Text>
-                        <Text
-                          style={
-                            styles.disabledText1
-                          }>{` (${item?.serviceName})`}</Text>
-                      </View>
-                      <Text
-                        style={styles.disabledText}>{`$ ${item.price}.00`}</Text>
-                    </View>
-                  );
-                })}
-              </View>
+            {item?.services?.map((item, index) => {
+              return (
+                <View style={styles.flexRow} key={index}>
+                  <View style={styles.flexRow1}>
+                    <Text style={styles.disabledText}>{item?.name}</Text>
+                    <Text
+                      style={
+                        styles.disabledText1
+                      }>{` (${item?.serviceName})`}</Text>
+                  </View>
+                  <Text
+                    style={styles.disabledText}>{`$ ${item.price}.00`}</Text>
+                </View>
+              );
+            })}
+          </View>
           <View style={styles.total}>
             <Text style={styles.totalText}>Total:</Text>
             <Text style={styles.priceBlack}>{`$${parseFloat(
-                  totalPrice,
-                )?.toFixed(2)}`}</Text>
+              totalPrice,
+            )?.toFixed(2)}`}</Text>
           </View>
         </View>
-         </View>
+      </View>
     </SafeAreaView>
   );
 }

@@ -7,40 +7,37 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight,
   },
 
+  headerContainer: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: sizes.screenWidth * 0.05,
+    marginTop: sizes.screenHeight * 0.05,
+  },
+
+  openButtonborder: {
+    borderStyle: 'solid',
+    borderColor: colors.white,
+    borderWidth: 1,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#00000044',
+    paddingHorizontal: 20,
+    paddingVertical: 2,
+  },
+
+  openButton: {
+    fontSize: fontSize.smallM,
+    color: colors.white,
+    bottom: 1,
+  },
+
   headerImage: {
     height: sizes.screenHeight * 0.4,
     width: sizes.screenWidth,
     borderBottomLeftRadius: sizes.screenWidth * 0.0562,
     borderBottomRightRadius: sizes.screenWidth * 0.0562,
-  },
-
-  arrowTop: {
-    marginLeft: sizes.screenWidth * 0.04,
-    marginTop: sizes.screenHeight * 0.06,
-  },
-
-  headerContainer: {
-    // backgroundColor: 'red',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-  },
-
-  openButtonborder: {
-    borderStyle: 'solid',
-    marginTop: sizes.screenHeight * 0.059,
-    marginRight: sizes.screenWidth * 0.059,
-    borderColor: colors.white,
-    borderWidth: sizes.screenWidth * 0.002,
-    width: sizes.screenWidth * 0.152,
-    borderRadius: sizes.screenWidth * 0.02,
-    height: sizes.screenHeight * 0.025,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  openButton: {
-    fontSize: fontSize.small,
-    color: colors.white,
   },
 
   openBg: {

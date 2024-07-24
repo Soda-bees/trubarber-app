@@ -10,6 +10,9 @@ export const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: sizes.screenWidth * 0.9,
+    justifyContent: 'space-between',
+    alignSelf: 'center',
     marginTop: sizes.screenHeight * 0.04,
   },
   arrowTop: {
@@ -88,14 +91,14 @@ export const styles = StyleSheet.create({
   },
 
   imageView: {
-    paddingLeft: sizes.screenWidth * 0.06,
     marginTop: sizes.screenHeight * 0.03,
-    paddingBottom:sizes.screenHeight * 0.02
+    paddingBottom: sizes.screenHeight * 0.02,
   },
   imageHeading: {
     fontSize: fontSize.medium,
     color: colors.black,
     fontWeight: '500',
+    marginLeft: sizes.screenWidth * 0.04,
   },
   imageContainer: {
     height: sizes.screenHeight * 0.25,
@@ -108,77 +111,77 @@ export const styles = StyleSheet.create({
   ScrollViewContainer: {
     marginTop: sizes.screenHeight * 0.02,
   },
-  modalView:{
-    backgroundColor:colors.lightgray,
-    width:sizes.screenWidth* 0.3,
+  modalView: {
+    backgroundColor: colors.lightgray,
+    width: sizes.screenWidth * 0.3,
     // marginTop:sizes.screenHeight* 0.09,
-    alignSelf:'flex-end',
-    marginRight:sizes.screenHeight* 0.02,
-    paddingHorizontal:sizes.screenHeight*0.02,
-    paddingVertical:sizes.screenHeight* 0.01,
-    borderRadius:sizes.screenWidth*0.02,
-    borderWidth:sizes.screenWidth* 0.002,
-    borderColor:colors.borderColor,
-    position:'absolute',
-    top:sizes.screenHeight * 0.07
+    alignSelf: 'flex-end',
+    marginRight: sizes.screenHeight * 0.02,
+    paddingHorizontal: sizes.screenHeight * 0.02,
+    paddingVertical: sizes.screenHeight * 0.01,
+    borderRadius: sizes.screenWidth * 0.02,
+    borderWidth: sizes.screenWidth * 0.002,
+    borderColor: colors.borderColor,
+    position: 'absolute',
+    top: sizes.screenHeight * 0.07,
   },
-  modalRow:{
-    flexDirection:'row',
-    alignItems:'center',
-    marginTop:sizes.screenHeight* 0.01,
-    marginBottom:sizes.screenHeight* 0.01
+  modalRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: sizes.screenHeight * 0.01,
+    marginBottom: sizes.screenHeight * 0.01,
   },
-  modalText:{
-    fontSize:fontSize.smallM,
-    color:colors.black,
-    fontWeight:'500',
-    marginStart:sizes.screenWidth* 0.02
+  modalText: {
+    fontSize: fontSize.smallM,
+    color: colors.black,
+    fontWeight: '500',
+    marginStart: sizes.screenWidth * 0.02,
   },
   modalMainView: {
     backgroundColor: colors.white,
     // height:sizes.screenHeight * 0.21,
-    width:sizes.screenWidth * 0.9,
-    borderRadius:sizes.screenWidth * 0.05,
-    paddingVertical:15
+    width: sizes.screenWidth * 0.9,
+    borderRadius: sizes.screenWidth * 0.05,
+    paddingVertical: 15,
   },
-  modalMessage:{
-    color:colors.black,
-    alignSelf:'center',
-    paddingHorizontal:15,
-    fontSize:fontSize.medium,
-    width:sizes.screenWidth * 0.85,
-    textAlign:'center'
+  modalMessage: {
+    color: colors.black,
+    alignSelf: 'center',
+    paddingHorizontal: 15,
+    fontSize: fontSize.medium,
+    width: sizes.screenWidth * 0.85,
+    textAlign: 'center',
   },
-  btnMainView:{
-    flexDirection:'row',
-    justifyContent:'space-between',
-    paddingHorizontal:15,
-    marginTop:15
+  btnMainView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+    marginTop: 15,
   },
-  btnView1:{
+  btnView1: {
     // borderWidth:1,
-    borderRadius:sizes.screenWidth * 0.03,
-    height:sizes.screenHeight * 0.05, 
-    width:sizes.screenWidth * 0.4, 
-    justifyContent:'center',
-    alignItems:'center',
-    backgroundColor:colors.btnColor,
+    borderRadius: sizes.screenWidth * 0.03,
+    height: sizes.screenHeight * 0.05,
+    width: sizes.screenWidth * 0.4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.btnColor,
   },
-  btnText1:{
-    color:colors.white,
-    fontSize:fontSize.h6,
+  btnText1: {
+    color: colors.white,
+    fontSize: fontSize.h6,
   },
-  btnView:{
-    borderWidth:1,
-    borderRadius:sizes.screenWidth * 0.03,
-    height:sizes.screenHeight * 0.05, 
-    width:sizes.screenWidth * 0.4, 
-    justifyContent:'center',
-    alignItems:'center',
+  btnView: {
+    borderWidth: 1,
+    borderRadius: sizes.screenWidth * 0.03,
+    height: sizes.screenHeight * 0.05,
+    width: sizes.screenWidth * 0.4,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  
-  btnText:{
-    color:colors.black,
-    fontSize:fontSize.h6,
+
+  btnText: {
+    color: colors.black,
+    fontSize: fontSize.h6,
   },
 });

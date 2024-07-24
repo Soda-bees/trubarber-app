@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { axiosInstance } from '../AxiosInstance';
-import { BASE_URL } from '../AxiosInstance';
+import {axiosInstance} from '../AxiosInstance';
+import {BASE_URL} from '../AxiosInstance';
 
 export const checkServerConnection = async () => {
   try {
@@ -15,7 +15,7 @@ export const validateEmailAvailability = async email => {
   try {
     const response = await axiosInstance.post(
       'auth/validateEmailAvailability',
-      { email },
+      {email},
     );
     return response;
   } catch (error) {
@@ -188,7 +188,7 @@ export const getAddressFromCoordinates = async (latitude, longitude) => {
         addressComponents.find(component =>
           component.types.includes('locality'),
         )?.long_name || '';
-      return { area, city };
+      return {area, city};
       // setAddress({ area, city });
       // console.log(area, city);
     } else {
@@ -225,7 +225,7 @@ export const deleteService = async (token, id) => {
     const response = await axiosInstance.post(
       `barber/deleteService/${id}`,
       {},
-      { headers },
+      {headers},
     );
     return response;
   } catch (error) {
@@ -241,8 +241,8 @@ export const handleAddPaymentCard = async (card, token) => {
     };
     const response = await axiosInstance.post(
       'user/addPaymentCard',
-      { card },
-      { headers },
+      {card},
+      {headers},
     );
     return response;
   } catch (error) {
@@ -273,7 +273,7 @@ export const hanleGetBookedAppoinment = async (token, id) => {
     };
     const response = await axiosInstance.get(
       `user/getBookedAppoinmentTime/${id}`,
-      { headers },
+      {headers},
     );
     return response;
   } catch (error) {
@@ -290,7 +290,7 @@ export const updateAppointmentStatus = async (token, id) => {
     const response = await axiosInstance.post(
       `barber/updateAppoinmentStatus/${id}`,
       {},
-      { headers },
+      {headers},
     );
     return response;
   } catch (error) {
@@ -304,7 +304,9 @@ export const createChatRoom = async (token, body) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post("user/createChatRoom", body, { headers });
+    const response = await axiosInstance.post('user/createChatRoom', body, {
+      headers,
+    });
     return response;
   } catch (error) {
     return error;
@@ -317,13 +319,16 @@ export const sendMessage = async (token, chatId, body) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post(`user/sendMessage/${chatId}`, body, { headers });
+    const response = await axiosInstance.post(
+      `user/sendMessage/${chatId}`,
+      body,
+      {headers},
+    );
     return response;
   } catch (error) {
     return error;
   }
 };
-
 
 export const setSeenTrue = async (token, messageIds) => {
   try {
@@ -331,7 +336,11 @@ export const setSeenTrue = async (token, messageIds) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post(`user/setSeenTrue`, { messageIds }, { headers });
+    const response = await axiosInstance.post(
+      `user/setSeenTrue`,
+      {messageIds},
+      {headers},
+    );
     return response;
   } catch (error) {
     return error;
@@ -344,7 +353,9 @@ export const postReview = async (body, token) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post('user/postReview', body, { headers, });
+    const response = await axiosInstance.post('user/postReview', body, {
+      headers,
+    });
     return response;
   } catch (error) {
     return error;
@@ -356,7 +367,9 @@ export const updateReview = async (body, token) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post('user/updateReview', body, { headers, });
+    const response = await axiosInstance.post('user/updateReview', body, {
+      headers,
+    });
     return response;
   } catch (error) {
     return error;
@@ -368,14 +381,16 @@ export const deleteReview = async (reviewId, token) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post(`user/deleteReview/${reviewId}`, {}, { headers },
+    const response = await axiosInstance.post(
+      `user/deleteReview/${reviewId}`,
+      {},
+      {headers},
     );
     return response;
   } catch (error) {
     return error;
   }
 };
-
 
 export const uploadMultiplesChatImages = async (formData, token) => {
   try {
@@ -395,15 +410,14 @@ export const uploadMultiplesChatImages = async (formData, token) => {
   }
 };
 
-export const handleGetUserDetails = async (token) => {
+export const handleGetUserDetails = async token => {
   try {
     console.log(token);
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.get("user/userData", { headers },
-    );
+    const response = await axiosInstance.get('user/userData', {headers});
     return response;
   } catch (error) {
     return error;
@@ -416,15 +430,32 @@ export const handleNotificationSeenTrue = async (token, notificationsIds) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post("user/setNotificationTrue", { notificationsIds }, { headers },);
+    const response = await axiosInstance.post(
+      'user/setNotificationTrue',
+      {notificationsIds},
+      {headers},
+    );
     return response;
   } catch (error) {
     return error;
   }
 };
 
-
-
-
-
-
+export const deleteDeviceToken = async token => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post(
+      'user/deleteDeviceToken',
+      {},
+      {
+        headers,
+      },
+    );
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
