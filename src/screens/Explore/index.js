@@ -320,13 +320,6 @@ export default function Explore({ navigation }) {
                     />
                   </TouchableOpacity>
                   <ChatConponent />
-                  {/* <TouchableOpacity
-                    style={styles.notificationContainer}
-                    onPress={() => {
-                      navigation.navigate('Chats');
-                    }}>
-                    <Image style={styles.iconImage} source={images.chat} />
-                  </TouchableOpacity> */}
                 </View>
               </View>
               <View style={styles.inputContainer}>
@@ -351,22 +344,17 @@ export default function Explore({ navigation }) {
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.cardRow}>
                   {filteredBarbers?.map((item, index) => {
-                    // const distance = location
-                    //   ? calculateDistance(location, item.location)
-                    //   : null;
                     const distance = calculateDistance(
                       location?.latitude,
                       location?.longitude,
                       item.location.latitude,
                       item.location.longitude,
                     );
-                    // console.log('barbar k items hain yeh',item.profile);
                     return (
                       <ImageBackground
                         key={index}
                         source={{ uri: item?.profile }}
                         imageStyle={styles.containerImage}
-                      // style={}
                       >
                         <View style={styles.row}>
                           <Text style={styles.textWhite}>5.0</Text>
@@ -392,7 +380,6 @@ export default function Explore({ navigation }) {
                                   style={styles.locationImg}
                                 />
                                 <Text style={styles.textBlack}>
-                                  {/* {`Lat: ${item.location.latitude}, Long: ${item.location.longitude}`} */}
                                   {distance !== null && (
                                     <Text style={styles.textBlack}>
                                       {`${distance.toFixed(2)} km`}
@@ -445,7 +432,6 @@ export default function Explore({ navigation }) {
                         latitude: item?.location?.latitude,
                         longitude: item?.location?.longitude,
                       }}
-                    // onPress={() => handleSelectBarber(item)}
                     >
                       <ImageBackground
                         source={images.locationIcon}
@@ -495,22 +481,17 @@ export default function Explore({ navigation }) {
               <ScrollView horizontal>
                 <View style={styles.cardRow}>
                   {barberData?.map((item, index) => {
-                    // const distance = location
-                    //   ? calculateDistance(location, item.location)
-                    //   : null;
                     const distance = calculateDistance(
                       location?.latitude,
                       location?.longitude,
                       item.location.latitude,
                       item.location.longitude,
                     );
-                    // console.log('barbar k items hain yeh',item.profile);
                     return (
                       <ImageBackground
                         key={index}
                         source={{ uri: item.profile }}
                         imageStyle={styles.containerImage}
-                      // style={}
                       >
                         <View style={styles.row}>
                           <Text style={styles.textWhite}>{calculateAverageRating(item?.reviews)}</Text>
@@ -536,7 +517,6 @@ export default function Explore({ navigation }) {
                                   style={styles.locationImg}
                                 />
                                 <Text style={styles.textBlack}>
-                                  {/* {`Lat: ${item.location.latitude}, Long: ${item.location.longitude}`} */}
                                   {distance !== null && (
                                     <Text style={styles.textBlack}>
                                       {`${distance.toFixed(2)} km`}
@@ -573,58 +553,4 @@ export default function Explore({ navigation }) {
       )}
     </SafeAreaView>
   );
-}
-
-{
-  /* <ImageBackground
-key={index}
-source={item.image}
-imageStyle={styles.containerImage}
-// style={}
->
-<View style={styles.row}>
-  <Text style={styles.textWhite}>5.0</Text>
-  <StarRating
-    maxStars={1}
-    starSize={12}
-    color={colors.gold}
-    rating={1}
-  />
-</View>
-<View style={styles.marginCardtop}>
-  <ImageBackground
-    source={images.bluredImg}
-    imageStyle={styles.bluredImg}>
-    <View style={styles.appointmentContainer}>
-      <Text style={styles.textDarkerblack}>
-        {item.name}
-      </Text>
-      <View style={styles.locationContainer}>
-        <Image
-          source={images.Location}
-          resizeMode="contain"
-          style={styles.locationImg}
-        />
-        <Text style={styles.textBlack}>
-          {item.location}
-        </Text>
-      </View>
-      <TouchableOpacity
-        style={styles.bookBtn}
-        onPress={() =>
-          navigation.navigate('BookAppointment')
-        }>
-        <Text style={styles.btnText}>
-          Book Appointment
-        </Text>
-        <Image
-          source={images.arrowIcon}
-          resizeMode="contain"
-          style={styles.arrowStyle}
-        />
-      </TouchableOpacity>
-    </View>
-  </ImageBackground>
-</View>
-</ImageBackground> */
 }

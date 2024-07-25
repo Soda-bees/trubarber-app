@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,18 +11,18 @@ import {
   PermissionsAndroid,
   Alert,
 } from 'react-native';
-import { styles } from './style.js';
+import {styles} from './style.js';
 import images from '../../services/utilities/images';
-import { colors, sizes } from '../../services';
+import {colors, sizes} from '../../services';
 import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectlocation, setLocation } from '../../store/location/index.js';
-import messaging from "@react-native-firebase/messaging"
+import {useDispatch, useSelector} from 'react-redux';
+import {selectlocation, setLocation} from '../../store/location/index.js';
+import messaging from '@react-native-firebase/messaging';
 
-export default function WelcomeScreen({ navigation }) {
+export default function WelcomeScreen({navigation}) {
   const dispatch = useDispatch();
   const location = useSelector(selectlocation);
 
@@ -53,21 +53,24 @@ export default function WelcomeScreen({ navigation }) {
 
   useEffect(() => {
     if (Platform.OS === 'android') {
-      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS).then((res) => {
-        console.log('res===>', res);
-        if (!!res && res === 'granted') {
-          requestUserPermission()
-          initializeLocation()
-        }
-        initializeLocation()
-      }).catch((error) => {
-        initializeLocation()
-        console.log('error in get permission in app.js')
-      })
+      PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+      )
+        .then(res => {
+          console.log('res===>', res);
+          if (!!res && res === 'granted') {
+            requestUserPermission();
+            initializeLocation();
+          }
+          initializeLocation();
+        })
+        .catch(error => {
+          initializeLocation();
+          console.log('error in get permission in app.js');
+        });
     } else {
-
     }
-  }, [])
+  }, []);
 
   async function requestUserPermission() {
     const authStatus = await messaging().requestPermission();
@@ -96,27 +99,6 @@ export default function WelcomeScreen({ navigation }) {
         });
     }
   };
-
-  // useEffect(() => {
-  //   const initializeLocation = async () => {
-  //     const hasPermission = await requestLocationPermission();
-  //     if (hasPermission) {
-  //       checkLocationServices()
-  //         .then(() => {
-  //           getCurrentLocation(setRegion, dispatch);
-  //         })
-  //         .catch(error => {
-  //           console.log('Location services not enabled', error.message);
-  //           Alert.alert(
-  //             'Location Services Disabled',
-  //             'Please enable location services to use this feature.',
-  //           );
-  //         });
-  //     }
-  //   };
-
-  //   initializeLocation();
-  // }, []);
 
   const requestLocationPermission = async () => {
     if (Platform.OS === 'android') {
@@ -159,16 +141,12 @@ export default function WelcomeScreen({ navigation }) {
   const getCurrentLocation = (setRegion, dispatch) => {
     Geolocation.getCurrentPosition(
       position => {
-        const { latitude, longitude } = position.coords;
-        // console.log(
-        //   position.coords,
-        //   '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
-        // );
+        const {latitude, longitude} = position.coords;
         const locationObj = {
           latitude,
           longitude,
         };
-        dispatch(setLocation(locationObj))
+        dispatch(setLocation(locationObj));
         setRegion({
           latitude,
           longitude,
@@ -191,12 +169,12 @@ export default function WelcomeScreen({ navigation }) {
     <SafeAreaView>
       <View style={styles.container}>
         <ScrollView
-          style={{ flex: 1 }}
+          style={{flex: 1}}
           horizontal={true}
           scrollEventThrottle={16}
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
-          onScroll={({ nativeEvent }) => onchange(nativeEvent)}>
+          onScroll={({nativeEvent}) => onchange(nativeEvent)}>
           <View style={Platform.OS == 'android' ? styles.body : styles.bodyIOS}>
             <ImageBackground
               style={styles.letsGetStartedImg1}

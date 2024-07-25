@@ -172,7 +172,7 @@ export default function Chats({ navigation }) {
                                     </Text>
                                   </View>
                                 </View>
-                                <View style={{ height: sizes.screenHeight * 0.06, flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'flex-start' }}>
+                                <View style={{ height: sizes.screenHeight * 0.06, flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'flex-start'}}>
                                   <Text style={styles.chatTime}>
                                     {timeAgo}
                                   </Text>

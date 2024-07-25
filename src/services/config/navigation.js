@@ -49,11 +49,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectAuthToken } from '../../store/authToken';
 import { selectRole } from '../../store/role';
 import Review from '../../screens/Review';
-import NavigationService from './NavigationService';
 import { Linking } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import { sizes } from '../utilities/sizes';
 import { colors } from '../utilities/colors';
+import BarberDirection from '../../screens/BarberDirection';
 
 
 
@@ -147,6 +147,7 @@ export default function MainNavigator() {
               <Stack.Screen name="MyTabs" component={MyTabs} />
               <Stack.Screen name="BookAppointment" component={BookAppointment} />
               <Stack.Screen name="WholeMap" component={WholeMap} />
+              <Stack.Screen name="BarberDirection" component={BarberDirection} />
               <Stack.Screen name="BookingProcess" component={BookingProcess} />
               <Stack.Screen name="AddCard" component={AddCard} />
               <Stack.Screen name="ServiceDetails" component={ServiceDetails} />
