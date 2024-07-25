@@ -398,6 +398,8 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.smallM,
     color: colors.black,
     maxWidth: sizes.screenWidth * 0.86,
+    // backgroundColor:'red',
+    paddingHorizontal:10
   },
 
   buttonContainer: {

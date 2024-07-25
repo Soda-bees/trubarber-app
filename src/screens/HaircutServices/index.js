@@ -81,7 +81,7 @@ export default function HaircutServices({navigation, route}) {
               </View>
             </View>
           </ImageBackground>
-          <ScrollView>
+          <ScrollView style={{height: sizes.screenHeight}}>
             <View
               style={
                 Platform.OS == 'android'
@@ -156,69 +156,70 @@ export default function HaircutServices({navigation, route}) {
                         </ImageBackground>
                       </View>
                     </ImageBackground>
-                    //   <ImageBackground
-                    //   key={index}
-                    //   source={{uri: item.profile}}
-                    //   imageStyle={styles.containerImage}
-                    //   // style={}
-                    // >
-                    //   <View style={styles.row}>
-                    //     <Text style={styles.textWhite}>5.0</Text>
-                    //     <StarRating
-                    //       maxStars={1}
-                    //       starSize={12}
-                    //       color={colors.gold}
-                    //       rating={1}
-                    //     />
-                    //   </View>
-                    //   <View style={styles.marginCardtop}>
-                    //     <ImageBackground
-                    //       source={images.bluredImg}
-                    //       imageStyle={styles.bluredImg}>
-                    //       <View style={styles.appointmentContainer}>
-                    //         <Text style={styles.textDarkerblack}>
-                    //           {item.name}
-                    //         </Text>
-                    //         <View style={styles.locationContainer}>
-                    //           <Image
-                    //             source={images.Location}
-                    //             resizeMode="contain"
-                    //             style={styles.locationImg}
-                    //           />
-                    //           <Text style={styles.textBlack}>
-                    //             {/* {`Lat: ${item.location.latitude}, Long: ${item.location.longitude}`} */}
-                    //             {distance !== null && (
-                    //               <Text style={styles.textBlack}>
-                    //                 {`Distance: ${distance.toFixed(2)} km`}
-                    //               </Text>
-                    //             )}
-                    //           </Text>
-                    //         </View>
-                    //         <TouchableOpacity
-                    //           style={styles.bookBtn}
-                    //           onPress={() =>
-                    //             navigation.navigate('BookAppointment')
-                    //           }>
-                    //           <Text style={styles.btnText}>
-                    //             Book Appointment
-                    //           </Text>
-                    //           <Image
-                    //             source={images.arrowIcon}
-                    //             resizeMode="contain"
-                    //             style={styles.arrowStyle}
-                    //           />
-                    //         </TouchableOpacity>
-                    //       </View>
-                    //     </ImageBackground>
-                    //   </View>
-                    // </ImageBackground>
                   );
                 })}
             </View>
-            {/* <View style={{paddingBottom: sizes.screenHeight * 0.24}}></View> */}
           </ScrollView>
+          {/* <View style={{paddingBottom: sizes.screenHeight * 0.17}}></View> */}
         </View>
       </View>
     </SafeAreaView>
   );
 }
+
+//   <ImageBackground
+//   key={index}
+//   source={{uri: item.profile}}
+//   imageStyle={styles.containerImage}
+//   // style={}
+// >
+//   <View style={styles.row}>
+//     <Text style={styles.textWhite}>5.0</Text>
+//     <StarRating
+//       maxStars={1}
+//       starSize={12}
+//       color={colors.gold}
+//       rating={1}
+//     />
+//   </View>
+//   <View style={styles.marginCardtop}>
+//     <ImageBackground
+//       source={images.bluredImg}
+//       imageStyle={styles.bluredImg}>
+//       <View style={styles.appointmentContainer}>
+//         <Text style={styles.textDarkerblack}>
+//           {item.name}
+//         </Text>
+//         <View style={styles.locationContainer}>
+//           <Image
+//             source={images.Location}
+//             resizeMode="contain"
+//             style={styles.locationImg}
+//           />
+//           <Text style={styles.textBlack}>
+//             {/* {`Lat: ${item.location.latitude}, Long: ${item.location.longitude}`} */}
+//             {distance !== null && (
+//               <Text style={styles.textBlack}>
+//                 {`Distance: ${distance.toFixed(2)} km`}
+//               </Text>
+//             )}
+//           </Text>
+//         </View>
+//         <TouchableOpacity
+//           style={styles.bookBtn}
+//           onPress={() =>
+//             navigation.navigate('BookAppointment')
+//           }>
+//           <Text style={styles.btnText}>
+//             Book Appointment
+//           </Text>
+//           <Image
+//             source={images.arrowIcon}
+//             resizeMode="contain"
+//             style={styles.arrowStyle}
+//           />
+//         </TouchableOpacity>
+//       </View>
+//     </ImageBackground>
+//   </View>
+// </ImageBackground>

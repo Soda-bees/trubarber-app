@@ -297,13 +297,13 @@ export default function BookAppointment({navigation, route}) {
                   </Text>
                 </View>
               </View>
-              <TouchableOpacity style={styles.containBookmark}>
+              {/* <TouchableOpacity style={styles.containBookmark}>
                 <Image
                   source={images.Bookmark}
                   resizeMode="contain"
                   style={styles.bookmark}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
         </ImageBackground>

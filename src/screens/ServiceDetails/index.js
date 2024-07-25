@@ -209,7 +209,7 @@ export default function ServiceDetails({navigation, route}) {
             );
           })}
           <Text style={styles.categoryImg}>Images</Text>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{marginHorizontal:12}}>
             {item?.pictures.map((item, index) => {
               return (
                 <View style={styles.imageContainer} key={index}>

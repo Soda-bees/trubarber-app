@@ -18,13 +18,11 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: sizes.screenHeight * 0.016,
-  
-},
+  },
 
   headerContainer: {
-    // backgroundColor: 'yellow',
     marginTop: sizes.screenHeight * 0.056,
-    width: sizes.screenWidth * 0.852
+    width: sizes.screenWidth * 0.852,
   },
   headerText: {
     textAlign: 'center',
@@ -37,8 +35,7 @@ export const styles = StyleSheet.create({
     marginLeft: sizes.screenWidth * 0.052,
     marginRight: sizes.screenWidth * 0.052,
     marginTop: sizes.screenHeight * 0.02,
-    // backgroundColor: 'red',
-    height: sizes.screenHeight,
+    marginBottom: sizes.screenHeight * 0.15,
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: sizes.screenWidth * 0.052,
@@ -48,7 +45,6 @@ export const styles = StyleSheet.create({
     marginLeft: sizes.screenWidth * 0.045,
     marginRight: sizes.screenWidth * 0.045,
     marginTop: sizes.screenHeight * 0.02,
-    // backgroundColor: 'red',
     height: sizes.screenHeight,
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -60,15 +56,13 @@ export const styles = StyleSheet.create({
     width: sizes.screenHeight * 0.22,
     height: sizes.screenHeight * 0.24,
     borderRadius: sizes.screenWidth * 0.042,
-    // borderRadius: 22,
   },
-  
+
   containerImageIOS: {
     marginTop: sizes.screenHeight * 0.012,
     width: sizes.screenHeight * 0.21,
     height: sizes.screenHeight * 0.24,
     borderRadius: sizes.screenWidth * 0.042,
-    // borderRadius: 22,
   },
 
   row: {
@@ -96,8 +90,7 @@ export const styles = StyleSheet.create({
   },
 
   textDarkerblack: {
-    // backgroundColor: 'orange',
-    color:colors.black,
+    color: colors.black,
     fontWeight: '700',
     fontSize: fontSize.small,
   },
@@ -107,24 +100,19 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
   },
   appointmentContainer: {
-    // backgroundColor: 'red',
     marginLeft: sizes.screenWidth * 0.042,
     marginTop: sizes.screenHeight * 0.009,
     gap: sizes.screenHeight * 0.007,
   },
   locationContainer: {
-    // marginTop: sizes.screenHeight * 0.007,
     alignItems: 'center',
-    // justifyContent: 'center',
     flexDirection: 'row',
   },
   locationImg: {
     width: sizes.screenWidth * 0.04,
-    // backgroundColor: 'purple',
     height: sizes.screenHeight * 0.013,
   },
   bookBtn: {
-    // marginTop: sizes.screenHeight * 0.002,
     backgroundColor: colors.btnColor,
     height: sizes.screenHeight * 0.032,
     width: sizes.screenWidth * 0.362,
@@ -140,10 +128,5 @@ export const styles = StyleSheet.create({
   },
   arrowStyle: {
     height: sizes.screenHeight * 0.012,
-    // backgroundColor: 'orange'
   },
-
-  // reviewContainer: {
-  //   height : sizes.screenHeight
-  // },
 });

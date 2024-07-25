@@ -184,6 +184,7 @@ export const styles = StyleSheet.create({
   imageContainer: {
     flexDirection: 'row',
     marginLeft: sizes.screenWidth * 0.02,
+    // marginHorizontal: sizes.screenWidth * 0.015,
     // backgroundColor:'red',
     width: sizes.screenWidth * 0.35,
     height: sizes.screenWidth * 0.5,
