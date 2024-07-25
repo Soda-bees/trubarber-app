@@ -51,6 +51,17 @@ export default function WelcomeScreen({navigation}) {
     navigation.navigate('Signup');
   };
 
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  }
+
   useEffect(() => {
     if (Platform.OS === 'android') {
       PermissionsAndroid.request(
@@ -71,17 +82,6 @@ export default function WelcomeScreen({navigation}) {
     } else {
     }
   }, []);
-
-  async function requestUserPermission() {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    if (enabled) {
-      console.log('Authorization status:', authStatus);
-    }
-  }
 
   const initializeLocation = async () => {
     const hasPermission = await requestLocationPermission();

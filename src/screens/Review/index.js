@@ -10,31 +10,32 @@ import {
   TextInput,
   ActivityIndicator,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { styles } from './style.js';
+import React, {useEffect, useState} from 'react';
+import {styles} from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import { StarRatingDisplay } from 'react-native-star-rating-widget';
+import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import StarRating from 'react-native-star-rating-widget';
-import { colors, sizes } from '../../services';
+import {colors, sizes} from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
-import { selectUserData } from '../../store/userData/index.js';
+import {useSelector} from 'react-redux';
+import {selectUserData} from '../../store/userData/index.js';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { selectAuthToken } from '../../store/authToken/index.js';
+import {selectAuthToken} from '../../store/authToken/index.js';
 import Modal from 'react-native-modal';
 import {
   deleteReview,
   postReview,
   updateReview,
 } from '../../services/config/API/index.js';
-import { ErrorShow } from '../../components/Error';
+import {ErrorShow} from '../../components/Error';
 import Toast from 'react-native-toast-message';
 import Loader from '../../components/Loader/index.js';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-export default function Review({ navigation, route }) {
+export default function Review({navigation, route}) {
   const barber = route?.params.barbar;
   const user = useSelector(selectUserData);
   const token = useSelector(selectAuthToken);
@@ -87,8 +88,8 @@ export default function Review({ navigation, route }) {
   };
 
   const onHide = () => {
-    navigation.goBack()
-  }
+    navigation.goBack();
+  };
 
   const handlePostReview = async () => {
     try {
@@ -103,7 +104,12 @@ export default function Review({ navigation, route }) {
         if (response?.data?.success) {
           setReview(response?.data?.review);
           setLoader(false);
-          ErrorShow('success', 'Congratulation!', response?.data?.message, onHide);
+          ErrorShow(
+            'success',
+            'Congratulation!',
+            response?.data?.message,
+            onHide,
+          );
         } else {
           console.log(response.data.message);
           setLoader(false);
@@ -140,7 +146,12 @@ export default function Review({ navigation, route }) {
         if (response.data.success) {
           setReview(response?.data?.review);
           setLoader(false);
-          ErrorShow('success', 'Review Updated!', response?.data?.message, onHide);
+          ErrorShow(
+            'success',
+            'Review Updated!',
+            response?.data?.message,
+            onHide,
+          );
         } else {
           console.log(response.data.message);
           setLoader(false);
@@ -173,7 +184,12 @@ export default function Review({ navigation, route }) {
         setReview(null);
         setComment('');
         setRating(0);
-        ErrorShow('success', 'Congratulation!', response?.data?.message, onHide);
+        ErrorShow(
+          'success',
+          'Congratulation!',
+          response?.data?.message,
+          onHide,
+        );
         setShowModal1(false);
       } else {
         console.log(response.data.message);
@@ -229,8 +245,8 @@ export default function Review({ navigation, route }) {
       <View style={styles.container}>
         <ImageBackground
           imageStyle={styles.headerImage}
-          source={{ uri: barber?.profile }}
-        // style={}
+          source={{uri: barber?.profile}}
+          // style={}
         >
           <View style={styles.headerContainer}>
             <View style={styles.arrowTop}>
@@ -270,47 +286,51 @@ export default function Review({ navigation, route }) {
             </View>
           </View>
         </ImageBackground>
-
-        <View style={styles.ratingContainer}>
-          <StarRating
-            rating={rating}
-            onChange={setRating}
-            color={colors.gold}
-            emptyColor={colors.gold}
-            starSize={36}
-            enableHalfStar={false}
-          />
-          <Text style={styles.disabledText2}>
-            Tell us about your experience at {barber.name}
-          </Text>
-          <View style={styles.userRow}>
-            <View style={styles.userRowLeft}>
-              <Image source={{ uri: user.profile }} style={styles.profile} />
-              <Text style={styles.userName}>{user.name}</Text>
-            </View>
-            {review ? (
-              <TouchableOpacity
-                onPress={() => {
-                  setShowModal1(true);
-                }}>
-                <Image source={images.deleteIconn} style={styles.deleteIconn} />
-              </TouchableOpacity>
-            ) : null}
-          </View>
-          <View style={styles.instructionsContainer}>
-            <TextInput
-              placeholder="Your review here.."
-              placeholderTextColor={colors.disabledBg2}
-              multiline
-              value={comment}
-              style={styles.descriptionInput}
-              onChangeText={text => {
-                setComment(text);
-              }}
+        <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={100} extraScrollHeight={100}>
+          <View style={styles.ratingContainer}>
+            <StarRating
+              rating={rating}
+              onChange={setRating}
+              color={colors.gold}
+              emptyColor={colors.gold}
+              starSize={36}
+              enableHalfStar={false}
             />
+            <Text style={styles.disabledText2}>
+              Tell us about your experience at {barber.name}
+            </Text>
+            <View style={styles.userRow}>
+              <View style={styles.userRowLeft}>
+                <Image source={{uri: user.profile}} style={styles.profile} />
+                <Text style={styles.userName}>{user.name}</Text>
+              </View>
+              {review ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    setShowModal1(true);
+                  }}>
+                  <Image
+                    source={images.deleteIconn}
+                    style={styles.deleteIconn}
+                  />
+                </TouchableOpacity>
+              ) : null}
+            </View>
+            <View style={styles.instructionsContainer}>
+              <TextInput
+                placeholder="Your review here.."
+                placeholderTextColor={colors.disabledBg2}
+                multiline
+                value={comment}
+                style={styles.descriptionInput}
+                onChangeText={text => {
+                  setComment(text);
+                }}
+              />
+            </View>
           </View>
-        </View>
-        <KeyboardSpacer />
+        </KeyboardAwareScrollView>
+        {/* <KeyboardSpacer topSpacing={900}/> */}
         <TouchableOpacity style={styles.buttonContainer}>
           {loader ? (
             <Loader title={'Submit'} />
@@ -337,11 +357,11 @@ export default function Review({ navigation, route }) {
             <TouchableOpacity
               style={styles.btnView1}
               onPress={!loader2 && handleDeleteReview}>
-              {
-                loader2 ?
-                  <ActivityIndicator color={colors.white}/> :
-                  <Text style={styles.btnText1}>Confirm</Text>
-              }
+              {loader2 ? (
+                <ActivityIndicator color={colors.white} />
+              ) : (
+                <Text style={styles.btnText1}>Confirm</Text>
+              )}
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.btnView}

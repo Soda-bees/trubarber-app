@@ -27,6 +27,7 @@ export default function BarberDirection({navigation, route}) {
   // console.log(barbar.location);
   // console.log(formatToJSON(barberData));
   // const location = useSelector(selectlocation);
+  const GOOGLE_MAPS_API_KEY = 'AIzaSyCbWOArVUIn-uRQ8S3fsvayHrep5El4ab4';
   const [routeInfo, setRouteInfo] = useState({distance: null, duration: null});
   const [location, setLocation] = useState(null);
   const mapViewRef = useRef(null);
@@ -156,9 +157,8 @@ export default function BarberDirection({navigation, route}) {
             showsUserLocation
             showsCompass={true}
             ref={mapViewRef}
-            apikey={GOOGLE_MAPS_API_KEY}
-            >
-          {/* <UrlTile
+            apikey={GOOGLE_MAPS_API_KEY}>
+            {/* <UrlTile
             urlTemplate="https://a.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png"
             maximumZ={100}
           /> */}
@@ -200,7 +200,7 @@ export default function BarberDirection({navigation, route}) {
                     duration: result.duration,
                   });
 
-                  if (result.distance < 0.01) {
+                  if (result.distance < 0.03) {
                     handleArrival();
                   }
                 }}

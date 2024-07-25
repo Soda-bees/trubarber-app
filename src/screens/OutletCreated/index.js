@@ -39,6 +39,10 @@ export default function OutletCreated({navigation, route}) {
   const [loader, setLoader] = useState(false);
   const [region, setRegion] = useState(null);
 
+  // useEffect(() => {
+
+  // }, []);
+
   const handleLocation = () => {
     const initializeLocation = async () => {
       const hasPermission = await requestLocationPermission();
@@ -59,10 +63,6 @@ export default function OutletCreated({navigation, route}) {
 
     initializeLocation();
   };
-
-  // useEffect(() => {
-
-  // }, []);
 
   const requestLocationPermission = async () => {
     if (Platform.OS === 'android') {
