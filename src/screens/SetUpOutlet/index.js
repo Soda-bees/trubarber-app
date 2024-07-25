@@ -3,28 +3,29 @@ import {
   Text,
   Image,
   TextInput,
-  Touchable,
   TouchableOpacity,
   SafeAreaView,
   Platform,
-  KeyboardAvoidingView,
+  Dimensions,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import images from '../../services/utilities/images';
-import { styles } from './style.js';
+import {styles} from './style.js';
 import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { PermissionsAndroid, PermissionsIOS } from 'react-native';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {PermissionsAndroid} from 'react-native';
 import TimePickerComponent from '../../components/TimePicketComponent';
 import Loader from '../../components/Loader';
-import { uploadProfile } from '../../services/config/API';
-import { ErrorShow } from '../../components/Error';
+import {uploadProfile} from '../../services/config/API';
+import {ErrorShow} from '../../components/Error';
 import Toast from 'react-native-toast-message';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { colors, sizes } from '../../services';
 
-export default function SetUpOutlet({ navigation, route }) {
-  const { userData } = route.params;
+export default function SetUpOutlet({navigation, route}) {
+  const {userData} = route.params;
+  const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
 
   const [outletName, setOutletName] = useState('RedBox Barber');
   const [description, setDescription] = useState('');
@@ -33,6 +34,7 @@ export default function SetUpOutlet({ navigation, route }) {
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [loader, setLoader] = useState(false);
+  const [dimensions, setDimensions] = useState({width: 0, height: 0});
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
@@ -67,7 +69,6 @@ export default function SetUpOutlet({ navigation, route }) {
           const uri =
             response.uri || (response.assets && response.assets[0].uri);
           if (uri) {
-            // setImgUri(uri);
             const img = response.assets[0];
             handleUploadProfile(img);
           } else {
@@ -81,7 +82,6 @@ export default function SetUpOutlet({ navigation, route }) {
       await requestCameraPermission();
 
       launchCamera(options, response => {
-        // console.log('** Full Camera Response:**', response.assets[0].uri);
         try {
           const uri = response.assets[0].uri;
           if (!uri) {
@@ -95,7 +95,6 @@ export default function SetUpOutlet({ navigation, route }) {
               console.log('No image URI found in camera response');
             }
           } else {
-            // setImgUri(uri);
             const img = response.assets[0];
             handleUploadProfile(img);
           }
@@ -145,9 +144,8 @@ export default function SetUpOutlet({ navigation, route }) {
       return ErrorShow('error', 'Oops!', 'Please fill the description');
     }
     const time = `${formatTime(startTime)} - ${formatTime(endTime)}`;
-    Object.assign(userData, { profile: imgUri, description, time });
-    // navigation.navigate('SetUpServices', { userData });
-    navigation.navigate('AuthSetUpServices', { userData });
+    Object.assign(userData, {profile: imgUri, description, time});
+    navigation.navigate('AuthSetUpServices', {userData});
   };
 
   const formatTime = date => {
@@ -160,6 +158,52 @@ export default function SetUpOutlet({ navigation, route }) {
     return hours + ':' + minutes + ' ' + ampm;
   };
 
+  const checkDimensions = imgUri => {
+    return new Promise((resolve, reject) => {
+      Image.getSize(
+        imgUri,
+        (width, height) => {
+          const aspectRatio = width / height;
+          let calculatedWidth, calculatedHeight;
+
+          if (width > screenHeight * 0.3) {
+            calculatedWidth = screenHeight * 0.3;
+            calculatedHeight = calculatedWidth / aspectRatio;
+          } else {
+            calculatedWidth = width;
+            calculatedHeight = height;
+          }
+
+          if (calculatedHeight > screenHeight *0.3) {
+            calculatedHeight = screenHeight * 0.3;
+            calculatedWidth = calculatedHeight * aspectRatio;
+          }
+
+          resolve({width: calculatedWidth, height: calculatedHeight});
+        },
+        error => {
+          reject(error);
+        },
+      );
+    });
+  };
+
+  useEffect(() => {
+    const calculateDimensions = async () => {
+      try {
+        if (!imgUri) {
+          return;
+        }
+        const {width, height} = await checkDimensions(imgUri);
+        setDimensions({width, height});
+      } catch (error) {
+        console.error('Error calculating image dimensions:', error);
+      }
+    };
+
+    calculateDimensions();
+  }, [imgUri]);
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -171,13 +215,22 @@ export default function SetUpOutlet({ navigation, route }) {
           <KeyboardAwareScrollView enableOnAndroid={true}>
             <View>
               <TouchableOpacity
-                style={styles.uploadImage}
+                style={imgUri ? {
+                  width: dimensions.width,
+                  height: dimensions.height,
+                  borderRadius: sizes.screenWidth * 0.04,
+                  alignSelf: 'center',
+                  marginTop: sizes.screenHeight*0.03
+                } : styles.uploadImage}
                 onPress={() => uploadPhoto('library')}>
                 {imgUri ? (
                   <Image
-                    source={{ uri: imgUri }}
-                    style={styles.imagestyle}
-                    resizeMode="contain"
+                    source={{uri: imgUri}}
+                    style={{
+                      width: dimensions.width,
+                      height: dimensions.height,
+                      borderRadius: sizes.screenWidth * 0.04,
+                    }}
                   />
                 ) : (
                   <Image
@@ -210,7 +263,7 @@ export default function SetUpOutlet({ navigation, route }) {
                   multiline={true}
                   numberOfLines={4}
                   placeholder="Description"
-                  placeholderTextColor='black'
+                  placeholderTextColor="black"
                 />
               </View>
               <View style={styles.timeContainer}>
@@ -233,7 +286,7 @@ export default function SetUpOutlet({ navigation, route }) {
           </KeyboardAwareScrollView>
         </View>
         <Toast />
-        <View style={{ position: 'absolute', bottom: 25 }}>
+        <View style={styles.nextBtn}>
           {loader ? (
             <Loader title={'Next'} />
           ) : (
@@ -241,6 +294,6 @@ export default function SetUpOutlet({ navigation, route }) {
           )}
         </View>
       </View>
-    </SafeAreaView >
+    </SafeAreaView>
   );
 }

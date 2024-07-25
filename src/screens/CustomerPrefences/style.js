@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight,
   },
   heroTextcontainer: {
-    marginTop: sizes.screenHeight * 0.04,
+    marginTop: sizes.screenHeight * 0.02,
     alignItems: 'center',
     marginLeft: sizes.screenWidth * 0.08,
     marginRight: sizes.screenWidth * 0.08,
@@ -54,7 +54,9 @@ export const styles = StyleSheet.create({
     color: colors.grayText,
   },
   Nextbtn: {
-    top: sizes.screenHeight * 0.1,
+    position: 'absolute',
+    bottom: sizes.screenHeight*0.07,
+    alignSelf: 'center'
   },
 
   NextbtnIOS: {

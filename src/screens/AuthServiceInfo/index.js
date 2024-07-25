@@ -489,12 +489,7 @@ export default function AuthServiceInfo({ navigation, route }) {
                 placeholderTextColor={colors.black}
               />
             </View>
-          </View>
-
-          {/* </View> */}
-        </KeyboardAwareScrollView>
-        {/* </ScrollView> */}
-        <View style={styles.saveChangeBtn}>
+            <View style={styles.saveChangeBtn}>
           {loader ? (
             <Loader title={'Save Changes'} />
           ) : (
@@ -512,6 +507,12 @@ export default function AuthServiceInfo({ navigation, route }) {
             />
           )}
         </View>
+          </View>
+
+          {/* </View> */}
+        </KeyboardAwareScrollView>
+        {/* </ScrollView> */}
+
       </View>
       <Toast />
     </SafeAreaView>

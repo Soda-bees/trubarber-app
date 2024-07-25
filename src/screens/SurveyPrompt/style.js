@@ -4,11 +4,17 @@ import {colors, fontSize, sizes} from '../../services';
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f5f5f5',
+    height: sizes.screenHeight
   },
   arrowblackleft: {
     marginTop: sizes.screenHeight * 0.06,
     width: sizes.screenWidth * 0.1,
     height: sizes.screenHeight * 0.023,
+  },
+
+  backArrow: {
+    marginLeft: sizes.screenWidth * 0.04,
+    marginTop: sizes.screenHeight * 0.04,
   },
 
   Hertotextcontainer: {
@@ -27,6 +33,8 @@ export const styles = StyleSheet.create({
   },
 
   Nextbtn: {
-    marginTop: sizes.screenHeight * 0.4,
+    position: 'absolute',
+    bottom: sizes.screenHeight*0.07,
+    alignSelf: 'center'
   },
 });

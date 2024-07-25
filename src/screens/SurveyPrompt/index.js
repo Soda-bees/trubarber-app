@@ -11,6 +11,7 @@ import React, {useState} from 'react';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
 import { styles } from './style';
+import BackArrow from '../../components/BackArrow';
 
 export default function SurveyPrompt({navigation, route}) {
   const {userData} = route.params;
@@ -27,13 +28,10 @@ export default function SurveyPrompt({navigation, route}) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handlegoBack}>
-        <Image
-          style={styles.arrowblackleft}
-          source={images.arrowblackleft}
-          resizeMode="contain"
-        />
-      </TouchableOpacity>
+      <View style={styles.backArrow}>
+
+<BackArrow onPress={()=> navigation.goBack()}/>
+      </View>
       <View
         style={
           Platform.OS == 'android'

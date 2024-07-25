@@ -491,7 +491,8 @@ export default function AppoinmentBarber({navigation}) {
                 onPress={handleUpdateAppointmentStatus}>
                 <Text
                   style={
-                    isFutureTime(modalItem?.time, modalItem?.date)
+                    isFutureTime(modalItem?.time, modalItem?.date) ||
+                    modalItem?.status === 'Completed'
                       ? styles.modalBtnTextDissable
                       : styles.modalBtnText
                   }>
@@ -500,7 +501,8 @@ export default function AppoinmentBarber({navigation}) {
                 <Image
                   source={images.arrowIcon}
                   style={
-                    isFutureTime(modalItem?.time, modalItem?.date)
+                    isFutureTime(modalItem?.time, modalItem?.date) ||
+                    modalItem?.status === 'Completed'
                       ? styles.modalArrowIconDsiable
                       : styles.modalArrowIcon
                   }

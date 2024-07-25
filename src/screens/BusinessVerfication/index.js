@@ -6,25 +6,28 @@ import {
   Touchable,
   TouchableOpacity,
   SafeAreaView,
+  Dimensions,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import images from '../../services/utilities/images';
-import { styles } from './style.js';
+import {styles} from './style.js';
 import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { PermissionsAndroid, PermissionsIOS } from 'react-native';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {PermissionsAndroid, PermissionsIOS} from 'react-native';
 import Loader from '../../components/Loader';
-import { uploadProfile } from '../../services/config/API';
-import { ErrorShow } from '../../components/Error';
+import {uploadProfile} from '../../services/config/API';
+import {ErrorShow} from '../../components/Error';
 import Toast from 'react-native-toast-message';
+import {sizes} from '../../services';
 
-export default function BusinessVerfication({ navigation, route }) {
-
-  const { userData } = route.params;
+export default function BusinessVerfication({navigation, route}) {
+  const {userData} = route.params;
+  const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
+  const [dimensions, setDimensions] = useState({width: 0, height: 0});
 
   const [imgUri, setImgUri] = useState(null);
-  const [loader, setLoader] = useState(false)
+  const [loader, setLoader] = useState(false);
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
@@ -127,11 +130,61 @@ export default function BusinessVerfication({ navigation, route }) {
 
   const handleConfirm = async () => {
     if (!imgUri) {
-      return ErrorShow('error', 'Oops!', 'Please Upload business verification photo');
+      return ErrorShow(
+        'error',
+        'Oops!',
+        'Please Upload business verification photo',
+      );
     }
-    userData.businessVerification = imgUri
-    navigation.navigate("OutletCreated", { userData })
-  }
+    userData.businessVerification = imgUri;
+    navigation.navigate('OutletCreated', {userData});
+  };
+
+  const checkDimensions = imgUri => {
+    return new Promise((resolve, reject) => {
+      Image.getSize(
+        imgUri,
+        (width, height) => {
+          const aspectRatio = width / height;
+          let calculatedWidth, calculatedHeight;
+
+          if (width > screenHeight * 0.3) {
+            calculatedWidth = screenHeight * 0.3;
+            calculatedHeight = calculatedWidth / aspectRatio;
+          } else {
+            calculatedWidth = width;
+            calculatedHeight = height;
+          }
+
+          if (calculatedHeight > screenHeight * 0.3) {
+            calculatedHeight = screenHeight * 0.3;
+            calculatedWidth = calculatedHeight * aspectRatio;
+          }
+
+          resolve({width: calculatedWidth, height: calculatedHeight});
+        },
+        error => {
+          reject(error);
+        },
+      );
+    });
+  };
+
+  useEffect(() => {
+    const calculateDimensions = async () => {
+      try {
+        if (!imgUri) {
+          return;
+        }
+        const {width, height} = await checkDimensions(imgUri);
+        setDimensions({width, height});
+      } catch (error) {
+        console.error('Error calculating image dimensions:', error);
+      }
+    };
+
+    calculateDimensions();
+  }, [imgUri]);
 
   return (
     <SafeAreaView>
@@ -144,12 +197,25 @@ export default function BusinessVerfication({ navigation, route }) {
           Verify Your Business: Upload Required Documents
         </Text>
         <View
-          style={styles.uploadImage}
-        >
+          style={
+            imgUri
+              ? {
+                  width: dimensions.width,
+                  height: dimensions.height,
+                  borderRadius: sizes.screenWidth * 0.04,
+                  marginTop: sizes.screenHeight * 0.04,
+                  alignSelf: 'center',
+                }
+              : styles.uploadImage
+          }>
           {imgUri ? (
             <Image
-              source={{ uri: imgUri }}
-              style={styles.imagestyle}
+              source={{uri: imgUri}}
+              style={{
+                width: dimensions.width,
+                height: dimensions.height,
+                borderRadius: sizes.screenWidth * 0.04,
+              }}
               resizeMode="contain"
             />
           ) : (
@@ -185,13 +251,13 @@ export default function BusinessVerfication({ navigation, route }) {
           />
           <Text style={styles.textBlack}>Choose picture from gallery</Text>
         </TouchableOpacity>
-        <View style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
-          {
-            loader ?
-              <Loader title={"Next"} />
-              :
-              <Button title={'Next'} onPress={() => handleConfirm()} />
-          }
+        <View
+          style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
+          {loader ? (
+            <Loader title={'Next'} />
+          ) : (
+            <Button title={'Next'} onPress={() => handleConfirm()} />
+          )}
         </View>
       </View>
       <Toast />

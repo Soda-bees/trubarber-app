@@ -27,7 +27,9 @@ export const styles = StyleSheet.create({
     lineHeight: sizes.screenHeight * 0.04,
   },
   buttonTop: {
-    marginTop: sizes.screenHeight * 0.39,
+    position: 'absolute',
+    bottom: sizes.screenHeight*0.07,
+    alignSelf: 'center'
   },
 
   buttonTopIOS: {

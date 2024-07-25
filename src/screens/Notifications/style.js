@@ -26,6 +26,7 @@ export const styles = StyleSheet.create({
   containerBody: {
     // marginTop: sizes.screenHeight * 0.02,
     // paddingHorizontal: sizes.screenWidth * 0.06,
+    marginBottom: sizes.screenHeight*0.02
   },
   scrollContianer: {
     marginTop: sizes.screenHeight * 0.02,

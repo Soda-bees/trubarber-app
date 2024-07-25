@@ -35,11 +35,3 @@ export default function BackArrow({light , back , onPress}) {
   );
 }
 
-{
-  /* <TouchableOpacity style={styles.notSelected}>
-    <Text style={styles.grayText}>Every Couple of months</Text>
-  </TouchableOpacity>
-  <TouchableOpacity style={styles.notSelected}>
-    <Text style={styles.grayText}>Once every six months</Text>
-  </TouchableOpacity> */
-}

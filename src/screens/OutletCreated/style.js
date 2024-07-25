@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
   },
 
   backArrow: {
-    marginLeft: sizes.screenWidth * 0.042,
+    marginLeft: sizes.screenWidth * 0.04,
     marginTop: sizes.screenHeight * 0.03,
   },
   forgotPass: {
@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
   nextBtn: {
     position:'absolute',
     alignSelf:'center',
-    bottom: sizes.screenHeight * 0.04,
+    bottom: sizes.screenHeight * 0.07,
   },
   nextBtnIOS: {
     top: sizes.screenHeight * 0.42,

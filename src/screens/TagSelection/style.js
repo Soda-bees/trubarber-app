@@ -71,7 +71,9 @@ export const styles = StyleSheet.create({
   },
 
   Nextbtn: {
-    top: sizes.screenHeight * 0.29,
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: sizes.screenHeight * 0.07,
   },
 
   NextbtnIOS: {

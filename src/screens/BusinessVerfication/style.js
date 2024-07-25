@@ -37,9 +37,9 @@ export const styles = StyleSheet.create({
 
   uploadImage: {
     marginTop: sizes.screenHeight * 0.04,
-    borderRadius: sizes.screenWidth * 0.02,
+    borderRadius: sizes.screenWidth * 0.04,
     width: sizes.screenWidth * 0.85,
-    height: sizes.screenHeight * 0.18,
+    height: sizes.screenHeight * 0.3,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
@@ -74,9 +74,9 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.selectorcolor,
   },
   nextBtn: {
-    position:'absolute',
-    alignSelf:'center',
-    bottom: sizes.screenHeight * 0.035,
+    position: 'absolute',
+    bottom: sizes.screenHeight*0.07,
+    alignSelf: 'center'
   },
   nextBtnIOS: {
     top: sizes.screenHeight * 0.16,

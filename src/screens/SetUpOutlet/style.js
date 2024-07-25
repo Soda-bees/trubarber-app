@@ -7,19 +7,18 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight,
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingBottom: sizes.screenHeight * 0.03
   },
 
   backArrow: {
-    marginLeft: sizes.screenWidth * 0.042,
+    marginLeft: sizes.screenWidth * 0.04,
     marginTop: sizes.screenHeight * 0.03,
   },
   Forgotpass: {
-    marginTop: sizes.screenHeight * 0.07,
-    marginLeft: sizes.screenWidth * 0.09,
+    marginTop: sizes.screenHeight * 0.03,
     fontSize: fontSize.h5,
     color: colors.black,
     fontWeight: '700',
+    alignSelf: 'center'
   },
   addimage: {
     width: sizes.screenWidth * 0.2,
@@ -38,7 +37,7 @@ export const styles = StyleSheet.create({
   },
 
   uploadImage: {
-    marginTop: sizes.screenHeight * 0.04,
+    marginTop: sizes.screenHeight*0.03,
     borderRadius: sizes.screenWidth * 0.04,
     width: sizes.screenWidth * 0.9,
     height: sizes.screenHeight * 0.3,
@@ -114,9 +113,6 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.04,
     backgroundColor: colors.selectorcolor,
   },
-  nextBtn: {
-    top: sizes.screenHeight * 0.045,
-  },
   description: {
     color: colors.black,
     fontWeight: '600',
@@ -139,5 +135,11 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     textAlignVertical: 'top',
     width: sizes.screenWidth * 0.83,
+  },
+
+  nextBtn: {
+    position: 'absolute',
+    bottom: sizes.screenHeight*0.07,
+    alignSelf: 'center'
   },
 });

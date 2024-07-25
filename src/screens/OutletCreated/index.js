@@ -134,10 +134,10 @@ export default function OutletCreated({navigation, route}) {
   };
 
   const handleConfirm = async () => {
-    // navigation.navigate('BarberTabs')
     try {
       setLoader(true);
       if (!location) {
+        setLoader(false);
         return handleLocation();
       }
       userData.location = location;
