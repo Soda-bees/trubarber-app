@@ -84,7 +84,9 @@ export default function MainNavigator() {
 
   function buildDeepLinkFromNotificationData(data) {
     // console.log("notification data-=-=>", formatToJSON(data));
-    getDetails()
+    if(navigationId){
+      getDetails()
+    }
     const navigationId = data?.navigationId;
     if (!NAVIGATION_IDS.includes(navigationId)) {
       console.warn('Unverified navigationId', navigationId)

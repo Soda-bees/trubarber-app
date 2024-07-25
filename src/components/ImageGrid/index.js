@@ -54,8 +54,8 @@ const ImageGrid = ({ images }) => {
                     <Image
                         source={{ uri: item }}
                         style={{
-                            width: imageDimensions.width,
-                            height: imageDimensions.height,
+                            width: sizes.screenWidth*0.65,
+                            height: sizes.screenHeight*0.4,
                             borderRadius: 8,
                             // resizeMode: 'contain'
                         }}
