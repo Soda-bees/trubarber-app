@@ -182,15 +182,13 @@ export default function WholeMap({navigation}) {
                       style={styles.locationImg}
                     />
                     <Text style={styles.textBlack}>
-                      {/* {console.log(selectedBarber?.location)} */}
                       {calculateDistance(
                         location.latitude,
                         location.longitude,
                         selectedBarber?.location.latitude,
                         selectedBarber?.location.longitude,
-                      ).toFixed(2)}
-                      {/* {``} */}
-                      {/* {`Distance: ${distance.toFixed(2)} km`} */}
+                      ).toFixed(2)}{' '}
+                      km
                     </Text>
                   </View>
                   <TouchableOpacity

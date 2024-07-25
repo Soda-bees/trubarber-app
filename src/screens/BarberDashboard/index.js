@@ -73,103 +73,6 @@ export default function BarberDashboard({navigation}) {
     },
   ]);
 
-  // useEffect(() => {
-  //   const cleanup = socketService(dispatch, authToken, userData);
-
-  //   return () => {
-  //     cleanup();
-  //   };
-  // }, [userData]);
-
-  useEffect(() => {
-    const initializeLocation = async () => {
-      const hasPermission = await requestLocationPermission();
-      if (hasPermission) {
-        checkLocationServices()
-          .then(() => {
-            getCurrentLocation(setRegion, dispatch);
-          })
-          .catch(error => {
-            console.log('Location services not enabled', error.message);
-            Alert.alert(
-              'Location Services Disabled',
-              'Please enable location services to use this feature.',
-            );
-          });
-      }
-    };
-
-    initializeLocation();
-  }, []);
-
-  const requestLocationPermission = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-          {
-            title: 'Location Permission',
-            message:
-              'This app needs access to your location to show your current position on the map.',
-            buttonPositive: 'OK',
-          },
-        );
-
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('Location permission granted');
-          return true;
-        } else {
-          console.log('Location permission denied');
-          return false;
-        }
-      } catch (err) {
-        console.warn(err);
-        return false;
-      }
-    } else {
-      return true;
-    }
-  };
-
-  const checkLocationServices = () => {
-    return LocationServicesDialogBox.checkLocationServicesIsEnabled({
-      message:
-        '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
-      ok: 'YES',
-      cancel: 'NO',
-    });
-  };
-
-  const getCurrentLocation = (setRegion, dispatch) => {
-    Geolocation.getCurrentPosition(
-      position => {
-        const {latitude, longitude} = position.coords;
-        // console.log(
-        //   position.coords,
-        //   '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
-        // );
-        const locationObj = {
-          latitude,
-          longitude,
-        };
-        dispatch(setLocation(locationObj));
-        setRegion({
-          latitude,
-          longitude,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
-        });
-      },
-      error => {
-        console.log('Error getting location: ', error.message);
-        Alert.alert(
-          'Error',
-          'Unable to retrieve your location. Please try again.',
-        );
-      },
-      // {enableHighAccuracy: true, timeout: 20000, maximumAge: 20000},
-    );
-  };
 
   const formatDateShort = dateString => {
     if (!dateString) return '';
@@ -179,7 +82,6 @@ export default function BarberDashboard({navigation}) {
     const month = parseInt(parts[0], 10) - 1;
     const year = parseInt(parts[2], 10);
     const dateObj = new Date(year, month, day);
-    // const options = {weekday: 'short', month: 'short', day: 'numeric'};
     const options = {month: 'short', day: 'numeric'};
 
     return dateObj.toLocaleDateString('en-US', options);
@@ -275,7 +177,6 @@ export default function BarberDashboard({navigation}) {
             <View style={styles.topIconRow}>
               <View
                 style={styles.locationRow}
-                // onPress={() => navigation.navigate('WholeMap')}
               >
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
@@ -288,32 +189,10 @@ export default function BarberDashboard({navigation}) {
                 </View>
               </View>
               <View style={styles.otherIconRow}>
-                {/* <TouchableOpacity
-                  style={styles.notificationContainer}
-                  onPress={() => {
-                    navigation.navigate('Notifications');
-                  }}>
-                  <Image
-                    style={styles.iconImage}
-                    source={images.notification}
-                  />
-                </TouchableOpacity> */}
                 <NotificationComponent />
                 <ChatConponent />
               </View>
             </View>
-            {/* <View style={styles.inputContainer}>
-              <Image
-                source={images.search}
-                resizeMode="contain"
-                style={styles.search}
-              />
-              <TextInput
-                placeholderTextColor={colors.placeholdertextgray}
-                style={styles.input}
-                placeholder="Search..."
-              />
-            </View> */}
           </ImageBackground>
         </View>
         <ScrollView

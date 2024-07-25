@@ -33,6 +33,7 @@ import {
 import {ErrorShow} from '../../components/Error';
 import Toast from 'react-native-toast-message';
 import Loader from '../../components/Loader/index.js';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function Review({navigation, route}) {
   const barber = route?.params.barbar;
@@ -280,47 +281,51 @@ export default function Review({navigation, route}) {
             </View>
           </View>
         </ImageBackground>
-
-        <View style={styles.ratingContainer}>
-          <StarRating
-            rating={rating}
-            onChange={setRating}
-            color={colors.gold}
-            emptyColor={colors.gold}
-            starSize={36}
-            enableHalfStar={false}
-          />
-          <Text style={styles.disabledText2}>
-            Tell us about your experience at {barber.name}
-          </Text>
-          <View style={styles.userRow}>
-            <View style={styles.userRowLeft}>
-              <Image source={{uri: user.profile}} style={styles.profile} />
-              <Text style={styles.userName}>{user.name}</Text>
-            </View>
-            {review ? (
-              <TouchableOpacity
-                onPress={() => {
-                  setShowModal1(true);
-                }}>
-                <Image source={images.deleteIconn} style={styles.deleteIconn} />
-              </TouchableOpacity>
-            ) : null}
-          </View>
-          <View style={styles.instructionsContainer}>
-            <TextInput
-              placeholder="Your review here.."
-              placeholderTextColor={colors.disabledBg2}
-              multiline
-              value={comment}
-              style={styles.descriptionInput}
-              onChangeText={text => {
-                setComment(text);
-              }}
+        <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={100} extraScrollHeight={100}>
+          <View style={styles.ratingContainer}>
+            <StarRating
+              rating={rating}
+              onChange={setRating}
+              color={colors.gold}
+              emptyColor={colors.gold}
+              starSize={36}
+              enableHalfStar={false}
             />
+            <Text style={styles.disabledText2}>
+              Tell us about your experience at {barber.name}
+            </Text>
+            <View style={styles.userRow}>
+              <View style={styles.userRowLeft}>
+                <Image source={{uri: user.profile}} style={styles.profile} />
+                <Text style={styles.userName}>{user.name}</Text>
+              </View>
+              {review ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    setShowModal1(true);
+                  }}>
+                  <Image
+                    source={images.deleteIconn}
+                    style={styles.deleteIconn}
+                  />
+                </TouchableOpacity>
+              ) : null}
+            </View>
+            <View style={styles.instructionsContainer}>
+              <TextInput
+                placeholder="Your review here.."
+                placeholderTextColor={colors.disabledBg2}
+                multiline
+                value={comment}
+                style={styles.descriptionInput}
+                onChangeText={text => {
+                  setComment(text);
+                }}
+              />
+            </View>
           </View>
-        </View>
-        <KeyboardSpacer />
+        </KeyboardAwareScrollView>
+        {/* <KeyboardSpacer topSpacing={900}/> */}
         <TouchableOpacity style={styles.buttonContainer}>
           {loader ? (
             <Loader title={'Submit'} />

@@ -81,9 +81,8 @@ export const styles = StyleSheet.create({
   chatDetailContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    // backgroundColor:'red',
     flex: 1,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   chatName: {
     fontSize: fontSize.medium,
@@ -95,8 +94,7 @@ export const styles = StyleSheet.create({
     color: colors.gratsText,
     lineHeight: sizes.screenHeight * 0.03,
     fontWeight: '500',
-    // backgroundColor:'red',
-    width: sizes.screenWidth * 0.6
+    width: sizes.screenWidth * 0.56
   },
   chatTime: {
     fontSize: fontSize.small,

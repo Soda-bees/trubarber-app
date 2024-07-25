@@ -220,7 +220,7 @@ export default function Appointments({navigation}) {
           )}
           <View
             style={{
-              paddingBottom: Platform.OS == 'ios' && sizes.screenHeight * 0.09,
+              paddingBottom: Platform.OS == 'ios' ? sizes.screenHeight * 0.09 : sizes.screenHeight * 0.01,
             }}
           />
         </ScrollView>

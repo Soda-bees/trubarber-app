@@ -30,14 +30,14 @@ export default function BookAppointment({navigation, route}) {
   const allBarbers = useSelector(selectbarber);
   const dispatch = useDispatch();
   const barbar = allBarbers?.find(barber => barber?._id === barbarId);
-  console.log(barbar);
+  // console.log(barbar);
   const userData = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken);
   const [services, setServices] = useState([]);
   const [chatRoomId, setChatRoomId] = useState(null);
   const [barberReviews, setBarberReviews] = useState([]);
   const [userReview, setUserReview] = useState(null);
-  console.log('==========', userReview, '==========', barberReviews);
+  // console.log('==========', userReview, '==========', barberReviews);
   const [rating, setRatings] = useState([
     {
       profilePic: images.profilePic,
@@ -309,7 +309,9 @@ export default function BookAppointment({navigation, route}) {
         </ImageBackground>
         <View style={styles.todoButtonscontainer}>
           <View style={styles.call}>
-            <TouchableOpacity style={styles.btnColor}>
+            <TouchableOpacity
+              style={styles.btnColor}
+              onPress={() => navigation.navigate('BarberDirection', {barbar})}>
               <Image
                 style={styles.direction}
                 source={images.direction}

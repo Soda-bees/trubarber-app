@@ -59,6 +59,9 @@ import { handleGetUserDetails } from './API';
 import AuthSetUpServices from '../../screens/AuthSetUpServices';
 import AuthServiceInfo from '../../screens/AuthServiceInfo';
 import { socketService, socket } from '../Socket';
+import BarberDirection from '../../screens/BarberDirection';
+
+
 
 const Stack = createStackNavigator();
 
@@ -232,6 +235,7 @@ export default function MainNavigator() {
           <Stack.Screen name="Chats" component={Chats} />
           <Stack.Screen name="ChatDetails" component={ChatDetails} />
           <Stack.Screen name="Review" component={Review} />
+          <Stack.Screen name="BarberDirection" component={BarberDirection} />
         </Stack.Navigator>
       ) : (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
