@@ -22,6 +22,7 @@ import {selectbarber} from '../../store/barber';
 import {selectUserData} from '../../store/userData';
 import {ErrorShow} from '../../components/Error';
 import Toast from 'react-native-toast-message';
+import Header from '../../components/Header';
 
 export default function ServiceDetails({navigation, route}) {
   const dispatch = useDispatch();
@@ -173,14 +174,7 @@ export default function ServiceDetails({navigation, route}) {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.allignment}>
-            <View style={styles.arrowTop}>
-              <BackArrow onPress={() => navigation.goBack()} />
-            </View>
-            <Text style={styles.headerText}>Service Details</Text>
-          </View>
-        </View>
+        <Header title={'Service Details'} />
         <ScrollView>
           <View style={styles.detailContainer}>
             <View style={styles.row}>

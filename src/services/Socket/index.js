@@ -1,14 +1,16 @@
-import io from "socket.io-client"
-import { BASE_URL } from "../config/AxiosInstance"
+import io from 'socket.io-client';
+import {BASE_URL} from '../config/AxiosInstance';
 import {
   addAndUpdateNewChatInRedux,
   addAppoinment,
   addMessageInChatRoom,
   addNewChatInRedux,
   updateAppointmendStatus,
-  addReview, deleteReview, updateReview,
-  addNewNotificationRedux
-} from "../../store/userData";
+  addReview,
+  deleteReview,
+  updateReview,
+  addNewNotificationRedux,
+} from '../../store/userData';
 
 let socket;
 
@@ -29,22 +31,22 @@ const socketService = (dispatch, authToken, userData) => {
     dispatch(addAppoinment(data));
   };
 
-  const handleUpdateAppointmendStatus = (data) => {
-    dispatch(updateAppointmendStatus(data))
-  }
+  const handleUpdateAppointmendStatus = data => {
+    dispatch(updateAppointmendStatus(data));
+  };
 
-  const handleAddNewMessage = async (data) => {
-    console.log("new message" , data);
-    dispatch(addMessageInChatRoom(data))
-  }
+  const handleAddNewMessage = async data => {
+    console.log('new message', data);
+    dispatch(addMessageInChatRoom(data));
+  };
 
-  const handleAddNewChatRoom = async (data) => {
-    dispatch(addNewChatInRedux(data))
-  }
+  const handleAddNewChatRoom = async data => {
+    dispatch(addNewChatInRedux(data));
+  };
 
-  const handleAddAndUpdateNewChat = async (data) => {
-    dispatch(addAndUpdateNewChatInRedux(data))
-  }
+  const handleAddAndUpdateNewChat = async data => {
+    dispatch(addAndUpdateNewChatInRedux(data));
+  };
 
   const handleAddNewReview = data => {
     dispatch(addReview(data));
@@ -57,22 +59,19 @@ const socketService = (dispatch, authToken, userData) => {
     dispatch(deleteReview(data));
   };
 
-  const handleNewNotification = data =>{
-    dispatch(addNewNotificationRedux(data))
-  }
+  const handleNewNotification = data => {
+    dispatch(addNewNotificationRedux(data));
+  };
 
-
-  socket.on('newAppoinment', handleReceivedNewAppoinment)
-  socket.on('appointmentStatusUpdate', handleUpdateAppointmendStatus)
-  socket.on('newMessage', handleAddNewMessage)
-  socket.on('newChatRoom', handleAddNewChatRoom)
-  socket.on('existingChatRoomUpdate', handleAddAndUpdateNewChat)
+  socket.on('newAppoinment', handleReceivedNewAppoinment);
+  socket.on('appointmentStatusUpdate', handleUpdateAppointmendStatus);
+  socket.on('newMessage', handleAddNewMessage);
+  socket.on('newChatRoom', handleAddNewChatRoom);
+  socket.on('existingChatRoomUpdate', handleAddAndUpdateNewChat);
   socket.on('newReview', handleAddNewReview);
   socket.on('updateReview', handleUpdateReview);
   socket.on('deleteReview', handleDeleteReview);
   socket.on('newNotification', handleNewNotification);
-
-  
 
   const cleanup = () => {
     socket.off('newAppoinment', handleReceivedNewAppoinment);
@@ -84,10 +83,8 @@ const socketService = (dispatch, authToken, userData) => {
     socket.off('updateReview', handleUpdateReview);
     socket.off('deleteReview', handleDeleteReview);
     socket.off('newNotification', handleNewNotification);
-    
-  }
-  return cleanup
-}
+  };
+  return cleanup;
+};
 
-
-export { socket, socketService };
+export {socket, socketService};

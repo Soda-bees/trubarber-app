@@ -9,54 +9,55 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { styles } from './style.js';
+import React, {useEffect, useState} from 'react';
+import {styles} from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
+import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
 import BackArrow from '../../components/BackArrow/index.js';
-import { colors } from '../../services/index.js';
-import { PermissionsAndroid, PermissionsIOS } from 'react-native';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectUserData, setUserData } from '../../store/userData/index.js';
-import { updateProfile, uploadProfile } from '../../services/config/API/index.js';
+import {colors} from '../../services/index.js';
+import {PermissionsAndroid, PermissionsIOS} from 'react-native';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectUserData, setUserData} from '../../store/userData/index.js';
+import {updateProfile, uploadProfile} from '../../services/config/API/index.js';
 import Loader from '../../components/Loader/index.js';
-import { selectAuthToken } from '../../store/authToken/index.js';
-import { ErrorShow } from '../../components/Error/index.js';
+import {selectAuthToken} from '../../store/authToken/index.js';
+import {ErrorShow} from '../../components/Error/index.js';
 import Toast from 'react-native-toast-message';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import TimePickerComponent from '../../components/TimePicketComponent/index.js';
-import { selectRole } from '../../store/role/index.js';
-import { parse, format } from 'date-fns';
+import {selectRole} from '../../store/role/index.js';
+import {parse, format} from 'date-fns';
+import Header from '../../components/Header/index.js';
 
 // import {colors, sizes} from 'borderBottomcomponents/BackArrow/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
-export default function EditScreen({ navigation }) {
-  const userData = useSelector(selectUserData)
-  const authToken = useSelector(selectAuthToken)
-  const role = useSelector(selectRole)
+export default function EditScreen({navigation}) {
+  const userData = useSelector(selectUserData);
+  const authToken = useSelector(selectAuthToken);
+  const role = useSelector(selectRole);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [imgUri, setImgUri] = useState(null);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [loader, setLoader] = useState(false)
+  const [loader, setLoader] = useState(false);
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [description, setDescription] = useState('');
 
-  const parseTimeString = (time) => {
+  const parseTimeString = time => {
     const [startTimeString, endTimeString] = time.split(' - ');
     const startTime = parseSingleTimeString(startTimeString);
     const endTime = parseSingleTimeString(endTimeString);
-    return { startTime, endTime };
+    return {startTime, endTime};
   };
 
-  const parseSingleTimeString = (timeString) => {
+  const parseSingleTimeString = timeString => {
     const [time, modifier] = timeString.split(' ');
 
     let [hours, minutes] = time.split(':');
@@ -79,20 +80,20 @@ export default function EditScreen({ navigation }) {
   useEffect(() => {
     if (userData) {
       if (role == 'user') {
-        setImgUri(userData?.profile)
-        setEmail(userData?.email)
-        setName(userData?.name)
+        setImgUri(userData?.profile);
+        setEmail(userData?.email);
+        setName(userData?.name);
       } else {
-        setImgUri(userData?.profile)
-        setEmail(userData?.email)
-        setName(userData?.name)
-        setDescription(userData?.description)
-        const { startTime, endTime } = parseTimeString(userData?.time);
+        setImgUri(userData?.profile);
+        setEmail(userData?.email);
+        setName(userData?.name);
+        setDescription(userData?.description);
+        const {startTime, endTime} = parseTimeString(userData?.time);
         setStartTime(startTime);
         setEndTime(endTime);
       }
     }
-  }, [userData])
+  }, [userData]);
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
@@ -204,55 +205,56 @@ export default function EditScreen({ navigation }) {
     return hours + ':' + minutes + ' ' + ampm;
   };
 
-  const onHide = async () => [
-    navigation.goBack()
-  ]
+  const onHide = async () => [navigation.goBack()];
 
   const handleUpdateProfile = async () => {
     try {
-      setLoader(true)
+      setLoader(true);
       const userBody = {
         name,
-        profile: imgUri
-      }
+        profile: imgUri,
+      };
       const BarberBody = {
         name,
         profile: imgUri,
         description,
-        time: `${formatTime(startTime)} - ${formatTime(endTime)}`
-      }
-      const response = await updateProfile(role == 'user' ? userBody : BarberBody, authToken)
+        time: `${formatTime(startTime)} - ${formatTime(endTime)}`,
+      };
+      const response = await updateProfile(
+        role == 'user' ? userBody : BarberBody,
+        authToken,
+      );
       if (response.status == 200) {
-        setLoader(false)
-        ErrorShow('success', 'Congratulation!', response?.data?.message, onHide)
-        dispatch(setUserData(response?.data?.updatedUser))
+        setLoader(false);
+        ErrorShow(
+          'success',
+          'Congratulation!',
+          response?.data?.message,
+          onHide,
+        );
+        dispatch(setUserData(response?.data?.updatedUser));
       } else {
-        setLoader(false)
-        ErrorShow('error', 'Oops!', response?.data?.message)
+        setLoader(false);
+        ErrorShow('error', 'Oops!', response?.data?.message);
       }
     } catch (error) {
-      setLoader(false)
+      setLoader(false);
       console.log(error);
-      ErrorShow('error', 'Oops!', error?.message)
+      ErrorShow('error', 'Oops!', error?.message);
     }
-  }
+  };
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <View style={styles.borderBottom}>
-          <View style={styles.row}>
-            <View style={styles.arrowTop}>
-              <BackArrow onPress={() => navigation.goBack()} />
-            </View>
-            <Text style={styles.headerText}>Edit Profile</Text>
-          </View>
+          <Header title={'Edit Profile'} />
         </View>
         <View style={styles.contentAlligment}>
           <TouchableOpacity onPress={() => uploadPhoto('library')}>
             {/* {imgUri ? ( */}
             <Image
-              source={{ uri: imgUri }}
+              source={{uri: imgUri}}
               style={styles.youngMan}
               resizeMode="cover"
             />
@@ -271,7 +273,10 @@ export default function EditScreen({ navigation }) {
             <Text style={styles.photoText}>Upload Photo</Text>
           </TouchableOpacity>
         </View>
-        <KeyboardAwareScrollView extraHeight={40} extraScrollHeight={90} enableOnAndroid={true}>
+        <KeyboardAwareScrollView
+          extraHeight={40}
+          extraScrollHeight={90}
+          enableOnAndroid={true}>
           <View style={styles.inputContainer}>
             <View style={styles.wholeContainer}>
               <View style={styles.rowInput}>
@@ -306,8 +311,7 @@ export default function EditScreen({ navigation }) {
                 />
               </View>
             </View>
-            {
-              role == 'barber' &&
+            {role == 'barber' && (
               <View style={styles.inputField}>
                 <View style={styles.description}>
                   <TimePickerComponent
@@ -324,9 +328,8 @@ export default function EditScreen({ navigation }) {
                   />
                 </View>
               </View>
-            }
-            {
-              role == 'barber' &&
+            )}
+            {role == 'barber' && (
               <View style={styles.inputFieldDes}>
                 <TextInput
                   style={styles.description}
@@ -335,21 +338,18 @@ export default function EditScreen({ navigation }) {
                   multiline={true}
                   numberOfLines={4}
                   placeholder="Description"
-                  placeholderTextColor='black'
+                  placeholderTextColor="black"
                 />
               </View>
-            }
+            )}
           </View>
         </KeyboardAwareScrollView>
         <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
-          {
-            loader ?
-              <Loader title={'Save'} />
-              : <Button
-                title={'Save'}
-                onPress={() => handleUpdateProfile()}
-              />
-          }
+          {loader ? (
+            <Loader title={'Save'} />
+          ) : (
+            <Button title={'Save'} onPress={() => handleUpdateProfile()} />
+          )}
         </View>
       </View>
       <Toast />

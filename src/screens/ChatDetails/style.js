@@ -87,11 +87,12 @@ export const styles = StyleSheet.create({
     borderTopRightRadius: 8,
     marginBottom: sizes.screenWidth * 0.015,
     maxWidth: sizes.screenWidth * 0.8,
+    marginLeft: sizes.screenWidth*0.03
+
   },
   chatText: {
     color: colors.black,
     fontSize: fontSize.medium,
-    // lineHeight: sizes.screenHeight * 0.019,
   },
   chatSend: {
     backgroundColor: colors.white,
@@ -106,6 +107,7 @@ export const styles = StyleSheet.create({
     maxWidth: sizes.screenWidth * 0.8,
     borderWidth: 0.5,
     borderColor: colors.disabledBg,
+    marginRight: sizes.screenWidth*0.03
   },
   texInputView: {
     backgroundColor: colors.white,

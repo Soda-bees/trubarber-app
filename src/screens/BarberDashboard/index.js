@@ -12,27 +12,27 @@ import {
   PermissionsAndroid,
   Alert,
 } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
-import { styles } from './style';
+import React, {useCallback, useEffect, useState} from 'react';
+import {styles} from './style';
 import images from '../../services/utilities/images';
-import { colors, sizes } from '../../services';
-import { StarRatingDisplay } from 'react-native-star-rating-widget';
+import {colors, sizes} from '../../services';
+import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import * as Progress from 'react-native-progress';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import { useDispatch, useSelector } from 'react-redux';
-import { setLocation } from '../../store/location';
-import { socket, socketService } from '../../services/Socket';
-import { selectUserData, setUserData } from '../../store/userData';
-import { selectAuthToken } from '../../store/authToken';
+import {useDispatch, useSelector} from 'react-redux';
+import {setLocation} from '../../store/location';
+import {socket, socketService} from '../../services/Socket';
+import {selectUserData, setUserData} from '../../store/userData';
+import {selectAuthToken} from '../../store/authToken';
 import formatToJSON from '../../services/config/FormatToJson';
 import ChatConponent from '../../components/ChatComponent';
 import moment from 'moment';
-import { handleGetUserDetails } from '../../services/config/API';
-import { useFocusEffect } from '@react-navigation/native';
+import {handleGetUserDetails} from '../../services/config/API';
+import {useFocusEffect} from '@react-navigation/native';
 import NotificationComponent from '../../components/NotificationComponent';
 
-export default function BarberDashboard({ navigation }) {
+export default function BarberDashboard({navigation}) {
   const dispatch = useDispatch();
   const userData = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken);
@@ -57,29 +57,29 @@ export default function BarberDashboard({ navigation }) {
 
   const [totalRating, setTotalRating] = useState([
     {
-      star: '5'
+      star: '5',
     },
     {
-      star: '4'
+      star: '4',
     },
     {
-      star: '3'
+      star: '3',
     },
     {
-      star: '2'
+      star: '2',
     },
     {
-      star: '1'
+      star: '1',
     },
   ]);
 
-  useEffect(() => {
-    const cleanup = socketService(dispatch, authToken, userData);
+  // useEffect(() => {
+  //   const cleanup = socketService(dispatch, authToken, userData);
 
-    return () => {
-      cleanup();
-    };
-  }, [userData]);
+  //   return () => {
+  //     cleanup();
+  //   };
+  // }, [userData]);
 
   useEffect(() => {
     const initializeLocation = async () => {
@@ -143,7 +143,7 @@ export default function BarberDashboard({ navigation }) {
   const getCurrentLocation = (setRegion, dispatch) => {
     Geolocation.getCurrentPosition(
       position => {
-        const { latitude, longitude } = position.coords;
+        const {latitude, longitude} = position.coords;
         // console.log(
         //   position.coords,
         //   '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
@@ -180,7 +180,7 @@ export default function BarberDashboard({ navigation }) {
     const year = parseInt(parts[2], 10);
     const dateObj = new Date(year, month, day);
     // const options = {weekday: 'short', month: 'short', day: 'numeric'};
-    const options = { month: 'short', day: 'numeric' };
+    const options = {month: 'short', day: 'numeric'};
 
     return dateObj.toLocaleDateString('en-US', options);
   };
@@ -218,21 +218,21 @@ export default function BarberDashboard({ navigation }) {
 
   useFocusEffect(
     useCallback(() => {
-      getBarberDetails()
+      getBarberDetails();
     }, []),
   );
 
   const getBarberDetails = async () => {
     try {
-      const response = await handleGetUserDetails(authToken)
+      const response = await handleGetUserDetails(authToken);
       if (response?.status == 200) {
-        console.log("get barber details");
+        console.log('get barber details');
         dispatch(setUserData(response?.data?.userData));
       }
     } catch (error) {
-      console.log("error in barber details", error);
+      console.log('error in barber details', error);
     }
-  }
+  };
 
   const formatDate = createdAt => {
     return moment(createdAt).format('DD MMMM YYYY');
@@ -275,7 +275,7 @@ export default function BarberDashboard({ navigation }) {
             <View style={styles.topIconRow}>
               <View
                 style={styles.locationRow}
-              // onPress={() => navigation.navigate('WholeMap')}
+                // onPress={() => navigation.navigate('WholeMap')}
               >
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
@@ -351,7 +351,7 @@ export default function BarberDashboard({ navigation }) {
                 </Text>
               </View>
             ) : (
-              <View style={{ marginBottom: 15 }}>
+              <View style={{marginBottom: 15}}>
                 <View style={styles.appointmentBtn}>
                   <Text style={styles.headingSummary}>Appointments</Text>
                   <TouchableOpacity
@@ -465,7 +465,7 @@ export default function BarberDashboard({ navigation }) {
                     <View style={styles.ratingData}>
                       <View style={styles.rowAndmargin}>
                         <Image
-                          source={{ uri: item?.userData?.profile }}
+                          source={{uri: item?.userData?.profile}}
                           style={styles.profilePic}
                         />
                         <View style={styles.alignItems}>

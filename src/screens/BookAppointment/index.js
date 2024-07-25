@@ -277,16 +277,9 @@ export default function BookAppointment({navigation, route}) {
           // style={}
         >
           <View style={styles.headerContainer}>
-            <View style={styles.arrowTop}>
-              <BackArrow light={true} onPress={handleGoback} />
-            </View>
+            <BackArrow light={true} onPress={handleGoback} />
             <View style={styles.openButtonborder}>
-              <ImageBackground
-                style={styles.openBg}
-                source={images.openBg}
-                resizeMode="cover">
-                <Text style={styles.openButton}>{status}</Text>
-              </ImageBackground>
+              <Text style={styles.openButton}>{status}</Text>
             </View>
           </View>
           <View style={styles.centerContent}>

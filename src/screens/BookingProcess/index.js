@@ -39,6 +39,7 @@ import {
 } from '../../services/config/API/index.js';
 import {addAppoinment} from '../../store/userData/index.js';
 import {socket, socketService} from '../../services/Socket';
+import Header from '../../components/Header/index.js';
 
 export default function BookingProcess({navigation, route}) {
   const dispatch = useDispatch();
@@ -335,20 +336,7 @@ export default function BookingProcess({navigation, route}) {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.allignment}>
-            {!loader && (
-              <View style={styles.arrowTop}>
-                <BackArrow
-                  onPress={() => {
-                    navigation.goBack();
-                  }}
-                />
-              </View>
-            )}
-            <Text style={styles.headerText}>Book Appointment</Text>
-          </View>
-        </View>
+        <Header title={'Book Appointment'} />
         <ScrollView>
           <View style={styles.topContentcontainer}>
             <View style={styles.rowcontainer}>

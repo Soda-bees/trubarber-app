@@ -6,8 +6,8 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { styles } from './style';
+import React, {useEffect, useState} from 'react';
+import {styles} from './style';
 import BackArrow from '../../components/BackArrow';
 import images from '../../services/utilities/images';
 import {
@@ -21,16 +21,20 @@ import {
   formatDistanceToNow,
   parse,
 } from 'date-fns';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectUserData, setNotificationSeenTrueRedux } from '../../store/userData';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  selectUserData,
+  setNotificationSeenTrueRedux,
+} from '../../store/userData';
 import formatToJSON from '../../services/config/FormatToJson';
 import moment from 'moment';
-import { handleNotificationSeenTrue } from '../../services/config/API';
-import { selectAuthToken } from '../../store/authToken';
+import {handleNotificationSeenTrue} from '../../services/config/API';
+import {selectAuthToken} from '../../store/authToken';
+import Header from '../../components/Header';
 
-export default function Notifications({ navigation }) {
-  const authToken = useSelector(selectAuthToken)
-  const dispatch = useDispatch()
+export default function Notifications({navigation}) {
+  const authToken = useSelector(selectAuthToken);
+  const dispatch = useDispatch();
   const [notification, setNotification] = useState([
     {
       title: 'Booking Done!',
@@ -48,20 +52,20 @@ export default function Notifications({ navigation }) {
       time: format(new Date(), 'MM-dd-yyyy hh:mm a'),
     },
   ]);
-  const userData = useSelector(selectUserData)
+  const userData = useSelector(selectUserData);
   // console.log(formatToJSON(userData?.notification[0]));
 
   const calculateTimeAgo = createdAt => {
     const currentDate = new Date();
     const timestamp = new Date(createdAt);
     const timeDifference = Math.abs(currentDate - timestamp);
-  
+
     const minutes = Math.floor(timeDifference / 60000);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
-  
+
     if (minutes < 1) {
-      return "just now";
+      return 'just now';
     } else if (minutes < 60) {
       return `${minutes}m ago`;
     } else if (hours < 24) {
@@ -70,8 +74,6 @@ export default function Notifications({ navigation }) {
       return `${days}d ago`;
     }
   };
-  
-
 
   const removeItemAtIndex = indexToRemove => {
     setNotification(prevList => {
@@ -80,25 +82,32 @@ export default function Notifications({ navigation }) {
   };
 
   useEffect(() => {
-    setSeenTrue()
-  }, [])
+    setSeenTrue();
+  }, []);
 
   const setSeenTrue = async () => {
     try {
-      let notificationsIds = []
+      let notificationsIds = [];
       if (userData?.role == 'user') {
-        notificationsIds = userData?.notification.filter(notification => notification?.userSeen === false)
+        notificationsIds = userData?.notification.filter(
+          notification => notification?.userSeen === false,
+        );
       } else {
-        notificationsIds = userData?.notification.filter(notification => notification?.barberSeen === false)
+        notificationsIds = userData?.notification.filter(
+          notification => notification?.barberSeen === false,
+        );
       }
-      if(notificationsIds?.length > 0){
-        const response = await handleNotificationSeenTrue(authToken, notificationsIds)
-        dispatch(setNotificationSeenTrueRedux())
+      if (notificationsIds?.length > 0) {
+        const response = await handleNotificationSeenTrue(
+          authToken,
+          notificationsIds,
+        );
+        dispatch(setNotificationSeenTrueRedux());
       }
     } catch (error) {
-      console.log("Error in update notification", error);
+      console.log('Error in update notification', error);
     }
-  }
+  };
 
   const leftButton = index => (
     <SwipeButtonsContainer style={styles.swipeItem}>
@@ -116,49 +125,47 @@ export default function Notifications({ navigation }) {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <View style={styles.row}>
-          <View style={styles.arrowTop}>
-            <BackArrow onPress={() => navigation.goBack()} />
-          </View>
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>Notifications</Text>
-          </View>
-        </View>
+        <Header title={'Notifications'} />
         <ScrollView style={styles.scrollContianer}>
           <View style={styles.containerBody}>
-            {userData?.notification?.length > 0 ?
-              userData?.notification?.map((item, index) => {
-                const timeAgo = calculateTimeAgo(item.createdAt);
-                return (
-                  // <SwipeProvider key={index}>
-                  //   <SwipeItem
-                  //     style={styles.notificationSwipeContainer}
-                  //     swipeContainerStyle={{}}
-                  //     leftButtons={leftButton(index)}>
-                  <View style={styles.notficationContainer} key={index}>
-                    <Image source={images.calendarIcon} />
-                    <View style={styles.notficationDetailContainer}>
-                      <Text style={styles.notificationTitle}>
-                        {item.title}
-                      </Text>
-                      <Text style={styles.notificationDetail}>
-                        {item.body}
-                      </Text>
-                      <Text style={styles.notificationTime}>
-                        {timeAgo}
-                      </Text>
+            {userData?.notification?.length > 0 ? (
+              userData?.notification
+                ?.map((item, index) => {
+                  const timeAgo = calculateTimeAgo(item.createdAt);
+                  return (
+                    // <SwipeProvider key={index}>
+                    //   <SwipeItem
+                    //     style={styles.notificationSwipeContainer}
+                    //     swipeContainerStyle={{}}
+                    //     leftButtons={leftButton(index)}>
+                    <View style={styles.notficationContainer} key={index}>
+                      <Image source={images.calendarIcon} />
+                      <View style={styles.notficationDetailContainer}>
+                        <Text style={styles.notificationTitle}>
+                          {item.title}
+                        </Text>
+                        <Text style={styles.notificationDetail}>
+                          {item.body}
+                        </Text>
+                        <Text style={styles.notificationTime}>{timeAgo}</Text>
+                      </View>
                     </View>
-                  </View>
-                  //   </SwipeItem>
-                  // </SwipeProvider>
-                );
-              }).reverse()
-              :
+                    //   </SwipeItem>
+                    // </SwipeProvider>
+                  );
+                })
+                .reverse()
+            ) : (
               <View style={styles.noChatView}>
-                <Image style={styles.noChatImg} source={images.noNotification} />
-                <Text style={styles.noChatText}>You don't have any notifications yet</Text>
+                <Image
+                  style={styles.noChatImg}
+                  source={images.noNotification}
+                />
+                <Text style={styles.noChatText}>
+                  You don't have any notifications yet
+                </Text>
               </View>
-            }
+            )}
           </View>
         </ScrollView>
       </View>

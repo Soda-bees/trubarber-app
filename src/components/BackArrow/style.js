@@ -3,20 +3,21 @@ import {colors, fontSize, sizes} from '../../services';
 
 export const styles = StyleSheet.create({
   arrowContainer: {
-    width: sizes.screenWidth * 0.055,
-    height: sizes.screenHeight * 0.03,
-    // backgroundColor:'red',
-    justifyContent:'center'
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   arrowBlackleft: {
-    width: sizes.screenWidth * 0.042,
-    height: sizes.screenHeight * 0.020,
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
   },
 
   arrowWhiteleft: {
-    width: sizes.screenWidth * 0.042,
-    height: sizes.screenHeight * 0.023,
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
     tintColor: colors.white,
   },
-
 });

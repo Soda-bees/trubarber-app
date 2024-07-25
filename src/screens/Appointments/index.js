@@ -20,6 +20,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {selectUserData} from '../../store/userData/index.js';
 import {removeCart, selectCart} from '../../store/cart/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
+import Header from '../../components/Header/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
 export default function Appointments({navigation}) {
@@ -115,18 +116,7 @@ export default function Appointments({navigation}) {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <View style={styles.borderBottom}>
-          <View style={styles.transparentBg}>
-            <View style={styles.row}>
-              <View style={styles.arrowTop}>
-                <BackArrow onPress={() => navigation.goBack()} />
-              </View>
-              <View style={styles.headerContainer}>
-                <Text style={styles.headerText}>Appointment</Text>
-              </View>
-            </View>
-          </View>
-        </View>
+        <Header title={'Appointments'} />
         <ScrollView style={styles.scrollContainer}>
           {userData?.appoinment?.length > 0 ? (
             userData?.appoinment

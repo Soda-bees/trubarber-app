@@ -19,6 +19,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useSelector} from 'react-redux';
 import {selectUserData} from '../../store/userData';
 import moment from 'moment';
+import Header from '../../components/Header';
 
 export default function Reviews({navigation}) {
   const userData = useSelector(selectUserData);
@@ -84,14 +85,7 @@ export default function Reviews({navigation}) {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <View style={styles.row}>
-          <View style={styles.arrowTop}>
-            <BackArrow onPress={() => navigation.goBack()} />
-          </View>
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>Reviews</Text>
-          </View>
-        </View>
+        <Header title={'Reviews'} />
         <ScrollView>
           <KeyboardAwareScrollView extraHeight={sizes.screenHeight * 0.18}>
             <View style={styles.containerBody}>
