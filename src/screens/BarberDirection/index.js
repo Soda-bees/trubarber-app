@@ -27,7 +27,6 @@ export default function BarberDirection({navigation, route}) {
   // console.log(barbar.location);
   // console.log(formatToJSON(barberData));
   // const location = useSelector(selectlocation);
-  const GOOGLE_MAPS_API_KEY = 'AIzaSyCbWOArVUIn-uRQ8S3fsvayHrep5El4ab4';
   const [routeInfo, setRouteInfo] = useState({distance: null, duration: null});
   const [location, setLocation] = useState(null);
   const mapViewRef = useRef(null);
