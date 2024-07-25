@@ -9,29 +9,28 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { styles } from './style';
+import React, {useEffect, useState} from 'react';
+import {styles} from './style';
 import images from '../../services/utilities/images';
-import { colors, sizes } from '../../services';
+import {colors, sizes} from '../../services';
 import Timetable from 'react-native-calendar-timetable';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
-import { selectUserData } from '../../store/userData';
+import {useSelector} from 'react-redux';
+import {selectUserData} from '../../store/userData';
 import DatePicker from 'react-native-date-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Modal from 'react-native-modal';
 import Loader from '../../components/Loader';
-import { ErrorShow } from '../../components/Error';
-import { selectAuthToken } from '../../store/authToken';
-import { updateAppointmentStatus } from '../../services/config/API';
+import {ErrorShow} from '../../components/Error';
+import {selectAuthToken} from '../../store/authToken';
+import {updateAppointmentStatus} from '../../services/config/API';
 import formatToJSON from '../../services/config/FormatToJson';
 import Toast from 'react-native-toast-message';
 import ChatConponent from '../../components/ChatComponent';
 import NotificationComponent from '../../components/NotificationComponent';
-export default function AppoinmentBarber({ navigation }) {
-
+export default function AppoinmentBarber({navigation}) {
   const barber = useSelector(selectUserData);
-  const authToken = useSelector(selectAuthToken)
+  const authToken = useSelector(selectAuthToken);
   // console.log(formatToJSON(barber?.appoinment?.length));
 
   const [startTime, setStartTime] = useState(new Date());
@@ -55,7 +54,7 @@ export default function AppoinmentBarber({ navigation }) {
   const [appointmentTimeline2, setAppointmentTimeline2] = useState([]);
   const [from, setFrom] = useState();
   const [to, setTo] = useState();
-  const [loader, setLoader] = useState(false)
+  const [loader, setLoader] = useState(false);
 
   const roundUpTime = time => {
     const hour = moment(time, 'h:mm A').hour();
@@ -82,7 +81,7 @@ export default function AppoinmentBarber({ navigation }) {
     if (!date) return '';
 
     const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'long' });
+    const month = date.toLocaleString('default', {month: 'long'});
     return `${day} ${month}`;
   };
 
@@ -118,7 +117,7 @@ export default function AppoinmentBarber({ navigation }) {
           status: appointment?.status || '',
           date: appointment?.date || '',
           id: appointment?._id || '',
-          time: appointment?.time
+          time: appointment?.time,
         };
       })
       .filter(item => item !== null);
@@ -126,7 +125,7 @@ export default function AppoinmentBarber({ navigation }) {
     setAppointmentTimeline2(transformedData);
   };
 
-  const RenderItem = ({ style, item }) => {
+  const RenderItem = ({style, item}) => {
     if (!item) return null;
 
     return (
@@ -161,7 +160,7 @@ export default function AppoinmentBarber({ navigation }) {
 
     const dateObj = new Date(year, month, day);
 
-    const options = { weekday: 'short', month: 'short', day: 'numeric' };
+    const options = {weekday: 'short', month: 'short', day: 'numeric'};
 
     return dateObj.toLocaleDateString('en-US', options);
   };
@@ -232,28 +231,28 @@ export default function AppoinmentBarber({ navigation }) {
       'MM-DD-YYYY h:mm A',
     );
     const currentDateTime = moment();
-    return (dateTime.isAfter(currentDateTime));
+    return dateTime.isAfter(currentDateTime);
   };
 
   const handleUpdateAppointmentStatus = async () => {
     try {
-      setLoader(true)
-      const response = await updateAppointmentStatus(authToken, modalItem?.id)
+      setLoader(true);
+      const response = await updateAppointmentStatus(authToken, modalItem?.id);
       if (response?.status == 200) {
-        setLoader(false)
-        setModalVisible(false)
+        setLoader(false);
+        setModalVisible(false);
         ErrorShow('success', 'Congratulation!', response?.data?.message);
       } else {
-        setLoader(false)
-        setModalVisible(false)
-        ErrorShow('error', 'Error!', response?.data?.message)
+        setLoader(false);
+        setModalVisible(false);
+        ErrorShow('error', 'Error!', response?.data?.message);
       }
     } catch (error) {
-      setLoader(false)
+      setLoader(false);
       console.log(error?.message);
-      ErrorShow('error', 'Error!', error?.message)
+      ErrorShow('error', 'Error!', error?.message);
     }
-  }
+  };
 
   return (
     <SafeAreaView>
@@ -266,7 +265,7 @@ export default function AppoinmentBarber({ navigation }) {
             <View style={styles.topIconRow}>
               <View
                 style={styles.locationRow}
-              // onPress={() => navigation.navigate('WholeMap')}
+                // onPress={() => navigation.navigate('WholeMap')}
               >
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
@@ -323,55 +322,56 @@ export default function AppoinmentBarber({ navigation }) {
               Your Schedule Overview: Keep track of upcoming and completed
               appointments here.
             </Text>
-            {
-              clientName || clientDate ?
-                <View style={styles.clientView}>
-                  <Text style={styles.clientHeading}>Next client</Text>
-                  <View style={styles.clientContianer}>
-                    <View style={styles.containerRow}>
-                      <View style={styles.clientRowBox}>
-                        <Image
-                          source={images.profileSmall}
-                          style={styles.clientBoxImg}
-                        />
-                        <Text style={styles.clientDetailTxt}>{clientName}</Text>
-                      </View>
-                      <View style={styles.clientRowBox}>
-                        <Image
-                          source={images.calendarSmall}
-                          style={styles.clientBoxImg}
-                        />
-                        <Text style={styles.clientDetailTxt}>{clientDate}</Text>
-                      </View>
-                      <View style={styles.clientRowBox}>
-                        <Image
-                          source={images.clockSmall}
-                          style={styles.clientBoxImg}
-                        />
-                        <Text style={styles.clientDetailTxt}>{clientTime}</Text>
-                      </View>
+            {clientName || clientDate ? (
+              <View style={styles.clientView}>
+                <Text style={styles.clientHeading}>Next client</Text>
+                <View style={styles.clientContianer}>
+                  <View style={styles.containerRow}>
+                    <View style={styles.clientRowBox}>
+                      <Image
+                        source={images.profileSmall}
+                        style={styles.clientBoxImg}
+                      />
+                      <Text style={styles.clientDetailTxt}>{clientName}</Text>
                     </View>
-                    <View style={styles.containerRowTwo}>
-                      <View style={styles.containerRowThree}>
-                        <Text style={styles.clientDetailTxtBlackTwo}>Service</Text>
-                        {/* <Image
-                        source={images.arrowForward}
-                        style={styles.forwardArrow}
-                      /> */}
-                        <Text style={styles.serviceDetailTxt}>{service}</Text>
-                      </View>
-                      <View style={styles.containerRowThree}>
-                        <Text style={styles.clientDetailTxtBlackTwo}>Style</Text>
-                        {/* <Image
-                        source={images.arrowForward}
-                        style={styles.forwardArrow}
-                      /> */}
-                        <Text style={styles.serviceDetailTxt}>{style}</Text>
-                      </View>
+                    <View style={styles.clientRowBox}>
+                      <Image
+                        source={images.calendarSmall}
+                        style={styles.clientBoxImg}
+                      />
+                      <Text style={styles.clientDetailTxt}>{clientDate}</Text>
+                    </View>
+                    <View style={styles.clientRowBox}>
+                      <Image
+                        source={images.clockSmall}
+                        style={styles.clientBoxImg}
+                      />
+                      <Text style={styles.clientDetailTxt}>{clientTime}</Text>
                     </View>
                   </View>
-                </View> : null
-            }
+                  <View style={styles.containerRowTwo}>
+                    <View style={styles.containerRowThree}>
+                      <Text style={styles.clientDetailTxtBlackTwo}>
+                        Service
+                      </Text>
+                      {/* <Image
+                        source={images.arrowForward}
+                        style={styles.forwardArrow}
+                      /> */}
+                      <Text style={styles.serviceDetailTxt}>{service}</Text>
+                    </View>
+                    <View style={styles.containerRowThree}>
+                      <Text style={styles.clientDetailTxtBlackTwo}>Style</Text>
+                      {/* <Image
+                        source={images.arrowForward}
+                        style={styles.forwardArrow}
+                      /> */}
+                      <Text style={styles.serviceDetailTxt}>{style}</Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            ) : null}
             <View style={styles.calenderView}>
               <View style={styles.containerRow}>
                 <Text style={styles.calenderHeaidng}>Calender</Text>
@@ -399,16 +399,16 @@ export default function AppoinmentBarber({ navigation }) {
                 is12Hour
                 hourHeight={70}
                 style={{
-                  time: { color: colors.disabledBg2 },
-                  timeContainer: { backgroundColor: 'transparent' },
-                  contentContainer: { width: sizes.screenWidth * 0.88 },
+                  time: {color: colors.disabledBg2},
+                  timeContainer: {backgroundColor: 'transparent'},
+                  contentContainer: {width: sizes.screenWidth * 0.88},
                   lines: {
                     width: sizes.screenWidth * 0.75,
                     marginLeft: sizes.screenWidth * 0.14,
                   },
                   nowLine: {
-                    dot: { backgroundColor: colors.red },
-                    line: { backgroundColor: colors.red },
+                    dot: {backgroundColor: colors.red},
+                    line: {backgroundColor: colors.red},
                   },
                 }}
               />
@@ -425,8 +425,8 @@ export default function AppoinmentBarber({ navigation }) {
             display="spinner"
             // themeVariant="dark"
             // textColor="red"
-            positiveButton={{ label: 'Done' }}
-            negativeButton={{ label: 'Cancel' }}
+            positiveButton={{label: 'Done'}}
+            negativeButton={{label: 'Cancel'}}
             onChange={handleSetDate}
           />
         )}
@@ -459,8 +459,9 @@ export default function AppoinmentBarber({ navigation }) {
               <Image source={images.clockIconFill} />
               <Text style={styles.modalServiceTxtFour}>
                 {modalItem?.date
-                  ? `${formatDateShort(modalItem?.date)} - ${modalItem?.duration
-                  }`
+                  ? `${formatDateShort(modalItem?.date)} - ${
+                      modalItem?.duration
+                    }`
                   : null}
               </Text>
             </View>
@@ -470,26 +471,43 @@ export default function AppoinmentBarber({ navigation }) {
                 {modalItem?.clientName}
               </Text>
             </View>
-            {
-              loader ?
-                <View style={styles.modalBtnView}>
-                  <Text style={styles.modalBtnText}>Confirm</Text>
-                  <ActivityIndicator color={colors.white} size={18} />
-                </View>
-                :
-                <TouchableOpacity
-                  disabled={isFutureTime(modalItem?.time, modalItem?.date)}
-                  style={isFutureTime(modalItem?.time, modalItem?.date) ? styles.modalBtnViewDisable : styles.modalBtnView}
-                  onPress={handleUpdateAppointmentStatus}>
-                  <Text style={isFutureTime(modalItem?.time, modalItem?.date) ? styles.modalBtnTextDissable : styles.modalBtnText}>Confirm</Text>
-                  <Image
-                    source={images.arrowIcon}
-                    style={isFutureTime(modalItem?.time, modalItem?.date) ? styles.modalArrowIconDsiable : styles.modalArrowIcon}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-            }
-
+            {loader ? (
+              <View style={styles.modalBtnView}>
+                <Text style={styles.modalBtnText}>Confirm</Text>
+                <ActivityIndicator color={colors.white} size={18} />
+              </View>
+            ) : (
+              <TouchableOpacity
+                disabled={
+                  isFutureTime(modalItem?.time, modalItem?.date) ||
+                  modalItem?.status === 'Completed'
+                }
+                style={
+                  isFutureTime(modalItem?.time, modalItem?.date) ||
+                  modalItem?.status === 'Completed'
+                    ? styles.modalBtnViewDisable
+                    : styles.modalBtnView
+                }
+                onPress={handleUpdateAppointmentStatus}>
+                <Text
+                  style={
+                    isFutureTime(modalItem?.time, modalItem?.date)
+                      ? styles.modalBtnTextDissable
+                      : styles.modalBtnText
+                  }>
+                  Confirm
+                </Text>
+                <Image
+                  source={images.arrowIcon}
+                  style={
+                    isFutureTime(modalItem?.time, modalItem?.date)
+                      ? styles.modalArrowIconDsiable
+                      : styles.modalArrowIcon
+                  }
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+            )}
           </View>
         </Modal>
       </View>
