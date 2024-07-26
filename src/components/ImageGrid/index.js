@@ -44,8 +44,8 @@ const ImageGrid = ({ images }) => {
                   key={index}
                   onPress={() => openModal(index)}
                   style={{
-                    marginTop: sizes.screenWidth * 0.005,
-                    marginLeft: sizes.screenWidth * 0.005,
+                    marginTop: 2,
+                    marginLeft: 2,
                   }}
                 >
                   <Image source={{ uri: image }} style={styles.image} />
@@ -221,16 +221,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
+        paddingVertical: 4,
+        paddingBottom: 6
     },
     imageContainer: {
         position: 'relative',
-        width: sizes.screenWidth * 0.32,
-        height: sizes.screenWidth * 0.39,
-        marginTop: sizes.screenWidth * 0.005,
-        marginLeft: sizes.screenWidth * 0.005,
+        // width: sizes.screenWidth * 0.32,
+        // height: sizes.screenWidth * 0.39,
+        marginTop: 2,
+        marginLeft: 2 ,
     },
     image: {
-        width: sizes.screenWidth * 0.32,
+        width: sizes.screenWidth * 0.31,
         height: sizes.screenWidth * 0.39,
         borderRadius: 8,
     },
