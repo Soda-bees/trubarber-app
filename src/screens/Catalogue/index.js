@@ -220,7 +220,7 @@ export default function Catalogue({navigation}) {
                           <TouchableOpacity
                             style={styles.bookBtn}
                             onPress={() =>
-                              navigation.navigate('BookAppointment', {item})
+                              navigation.navigate('BookAppointment', {item , tabName:'About'})
                             }>
                             <Text style={styles.btnText}>Book Appointment</Text>
                             <Image

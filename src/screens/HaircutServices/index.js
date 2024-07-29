@@ -104,7 +104,9 @@ export default function HaircutServices({navigation, route}) {
                         Platform.OS == 'android'
                           ? styles.containerImage
                           : styles.containerImageIOS
-                      }>
+                      }
+                      style={styles.containerImage}
+                      >
                       <View style={styles.row}>
                         <Text style={styles.textWhite}>
                           {calculateAverageRating(item.reviews)}
@@ -116,10 +118,10 @@ export default function HaircutServices({navigation, route}) {
                           rating={1}
                         />
                       </View>
-                      <View style={styles.marginTop}>
                         <ImageBackground
                           source={images.bluredImg}
-                          imageStyle={styles.bluredImg}>
+                          imageStyle={styles.bluredImg}
+                          style={styles.bluredImg}>
                           <View style={styles.appointmentContainer}>
                             <Text style={styles.textDarkerblack}>
                               {item.name}
@@ -141,7 +143,7 @@ export default function HaircutServices({navigation, route}) {
                             <TouchableOpacity
                               style={styles.bookBtn}
                               onPress={() =>
-                                navigation.navigate('BookAppointment', {item})
+                                navigation.navigate('BookAppointment', {item , tabName:'About'})
                               }>
                               <Text style={styles.btnText}>
                                 Book Appointment
@@ -154,7 +156,6 @@ export default function HaircutServices({navigation, route}) {
                             </TouchableOpacity>
                           </View>
                         </ImageBackground>
-                      </View>
                     </ImageBackground>
                     //   <ImageBackground
                     //   key={index}
@@ -215,7 +216,7 @@ export default function HaircutServices({navigation, route}) {
                   );
                 })}
             </View>
-            {/* <View style={{paddingBottom: sizes.screenHeight * 0.24}}></View> */}
+            <View style={{paddingBottom: sizes.screenHeight * 0.05}}></View>
           </ScrollView>
         </View>
       </View>

@@ -9,25 +9,26 @@ import {
   PermissionsAndroid,
   Alert,
 } from 'react-native';
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import images from '../../services/utilities/images';
-import { styles } from './style';
-import { useSelector } from 'react-redux';
-import { selectlocation } from '../../store/location';
-import MapView, { Marker, UrlTile } from 'react-native-maps';
+import {styles} from './style';
+import {useSelector} from 'react-redux';
+import {selectlocation} from '../../store/location';
+import MapView, {Marker, UrlTile} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import Geolocation from '@react-native-community/geolocation';
-import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
+import {fontSize} from '../../services';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
-export default function BarberDirection({ navigation, route }) {
-  const { barbar } = route?.params;
+export default function BarberDirection({navigation, route}) {
+  const {barbar} = route?.params;
   // console.log(barbar.location);
   // console.log(formatToJSON(barberData));
   // const location = useSelector(selectlocation);
-  const [routeInfo, setRouteInfo] = useState({ distance: null, duration: null });
+  const [routeInfo, setRouteInfo] = useState({distance: null, duration: null});
   const [location, setLocation] = useState(null);
   const mapViewRef = useRef(null);
 
@@ -39,7 +40,7 @@ export default function BarberDirection({ navigation, route }) {
             PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
           );
           if (permission === RESULTS.GRANTED) {
-            getCurrentLocation();
+            checkLocationServices();
           } else {
             console.error('Location permission denied');
           }
@@ -52,7 +53,7 @@ export default function BarberDirection({ navigation, route }) {
             },
           );
           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            getCurrentLocation();
+            checkLocationServices();
           } else {
             console.error('Location permission denied');
           }
@@ -62,11 +63,36 @@ export default function BarberDirection({ navigation, route }) {
       }
     };
 
+    const checkLocationServices = () => {
+      LocationServicesDialogBox.checkLocationServicesIsEnabled({
+        message:
+          '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
+        ok: 'YES',
+        cancel: 'NO',
+      })
+        .then(() => {
+          getCurrentLocation();
+        })
+        .catch(error => {
+          console.log('Location services not enabled', error.message);
+          Alert.alert(
+            'Location Services Disabled',
+            'Please enable location services to use this feature.',
+            [
+              {
+                text: 'OK',
+                onPress: () => navigation.goBack(), // Navigate back if location services are not enabled
+              },
+            ],
+          );
+        });
+    };
+
     const getCurrentLocation = () => {
       Geolocation.getCurrentPosition(
         position => {
-          const { latitude, longitude } = position.coords;
-          setLocation({ latitude, longitude });
+          const {latitude, longitude} = position.coords;
+          setLocation({latitude, longitude});
         },
         error => {
           console.error('Error getting current position:', error);
@@ -86,8 +112,8 @@ export default function BarberDirection({ navigation, route }) {
     const watchUserLocation = () => {
       const watchId = Geolocation.watchPosition(
         position => {
-          const { latitude, longitude } = position.coords;
-          setLocation({ latitude, longitude });
+          const {latitude, longitude} = position.coords;
+          setLocation({latitude, longitude});
 
           if (mapViewRef.current) {
             mapViewRef.current.animateToRegion(
@@ -116,11 +142,23 @@ export default function BarberDirection({ navigation, route }) {
       return () => Geolocation.clearWatch(watchId);
     };
 
-    watchUserLocation();
-  }, []);
+    if (location) {
+      watchUserLocation();
+    }
+  }, [location]);
 
   if (!location) {
-    return <Text>Loading...</Text>;
+    return (
+      <Text
+        style={{
+          color: 'black',
+          fontSize: fontSize.medium,
+          alignSelf: 'center',
+          marginTop: 200,
+        }}>
+        Please enable your location to use this feature
+      </Text>
+    );
   }
 
   const handleArrival = () => {
@@ -133,7 +171,7 @@ export default function BarberDirection({ navigation, route }) {
           onPress: () => navigation.goBack(),
         },
       ],
-      { cancelable: false },
+      {cancelable: false},
     );
   };
 
@@ -142,7 +180,7 @@ export default function BarberDirection({ navigation, route }) {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <View style={[styles.mapContainer, { zIndex: 0 }]}>
+        <View style={[styles.mapContainer, {zIndex: 0}]}>
           <MapView
             style={styles.mapStyle}
             region={{
@@ -155,8 +193,7 @@ export default function BarberDirection({ navigation, route }) {
             showsMyLocationButton={true}
             showsUserLocation
             showsCompass={true}
-            ref={mapViewRef}
-          >
+            ref={mapViewRef}>
             {/* <UrlTile
             urlTemplate="https://a.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png"
             maximumZ={100}
@@ -171,7 +208,7 @@ export default function BarberDirection({ navigation, route }) {
                 style={styles.locationImgIcon}
                 resizeMode="contain">
                 <Image
-                  source={{ uri: barbar?.profile }}
+                  source={{uri: barbar?.profile}}
                   style={styles.markerIngStyle}
                 />
               </ImageBackground>
@@ -205,7 +242,7 @@ export default function BarberDirection({ navigation, route }) {
               />
             )}
           </MapView>
-          <View style={styles.distanceDuration}>
+          {/* <View style={styles.distanceDuration}>
             <Text style={styles.distanceText}>
               Distance:{' '}
               {routeInfo.distance
@@ -218,7 +255,7 @@ export default function BarberDirection({ navigation, route }) {
                 ? `${routeInfo.duration.toFixed(2)} min`
                 : 'N/A'}
             </Text>
-          </View>
+          </View> */}
         </View>
       </View>
     </SafeAreaView>

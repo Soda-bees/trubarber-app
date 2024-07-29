@@ -491,8 +491,14 @@ export default function Explore({navigation}) {
                       item.location.longitude,
                     );
                     return (
+                      <TouchableOpacity
+                      key={index}
+                      onPress={() =>
+                        navigation.navigate('BookAppointment', {item , tabName:'About'})
+                      }
+                      >
+
                       <ImageBackground
-                        key={index}
                         source={{uri: item.profile}}
                         imageStyle={styles.containerImage}
                       >
@@ -532,7 +538,7 @@ export default function Explore({navigation}) {
                               <TouchableOpacity
                                 style={styles.bookBtn}
                                 onPress={() =>
-                                  navigation.navigate('BookAppointment', {item})
+                                  navigation.navigate('BookAppointment', {item , tabName:'Services'})
                                 }>
                                 <Text style={styles.btnText}>
                                   Book Appointment
@@ -547,6 +553,8 @@ export default function Explore({navigation}) {
                           </ImageBackground>
                         </View>
                       </ImageBackground>
+                      </TouchableOpacity>
+
                     );
                   })}
                 </View>

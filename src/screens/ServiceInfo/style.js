@@ -172,9 +172,10 @@ export const styles = StyleSheet.create({
     textAlignVertical:"top",
   },
   saveChangeBtn: {
-    position: 'absolute',
-    bottom: sizes.screenHeight*0.07,
-    alignSelf: 'center'
+    // position: 'absolute',
+    // bottom: sizes.screenHeight*0.07,
+    alignSelf: 'center',
+    marginVertical: sizes.screenHeight*0.02
   },
 
   saveChangeBtnIOS: {

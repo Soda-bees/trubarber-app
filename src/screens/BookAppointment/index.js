@@ -27,6 +27,7 @@ import {useFocusEffect} from '@react-navigation/native';
 
 export default function BookAppointment({navigation, route}) {
   const barbarId = route?.params?.item._id;
+  const tabName = route?.params?.tabName;
   const allBarbers = useSelector(selectbarber);
   const dispatch = useDispatch();
   const barbar = allBarbers?.find(barber => barber?._id === barbarId);
@@ -127,6 +128,12 @@ export default function BookAppointment({navigation, route}) {
 
   const [tab, setTabs] = useState('About');
   const [status, setStatus] = useState(null);
+
+  useEffect(() => {
+    if (tabName) {
+      setTabs(tabName);
+    }
+  }, [route.params]);
 
   const handleGoback = () => {
     navigation.goBack();
@@ -297,13 +304,13 @@ export default function BookAppointment({navigation, route}) {
                   </Text>
                 </View>
               </View>
-              <TouchableOpacity style={styles.containBookmark}>
+              {/* <TouchableOpacity style={styles.containBookmark}>
                 <Image
                   source={images.Bookmark}
                   resizeMode="contain"
                   style={styles.bookmark}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
         </ImageBackground>
