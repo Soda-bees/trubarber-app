@@ -200,6 +200,13 @@ export const styles = StyleSheet.create({
     top: sizes.screenHeight * 0.3,
     left: sizes.screenWidth * 0.08,
   },
+  btnIOS: {
+    position: 'absolute',
+    bottom:0,
+    alignSelf:'center'
+    // top: sizes.screenHeight * 0.3,
+    // left: sizes.screenWidth * 0.08,
+  },
 
   servicesContainer: {
     flexDirection: 'row',

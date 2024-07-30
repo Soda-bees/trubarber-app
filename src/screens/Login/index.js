@@ -96,8 +96,29 @@ export default function Login({navigation}) {
     }
   };
 
+  // const getFcmToken = async () => {
+  //   try {
+  //     const token = await messaging().getToken();
+  //     setDeviceToken(token);
+  //     console.log('Notification token Login=', token);
+  //     return token;
+  //   } catch (error) {
+  //     console.log('Error in generating token:', error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   getFcmToken();
+  // }, []);
+
   const getFcmToken = async () => {
     try {
+      // Register the device for remote messages (iOS only)
+      if (Platform.OS === 'ios') {
+        await messaging().registerDeviceForRemoteMessages();
+      }
+
+      // Get the FCM token
       const token = await messaging().getToken();
       setDeviceToken(token);
       console.log('Notification token Login=', token);
@@ -108,8 +129,28 @@ export default function Login({navigation}) {
   };
 
   useEffect(() => {
-    getFcmToken();
+    // Request notification permission (iOS only)
+    const requestPermission = async () => {
+      if (Platform.OS === 'ios') {
+        const authStatus = await messaging().requestPermission();
+        const enabled =
+          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+        if (enabled) {
+          console.log('Authorization status:', authStatus);
+          getFcmToken();
+        } else {
+          console.log('Notification permission denied');
+        }
+      } else {
+        getFcmToken(); // Directly get token for Android
+      }
+    };
+
+    requestPermission();
   }, []);
+
 
   return (
     <SafeAreaView style={styles.container}>

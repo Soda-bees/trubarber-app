@@ -362,7 +362,7 @@ export default function BookAppointment({navigation, route}) {
             <ScrollView style={styles.scrollView}>
               <Text style={styles.aboutContent}>{barbar?.description}</Text>
             </ScrollView>
-            <View style={styles.btn}>
+            <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
               <Button
                 title={'Book Appointment'}
                 onPress={() => {

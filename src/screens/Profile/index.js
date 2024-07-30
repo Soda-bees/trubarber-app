@@ -7,6 +7,7 @@ import {
   ScrollView,
   TextInput,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import {styles} from './style.js';
@@ -134,7 +135,7 @@ export default function Profile({navigation}) {
           </View>
         </View>
 
-        <View style={styles.btn}>
+        <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}> 
           <Button title={'Logout'} onPress={() => handleLogout()} />
         </View>
       </View>

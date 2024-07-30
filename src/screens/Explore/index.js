@@ -37,7 +37,7 @@ export default function Explore({navigation}) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const location = useSelector(selectlocation);
-  // console.log(location);
+  console.log("Location-=-=-=>",location);
   const [region, setRegion] = useState(null);
   const authToken = useSelector(selectAuthToken);
   const [loader, setLoader] = useState(false);
@@ -482,7 +482,7 @@ export default function Explore({navigation}) {
             <View style={styles.marginTop}>
               <Text style={styles.heading}>Recommended</Text>
               <ScrollView horizontal>
-                <View style={styles.cardRow}>
+                <View style={Platform.OS == 'android' ? styles.cardRow : styles.cardRowIOS}>
                   {barberData?.map((item, index) => {
                     const distance = calculateDistance(
                       location?.latitude,

@@ -141,6 +141,13 @@ export const styles = StyleSheet.create({
     paddingRight: sizes.screenWidth * 0.08,
     paddingBottom: sizes.screenHeight * 0.08,
   },
+  cardRowIOS: {
+    marginStart: sizes.screenWidth * 0.05,
+    flexDirection: 'row',
+    gap: sizes.screenWidth * 0.09,
+    paddingRight: sizes.screenWidth * 0.08,
+    paddingBottom: sizes.screenHeight * 0.08,
+  },
   categoryBox: {
     height: sizes.screenHeight * 0.1,
     width: sizes.screenWidth * 0.45,

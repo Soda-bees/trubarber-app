@@ -15,22 +15,26 @@ import {
   PermissionsAndroid,
   FlatList,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { styles } from './style';
+import React, {useEffect, useRef, useState} from 'react';
+import {styles} from './style';
 import BackArrow from '../../components/BackArrow';
 import images from '../../services/utilities/images';
-import { TextInput } from 'react-native-gesture-handler';
-import { colors, fontSize, sizes } from '../../services';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectUserData, setSeenTrueRedux } from '../../store/userData';
-import { selectAuthToken } from '../../store/authToken';
-import { sendMessage, setSeenTrue, uploadMultiplesChatImages } from '../../services/config/API';
+import {TextInput} from 'react-native-gesture-handler';
+import {colors, fontSize, sizes} from '../../services';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectUserData, setSeenTrueRedux} from '../../store/userData';
+import {selectAuthToken} from '../../store/authToken';
+import {
+  sendMessage,
+  setSeenTrue,
+  uploadMultiplesChatImages,
+} from '../../services/config/API';
 import formatToJSON from '../../services/config/FormatToJson';
 import ImageGrid from '../../components/ImageGrid';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import moment from 'moment';
 
-const ChatDetails = ({ navigation, route }) => {
+const ChatDetails = ({navigation, route}) => {
   const chatRoomId = route?.params?.chatRoomId;
   const userData = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken);
@@ -47,7 +51,6 @@ const ChatDetails = ({ navigation, route }) => {
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(true);
   const [show, setShow] = useState(true);
-  
 
   useEffect(() => {
     if (chatRoomId) {
@@ -58,8 +61,8 @@ const ChatDetails = ({ navigation, route }) => {
     }
   }, [route.params]);
 
-  const handleSetChatName = (_id) => {
-    const chat = userData?.chat?.find((chat) => chat?._id === _id);
+  const handleSetChatName = _id => {
+    const chat = userData?.chat?.find(chat => chat?._id === _id);
     if (userData?.role === 'user') {
       setChatName(chat?.barber?.name);
     } else {
@@ -69,19 +72,18 @@ const ChatDetails = ({ navigation, route }) => {
 
   const scrollToBottom = () => {
     if (flatListRef.current) {
-      flatListRef.current.scrollToOffset({ offset: 0, animated: true });
+      flatListRef.current.scrollToOffset({offset: 0, animated: true});
       setIsAtBottom(true);
       setShowScrollToBottom(false);
     }
   };
-
 
   const handlesendMessage = async () => {
     try {
       setText('');
       setSelectedImages([]);
       setShowImgScreen(false);
-      const body = { text, image: selectedImages };
+      const body = {text, image: selectedImages};
       const response = await sendMessage(authToken, chatId, body);
       console.log(response?.status);
     } catch (error) {
@@ -89,20 +91,21 @@ const ChatDetails = ({ navigation, route }) => {
     }
   };
 
-  const handleUpdateSeen = async (chatRoomId) => {
+  const handleUpdateSeen = async chatRoomId => {
     try {
       let filteredMessages = [];
 
-      filteredMessages = userData?.chat
-        ?.find((chat) => chat?._id === chatRoomId)
-        ?.messages?.filter(
-          (message) =>
-            message?.sender !== userData?._id && message.seen === false
-        )
-        ?.map((message) => message._id) || [];
+      filteredMessages =
+        userData?.chat
+          ?.find(chat => chat?._id === chatRoomId)
+          ?.messages?.filter(
+            message =>
+              message?.sender !== userData?._id && message.seen === false,
+          )
+          ?.map(message => message._id) || [];
       console.log(filteredMessages);
       if (filteredMessages?.length > 0) {
-        dispatch(setSeenTrueRedux({ chatRoomId, messageIds: filteredMessages }));
+        dispatch(setSeenTrueRedux({chatRoomId, messageIds: filteredMessages}));
         const response = await setSeenTrue(authToken, filteredMessages);
         console.log(response?.data?.message);
       }
@@ -131,14 +134,13 @@ const ChatDetails = ({ navigation, route }) => {
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      handleBackButtonClick
+      handleBackButtonClick,
     );
 
     return () => backHandler.remove();
   }, [userData, showImgScreen]);
-  
 
-  const handleScroll = (event) => {
+  const handleScroll = event => {
     const offsetY = event.nativeEvent.contentOffset.y;
     const contentHeight = event.nativeEvent.contentSize.height;
     const layoutHeight = event.nativeEvent.layoutMeasurement.height;
@@ -150,11 +152,10 @@ const ChatDetails = ({ navigation, route }) => {
       setShowScrollToBottom(false);
     }
   };
-  
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.CAMERA
+      PermissionsAndroid.PERMISSIONS.CAMERA,
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       console.log('Camera permission granted');
@@ -163,7 +164,7 @@ const ChatDetails = ({ navigation, route }) => {
     }
   };
 
-  const uploadPhoto = async (sourceType) => {
+  const uploadPhoto = async sourceType => {
     let options = {
       mediaType: 'photo',
       quality: 1,
@@ -178,7 +179,7 @@ const ChatDetails = ({ navigation, route }) => {
       },
     };
 
-    const handleResponse = (response) => {
+    const handleResponse = response => {
       try {
         const assets = response.assets || [];
         if (assets.length > 0) {
@@ -199,12 +200,12 @@ const ChatDetails = ({ navigation, route }) => {
     }
   };
 
-  const handleUploadImage = async (images) => {
+  const handleUploadImage = async images => {
     try {
       setShowImgScreen(true);
       setLoader(true);
       const formData = new FormData();
-      images.forEach((image) => {
+      images.forEach(image => {
         formData.append('images', {
           uri: image.uri,
           type: image.type,
@@ -232,9 +233,9 @@ const ChatDetails = ({ navigation, route }) => {
     setShowImgScreen(false);
     setSelectedImages([]);
   };
-  const selectedChat = userData?.chat?.find((chat) => chat?._id === chatId);
+  const selectedChat = userData?.chat?.find(chat => chat?._id === chatId);
 
-  const getDateHeader = (date) => {
+  const getDateHeader = date => {
     const today = moment().startOf('day');
     const messageDate = moment(date).startOf('day');
 
@@ -255,8 +256,8 @@ const ChatDetails = ({ navigation, route }) => {
     if (!chatId || !userData?.chat?.length) return [];
 
     return userData.chat
-      .filter((chat) => chat?._id === chatId)
-      .flatMap((chat) => chat?.messages)
+      .filter(chat => chat?._id === chatId)
+      .flatMap(chat => chat?.messages)
       .reduce((acc, message, index, arr) => {
         const prevDate = arr[index - 1]?.createdAt;
         const currentDate = message?.createdAt;
@@ -264,16 +265,16 @@ const ChatDetails = ({ navigation, route }) => {
         const prevHeader = getDateHeader(prevDate);
 
         if (currentHeader !== prevHeader) {
-          acc.push({ type: 'header', header: currentHeader });
+          acc.push({type: 'header', header: currentHeader});
         }
-        acc.push({ type: 'message', ...message });
+        acc.push({type: 'message', ...message});
         return acc;
       }, [])
       .reverse();
   };
   const data = prepareData();
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({item, index}) => {
     if (item.type === 'header') {
       return (
         <View
@@ -284,23 +285,20 @@ const ChatDetails = ({ navigation, route }) => {
             justifyContent: 'space-between',
             paddingHorizontal: sizes.screenWidth * 0.02,
             marginBottom: sizes.screenWidth * 0.01,
-          }}
-        >
+          }}>
           <View
             style={{
               backgroundColor: colors.disabledBg,
               borderRadius: 10,
               flex: 1,
               height: 2,
-            }}
-          ></View>
+            }}></View>
           <Text
             style={{
               color: colors.disabledBg2,
               fontSize: fontSize.smallM,
               paddingHorizontal: sizes.screenWidth * 0.03,
-            }}
-          >
+            }}>
             {item.header}
           </Text>
           <View
@@ -309,20 +307,16 @@ const ChatDetails = ({ navigation, route }) => {
               borderRadius: 10,
               flex: 1,
               height: 2,
-            }}
-          ></View>
+            }}></View>
         </View>
       );
     }
     return (
       <View
         style={
-          item.sender === userData?._id
-            ? styles.chatSend
-            : styles.chatRecieved
+          item.sender === userData?._id ? styles.chatSend : styles.chatRecieved
         }
-        key={index}
-      >
+        key={index}>
         {item.image?.length > 0 ? (
           <ImageGrid images={item.image} />
         ) : (
@@ -333,7 +327,7 @@ const ChatDetails = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{flex: 1}}>
       {showImgScreen ? (
         <View style={styles.laoderContainer}>
           {loader ? (
@@ -345,12 +339,10 @@ const ChatDetails = ({ navigation, route }) => {
                   width: sizes.screenWidth,
                   height: sizes.screenHeight,
                   alignItems: 'flex-start',
-                }}
-              >
+                }}>
                 <TouchableOpacity
-                  style={{ top: 20, left: 20, zIndex: 10 }}
-                  onPress={handleCancelImage}
-                >
+                  style={{top: 20, left: 20, zIndex: 10}}
+                  onPress={handleCancelImage}>
                   <Image
                     source={images.cancel}
                     style={{
@@ -362,12 +354,11 @@ const ChatDetails = ({ navigation, route }) => {
                 <ScrollView
                   horizontal
                   pagingEnabled
-                  showsHorizontalScrollIndicator={false}
-                >
+                  showsHorizontalScrollIndicator={false}>
                   {selectedImages?.map((item, index) => (
                     <Image
                       key={index}
-                      source={{ uri: item }}
+                      source={{uri: item}}
                       style={{
                         width: sizes.screenWidth,
                         height: sizes.screenHeight,
@@ -378,8 +369,7 @@ const ChatDetails = ({ navigation, route }) => {
                 </ScrollView>
                 <TouchableOpacity
                   style={styles.arrowBlackIcon}
-                  onPress={handlesendMessage}
-                >
+                  onPress={handlesendMessage}>
                   <Image
                     source={images.sendSecond}
                     style={styles.sendBtnIconSecond}
@@ -402,9 +392,7 @@ const ChatDetails = ({ navigation, route }) => {
                 }
               }}
             />
-            <Text style={styles.headerText}>
-              {chatName ? chatName : ''}
-            </Text>
+            <Text style={styles.headerText}>{chatName ? chatName : ''}</Text>
           </View>
           {/* {showScrollToBottom && (
             <TouchableOpacity
@@ -429,8 +417,7 @@ const ChatDetails = ({ navigation, route }) => {
                 textAlign: 'center',
                 fontSize: fontSize.smallM,
                 fontWeight: '500',
-              }}
-            >
+              }}>
               You're starting a new conversation. Say hi!
             </Text>
           )}
@@ -447,16 +434,19 @@ const ChatDetails = ({ navigation, route }) => {
               Platform.OS === 'android'
                 ? styles.texInputView
                 : styles.texInputViewIOS
-            }
-          >
+            }>
             <TextInput
               placeholder="Write Message.."
               placeholderTextColor={colors.black}
               multiline={true}
               numberOfLines={2}
-              style={styles.textInputContainer}
+              style={
+                Platform.OS == 'android'
+                  ? styles.textInputContainer
+                  : styles.textInputContainerIOS
+              }
               value={text}
-              onChangeText={(text) => setText(text)}
+              onChangeText={text => setText(text)}
             />
             {text ? (
               <TouchableOpacity onPress={handlesendMessage}>
@@ -468,12 +458,8 @@ const ChatDetails = ({ navigation, route }) => {
             ) : (
               <TouchableOpacity
                 style={styles.imageIconTouchable}
-                onPress={() => uploadPhoto('library')}
-              >
-                <Image
-                  source={images.chatImg}
-                  style={styles.imgIcon}
-                />
+                onPress={() => uploadPhoto('library')}>
+                <Image source={images.chatImg} style={styles.imgIcon} />
               </TouchableOpacity>
             )}
           </View>

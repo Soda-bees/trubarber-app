@@ -81,12 +81,11 @@ export const styles = StyleSheet.create({
   },
   contentMarginIOS: {
     marginLeft: sizes.screenWidth * 0.04,
-    marginRight: sizes.screenWidth * 0.04,
-    height: sizes.screenHeight,
+    marginTop: sizes.screenHeight * 0.015,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: sizes.screenWidth * 0.065,
-    marginBottom: sizes.screenHeight * 0.03,
+    gap: sizes.screenWidth * 0.075,
+    marginBottom: sizes.screenHeight * 0.13,
   },
 
   containerImage: {
@@ -97,9 +96,8 @@ export const styles = StyleSheet.create({
   },
 
   containerImageIOS: {
-    marginTop: sizes.screenHeight * 0.012,
     width: sizes.screenHeight * 0.21,
-    height: sizes.screenHeight * 0.24,
+    height: sizes.screenHeight * 0.23,
     borderRadius: sizes.screenWidth * 0.042,
   },
 

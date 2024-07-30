@@ -1,11 +1,11 @@
-import { StyleSheet } from 'react-native';
-import { colors, fontSize, sizes } from '../../services';
+import {StyleSheet} from 'react-native';
+import {colors, fontSize, sizes} from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.bluishWhite,
-    paddingBottom:sizes.screenWidth * 0.01
+    paddingBottom: sizes.screenWidth * 0.01,
   },
   row: {
     flexDirection: 'row',
@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
   scrollContianer: {
     flexGrow: 1,
     justifyContent: 'flex-end',
-    paddingHorizontal:sizes.screenWidth * 0.02,
+    paddingHorizontal: sizes.screenWidth * 0.02,
     // backgroundColor:'red'
     // marginTop: sizes.screenHeight * 0.01,
     // backgroundColor:'green'
@@ -73,7 +73,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.92,
     justifyContent: 'flex-end',
     overflow: 'hidden',
-    backgroundColor:'red'
+    backgroundColor: 'red',
   },
 
   chatRecieved: {
@@ -87,8 +87,7 @@ export const styles = StyleSheet.create({
     borderTopRightRadius: 8,
     marginBottom: sizes.screenWidth * 0.015,
     maxWidth: sizes.screenWidth * 0.8,
-    marginLeft: sizes.screenWidth*0.03
-
+    marginLeft: sizes.screenWidth * 0.03,
   },
   chatText: {
     color: colors.black,
@@ -107,7 +106,7 @@ export const styles = StyleSheet.create({
     maxWidth: sizes.screenWidth * 0.8,
     borderWidth: 0.5,
     borderColor: colors.disabledBg,
-    marginRight: sizes.screenWidth*0.03
+    marginRight: sizes.screenWidth * 0.03,
   },
   texInputView: {
     backgroundColor: colors.white,
@@ -123,21 +122,28 @@ export const styles = StyleSheet.create({
   },
   texInputViewIOS: {
     backgroundColor: colors.white,
-    marginTop: sizes.screenHeight * 0.01,
-    marginBottom: sizes.screenHeight * 0.09,
     borderRadius: sizes.screenWidth * 0.03,
-    paddingHorizontal: sizes.screenWidth * 0.04,
-    paddingVertical: sizes.screenWidth * 0.04,
+    paddingHorizontal: sizes.screenWidth * 0.02,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    width: sizes.screenWidth * 0.97,
     alignSelf: 'center',
+    borderColor: colors.disabledBg,
+    borderWidth: 1,
   },
   textInputContainer: {
     backgroundColor: 'white',
     width: sizes.screenWidth * 0.75,
     height: sizes.screenHeight * 0.07,
     color: colors.black,
+  },
+  textInputContainerIOS: {
+    backgroundColor: 'white',
+    width: sizes.screenWidth * 0.75,
+    height: sizes.screenHeight * 0.055,
+    color: colors.black,
+    paddingTop:10
   },
 
   laoderContainer: {
@@ -187,7 +193,7 @@ export const styles = StyleSheet.create({
   scrollTouchable: {
     position: 'absolute',
     right: 15,
-    bottom: sizes.screenHeight*0.1,
-    zIndex:10
-  }
+    bottom: sizes.screenHeight * 0.1,
+    zIndex: 10,
+  },
 });
