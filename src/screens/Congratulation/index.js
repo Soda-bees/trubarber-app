@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   Image,
   PermissionsAndroid,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import BackArrow from '../../components/BackArrow';
@@ -162,7 +163,7 @@ export default function Congratulation({route}) {
           </View>
         </View>
 
-        <View style={styles.buttonStyle}>
+        <View style={Platform.OS == 'android' ? styles.buttonStyle : styles.buttonStyleIOS}>
           {loader ? (
             <View style={styles.loaderBtnStyle}>
               <ActivityIndicator color={colors.disabledBg} size={30} />

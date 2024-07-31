@@ -76,33 +76,33 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.02,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: sizes.screenWidth * 0.075,
-    marginBottom: sizes.screenHeight * 0.13,
+    gap: 10,
+    width: sizes.screenWidth*0.912,
+    alignSelf: 'center'
   },
   contentMarginIOS: {
-    marginLeft: sizes.screenWidth * 0.04,
-    marginTop: sizes.screenHeight * 0.015,
+    marginTop: sizes.screenHeight * 0.02,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: sizes.screenWidth * 0.075,
-    marginBottom: sizes.screenHeight * 0.13,
+    gap: 10,
+    width: sizes.screenWidth*0.912,
+    alignSelf: 'center'
   },
 
   containerImage: {
-    // marginTop: sizes.screenHeight * 0.012,
-    width: sizes.screenHeight * 0.22,
+    width: sizes.screenWidth * 0.44,
     height: sizes.screenHeight * 0.24,
-    borderRadius: sizes.screenWidth * 0.042,
+    borderRadius: 12,
   },
-
+  
   containerImageIOS: {
-    width: sizes.screenHeight * 0.21,
-    height: sizes.screenHeight * 0.23,
-    borderRadius: sizes.screenWidth * 0.042,
+    width: sizes.screenWidth * 0.44,
+    height: sizes.screenHeight * 0.24,
+    borderRadius: 12,
   },
 
   row: {
-    // marginTop: sizes.screenHeight * 0.019,
+    marginTop: sizes.screenHeight * 0.019,
     alignItems: 'center',
     flexDirection: 'row',
     marginLeft: sizes.screenWidth * 0.03,
@@ -121,13 +121,17 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenHeight * 0.012,
     width: sizes.screenWidth * 0.392,
     opacity: 0.9,
-    marginHorizontal: sizes.screenWidth * 0.026,
+    position: 'absolute',
+    bottom: 10,
+    alignSelf: 'center'
   },
 
   textDarkerblack: {
     color: colors.black,
     fontWeight: '700',
     fontSize: fontSize.small,
+    marginLeft: sizes.screenWidth*0.02,
+    marginTop: sizes.screenHeight*0.01
   },
   textBlack: {
     color: colors.black,
@@ -135,11 +139,10 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
   },
   appointmentContainer: {
-    marginLeft: sizes.screenWidth * 0.042,
-    marginTop: sizes.screenHeight * 0.009,
-    gap: sizes.screenHeight * 0.007,
+    gap: 6,
   },
   locationContainer: {
+    left: sizes.screenWidth * 0.01,
     alignItems: 'center',
     flexDirection: 'row',
   },
@@ -150,11 +153,12 @@ export const styles = StyleSheet.create({
   bookBtn: {
     backgroundColor: colors.btnColor,
     height: sizes.screenHeight * 0.032,
-    width: sizes.screenWidth * 0.362,
+    width: sizes.screenWidth * 0.36,
     borderRadius: sizes.screenWidth * 0.022,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    alignSelf: 'center'
   },
   btnText: {
     fontSize: fontSize.small,

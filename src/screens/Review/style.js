@@ -405,7 +405,7 @@ export const styles = StyleSheet.create({
   buttonContainer: {
     position: 'absolute',
     alignSelf: 'center',
-    bottom: sizes.screenHeight * 0.08,
+    bottom: sizes.screenHeight * 0.09,
   },
 
   modalMainView: {

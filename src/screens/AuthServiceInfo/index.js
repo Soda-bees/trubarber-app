@@ -485,7 +485,7 @@ export default function AuthServiceInfo({ navigation, route }) {
                 value={servicesData && servicesData[currentIndex]?.description}
                 multiline={true}
                 numberOfLines={4}
-                style={styles.descriptionTextContainer}
+                style={Platform.OS == 'android' ? styles.descriptionTextContainer : styles.descriptionTextContainerIOS} 
                 placeholderTextColor={colors.black}
               />
             </View>
@@ -507,6 +507,7 @@ export default function AuthServiceInfo({ navigation, route }) {
             />
           )}
         </View>
+        <View style={Platform.OS == 'ios' && {marginBottom:sizes.screenHeight * 0.07}}></View>
           </View>
 
           {/* </View> */}

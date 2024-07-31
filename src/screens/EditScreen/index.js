@@ -332,7 +332,7 @@ export default function EditScreen({navigation}) {
             {role == 'barber' && (
               <View style={styles.inputFieldDes}>
                 <TextInput
-                  style={styles.description}
+                  style={Platform.OS === "android" ? styles.description : styles.descriptionIOS}
                   onChangeText={setDescription}
                   value={description}
                   multiline={true}

@@ -30,6 +30,7 @@ export default function BarberDirection({navigation, route}) {
   // const location = useSelector(selectlocation);
   const [routeInfo, setRouteInfo] = useState({distance: null, duration: null});
   const [location, setLocation] = useState(null);
+  const reduxLocation = useSelector(selectlocation);
   const mapViewRef = useRef(null);
 
   useEffect(() => {
@@ -104,8 +105,13 @@ export default function BarberDirection({navigation, route}) {
         },
       );
     };
-
-    requestLocationPermission();
+    if (Platform.OS === 'ios') {
+      if (reduxLocation) {
+        setLocation(reduxLocation);
+      }
+    } else {
+      requestLocationPermission();
+    }
   }, []);
 
   useEffect(() => {

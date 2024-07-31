@@ -204,6 +204,7 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
     color: colors.white,
     borderRadius: sizes.screenWidth * 0.02,
+    overflow: 'hidden'
   },
 
   appointmentStyle: {

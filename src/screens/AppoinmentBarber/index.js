@@ -8,6 +8,7 @@ import {
   TextInput,
   ScrollView,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {styles} from './style';
@@ -225,6 +226,12 @@ export default function AppoinmentBarber({navigation}) {
     }
   };
 
+  const handleSetDateIOS = async (event, selectedDate) => {
+    if (selectedDate) {
+      setDate(selectedDate);
+    }
+  };
+
   const isFutureTime = (startTime, formattedDate) => {
     const dateTime = moment(
       `${formattedDate} ${startTime}`,
@@ -278,41 +285,38 @@ export default function AppoinmentBarber({navigation}) {
                 </View>
               </View>
               <View style={styles.otherIconRow}>
-                {/* <TouchableOpacity
-                  style={styles.notificationContainer}
-                  onPress={() => {
-                    navigation.navigate('Notifications');
-                  }}>
-                  <Image
-                    style={styles.iconImage}
-                    source={images.notification}
-                  />
-                </TouchableOpacity> */}
                 <NotificationComponent />
-                {/* <TouchableOpacity
-                  style={styles.notificationContainer}
-                  onPress={() => {
-                    navigation.navigate('Chats');
-                  }}>
-                  <Image style={styles.iconImage} source={images.chat} />
-                </TouchableOpacity> */}
                 <ChatConponent />
               </View>
             </View>
-            {/* <View style={styles.inputContainer}>
-              <Image
-                source={images.search}
-                resizeMode="contain"
-                style={styles.search}
-              />
-              <TextInput
-                placeholderTextColor={colors.placeholdertextgray}
-                style={styles.input}
-                placeholder="Search..."
-              />
-            </View> */}
           </ImageBackground>
         </View>
+        {Platform.OS === 'ios' && (
+          <Modal
+            isVisible={open}
+            onBackdropPress={() => setOpen(false)}
+            onBackButtonPress={() => setOpen(false)}>
+            <DateTimePicker
+              testID="startTimePicker"
+              value={date}
+              mode="date"
+              is24Hour={false}
+              display="spinner"
+              // textColor="red"
+              positiveButton={{label: 'Done'}}
+              negativeButton={{label: 'Cancel'}}
+              onChange={
+                Platform.OS === 'android' ? handleSetDate : handleSetDateIOS
+              }
+              style={{
+                backgroundColor: colors.bluishWhite,
+                borderRadius: sizes.screenWidth * 0.03,
+                overflow: 'hidden',
+              }}
+            />
+          </Modal>
+        )}
+
         <ScrollView
           style={styles.scrollContianer}
           showsVerticalScrollIndicator={false}>
@@ -416,7 +420,7 @@ export default function AppoinmentBarber({navigation}) {
           </View>
           <View style={Platform.OS == 'ios' && styles.paddingBtm} />
         </ScrollView>
-        {open && (
+        {Platform.OS === 'android' && open && (
           <DateTimePicker
             testID="startTimePicker"
             value={date}

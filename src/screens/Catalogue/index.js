@@ -184,7 +184,9 @@ export default function Catalogue({navigation}) {
                       Platform.OS == 'android'
                         ? styles.containerImage
                         : styles.containerImageIOS
-                    }>
+                    }
+                    style={styles.containerImage}
+                    >
                     <View style={styles.row}>
                       <Text style={styles.textWhite}>
                         {calculateAverageRating(item.reviews)}
@@ -196,10 +198,10 @@ export default function Catalogue({navigation}) {
                         rating={1}
                       />
                     </View>
-                    <View style={styles.marginTop}>
                       <ImageBackground
                         source={images.bluredImg}
-                        imageStyle={styles.bluredImg}>
+                        imageStyle={styles.bluredImg}
+                        style={styles.bluredImg}>
                         <View style={styles.appointmentContainer}>
                           <Text style={styles.textDarkerblack}>
                             {item?.name}
@@ -231,7 +233,6 @@ export default function Catalogue({navigation}) {
                           </TouchableOpacity>
                         </View>
                       </ImageBackground>
-                    </View>
                   </ImageBackground>
                 );
               })}
@@ -239,7 +240,7 @@ export default function Catalogue({navigation}) {
             <View
               style={{
                 paddingBottom:
-                  Platform.OS == 'ios' && sizes.screenHeight * 0.08,
+                  Platform.OS == 'ios' && sizes.screenHeight * 0.18,
               }}
             />
           </ScrollView>

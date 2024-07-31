@@ -62,4 +62,9 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     bottom: sizes.screenHeight * 0.07,
   },
+  buttonStyleIOS: {
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: sizes.screenHeight * 0.09,
+  },
 });

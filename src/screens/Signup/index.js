@@ -1,5 +1,6 @@
 import {
   Image,
+  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -232,7 +233,8 @@ export default function Signup({navigation}) {
           </Text>
         </View>
       </View>
-      <View style={styles.forgotPass}>
+      <View style={Platform.OS == 'ios' && styles.forgotPassIOS }>
+      <View style={styles.forgotPass}> 
         {loader ? (
           <Loader title={'Sign Up'} />
         ) : (
@@ -242,12 +244,7 @@ export default function Signup({navigation}) {
       <View style={styles.SignupContainer}>
         <Text style={styles.fontWeight}>Already have an account?</Text>
         <Button title={'Sign In'} light={true} onPress={handleSignIn} />
-        {/* <View style={styles.textContainer}>
-          <Text style={styles.textOpacity}>
-            By signing up I agree to the the Privacy Policy and Terms and
-            Conditions
-          </Text>
-        </View> */}
+      </View>
       </View>
       <View style={styles.toasterStyle}>
         <Toast />

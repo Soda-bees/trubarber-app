@@ -103,7 +103,9 @@ export const styles = StyleSheet.create({
   },
 
   nextBtnIOS: {
-    top: sizes.screenHeight * 0.02
+    position:'absolute',
+    alignSelf:'center',
+    bottom: sizes.screenHeight * 0.1
   },
 
   description: {

@@ -37,7 +37,7 @@ export default function Explore({navigation}) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const location = useSelector(selectlocation);
-  console.log("Location-=-=-=>",location);
+  console.log('Location-=-=-=>', location);
   const [region, setRegion] = useState(null);
   const authToken = useSelector(selectAuthToken);
   const [loader, setLoader] = useState(false);
@@ -357,8 +357,7 @@ export default function Explore({navigation}) {
                       <ImageBackground
                         key={index}
                         source={{uri: item?.profile}}
-                        imageStyle={styles.containerImage}
-                      >
+                        imageStyle={styles.containerImage}>
                         <View style={styles.row}>
                           <Text style={styles.textWhite}>5.0</Text>
                           <StarRating
@@ -434,8 +433,7 @@ export default function Explore({navigation}) {
                       coordinate={{
                         latitude: item?.location?.latitude,
                         longitude: item?.location?.longitude,
-                      }}
-                    >
+                      }}>
                       <ImageBackground
                         source={images.locationIcon}
                         style={styles.locationImgIcon}
@@ -482,7 +480,12 @@ export default function Explore({navigation}) {
             <View style={styles.marginTop}>
               <Text style={styles.heading}>Recommended</Text>
               <ScrollView horizontal>
-                <View style={Platform.OS == 'android' ? styles.cardRow : styles.cardRowIOS}>
+                <View
+                  style={
+                    Platform.OS == 'android'
+                      ? styles.cardRow
+                      : styles.cardRowIOS
+                  }>
                   {barberData?.map((item, index) => {
                     const distance = calculateDistance(
                       location?.latitude,
@@ -492,70 +495,73 @@ export default function Explore({navigation}) {
                     );
                     return (
                       <TouchableOpacity
-                      key={index}
-                      onPress={() =>
-                        navigation.navigate('BookAppointment', {item , tabName:'About'})
-                      }
-                      >
+                        key={index}
+                        onPress={() =>
+                          navigation.navigate('BookAppointment', {
+                            item,
+                            tabName: 'About',
+                          })
+                        }>
+                        <ImageBackground
+                          source={{uri: item.profile}}
+                          imageStyle={styles.containerImage}
+                          style={styles.containerImage}>
+                          <View style={styles.row}>
+                            <Text style={styles.textWhite}>
+                              {calculateAverageRating(item?.reviews)}
+                            </Text>
+                            <StarRating
+                              maxStars={1}
+                              starSize={12}
+                              color={colors.gold}
+                              rating={1}
+                            />
+                          </View>
 
-                      <ImageBackground
-                        source={{uri: item.profile}}
-                        imageStyle={styles.containerImage}
-                      >
-                        <View style={styles.row}>
-                          <Text style={styles.textWhite}>
-                            {calculateAverageRating(item?.reviews)}
-                          </Text>
-                          <StarRating
-                            maxStars={1}
-                            starSize={12}
-                            color={colors.gold}
-                            rating={1}
-                          />
-                        </View>
-                        <View style={styles.marginCardtop}>
-                          <ImageBackground
-                            source={images.bluredImg}
-                            imageStyle={styles.bluredImg}
-                            >
-                            <View style={styles.appointmentContainer}>
-                              <Text style={styles.textDarkerblack}>
-                                {item.name}
-                              </Text>
-                              <View style={styles.locationContainer}>
-                                <Image
-                                  source={images.Location}
-                                  resizeMode="contain"
-                                  style={styles.locationImg}
-                                />
-                                <Text style={styles.textBlack}>
-                                  {distance !== null && (
-                                    <Text style={styles.textBlack}>
-                                      {`${distance.toFixed(2)} km`}
-                                    </Text>
-                                  )}
+                            <ImageBackground
+                              source={images.bluredImg}
+                              imageStyle={styles.bluredImg}
+                              style={styles.bluredImg}>
+                              <View style={styles.appointmentContainer}>
+                                <Text style={styles.textDarkerblack}>
+                                  {item.name}
                                 </Text>
+                                <View style={styles.locationContainer}>
+                                  <Image
+                                    source={images.Location}
+                                    resizeMode="contain"
+                                    style={styles.locationImg}
+                                  />
+                                  <Text style={styles.textBlack}>
+                                    {distance !== null && (
+                                      <Text style={styles.textBlack}>
+                                        {`${distance.toFixed(2)} km`}
+                                      </Text>
+                                    )}
+                                  </Text>
+                                </View>
+                                <TouchableOpacity
+                                  style={styles.bookBtn}
+                                  onPress={() =>
+                                    navigation.navigate('BookAppointment', {
+                                      item,
+                                      tabName: 'Services',
+                                    })
+                                  }>
+                                  <Text style={styles.btnText}>
+                                    Book Appointment
+                                  </Text>
+                                  <Image
+                                    source={images.arrowIcon}
+                                    resizeMode="contain"
+                                    style={styles.arrowStyle}
+                                  />
+                                </TouchableOpacity>
                               </View>
-                              <TouchableOpacity
-                                style={styles.bookBtn}
-                                onPress={() =>
-                                  navigation.navigate('BookAppointment', {item , tabName:'Services'})
-                                }>
-                                <Text style={styles.btnText}>
-                                  Book Appointment
-                                </Text>
-                                <Image
-                                  source={images.arrowIcon}
-                                  resizeMode="contain"
-                                  style={styles.arrowStyle}
-                                />
-                              </TouchableOpacity>
-                            </View>
-                          </ImageBackground>
-                        </View>
-                      </ImageBackground>
-                      </TouchableOpacity>
+                            </ImageBackground>
 
+                        </ImageBackground>
+                      </TouchableOpacity>
                     );
                   })}
                 </View>

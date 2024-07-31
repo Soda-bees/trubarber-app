@@ -257,7 +257,7 @@ export default function SetUpOutlet({navigation, route}) {
                   Description
                 </Text>
                 <TextInput
-                  style={styles.description}
+                  style={Platform.OS == 'android' ? styles.description :styles.descriptionIOS}
                   onChangeText={setDescription}
                   value={description}
                   multiline={true}
@@ -286,7 +286,7 @@ export default function SetUpOutlet({navigation, route}) {
           </KeyboardAwareScrollView>
         </View>
         <Toast />
-        <View style={styles.nextBtn}>
+        <View style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
           {loader ? (
             <Loader title={'Next'} />
           ) : (

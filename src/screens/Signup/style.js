@@ -54,7 +54,7 @@ export const styles = StyleSheet.create({
     color: colors.grayText,
     fontWeight: '600',
     textAlign: 'center',
-    marginBottom: sizes.screenHeight * 0.02,
+    marginVertical: sizes.screenHeight * 0.02,
   },
 
   inputContainer: {
@@ -98,6 +98,10 @@ export const styles = StyleSheet.create({
   forgotPass: {
     marginTop: sizes.screenHeight * 0.06,
   },
+  forgotPassIOS: {
+    // marginTop: sizes.screenHeight * 0.06,
+    bottom:sizes.screenHeight * 0.2
+  },
 
   inputPasswordcontainer: {
     flexDirection: 'row',
@@ -108,7 +112,7 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.03,
   },
   SignupContainer: {
-    marginTop: sizes.screenHeight * 0.08,
+    // marginTop: sizes.screenHeight * 0.08,
   },
   Signup: {
     fontSize: fontSize.h5,

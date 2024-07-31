@@ -79,8 +79,9 @@ export const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   nextBtnIOS: {
-    top: sizes.screenHeight * 0.16,
-  },
+    position: 'absolute',
+    bottom: sizes.screenHeight*0.09,
+    alignSelf: 'center'  },
 
   smallText: {
     textAlign: 'center',

@@ -68,23 +68,15 @@ export const styles = StyleSheet.create({
     gap: sizes.screenHeight * 0.02,
   },
   textContainer: {
-    // backgroundColor: 'red',
-    // gap: sizes.screenHeight * 0.004,
-    // justifyContent: 'space-between',
     alignSelf: 'center',
   },
   timeContainer: {
-    // gap: sizes.screenHeight * 0.004,
-    // justifyContent: 'space-between',
-    // flexDirection: 'row',
-    // alignItems: 'center',
     alignSelf: 'center',
   },
 
   clockIcon: {
     height: sizes.screenHeight * 0.0222,
     width: sizes.screenWidth * 0.042,
-    // top:15
     position: 'absolute',
     right: sizes.screenWidth * 0.03,
     top: sizes.screenWidth * 0.025
@@ -105,7 +97,6 @@ export const styles = StyleSheet.create({
     color: colors.durationColor,
     fontSize: fontSize.small,
     marginVertical: sizes.screenHeight * 0.007,
-    // marginStart: sizes.screenWidth * 0.01,
   },
   imagestyle: {
     width: sizes.screenWidth * 0.9,
@@ -123,6 +114,18 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.02,
     position: 'relative',
   },
+  descriptionIOS: {
+    color: colors.black,
+    fontWeight: '600',
+    textAlignVertical: 'top',
+    width: sizes.screenWidth * 0.9,
+    backgroundColor: colors.selectorcolor,
+    paddingHorizontal: sizes.screenWidth * 0.02,
+    borderRadius: sizes.screenWidth * 0.02,
+    position: 'relative',
+    height:sizes.screenHeight * 0.1,
+    paddingTop:10
+  },
   descriptionTwo: {
     color: colors.black,
     fontWeight: '600',
@@ -139,7 +142,12 @@ export const styles = StyleSheet.create({
 
   nextBtn: {
     position: 'absolute',
-    bottom: sizes.screenHeight*0.07,
+    bottom: sizes.screenHeight * 0.07,
+    alignSelf: 'center'
+  },
+  nextBtnIOS: {
+    position: 'absolute',
+    bottom: sizes.screenHeight * 0.09,
     alignSelf: 'center'
   },
 });

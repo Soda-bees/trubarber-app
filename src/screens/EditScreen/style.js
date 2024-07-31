@@ -156,6 +156,18 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.02,
     position: 'relative',
   },
+  descriptionIOS: {
+    color: colors.black,
+    // fontWeight: '600',
+    textAlignVertical: 'top',
+    width: sizes.screenWidth * 0.9,
+    backgroundColor: colors.selectorcolor,
+    paddingHorizontal: sizes.screenWidth * 0.03,
+    borderRadius: sizes.screenWidth * 0.02,
+    position: 'relative',
+    height:sizes.screenHeight * 0.1,
+    paddingTop:sizes.screenHeight * 0.01
+  },
   clockIcon: {
     height: sizes.screenHeight * 0.0222,
     width: sizes.screenWidth * 0.042,

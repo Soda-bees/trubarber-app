@@ -127,7 +127,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: sizes.screenWidth * 0.97,
+    width: sizes.screenWidth * 0.96,
     alignSelf: 'center',
     borderColor: colors.disabledBg,
     borderWidth: 1,
@@ -143,6 +143,8 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.75,
     height: sizes.screenHeight * 0.07,
     color: colors.black,
+    // backgroundColor:'red',
+    paddingTop:10
   },
 
   laoderContainer: {

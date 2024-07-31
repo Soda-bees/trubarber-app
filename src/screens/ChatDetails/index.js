@@ -33,6 +33,7 @@ import formatToJSON from '../../services/config/FormatToJson';
 import ImageGrid from '../../components/ImageGrid';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import moment from 'moment';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 const ChatDetails = ({navigation, route}) => {
   const chatRoomId = route?.params?.chatRoomId;
@@ -463,6 +464,7 @@ const ChatDetails = ({navigation, route}) => {
               </TouchableOpacity>
             )}
           </View>
+          {Platform.OS == 'ios' && <KeyboardSpacer />}
         </View>
       )}
     </SafeAreaView>

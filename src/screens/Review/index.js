@@ -281,7 +281,7 @@ export default function Review({navigation, route}) {
             </View>
           </View>
         </ImageBackground>
-        <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={100} extraScrollHeight={100}>
+        <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={Platform.OS == 'android' ? 100 : sizes.screenHeight * 0.45} extraScrollHeight={100}>
           <View style={styles.ratingContainer}>
             <StarRating
               rating={rating}

@@ -22,8 +22,21 @@ export const styles = StyleSheet.create({
     // backgroundColor: 'red',
     alignItems: 'center',
   },
+  HertotextcontainerIOS: {
+    marginTop: sizes.screenHeight * 0.32,
+    // backgroundColor: 'red',
+    alignItems: 'center',
+  },
 
   heroText:{
+    textAlign: 'center',
+    fontSize : fontSize.h5,
+    color : 'black',
+    fontWeight : '900',
+    // backgroundColor : 'orange',
+    width : sizes.screenWidth * 0.5100,
+  },
+  heroTextIOS:{
     textAlign: 'center',
     fontSize : fontSize.h5,
     color : 'black',
@@ -34,7 +47,12 @@ export const styles = StyleSheet.create({
 
   Nextbtn: {
     position: 'absolute',
-    bottom: sizes.screenHeight*0.07,
+    bottom: sizes.screenHeight * 0.07,
+    alignSelf: 'center'
+  },
+  NextbtnIOS: {
+    position: 'absolute',
+    bottom: sizes.screenHeight * 0.09,
     alignSelf: 'center'
   },
 });
