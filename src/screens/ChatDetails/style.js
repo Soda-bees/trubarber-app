@@ -141,9 +141,8 @@ export const styles = StyleSheet.create({
   textInputContainerIOS: {
     backgroundColor: 'white',
     width: sizes.screenWidth * 0.75,
-    height: sizes.screenHeight * 0.055,
+    height: sizes.screenHeight * 0.07,
     color: colors.black,
-    paddingTop:10
   },
 
   laoderContainer: {

@@ -25,8 +25,7 @@ import messaging from '@react-native-firebase/messaging';
 export default function WelcomeScreen({navigation}) {
   const dispatch = useDispatch();
   const location = useSelector(selectlocation);
-
-  console.log('getting location', location);
+  console.log('location', location);
 
   const [imgActive, setImgActive] = useState(0);
   const [itemList, setItem] = useState(['Text1', 'Text3', 'Text4']);
@@ -51,6 +50,17 @@ export default function WelcomeScreen({navigation}) {
     navigation.navigate('Signup');
   };
 
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  }
+
   useEffect(() => {
     if (Platform.OS === 'android') {
       PermissionsAndroid.request(
@@ -59,7 +69,7 @@ export default function WelcomeScreen({navigation}) {
         .then(res => {
           console.log('res===>', res);
           if (!!res && res === 'granted') {
-            requestLocationPermission();
+            requestUserPermission();
             initializeLocation();
           }
           initializeLocation();
@@ -69,139 +79,22 @@ export default function WelcomeScreen({navigation}) {
           console.log('error in get permission in app.js');
         });
     } else {
-      requestLocationPermission();
-            initializeLocation();
       // requestUserPermission();
+      initializeLocation();
     }
   }, []);
 
-  async function requestUserPermission() {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    if (enabled) {
-      console.log('Authorization status:', authStatus);
-      requestLocationPermission();
-      initializeLocation();
-    } else {
-      console.log('Authorization status:', authStatus);
-      requestLocationPermission();
-      initializeLocation();
-    }
-  }
-
-  // const initializeLocation = async () => {
-  //   const hasPermission = await requestLocationPermission();
-  //   if (hasPermission) {
-  //     checkLocationServices()
-  //       .then(() => {
-  //         getCurrentLocation(setRegion, dispatch);
-  //       })
-  //       .catch(error => {
-  //         console.log('Location services not enabled', error.message);
-  //         Alert.alert(
-  //           'Location Services Disabled',
-  //           'Please enable location services to use this feature.',
-  //         );
-  //       });
-  //   }
-  // };
-
-  // const requestLocationPermission = async () => {
-  //   if (Platform.OS === 'android') {
-  //     try {
-  //       const granted = await PermissionsAndroid.request(
-  //         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-  //         {
-  //           title: 'Location Permission',
-  //           message:
-  //             'This app needs access to your location to show your current position on the map.',
-  //           buttonPositive: 'OK',
-  //         },
-  //       );
-
-  //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-  //         console.log('Location permission granted');
-  //         return true;
-  //       } else {
-  //         console.log('Location permission denied');
-  //         return false;
-  //       }
-  //     } catch (err) {
-  //       console.warn(err);
-  //       return false;
-  //     }
-  //   } else {
-  //     return true;
-  //   }
-  // };
-
-  // const checkLocationServices = () => {
-  //   return LocationServicesDialogBox.checkLocationServicesIsEnabled({
-  //     message:
-  //       '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
-  //     ok: 'YES',
-  //     cancel: 'NO',
-  //   });
-  // };
-
-  // const getCurrentLocation = (setRegion, dispatch) => {
-  //   Geolocation.getCurrentPosition(
-  //     position => {
-  //       const {latitude, longitude} = position.coords;
-  //       const locationObj = {
-  //         latitude,
-  //         longitude,
-  //       };
-  //       dispatch(setLocation(locationObj));
-  //       setRegion({
-  //         latitude,
-  //         longitude,
-  //         latitudeDelta: 0.01,
-  //         longitudeDelta: 0.01,
-  //       });
-  //     },
-  //     error => {
-  //       console.log('Error getting location: ', error.message);
-  //       Alert.alert(
-  //         'Error',
-  //         'Unable to retrieve your location. Please try again.',
-  //       );
-  //     },
-  //     // {enableHighAccuracy: true, timeout: 20000, maximumAge: 20000},
-  //   );
-  // };
-
-  // useEffect(() => {
-  //   const initializeLocation = async () => {
-  //     const hasPermission = await requestLocationPermission();
-  //     if (hasPermission) {
-  //       checkLocationServices()
-  //         .then(() => {
-  //           getCurrentLocation(setRegion, dispatch);
-  //         })
-  //         .catch(error => {
-  //           console.log('Location services not enabled', error.message);
-  //           Alert.alert(
-  //             'Location Services Disabled',
-  //             'Please enable location services to use this feature.',
-  //           );
-  //         });
-  //     }
-  //   };
-  //   initializeLocation();
-  // }, []);
-
   const initializeLocation = async () => {
     const hasPermission = await requestLocationPermission();
+    console.log('has permission', hasPermission);
     if (hasPermission) {
       checkLocationServices()
         .then(() => {
+          console.log('then');
           getCurrentLocation(setRegion, dispatch);
         })
         .catch(error => {
+          console.log('catch');
           console.log('Location services not enabled', error.message);
           Alert.alert(
             'Location Services Disabled',
@@ -223,6 +116,7 @@ export default function WelcomeScreen({navigation}) {
             buttonPositive: 'OK',
           },
         );
+
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           console.log('Location permission granted');
           return true;
@@ -234,69 +128,57 @@ export default function WelcomeScreen({navigation}) {
         console.warn(err);
         return false;
       }
-    } else {
-      return new Promise((resolve, reject) => {
-        Geolocation.requestAuthorization(authStatus => {
-          if (
-            authStatus === 'granted' ||
-            authStatus === 'authorizedWhenInUse'
-          ) {
-            console.log('Location permission granted');
-            resolve(true);
-          } else {
-            console.log('Location permission denied');
-            resolve(false);
-          }
-        });
-      });
+    } 
+    else if (Platform.OS === 'ios') {
+      Geolocation.requestAuthorization();
+      return true;
     }
   };
 
   const checkLocationServices = async () => {
-    if (Platform.OS === 'android') {
-      return LocationServicesDialogBox.checkLocationServicesIsEnabled({
+    // console.log("work checkLocationServices");
+    // return LocationServicesDialogBox.checkLocationServicesIsEnabled({
+    //   message:
+    //     '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
+    //   ok: 'YES',
+    //   cancel: 'NO',
+    // });
+
+    if (LocationServicesDialogBox) {
+      LocationServicesDialogBox.checkLocationServicesIsEnabled({
         message:
           '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
         ok: 'YES',
         cancel: 'NO',
-      });
+      })
+        .then(() => {
+          console.log('Location services enabled');
+        })
+        .catch(error => {
+          console.error('Location services not enabled', error.message);
+          throw error; // Re-throw the error to handle it in the calling function
+        });
     } else {
-      return new Promise((resolve, reject) => {
-        Geolocation.getCurrentPosition(
-          position => resolve(),
-          error => {
-            if (error.code === 1) {
-              reject(new Error('Location services not enabled'));
-            } else {
-              resolve();
-            }
-          },
-          // {enableHighAccuracy: true, timeout: 20000, maximumAge: 20000}
-        );
-      });
+      console.error('LocationServicesDialogBox is not initialized');
     }
   };
 
   const getCurrentLocation = (setRegion, dispatch) => {
+    console.log('work getCurrentLocation');
     Geolocation.getCurrentPosition(
       position => {
         const {latitude, longitude} = position.coords;
-        console.log(
-          position.coords,
-          '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
-        );
         const locationObj = {
           latitude,
           longitude,
         };
-        // dispatch(setLocation(locationObj));
+        dispatch(setLocation(locationObj));
         setRegion({
           latitude,
           longitude,
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         });
-        dispatch(setLocation(locationObj));
       },
       error => {
         console.log('Error getting location: ', error.message);
@@ -305,7 +187,7 @@ export default function WelcomeScreen({navigation}) {
           'Unable to retrieve your location. Please try again.',
         );
       },
-      // {enableHighAccuracy: true, timeout: 20000, maximumAge: 20000},
+      {enableHighAccuracy: false, timeout: 20000, maximumAge: 20000},
     );
   };
 

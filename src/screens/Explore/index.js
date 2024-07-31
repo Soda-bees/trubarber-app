@@ -516,7 +516,8 @@ export default function Explore({navigation}) {
                         <View style={styles.marginCardtop}>
                           <ImageBackground
                             source={images.bluredImg}
-                            imageStyle={styles.bluredImg}>
+                            imageStyle={styles.bluredImg}
+                            >
                             <View style={styles.appointmentContainer}>
                               <Text style={styles.textDarkerblack}>
                                 {item.name}

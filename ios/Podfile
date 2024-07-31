@@ -50,6 +50,10 @@ target 'TruBarber' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'Firebase/Core'
+  pod 'Firebase/Messaging'
+
+
 
   target 'TruBarberTests' do
     inherit! :complete

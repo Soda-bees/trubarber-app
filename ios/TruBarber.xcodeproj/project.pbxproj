@@ -40,6 +40,7 @@
 		2A9666307F6A03ECF0D4314C /* Pods_TruBarber.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TruBarber.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-TruBarber.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TruBarber.debug.xcconfig"; path = "Target Support Files/Pods-TruBarber/Pods-TruBarber.debug.xcconfig"; sourceTree = "<group>"; };
 		501D45F52C58B929005EB3AA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		505B783E2C5A253F0063C53A /* TruBarber.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TruBarber.entitlements; path = TruBarber/TruBarber.entitlements; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-TruBarber.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TruBarber.release.xcconfig"; path = "Target Support Files/Pods-TruBarber/Pods-TruBarber.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-TruBarber-TruBarberTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TruBarber-TruBarberTests.debug.xcconfig"; path = "Target Support Files/Pods-TruBarber-TruBarberTests/Pods-TruBarber-TruBarberTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = TruBarber/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -88,6 +89,7 @@
 		13B07FAE1A68108700A75B9A /* TruBarber */ = {
 			isa = PBXGroup;
 			children = (
+				505B783E2C5A253F0063C53A /* TruBarber.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -503,6 +505,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = TruBarber/TruBarber.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5947YLGBNJ;
 				ENABLE_BITCODE = NO;
@@ -531,6 +534,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = TruBarber/TruBarber.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5947YLGBNJ;
 				INFOPLIST_FILE = TruBarber/Info.plist;

@@ -116,6 +116,7 @@ export default function Login({navigation}) {
       // Register the device for remote messages (iOS only)
       if (Platform.OS === 'ios') {
         await messaging().registerDeviceForRemoteMessages();
+        await messaging().setAutoInitEnabled(true);
       }
 
       // Get the FCM token

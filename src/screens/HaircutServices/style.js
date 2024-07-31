@@ -43,13 +43,12 @@ export const styles = StyleSheet.create({
   },
 
   contentMarginIOS: {
-    marginLeft: sizes.screenWidth * 0.045,
-    marginRight: sizes.screenWidth * 0.045,
     marginTop: sizes.screenHeight * 0.02,
-    height: sizes.screenHeight,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: sizes.screenWidth * 0.065,
+    gap: 10,
+    width: sizes.screenWidth*0.912,
+    alignSelf: 'center'
   },
 
   containerImage: {
@@ -59,10 +58,9 @@ export const styles = StyleSheet.create({
   },
   
   containerImageIOS: {
-    marginTop: sizes.screenHeight * 0.012,
-    width: sizes.screenHeight * 0.21,
+    width: sizes.screenWidth * 0.44,
     height: sizes.screenHeight * 0.24,
-    borderRadius: sizes.screenWidth * 0.042,
+    borderRadius: 12,
   },
 
   row: {
