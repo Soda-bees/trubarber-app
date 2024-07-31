@@ -36,7 +36,11 @@ import NotificationComponent from '../../components/NotificationComponent';
 export default function Explore({navigation}) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
-  const location = useSelector(selectlocation);
+  const location = useSelector(selectlocation) || userData?.location
+  // const location = {
+  //   latitude: 37.78825,
+  //   longitude: -122.4324,
+  // }
   // console.log(location);
   const [region, setRegion] = useState(null);
   const authToken = useSelector(selectAuthToken);
