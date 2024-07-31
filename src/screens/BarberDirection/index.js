@@ -20,17 +20,19 @@ import Geolocation from '@react-native-community/geolocation';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import {fontSize} from '../../services';
+import { selectUserData } from '../../store/userData';
 
 const {width, height} = Dimensions.get('window');
 
 export default function BarberDirection({navigation, route}) {
   const {barbar} = route?.params;
+  const userData = useSelector(selectUserData)
   // console.log(barbar.location);
   // console.log(formatToJSON(barberData));
   // const location = useSelector(selectlocation);
   const [routeInfo, setRouteInfo] = useState({distance: null, duration: null});
   const [location, setLocation] = useState(null);
-  const reduxLocation = useSelector(selectlocation);
+  const reduxLocation = useSelector(selectlocation) || userData?.location
   const mapViewRef = useRef(null);
 
   useEffect(() => {

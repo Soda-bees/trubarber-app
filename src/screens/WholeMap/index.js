@@ -20,12 +20,14 @@ import {useSelector} from 'react-redux';
 import {selectlocation} from '../../store/location';
 import {selectbarber} from '../../store/barber';
 import formatToJSON from '../../services/config/FormatToJson';
+import { selectUserData } from '../../store/userData';
 
 export default function WholeMap({navigation}) {
   const barberData = useSelector(selectbarber);
+  const userData = useSelector(selectUserData)
   // console.log(formatToJSON(barberData));
   const [selectedBarber, setSelectedBarber] = useState('');
-  const location = useSelector(selectlocation);
+  const location = useSelector(selectlocation) || userData?.location
   const [currentLocation, setCurrentLocation] = useState(
     'Rachael McPhail Street...',
   );

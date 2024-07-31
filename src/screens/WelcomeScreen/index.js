@@ -21,10 +21,12 @@ import LocationServicesDialogBox from 'react-native-android-location-services-di
 import {useDispatch, useSelector} from 'react-redux';
 import {selectlocation, setLocation} from '../../store/location/index.js';
 import messaging from '@react-native-firebase/messaging';
+import { selectUserData } from '../../store/userData/index.js';
 
 export default function WelcomeScreen({navigation}) {
   const dispatch = useDispatch();
-  const location = useSelector(selectlocation);
+  const userData = useSelector(selectUserData)
+  const location = useSelector(selectlocation) || userData?.location
   console.log('location', location);
 
   const [imgActive, setImgActive] = useState(0);

@@ -20,12 +20,14 @@ import {useSelector} from 'react-redux';
 import {selectbarber} from '../../store/barber/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import {selectlocation} from '../../store/location/index.js';
+import { selectUserData } from '../../store/userData/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
 export default function HaircutServices({navigation, route}) {
   const {name} = route?.params;
+  const userData = useSelector(selectUserData)
   const barbers = useSelector(selectbarber);
-  const location = useSelector(selectlocation);
+  const location = useSelector(selectlocation) || userData?.location
   const [barberData, setBarberdata] = useState([]);
   useEffect(() => {
     getSpecificBarberBarber();

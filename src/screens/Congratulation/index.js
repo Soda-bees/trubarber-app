@@ -27,7 +27,7 @@ import LocationServicesDialogBox from 'react-native-android-location-services-di
 export default function Congratulation({route}) {
   const dispatch = useDispatch();
   const {userData} = route.params;
-  const location = useSelector(selectlocation);
+  const location = useSelector(selectlocation)
 
   const [loader, setLoader] = useState(false);
   const [region, setRegion] = useState();

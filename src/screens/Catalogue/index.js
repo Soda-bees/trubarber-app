@@ -20,13 +20,15 @@ import {useSelector} from 'react-redux';
 import {selectbarber} from '../../store/barber/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import {selectlocation} from '../../store/location/index.js';
+import { selectUserData } from '../../store/userData/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
 export default function Catalogue({navigation}) {
   const barbers = useSelector(selectbarber);
+  const userData = useSelector(selectUserData)
   // console.log('all barbers', formatToJSON(barbers));
   const [btnActive, setactive] = useState('barber');
-  const location = useSelector(selectlocation);
+  const location = useSelector(selectlocation) || userData?.location
   const [search, setSearch] = useState('');
   const [barberData, setBarberdata] = useState([]);
   const [servicesData, setserviceData] = useState([]);
