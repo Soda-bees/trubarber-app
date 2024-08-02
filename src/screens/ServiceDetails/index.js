@@ -6,12 +6,13 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import React, {useEffect, useState} from 'react';
 import {styles} from './style';
 import BackArrow from '../../components/BackArrow';
-import {colors} from '../../services';
+import {colors, sizes} from '../../services';
 import Button from '../../components/Button';
 import images from '../../services/utilities/images';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -247,6 +248,8 @@ export default function ServiceDetails({navigation, route}) {
             </View>
           </View>
           <View style={{marginBottom: 20}} />
+        <View style={Platform.OS == 'ios' && {paddingBottom:sizes.screenHeight * 0.08}}/>
+
         </ScrollView>
         <Toast />
       </View>

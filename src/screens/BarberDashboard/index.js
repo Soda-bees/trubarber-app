@@ -201,22 +201,22 @@ export default function BarberDashboard({navigation}) {
           <View style={styles.containerBody}>
             <View style={styles.detailRow}>
               <View style={styles.detailContainer}>
+                <View style={{flexDirection:"row" ,alignItems:'center' , justifyContent:'space-between'}}>
                 <Image style={styles.boxImg} source={images.appointment} />
-                <View>
                   <Text style={styles.appoitmentNumberTxt}>
                     {numberOfCompletedAppointments}
                   </Text>
-                  <Text style={styles.detailTxt}>Completed Appointments</Text>
                 </View>
+                  <Text style={styles.detailTxt}>Completed Appointments</Text>
               </View>
               <View style={styles.detailContainer}>
+                <View style={{flexDirection:"row" ,alignItems:'center' , justifyContent:'space-between'}}>
                 <Image style={styles.boxImg} source={images.appointment} />
-                <View>
                   <Text style={styles.appoitmentNumberTxt}>
                     {numberOfPendingAppointments}
                   </Text>
-                  <Text style={styles.detailTxt}>Pending Appointments</Text>
                 </View>
+                  <Text style={styles.detailTxt}>Pending Appointments</Text>
               </View>
             </View>
             {userData.appoinment?.length == 0 ? (

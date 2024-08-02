@@ -10,6 +10,8 @@ import {
   Platform,
   PermissionsAndroid,
   Alert,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import React, {useEffect, useState, useCallback} from 'react';
 import images from '../../services/utilities/images';
@@ -36,7 +38,7 @@ import NotificationComponent from '../../components/NotificationComponent';
 export default function Explore({navigation}) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
-  const location = useSelector(selectlocation) || userData?.location
+  const location = useSelector(selectlocation) || userData?.location;
   console.log('Location-=-=-=>', location);
   const [region, setRegion] = useState(null);
   const authToken = useSelector(selectAuthToken);
@@ -287,31 +289,33 @@ export default function Explore({navigation}) {
           />
         </View>
       ) : (
-        <View style={styles.container}>
-          <View style={styles.backgroundColor}>
-            <ImageBackground
-              source={images.transparentBg}
-              resizeMode="contain"
-              style={styles.transparentBg}>
-              <View style={styles.topIconRow}>
-                <TouchableOpacity
-                  style={styles.locationRow}
-                  onPress={() => navigation.navigate('WholeMap')}>
-                  <View style={styles.locationContainertop}>
-                    <Image
-                      style={styles.iconImage}
-                      source={images.redLocation}
-                    />
-                  </View>
-                  <View style={styles.locationDetailColumn}>
-                    <Text style={styles.nearbyTxt}>Find barber near</Text>
-                    <Text style={styles.currentLocationTxt}>
-                      {currentLocation}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-                <View style={styles.otherIconRow}>
-                  {/* <TouchableOpacity
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <View>
+            <View style={styles.container}>
+              <View style={styles.backgroundColor}>
+                <ImageBackground
+                  source={images.transparentBg}
+                  resizeMode="contain"
+                  style={styles.transparentBg}>
+                  <View style={styles.topIconRow}>
+                    <TouchableOpacity
+                      style={styles.locationRow}
+                      onPress={() => navigation.navigate('WholeMap')}>
+                      <View style={styles.locationContainertop}>
+                        <Image
+                          style={styles.iconImage}
+                          source={images.redLocation}
+                        />
+                      </View>
+                      <View style={styles.locationDetailColumn}>
+                        <Text style={styles.nearbyTxt}>Find barber near</Text>
+                        <Text style={styles.currentLocationTxt}>
+                          {currentLocation}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                    <View style={styles.otherIconRow}>
+                      {/* <TouchableOpacity
                     style={styles.notificationContainer}
                     onPress={() => {
                       navigation.navigate('Notifications');
@@ -321,255 +325,260 @@ export default function Explore({navigation}) {
                       source={images.notification}
                     />
                   </TouchableOpacity> */}
-                  <NotificationComponent />
-                  <ChatConponent />
-                </View>
+                      <NotificationComponent />
+                      <ChatConponent />
+                    </View>
+                  </View>
+                  <View style={styles.inputContainer}>
+                    <Image
+                      source={images.search}
+                      resizeMode="contain"
+                      style={styles.search}
+                    />
+                    <TextInput
+                      placeholderTextColor={colors.placeholdertextgray}
+                      onChangeText={text => {
+                        setSearch(text);
+                      }}
+                      style={styles.input}
+                      placeholder="Search..."
+                    />
+                  </View>
+                </ImageBackground>
               </View>
-              <View style={styles.inputContainer}>
-                <Image
-                  source={images.search}
-                  resizeMode="contain"
-                  style={styles.search}
-                />
-                <TextInput
-                  placeholderTextColor={colors.placeholdertextgray}
-                  onChangeText={text => {
-                    setSearch(text);
-                  }}
-                  style={styles.input}
-                  placeholder="Search..."
-                />
-              </View>
-            </ImageBackground>
-          </View>
-          <ScrollView style={styles.scrollContainer}>
-            {filteredBarbers && (
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View style={styles.cardRow}>
-                  {filteredBarbers?.map((item, index) => {
-                    const distance = calculateDistance(
-                      location?.latitude,
-                      location?.longitude,
-                      item.location.latitude,
-                      item.location.longitude,
-                    );
-                    return (
-                      <ImageBackground
-                        key={index}
-                        source={{uri: item?.profile}}
-                        imageStyle={styles.containerImage}>
-                        <View style={styles.row}>
-                          <Text style={styles.textWhite}>5.0</Text>
-                          <StarRating
-                            maxStars={1}
-                            starSize={12}
-                            color={colors.gold}
-                            rating={1}
-                          />
-                        </View>
-                        <View style={styles.marginCardtop}>
+              <ScrollView style={styles.scrollContainer}>
+                {filteredBarbers && (
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <View style={styles.cardRow}>
+                      {filteredBarbers?.map((item, index) => {
+                        const distance = calculateDistance(
+                          location?.latitude,
+                          location?.longitude,
+                          item.location.latitude,
+                          item.location.longitude,
+                        );
+                        return (
                           <ImageBackground
-                            source={images.bluredImg}
-                            imageStyle={styles.bluredImg}>
-                            <View style={styles.appointmentContainer}>
-                              <Text style={styles.textDarkerblack}>
-                                {item?.name}
-                              </Text>
-                              <View style={styles.locationContainer}>
-                                <Image
-                                  source={images.Location}
-                                  resizeMode="contain"
-                                  style={styles.locationImg}
-                                />
-                                <Text style={styles.textBlack}>
-                                  {distance !== null && (
+                            key={index}
+                            source={{uri: item?.profile}}
+                            imageStyle={styles.containerImage}>
+                            <View style={styles.row}>
+                              <Text style={styles.textWhite}>5.0</Text>
+                              <StarRating
+                                maxStars={1}
+                                starSize={12}
+                                color={colors.gold}
+                                rating={1}
+                              />
+                            </View>
+                            <View style={styles.marginCardtop}>
+                              <ImageBackground
+                                source={images.bluredImg}
+                                imageStyle={styles.bluredImg}>
+                                <View style={styles.appointmentContainer}>
+                                  <Text style={styles.textDarkerblack}>
+                                    {item?.name}
+                                  </Text>
+                                  <View style={styles.locationContainer}>
+                                    <Image
+                                      source={images.Location}
+                                      resizeMode="contain"
+                                      style={styles.locationImg}
+                                    />
                                     <Text style={styles.textBlack}>
-                                      {`${distance.toFixed(2)} km`}
+                                      {distance !== null && (
+                                        <Text style={styles.textBlack}>
+                                          {`${distance.toFixed(2)} km`}
+                                        </Text>
+                                      )}
                                     </Text>
-                                  )}
-                                </Text>
-                              </View>
-                              <TouchableOpacity
-                                style={styles.bookBtn}
-                                onPress={() =>
-                                  navigation.navigate('BookAppointment', {item})
-                                }>
-                                <Text style={styles.btnText}>
-                                  Book Appointment
-                                </Text>
-                                <Image
-                                  source={images.arrowIcon}
-                                  resizeMode="contain"
-                                  style={styles.arrowStyle}
-                                />
-                              </TouchableOpacity>
+                                  </View>
+                                  <TouchableOpacity
+                                    style={styles.bookBtn}
+                                    onPress={() =>
+                                      navigation.navigate('BookAppointment', {
+                                        item,
+                                      })
+                                    }>
+                                    <Text style={styles.btnText}>
+                                      Book Appointment
+                                    </Text>
+                                    <Image
+                                      source={images.arrowIcon}
+                                      resizeMode="contain"
+                                      style={styles.arrowStyle}
+                                    />
+                                  </TouchableOpacity>
+                                </View>
+                              </ImageBackground>
                             </View>
                           </ImageBackground>
-                        </View>
-                      </ImageBackground>
-                    );
-                  })}
-                </View>
-              </ScrollView>
-            )}
+                        );
+                      })}
+                    </View>
+                  </ScrollView>
+                )}
 
-            <View style={styles.mapContainer}>
-              <MapView
-                style={styles.mapStyle}
-                initialRegion={{
-                  latitude: location?.latitude,
-                  longitude: location?.longitude,
-                  latitudeDelta: 0.001,
-                  longitudeDelta: 0.001,
-                }}
-                followsUserLocation={true}
-                showsMyLocationButton={true}
-                showsUserLocation
-                showsCompass={true}>
-                {barberData?.map((item, index) => {
-                  return (
-                    <Marker
-                      key={index}
-                      coordinate={{
-                        latitude: item?.location?.latitude,
-                        longitude: item?.location?.longitude,
-                      }}>
-                      <ImageBackground
-                        source={images.locationIcon}
-                        style={styles.locationImgIcon}
-                        resizeMode="contain">
-                        <Image
-                          source={{uri: item.profile}}
-                          style={styles.markerIngStyle}
-                        />
-                      </ImageBackground>
-                    </Marker>
-                  );
-                })}
-              </MapView>
-            </View>
-            <View style={styles.marginTop}>
-              {categories?.length > 0 && (
-                <Text style={styles.heading}>Categories</Text>
-              )}
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View style={styles.categoryRow}>
-                  {categories?.length > 0 &&
-                    categories?.map((item, index) => {
+                <View style={styles.mapContainer}>
+                  <MapView
+                    style={styles.mapStyle}
+                    initialRegion={{
+                      latitude: location?.latitude,
+                      longitude: location?.longitude,
+                      latitudeDelta: 0.001,
+                      longitudeDelta: 0.001,
+                    }}
+                    followsUserLocation={true}
+                    showsMyLocationButton={true}
+                    showsUserLocation
+                    showsCompass={true}>
+                    {barberData?.map((item, index) => {
                       return (
-                        <TouchableOpacity
+                        <Marker
                           key={index}
-                          style={styles.categoryBox}
-                          onPress={() =>
-                            navigation.navigate('HaircutServices', {
-                              name: item?.name,
-                            })
-                          }>
-                          <Image
-                            source={{uri: item?.icon}}
-                            style={styles.imageResize}
-                            resizeMode="contain"
-                          />
-                          <Text style={styles.categoryTxt}>{item.name}</Text>
-                        </TouchableOpacity>
+                          coordinate={{
+                            latitude: item?.location?.latitude,
+                            longitude: item?.location?.longitude,
+                          }}>
+                          <ImageBackground
+                            source={images.locationIcon}
+                            style={styles.locationImgIcon}
+                            resizeMode="contain">
+                            <Image
+                              source={{uri: item.profile}}
+                              style={styles.markerIngStyle}
+                            />
+                          </ImageBackground>
+                        </Marker>
                       );
                     })}
+                  </MapView>
                 </View>
-              </ScrollView>
-            </View>
-            <View style={styles.marginTop}>
-              <Text style={styles.heading}>Recommended</Text>
-              <ScrollView horizontal>
-                <View
-                  style={
-                    Platform.OS == 'android'
-                      ? styles.cardRow
-                      : styles.cardRowIOS
-                  }>
-                  {barberData?.map((item, index) => {
-                    const distance = calculateDistance(
-                      location?.latitude,
-                      location?.longitude,
-                      item.location.latitude,
-                      item.location.longitude,
-                    );
-                    return (
-                      <TouchableOpacity
-                        key={index}
-                        onPress={() =>
-                          navigation.navigate('BookAppointment', {
-                            item,
-                            tabName: 'About',
-                          })
-                        }>
-                        <ImageBackground
-                          source={{uri: item.profile}}
-                          imageStyle={styles.containerImage}
-                          style={styles.containerImage}>
-                          <View style={styles.row}>
-                            <Text style={styles.textWhite}>
-                              {calculateAverageRating(item?.reviews)}
-                            </Text>
-                            <StarRating
-                              maxStars={1}
-                              starSize={12}
-                              color={colors.gold}
-                              rating={1}
-                            />
-                          </View>
-
+                <View style={styles.marginTop}>
+                  {categories?.length > 0 && (
+                    <Text style={styles.heading}>Categories</Text>
+                  )}
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <View style={styles.categoryRow}>
+                      {categories?.length > 0 &&
+                        categories?.map((item, index) => {
+                          return (
+                            <TouchableOpacity
+                              key={index}
+                              style={styles.categoryBox}
+                              onPress={() =>
+                                navigation.navigate('HaircutServices', {
+                                  name: item?.name,
+                                })
+                              }>
+                              <Image
+                                source={{uri: item?.icon}}
+                                style={styles.imageResize}
+                                resizeMode="contain"
+                              />
+                              <Text style={styles.categoryTxt}>
+                                {item.name}
+                              </Text>
+                            </TouchableOpacity>
+                          );
+                        })}
+                    </View>
+                  </ScrollView>
+                </View>
+                <View style={styles.marginTop}>
+                  <Text style={styles.heading}>Recommended</Text>
+                  <ScrollView horizontal>
+                    <View
+                      style={
+                        Platform.OS == 'android'
+                          ? styles.cardRow
+                          : styles.cardRowIOS
+                      }>
+                      {barberData?.map((item, index) => {
+                        const distance = calculateDistance(
+                          location?.latitude,
+                          location?.longitude,
+                          item.location.latitude,
+                          item.location.longitude,
+                        );
+                        return (
+                          <TouchableOpacity
+                            key={index}
+                            onPress={() =>
+                              navigation.navigate('BookAppointment', {
+                                item,
+                                tabName: 'About',
+                              })
+                            }>
                             <ImageBackground
-                              source={images.bluredImg}
-                              imageStyle={styles.bluredImg}
-                              style={styles.bluredImg}>
-                              <View style={styles.appointmentContainer}>
-                                <Text style={styles.textDarkerblack}>
-                                  {item.name}
+                              source={{uri: item.profile}}
+                              imageStyle={styles.containerImage}
+                              style={styles.containerImage}>
+                              <View style={styles.row}>
+                                <Text style={styles.textWhite}>
+                                  {calculateAverageRating(item?.reviews)}
                                 </Text>
-                                <View style={styles.locationContainer}>
-                                  <Image
-                                    source={images.Location}
-                                    resizeMode="contain"
-                                    style={styles.locationImg}
-                                  />
-                                  <Text style={styles.textBlack}>
-                                    {distance !== null && (
-                                      <Text style={styles.textBlack}>
-                                        {`${distance.toFixed(2)} km`}
-                                      </Text>
-                                    )}
-                                  </Text>
-                                </View>
-                                <TouchableOpacity
-                                  style={styles.bookBtn}
-                                  onPress={() =>
-                                    navigation.navigate('BookAppointment', {
-                                      item,
-                                      tabName: 'Services',
-                                    })
-                                  }>
-                                  <Text style={styles.btnText}>
-                                    Book Appointment
-                                  </Text>
-                                  <Image
-                                    source={images.arrowIcon}
-                                    resizeMode="contain"
-                                    style={styles.arrowStyle}
-                                  />
-                                </TouchableOpacity>
+                                <StarRating
+                                  maxStars={1}
+                                  starSize={12}
+                                  color={colors.gold}
+                                  rating={1}
+                                />
                               </View>
-                            </ImageBackground>
 
-                        </ImageBackground>
-                      </TouchableOpacity>
-                    );
-                  })}
+                              <ImageBackground
+                                source={images.bluredImg}
+                                imageStyle={styles.bluredImg}
+                                style={styles.bluredImg}>
+                                <View style={styles.appointmentContainer}>
+                                  <Text style={styles.textDarkerblack}>
+                                    {item.name}
+                                  </Text>
+                                  <View style={styles.locationContainer}>
+                                    <Image
+                                      source={images.Location}
+                                      resizeMode="contain"
+                                      style={styles.locationImg}
+                                    />
+                                    <Text style={styles.textBlack}>
+                                      {distance !== null && (
+                                        <Text style={styles.textBlack}>
+                                          {`${distance.toFixed(2)} km`}
+                                        </Text>
+                                      )}
+                                    </Text>
+                                  </View>
+                                  <TouchableOpacity
+                                    style={styles.bookBtn}
+                                    onPress={() =>
+                                      navigation.navigate('BookAppointment', {
+                                        item,
+                                        tabName: 'Services',
+                                      })
+                                    }>
+                                    <Text style={styles.btnText}>
+                                      Book Appointment
+                                    </Text>
+                                    <Image
+                                      source={images.arrowIcon}
+                                      resizeMode="contain"
+                                      style={styles.arrowStyle}
+                                    />
+                                  </TouchableOpacity>
+                                </View>
+                              </ImageBackground>
+                            </ImageBackground>
+                          </TouchableOpacity>
+                        );
+                      })}
+                    </View>
+                  </ScrollView>
                 </View>
               </ScrollView>
+              <View style={Platform.OS == 'ios' && styles.paddingBtm} />
             </View>
-          </ScrollView>
-          <View style={Platform.OS == 'ios' && styles.paddingBtm} />
-        </View>
+          </View>
+        </TouchableWithoutFeedback>
       )}
     </SafeAreaView>
   );

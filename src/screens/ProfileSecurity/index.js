@@ -8,6 +8,9 @@ import {
   TextInput,
   SafeAreaView,
   Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Touchable,
 } from 'react-native';
 import React, {useState} from 'react';
 import {styles} from './style.js';
@@ -75,123 +78,125 @@ export default function ProfileSecurity({navigation}) {
 
   return (
     <SafeAreaView>
-      <View style={styles.container}>
-        <View style={styles.borderBottom}>
-          <Header title={'Security'} />
-        </View>
-        <View style={styles.contentAlligment}>
-          <Text style={styles.contentContainer}>
-            Create a new password on your account.
-          </Text>
-        </View>
-        <View style={styles.inputContainer}>
-          <View style={styles.wholeInput}>
-            <View style={styles.inputStyle}>
-              <TextInput
-                placeholder="Old Password"
-                style={styles.input}
-                secureTextEntry={!showPass}
-                placeholderTextColor={colors.placeholdertextgray}
-                value={password}
-                onChangeText={text => {
-                  setPassword(text);
-                }}
-              />
-              {!showPass ? (
-                <TouchableOpacity onPress={() => setShowpass(!showPass)}>
-                  <Image
-                    source={images.hidden}
-                    style={styles.inputimage}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity onPress={() => setShowpass(!showPass)}>
-                  <Image
-                    source={images.show}
-                    style={styles.inputimage}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              )}
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={styles.container}>
+          <View style={styles.borderBottom}>
+            <Header title={'Security'} />
+          </View>
+          <View style={styles.contentAlligment}>
+            <Text style={styles.contentContainer}>
+              Create a new password on your account.
+            </Text>
+          </View>
+          <View style={styles.inputContainer}>
+            <View style={styles.wholeInput}>
+              <View style={styles.inputStyle}>
+                <TextInput
+                  placeholder="Old Password"
+                  style={styles.input}
+                  secureTextEntry={!showPass}
+                  placeholderTextColor={colors.placeholdertextgray}
+                  value={password}
+                  onChangeText={text => {
+                    setPassword(text);
+                  }}
+                />
+                {!showPass ? (
+                  <TouchableOpacity onPress={() => setShowpass(!showPass)}>
+                    <Image
+                      source={images.hidden}
+                      style={styles.inputimage}
+                      resizeMode="contain"
+                    />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity onPress={() => setShowpass(!showPass)}>
+                    <Image
+                      source={images.show}
+                      style={styles.inputimage}
+                      resizeMode="contain"
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+            <View style={styles.wholeInput}>
+              <View style={styles.inputStyle}>
+                <TextInput
+                  placeholder="Enter New Password"
+                  style={styles.input}
+                  secureTextEntry={!showEnternewPass}
+                  placeholderTextColor={colors.placeholdertextgray}
+                  value={enterNewpassword}
+                  onChangeText={text => {
+                    setEnternewPassword(text);
+                  }}
+                />
+                {!showEnternewPass ? (
+                  <TouchableOpacity
+                    onPress={() => setShowenterNewpass(!showEnternewPass)}>
+                    <Image
+                      source={images.hidden}
+                      style={styles.inputimage}
+                      resizeMode="contain"
+                    />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => setShowenterNewpass(!showEnternewPass)}>
+                    <Image
+                      source={images.show}
+                      style={styles.inputimage}
+                      resizeMode="contain"
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+            <View style={styles.wholeInput}>
+              <View style={styles.inputStyle}>
+                <TextInput
+                  placeholder="Re-enter Password"
+                  style={styles.input}
+                  secureTextEntry={!showRenteredpass}
+                  placeholderTextColor={colors.placeholdertextgray}
+                  value={reEnterpassword}
+                  onChangeText={text => {
+                    setReenterPassword(text);
+                  }}
+                />
+                {!showRenteredpass ? (
+                  <TouchableOpacity
+                    onPress={() => setShowrenterPass(!showRenteredpass)}>
+                    <Image
+                      source={images.hidden}
+                      style={styles.inputimage}
+                      resizeMode="contain"
+                    />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => setShowrenterPass(!showRenteredpass)}>
+                    <Image
+                      source={images.show}
+                      style={styles.inputimage}
+                      resizeMode="contain"
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
           </View>
-          <View style={styles.wholeInput}>
-            <View style={styles.inputStyle}>
-              <TextInput
-                placeholder="Enter New Password"
-                style={styles.input}
-                secureTextEntry={!showEnternewPass}
-                placeholderTextColor={colors.placeholdertextgray}
-                value={enterNewpassword}
-                onChangeText={text => {
-                  setEnternewPassword(text);
-                }}
-              />
-              {!showEnternewPass ? (
-                <TouchableOpacity
-                  onPress={() => setShowenterNewpass(!showEnternewPass)}>
-                  <Image
-                    source={images.hidden}
-                    style={styles.inputimage}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  onPress={() => setShowenterNewpass(!showEnternewPass)}>
-                  <Image
-                    source={images.show}
-                    style={styles.inputimage}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              )}
-            </View>
+          <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
+            {loader ? (
+              <Loader title={'Save'} />
+            ) : (
+              <Button title={'Save'} onPress={() => handleUpdatePasswrd()} />
+            )}
           </View>
-          <View style={styles.wholeInput}>
-            <View style={styles.inputStyle}>
-              <TextInput
-                placeholder="Re-enter Password"
-                style={styles.input}
-                secureTextEntry={!showRenteredpass}
-                placeholderTextColor={colors.placeholdertextgray}
-                value={reEnterpassword}
-                onChangeText={text => {
-                  setReenterPassword(text);
-                }}
-              />
-              {!showRenteredpass ? (
-                <TouchableOpacity
-                  onPress={() => setShowrenterPass(!showRenteredpass)}>
-                  <Image
-                    source={images.hidden}
-                    style={styles.inputimage}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  onPress={() => setShowrenterPass(!showRenteredpass)}>
-                  <Image
-                    source={images.show}
-                    style={styles.inputimage}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
+          <Toast />
         </View>
-        <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
-          {loader ? (
-            <Loader title={'Save'} />
-          ) : (
-            <Button title={'Save'} onPress={() => handleUpdatePasswrd()} />
-          )}
-        </View>
-      </View>
-      <Toast />
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }

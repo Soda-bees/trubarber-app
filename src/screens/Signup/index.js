@@ -7,6 +7,8 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {styles} from './style';
@@ -106,149 +108,158 @@ export default function Signup({navigation}) {
   }, []);
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.toggleContainer}>
-        <TouchableOpacity
-          style={role == 'user' ? styles.active : styles.inActive}
-          onPress={
-            () => handleChangeRole('user')
-            //  setactive('user')
-          }>
-          <Text
-            style={
-              role == 'user' ? styles.textColorwhite : styles.toggleTextsize
-            }>
-            User
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={role == 'barber' ? styles.active : styles.inActive}
-          onPress={
-            () => handleChangeRole('barber')
-            // setactive('barber')
-          }>
-          <Text
-            style={
-              role == 'barber' ? styles.textColorwhite : styles.toggleTextsize
-            }>
-            Barber
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.loginText}>Sign Up</Text>
-      <View style={styles.inputfields}>
-        <View style={styles.inputContainer}>
-          <Image
-            source={images.user}
-            style={styles.inputImage}
-            resizeMode="contain"
-          />
-          <TextInput
-            placeholder="Username"
-            placeholderTextColor={colors.placeholdertextgray}
-            style={styles.input}
-            value={userName}
-            onChangeText={text => {
-              setuserName(text);
-            }}
-          />
-        </View>
-        <View style={styles.inputEmailcontainer}>
-          <Image
-            source={images.Message}
-            style={styles.inputImage}
-            resizeMode="contain"
-          />
-          <TextInput
-            placeholder="Email"
-            style={styles.input}
-            placeholderTextColor={colors.placeholdertextgray}
-            value={email}
-            onChangeText={text => {
-              setEmail(text);
-            }}
-          />
-        </View>
-        <View style={styles.inputPasswordcontainer}>
-          <Image
-            source={images.lock}
-            style={styles.inputImage}
-            resizeMode="contain"
-          />
-          <TextInput
-            placeholder="Password"
-            style={styles.input}
-            placeholderTextColor={colors.placeholdertextgray}
-            secureTextEntry={!showPass}
-            value={password}
-            onChangeText={text => {
-              setPassword(text);
-            }}
-          />
-          {!showPass ? (
-            <TouchableOpacity onPress={() => setShowpass(!showPass)}>
-              <Image
-                source={images.hidden}
-                style={styles.eye}
-                resizeMode="contain"
-              />
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View>
+          <View style={styles.toggleContainer}>
+            <TouchableOpacity
+              style={role == 'user' ? styles.active : styles.inActive}
+              onPress={
+                () => handleChangeRole('user')
+                //  setactive('user')
+              }>
+              <Text
+                style={
+                  role == 'user' ? styles.textColorwhite : styles.toggleTextsize
+                }>
+                User
+              </Text>
             </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={() => setShowpass(!showPass)}>
-              <Image
-                source={images.show}
-                style={styles.eye}
-                resizeMode="contain"
-              />
+            <TouchableOpacity
+              style={role == 'barber' ? styles.active : styles.inActive}
+              onPress={
+                () => handleChangeRole('barber')
+                // setactive('barber')
+              }>
+              <Text
+                style={
+                  role == 'barber'
+                    ? styles.textColorwhite
+                    : styles.toggleTextsize
+                }>
+                Barber
+              </Text>
             </TouchableOpacity>
-          )}
-        </View>
-        <View
-          style={
-            Platform.OS == 'android'
-              ? styles.checkboxView
-              : styles.checkboxViewIOS
-          }>
-          <View>
-            {checked ? (
-              <TouchableOpacity onPress={() => setChecked(!checked)}>
-                <Image
-                  source={images.checked}
-                  resizeMode="contain"
-                  style={styles.checked}
-                />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={() => setChecked(!checked)}>
-                <Image
-                  source={images.unchecked}
-                  resizeMode="contain"
-                  style={[styles.checked, styles.tintColor]}
-                />
-              </TouchableOpacity>
-            )}
           </View>
-          <Text style={styles.checkboxTitle}>
-            By selecting the checkbox, you are indicating your agreement to the
-            Terms and Policies.
-          </Text>
+          <Text style={styles.loginText}>Sign Up</Text>
+          <View style={styles.inputfields}>
+            <View style={styles.inputContainer}>
+              <Image
+                source={images.user}
+                style={styles.inputImage}
+                resizeMode="contain"
+              />
+              <TextInput
+                placeholder="Username"
+                placeholderTextColor={colors.placeholdertextgray}
+                style={styles.input}
+                value={userName}
+                onChangeText={text => {
+                  setuserName(text);
+                }}
+              />
+            </View>
+            <View style={styles.inputEmailcontainer}>
+              <Image
+                source={images.Message}
+                style={styles.inputImage}
+                resizeMode="contain"
+              />
+              <TextInput
+                placeholder="Email"
+                style={styles.input}
+                placeholderTextColor={colors.placeholdertextgray}
+                value={email}
+                onChangeText={text => {
+                  setEmail(text);
+                }}
+              />
+            </View>
+            <View style={styles.inputPasswordcontainer}>
+              <Image
+                source={images.lock}
+                style={styles.inputImage}
+                resizeMode="contain"
+              />
+              <TextInput
+                placeholder="Password"
+                style={styles.input}
+                placeholderTextColor={colors.placeholdertextgray}
+                secureTextEntry={!showPass}
+                value={password}
+                onChangeText={text => {
+                  setPassword(text);
+                }}
+              />
+              {!showPass ? (
+                <TouchableOpacity onPress={() => setShowpass(!showPass)}>
+                  <Image
+                    source={images.hidden}
+                    style={styles.eye}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={() => setShowpass(!showPass)}>
+                  <Image
+                    source={images.show}
+                    style={styles.eye}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+            <View
+              style={
+                Platform.OS == 'android'
+                  ? styles.checkboxView
+                  : styles.checkboxViewIOS
+              }>
+              <View>
+                {checked ? (
+                  <TouchableOpacity onPress={() => setChecked(!checked)}>
+                    <Image
+                      source={images.checked}
+                      resizeMode="contain"
+                      style={styles.checked}
+                    />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity onPress={() => setChecked(!checked)}>
+                    <Image
+                      source={images.unchecked}
+                      resizeMode="contain"
+                      style={[styles.checked, styles.tintColor]}
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
+              <Text style={styles.checkboxTitle}>
+                By selecting the checkbox, you are indicating your agreement to
+                the Terms and Policies.
+              </Text>
+            </View>
+          </View>
+          <View style={Platform.OS == 'ios' && styles.forgotPassIOS}>
+            <View style={styles.forgotPass}>
+              {loader ? (
+                <Loader title={'Sign Up'} />
+              ) : (
+                <Button
+                  title={'Sign Up'}
+                  onPress={() => handleEmailValidation()}
+                />
+              )}
+            </View>
+            <View style={styles.SignupContainer}>
+              <Text style={styles.fontWeight}>Already have an account?</Text>
+              <Button title={'Sign In'} light={true} onPress={handleSignIn} />
+            </View>
+          </View>
+          <View style={styles.toasterStyle}>
+            <Toast />
+          </View>
         </View>
-      </View>
-      <View style={Platform.OS == 'ios' && styles.forgotPassIOS }>
-      <View style={styles.forgotPass}> 
-        {loader ? (
-          <Loader title={'Sign Up'} />
-        ) : (
-          <Button title={'Sign Up'} onPress={() => handleEmailValidation()} />
-        )}
-      </View>
-      <View style={styles.SignupContainer}>
-        <Text style={styles.fontWeight}>Already have an account?</Text>
-        <Button title={'Sign In'} light={true} onPress={handleSignIn} />
-      </View>
-      </View>
-      <View style={styles.toasterStyle}>
-        <Toast />
-      </View>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }

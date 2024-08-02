@@ -20,19 +20,17 @@ import Geolocation from '@react-native-community/geolocation';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import {fontSize} from '../../services';
-import { selectUserData } from '../../store/userData';
+import {selectUserData} from '../../store/userData';
+import BackArrow from '../../components/BackArrow';
 
 const {width, height} = Dimensions.get('window');
 
 export default function BarberDirection({navigation, route}) {
   const {barbar} = route?.params;
-  const userData = useSelector(selectUserData)
-  // console.log(barbar.location);
-  // console.log(formatToJSON(barberData));
-  // const location = useSelector(selectlocation);
+  const userData = useSelector(selectUserData);
   const [routeInfo, setRouteInfo] = useState({distance: null, duration: null});
   const [location, setLocation] = useState(null);
-  const reduxLocation = useSelector(selectlocation) || userData?.location
+  const reduxLocation = useSelector(selectlocation) || userData?.location;
   const mapViewRef = useRef(null);
 
   useEffect(() => {
@@ -84,7 +82,7 @@ export default function BarberDirection({navigation, route}) {
             [
               {
                 text: 'OK',
-                onPress: () => navigation.goBack(), // Navigate back if location services are not enabled
+                onPress: () => navigation.goBack(),
               },
             ],
           );
@@ -201,7 +199,9 @@ export default function BarberDirection({navigation, route}) {
             showsMyLocationButton={true}
             showsUserLocation
             showsCompass={true}
-            ref={mapViewRef}>
+            ref={mapViewRef}
+
+            >
             {/* <UrlTile
             urlTemplate="https://a.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png"
             maximumZ={100}

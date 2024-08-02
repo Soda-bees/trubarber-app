@@ -81,7 +81,8 @@ export const styles = StyleSheet.create({
   },
 
   NextbtnIOS: {
-    marginTop: sizes.screenHeight * 0.34,
-  },
+    position: 'absolute',
+    bottom: sizes.screenHeight*0.1,
+    alignSelf: 'center'  },
 
 });

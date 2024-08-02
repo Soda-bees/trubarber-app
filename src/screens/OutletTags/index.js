@@ -8,19 +8,18 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React, { useState } from 'react';
-import { styles } from './style';
+import React, {useState} from 'react';
+import {styles} from './style';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import { colors } from '../../services';
+import {colors} from '../../services';
 import Backarrow from '../../components/BackArrow';
 import formatToJSON from '../../services/config/FormatToJson';
-import { ErrorShow } from '../../components/Error';
+import {ErrorShow} from '../../components/Error';
 import Toast from 'react-native-toast-message';
 
-export default function OutletTags({ navigation, route }) {
-
-  const { userData } = route.params;
+export default function OutletTags({navigation, route}) {
+  const {userData} = route.params;
 
   const [tagsData, setTagsData] = useState([
     '#BarberSkills',
@@ -50,9 +49,9 @@ export default function OutletTags({ navigation, route }) {
     if (selectedTags.length == 0) {
       return ErrorShow('error', 'Oops', 'Please select at least one Tag');
     }
-    userData.tagSelection = selectedTags
-    navigation.navigate("BusinessVerfication", { userData })
-  }
+    userData.tagSelection = selectedTags;
+    navigation.navigate('BusinessVerfication', {userData});
+  };
 
   return (
     <SafeAreaView>
@@ -63,7 +62,8 @@ export default function OutletTags({ navigation, route }) {
         <Text style={styles.forgotPass}>Outlet Tags</Text>
         <View style={styles.adjustWidth}>
           <Text style={styles.subText}>
-            Tailor Your Profile: Choose Tags That Represent Your Barbering Style!
+            Tailor Your Profile: Choose Tags That Represent Your Barbering
+            Style!
           </Text>
         </View>
         <View style={styles.centerContent}>
@@ -89,8 +89,8 @@ export default function OutletTags({ navigation, route }) {
           ))}
         </View>
 
-
-        <View style={Platform.OS == 'android' ? styles.Nextbtn : styles.NextbtnIOS}>
+        <View
+          style={Platform.OS == 'android' ? styles.Nextbtn : styles.NextbtnIOS}>
           <Button title={'Next'} onPress={() => handleConfirm()} />
         </View>
       </View>

@@ -152,9 +152,10 @@ export const styles = StyleSheet.create({
   checkboxViewIOS: {
     flexDirection: 'row',
     alignItems: 'start',
-    marginHorizontal: sizes.screenWidth * 0.05,
+    // marginHorizontal: sizes.screenWidth * 0.05,
     marginTop: sizes.screenHeight * 0.02,
     marginBottom: sizes.screenHeight * 0.22,
+
   },
 
   checked: {
