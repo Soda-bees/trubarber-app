@@ -7,6 +7,7 @@ import {
   ScrollView,
   BackHandler,
   ToastAndroid,
+  Platform,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {styles} from './style.js';
@@ -505,7 +506,7 @@ export default function BookingProcess({navigation, route}) {
             )}
           </View>
         </ScrollView>
-        <View style={styles.btnMargin}>
+        <View style={Platform.OS == 'android' ? styles.btnMargin : styles.btnMarginIOS}>
           {loader ? (
             <Loader title={'Book'} />
           ) : (

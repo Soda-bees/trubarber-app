@@ -32,7 +32,7 @@ import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 
 export default function OutletCreated({navigation, route}) {
-  const location = useSelector(selectlocation);
+  const location = useSelector(selectlocation)
   const dispatch = useDispatch();
   const {userData} = route.params;
 

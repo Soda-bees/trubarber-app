@@ -109,6 +109,8 @@ export const styles = StyleSheet.create({
     top: sizes.screenHeight * 0.28,
   },
   btnIOS: {
-    top: sizes.screenHeight * 0.16,
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: sizes.screenHeight * 0.19,
   },
 });

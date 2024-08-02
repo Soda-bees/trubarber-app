@@ -5,6 +5,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {styles} from './style';
@@ -126,7 +127,7 @@ export default function Notifications({navigation}) {
     <SafeAreaView>
       <View style={styles.container}>
         <Header title={'Notifications'} />
-        <ScrollView style={styles.scrollContianer}>
+        <ScrollView style={Platform.OS === "android" ? styles.scrollContianer : styles.scrollContianerIOS}>
           <View style={styles.containerBody}>
             {userData?.notification?.length > 0 ? (
               userData?.notification

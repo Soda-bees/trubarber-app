@@ -8,6 +8,9 @@ import {
   TextInput,
   SafeAreaView,
   Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Touchable,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {styles} from './style.js';
@@ -246,113 +249,119 @@ export default function EditScreen({navigation}) {
 
   return (
     <SafeAreaView>
-      <View style={styles.container}>
-        <View style={styles.borderBottom}>
-          <Header title={'Edit Profile'} />
-        </View>
-        <View style={styles.contentAlligment}>
-          <TouchableOpacity onPress={() => uploadPhoto('library')}>
-            {/* {imgUri ? ( */}
-            <Image
-              source={{uri: imgUri}}
-              style={styles.youngMan}
-              resizeMode="cover"
-            />
-            {/* ) : (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+    <View style={styles.container}>
+          <View style={styles.borderBottom}>
+            <Header title={'Edit Profile'} />
+          </View>
+          <View style={styles.contentAlligment}>
+            <TouchableOpacity onPress={() => uploadPhoto('library')}>
+              {/* {imgUri ? ( */}
+              <Image
+                source={{uri: imgUri}}
+                style={styles.youngMan}
+                resizeMode="cover"
+              />
+              {/* ) : (
               <Image source={images.youngMan} style={styles.youngMan} />
             )} */}
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.uploadPhoto}
-            onPress={() => uploadPhoto('library')}>
-            <Image
-              source={images.editProfileimg}
-              style={styles.editProfileimg}
-              resizeMode="contain"
-            />
-            <Text style={styles.photoText}>Upload Photo</Text>
-          </TouchableOpacity>
-        </View>
-        <KeyboardAwareScrollView
-          extraHeight={40}
-          extraScrollHeight={90}
-          enableOnAndroid={true}>
-          <View style={styles.inputContainer}>
-            <View style={styles.wholeContainer}>
-              <View style={styles.rowInput}>
-                <Image source={images.user} style={styles.inputImage} />
-                <TextInput
-                  placeholder="Name"
-                  style={styles.input}
-                  placeholderTextColor={colors.placeholdertext}
-                  value={name}
-                  onChangeText={text => {
-                    setName(text);
-                  }}
-                />
-              </View>
-            </View>
-            <View style={styles.inputField}>
-              <View style={styles.rowInput}>
-                <Image
-                  source={images.Message}
-                  style={styles.inputImage}
-                  resizeMode="contain"
-                />
-                <TextInput
-                  placeholder="tyler13@email.com"
-                  style={styles.input}
-                  placeholderTextColor={colors.placeholdertext}
-                  value={email}
-                  editable={false}
-                  onChangeText={text => {
-                    setEmail(text);
-                  }}
-                />
-              </View>
-            </View>
-            {role == 'barber' && (
-              <View style={styles.inputField}>
-                <View style={styles.description}>
-                  <TimePickerComponent
-                    startTime={startTime}
-                    setStartTime={setStartTime}
-                    endTime={endTime}
-                    setEndTime={setEndTime}
-                    isBold={false}
-                  />
-                  <Image
-                    source={images.clockIcon}
-                    style={styles.clockIcon}
-                    resizeMode="contain"
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.uploadPhoto}
+              onPress={() => uploadPhoto('library')}>
+              <Image
+                source={images.editProfileimg}
+                style={styles.editProfileimg}
+                resizeMode="contain"
+              />
+              <Text style={styles.photoText}>Upload Photo</Text>
+            </TouchableOpacity>
+          </View>
+          <KeyboardAwareScrollView
+            extraHeight={90}
+            extraScrollHeight={220}
+            enableOnAndroid={true}>
+            <View style={styles.inputContainer}>
+              <View style={styles.wholeContainer}>
+                <View style={styles.rowInput}>
+                  <Image source={images.user} style={styles.inputImage} />
+                  <TextInput
+                    placeholder="Name"
+                    style={styles.input}
+                    placeholderTextColor={colors.placeholdertext}
+                    value={name}
+                    onChangeText={text => {
+                      setName(text);
+                    }}
                   />
                 </View>
               </View>
-            )}
-            {role == 'barber' && (
-              <View style={styles.inputFieldDes}>
-                <TextInput
-                  style={styles.description}
-                  onChangeText={setDescription}
-                  value={description}
-                  multiline={true}
-                  numberOfLines={4}
-                  placeholder="Description"
-                  placeholderTextColor="black"
-                />
+              <View style={styles.inputField}>
+                <View style={styles.rowInput}>
+                  <Image
+                    source={images.Message}
+                    style={styles.inputImage}
+                    resizeMode="contain"
+                  />
+                  <TextInput
+                    placeholder="tyler13@email.com"
+                    style={styles.input}
+                    placeholderTextColor={colors.placeholdertext}
+                    value={email}
+                    editable={false}
+                    onChangeText={text => {
+                      setEmail(text);
+                    }}
+                  />
+                </View>
               </View>
+              {role == 'barber' && (
+                <View style={styles.inputField}>
+                  <View style={styles.description}>
+                    <TimePickerComponent
+                      startTime={startTime}
+                      setStartTime={setStartTime}
+                      endTime={endTime}
+                      setEndTime={setEndTime}
+                      isBold={false}
+                    />
+                    <Image
+                      source={images.clockIcon}
+                      style={styles.clockIcon}
+                      resizeMode="contain"
+                    />
+                  </View>
+                </View>
+              )}
+              {role == 'barber' && (
+                <View style={styles.inputFieldDes}>
+                  <TextInput
+                    style={
+                      Platform.OS === 'android'
+                        ? styles.description
+                        : styles.descriptionIOS
+                    }
+                    onChangeText={setDescription}
+                    value={description}
+                    multiline={true}
+                    numberOfLines={4}
+                    placeholder="Description"
+                    placeholderTextColor="black"
+                  />
+                </View>
+              )}
+            </View>
+          </KeyboardAwareScrollView>
+          <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
+            {loader ? (
+              <Loader title={'Save'} />
+            ) : (
+              <Button title={'Save'} onPress={() => handleUpdateProfile()} />
             )}
           </View>
-        </KeyboardAwareScrollView>
-        <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
-          {loader ? (
-            <Loader title={'Save'} />
-          ) : (
-            <Button title={'Save'} onPress={() => handleUpdateProfile()} />
-          )}
+          <Toast />
         </View>
-      </View>
-      <Toast />
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }

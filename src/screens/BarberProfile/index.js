@@ -36,7 +36,7 @@ export default function Profile({navigation}) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const authToken = useSelector(selectAuthToken);
-  const location = useSelector(selectlocation);
+  const location = useSelector(selectlocation) || userData?.location
 
   const [address, setAddress] = useState(null);
   const [locationLoader, setLocationLoader] = useState(false);

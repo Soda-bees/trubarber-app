@@ -24,7 +24,6 @@ import { selectUserData } from '../../store/userData';
 
 export default function WholeMap({navigation}) {
   const barberData = useSelector(selectbarber);
-  // console.log(formatToJSON(barberData));
   const userData = useSelector(selectUserData)
   const [selectedBarber, setSelectedBarber] = useState('');
   const location = useSelector(selectlocation) || userData?.location
@@ -107,9 +106,9 @@ export default function WholeMap({navigation}) {
           <MapView
             style={styles.mapStyle}
             initialRegion={{
-              latitude: location.latitude,
-              longitude: location.longitude,
-              latitudeDelta: 0.001,
+              latitude: location?.latitude,
+              longitude: location?.longitude,
+              latitudeDelta: 0.001, 
               longitudeDelta: 0.001,
             }}
             followsUserLocation={true}
@@ -121,8 +120,8 @@ export default function WholeMap({navigation}) {
                 <Marker
                   key={index}
                   coordinate={{
-                    latitude: item.location.latitude,
-                    longitude: item.location.longitude,
+                    latitude: item?.location?.latitude,
+                    longitude: item?.location?.longitude,
                   }}
                   onPress={() => handleSelectBarber(item)}>
                   <ImageBackground

@@ -110,4 +110,9 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     bottom: sizes.screenHeight * 0.12,
   },
+  btnIOS: {
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: sizes.screenHeight * 0.19,
+  },
 });

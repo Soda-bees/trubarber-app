@@ -16,30 +16,33 @@ import images from '../../services/utilities/images';
 import {styles} from './style.js';
 import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { PermissionsAndroid, PermissionsIOS } from 'react-native';
-import { colors, sizes } from '../../services';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { addServices, updateService, uploadMultiplesImages } from '../../services/config/API';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {PermissionsAndroid, PermissionsIOS} from 'react-native';
+import {colors, sizes} from '../../services';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {
+  addServices,
+  updateService,
+  uploadMultiplesImages,
+} from '../../services/config/API';
 import formatToJSON from '../../services/config/FormatToJson';
 import Loader from '../../components/Loader';
 import Toast from 'react-native-toast-message';
-import { ErrorShow } from '../../components/Error';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectAuthToken } from '../../store/authToken';
-import { setUserData, updateServiceRedux } from '../../store/userData';
+import {ErrorShow} from '../../components/Error';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectAuthToken} from '../../store/authToken';
+import {setUserData, updateServiceRedux} from '../../store/userData';
 
-export default function ServiceInfo({ navigation, route }) {
-
-  const dispatch = useDispatch()
+export default function ServiceInfo({navigation, route}) {
+  const dispatch = useDispatch();
 
   // const { userData, services } = route.params;
   const userData = route?.params?.userData;
   const services = route?.params?.services;
   const isAdd = route?.params?.isAdd;
-  const isEdit = route?.params?.isEdit
+  const isEdit = route?.params?.isEdit;
 
-  const authToken = useSelector(selectAuthToken)
+  const authToken = useSelector(selectAuthToken);
 
   const [imgUri, setImgUri] = useState(null);
   const [addServiceImage, setAddServiceImage] = useState(images.hairCut);
@@ -221,79 +224,113 @@ export default function ServiceInfo({ navigation, route }) {
   };
 
   const onHide = () => {
-    navigation.navigate('BaberCatalogue')
-  }
+    navigation.navigate('BaberCatalogue');
+  };
 
   const handleAddService = async () => {
     try {
-      const serviceLength = services.length - 1
+      const serviceLength = services.length - 1;
       if (currentIndex == serviceLength) {
         if (servicesData[currentIndex]?.pictures?.length == 0) {
-          return ErrorShow('error', 'Oops!', 'Please upload at least one picture');
+          return ErrorShow(
+            'error',
+            'Oops!',
+            'Please upload at least one picture',
+          );
         }
         if (!hasValidOptions(servicesData[currentIndex]?.options)) {
-          return ErrorShow('error', 'Oops!', 'Please add at least one valid option with both name and price');
+          return ErrorShow(
+            'error',
+            'Oops!',
+            'Please add at least one valid option with both name and price',
+          );
         }
         if (!servicesData[currentIndex]?.description) {
           return ErrorShow('error', 'Oops!', 'Description required');
         }
-        setLoader(true)
-        const body = { services: servicesData }
-        const response = await addServices(body, authToken)
+        setLoader(true);
+        const body = {services: servicesData};
+        const response = await addServices(body, authToken);
         if (response?.status == 201) {
-          setLoader(false)
-          ErrorShow('success', 'Congratulation!', response?.data?.message, onHide)
-          dispatch(setUserData(response?.data?.updateUser))
+          setLoader(false);
+          ErrorShow(
+            'success',
+            'Congratulation!',
+            response?.data?.message,
+            onHide,
+          );
+          dispatch(setUserData(response?.data?.updateUser));
         } else {
-          setLoader(false)
+          setLoader(false);
           ErrorShow('error', 'Oops!', response?.data?.message);
         }
       } else {
         if (servicesData[currentIndex]?.pictures?.length == 0) {
-          return ErrorShow('error', 'Oops!', 'Please upload at least one picture');
+          return ErrorShow(
+            'error',
+            'Oops!',
+            'Please upload at least one picture',
+          );
         }
         if (!hasValidOptions(servicesData[currentIndex]?.options)) {
-          return ErrorShow('error', 'Oops!', 'Please add at least one valid option with both name and price');
+          return ErrorShow(
+            'error',
+            'Oops!',
+            'Please add at least one valid option with both name and price',
+          );
         }
         if (!servicesData[currentIndex]?.description) {
           return ErrorShow('error', 'Oops!', 'Description required');
         }
-        setCurrentIndex(currentIndex + 1)
+        setCurrentIndex(currentIndex + 1);
       }
     } catch (error) {
-      setLoader(false)
+      setLoader(false);
       console.log(error);
       ErrorShow('error', 'Oops!', error?.message);
     }
-  }
+  };
 
   const handleUpdateService = async () => {
     try {
       if (servicesData[currentIndex]?.pictures?.length == 0) {
-        return ErrorShow('error', 'Oops!', 'Please upload at least one picture');
+        return ErrorShow(
+          'error',
+          'Oops!',
+          'Please upload at least one picture',
+        );
       }
       if (!hasValidOptions(servicesData[currentIndex]?.options)) {
-        return ErrorShow('error', 'Oops!', 'Please add at least one valid option with both name and price');
+        return ErrorShow(
+          'error',
+          'Oops!',
+          'Please add at least one valid option with both name and price',
+        );
       }
       if (!servicesData[currentIndex]?.description) {
         return ErrorShow('error', 'Oops!', 'Description required');
       }
-      setLoader(true)
-      const response = await updateService(servicesData[0], authToken)
+      setLoader(true);
+      const response = await updateService(servicesData[0], authToken);
       if (response?.status == 200) {
-        setLoader(false)
-        ErrorShow('success', 'Congratulation!', response?.data?.message, onHide)
-        dispatch(updateServiceRedux(response?.data?.updatedService))
+        setLoader(false);
+        ErrorShow(
+          'success',
+          'Congratulation!',
+          response?.data?.message,
+          onHide,
+        );
+        dispatch(updateServiceRedux(response?.data?.updatedService));
       } else {
-        setLoader(false)
+        setLoader(false);
         ErrorShow('error', 'Oops!', response?.data?.message);
       }
     } catch (error) {
-      setLoader(false)
+      setLoader(false);
       console.log(error);
       ErrorShow('error', 'Oops!', error?.message);
     }
-  }
+  };
 
   const handleConfirm = async () => {
     const serviceLength = services.length - 1;
@@ -372,10 +409,10 @@ export default function ServiceInfo({ navigation, route }) {
           </View>
         </View>
         <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
           enableOnAndroid={true}
           extraHeight={sizes.screenHeight * 0.15}
-          extraScrollHeight={sizes.screenHeight * 0.2}
-          >
+          extraScrollHeight={sizes.screenHeight * 0.2}>
           <View style={styles.serviceContainer}>
             <Text style={styles.serviceNameText}>
               {services[currentIndex]?.name} Details
@@ -421,9 +458,6 @@ export default function ServiceInfo({ navigation, route }) {
               <Text style={styles.uploadImgText}>Add Service Pictures</Text>
             </TouchableOpacity>
           </View>
-          {/* <ScrollView
-          style={styles.scrollContainer}
-          showsVerticalScrollIndicator={false}> */}
 
           <View style={styles.containerBody}>
             <View style={styles.serviceDetailContainer}>
@@ -485,37 +519,38 @@ export default function ServiceInfo({ navigation, route }) {
                 value={servicesData && servicesData[currentIndex]?.description}
                 multiline={true}
                 numberOfLines={4}
-                style={styles.descriptionTextContainer}
+                style={Platform.OS === "android" ? styles.descriptionTextContainer : styles.descriptionTextContainerIOS}
                 placeholderTextColor={colors.black}
               />
             </View>
             <View style={styles.saveChangeBtn}>
-          {loader ? (
-            <Loader title={'Save Changes'} />
-          ) : (
-            <Button
-              title={'Save Changes'}
-              onPress={() => {
-                if (isAdd) {
-                  handleAddService()
-                } else if (isEdit) {
-                  handleUpdateService()
-                } else {
-                  handleConfirm()
-                }
-              }}
-            />
-          )}
-        </View>
+              {loader ? (
+                <Loader title={'Save Changes'} />
+              ) : (
+                <Button
+                  title={'Save Changes'}
+                  onPress={() => {
+                    if (isAdd) {
+                      handleAddService();
+                    } else if (isEdit) {
+                      handleUpdateService();
+                    } else {
+                      handleConfirm();
+                    }
+                  }}
+                />
+              )}
+            </View>
           </View>
-
-          {/* </View> */}
+          <View
+            style={
+              Platform.OS === 'ios' && {
+                paddingBottom: sizes.screenHeight * 0.06,
+              }
+            }></View>
         </KeyboardAwareScrollView>
-        {/* </ScrollView> */}
-
       </View>
       <Toast />
     </SafeAreaView>
   );
 }
-

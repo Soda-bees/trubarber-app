@@ -3,10 +3,11 @@ import {colors, fontSize, sizes} from '../../services';
 
 export const styles = StyleSheet.create({
   arrowContainer: {
-    width: 24,
+    width: 26,
     height: 24,
     justifyContent: 'center',
     alignItems: 'center',
+    padding:13
   },
   arrowBlackleft: {
     width: 20,

@@ -1,7 +1,7 @@
 import { TouchableOpacity } from "react-native-gesture-handler";
 import images from "../../services/utilities/images";
 import { useNavigation } from '@react-navigation/native';
-import { Image, Text, View } from "react-native";
+import { Image, Platform, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { selectUserData } from "../../store/userData";
 import { useEffect, useState } from "react";
@@ -35,7 +35,7 @@ export default function NotificationComponent() {
             }}>
             {
                 totalUnseenNotification > 0 &&
-                <View style={styles.unseenTextContainer}>
+                <View style={Platform.OS === 'android'  ? styles.unseenTextContainer : styles.unseenTextContainerIOS}>
                     <Text style={styles.unseenText}>{totalUnseenNotification}</Text>
                 </View>
             }

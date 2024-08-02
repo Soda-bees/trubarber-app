@@ -7,33 +7,34 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Platform,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 import Modal from 'react-native-modal';
-import React, { useState } from 'react';
-import { styles } from './style';
-import { colors } from '../../services';
+import React, {useState} from 'react';
+import {styles} from './style';
+import {colors} from '../../services';
 import Button from '../../components/Button';
 import images from '../../services/utilities/images';
 import BackArrow from '../../components/BackArrow';
-import { handleAddPaymentCard } from '../../services/config/API';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectAuthToken } from '../../store/authToken';
-import { addPaymentCard } from '../../store/paymentCard';
-import { ErrorShow } from '../../components/Error';
+import {handleAddPaymentCard} from '../../services/config/API';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectAuthToken} from '../../store/authToken';
+import {addPaymentCard} from '../../store/paymentCard';
+import {ErrorShow} from '../../components/Error';
 import Toast from 'react-native-toast-message';
 import Loader from '../../components/Loader';
 
-export default function AddCard({ navigation }) {
-
-  const authToken = useSelector(selectAuthToken)
-  const dispatch = useDispatch()
+export default function AddCard({navigation}) {
+  const authToken = useSelector(selectAuthToken);
+  const dispatch = useDispatch();
 
   const [modalOpen, setModalopen] = useState(false);
   const [cardName, setCardname] = useState('');
   const [cardNumber, setCardnumber] = useState('');
   const [expiryDate, setExpirydate] = useState('');
   const [securityCode, setSecurityCode] = useState('');
-  const [loader, setLoader] = useState(false)
+  const [loader, setLoader] = useState(false);
 
   const setmodalTrue = () => {
     setModalopen(!modalOpen);
@@ -61,70 +62,63 @@ export default function AddCard({ navigation }) {
 
   const handleConfirm = async () => {
     try {
-      if(!cardName){
-        return  ErrorShow('error', 'Error!', 'Please enter card name')
+      if (!cardName) {
+        return ErrorShow('error', 'Error!', 'Please enter card name');
       }
-      if(!cardNumber){
-        return  ErrorShow('error', 'Error!', 'Please enter card number')
+      if (!cardNumber) {
+        return ErrorShow('error', 'Error!', 'Please enter card number');
       }
-      if(!expiryDate){
-        return  ErrorShow('error', 'Error!', 'Please enter expiry date')
+      if (!expiryDate) {
+        return ErrorShow('error', 'Error!', 'Please enter expiry date');
       }
-      if(!securityCode){
-        return  ErrorShow('error', 'Error!', 'Please enter cvv')
+      if (!securityCode) {
+        return ErrorShow('error', 'Error!', 'Please enter cvv');
       }
-      setLoader(true)
+      setLoader(true);
       const card = {
         name: cardName,
         number: cardNumber,
         expiryDate: expiryDate,
-        cvv: securityCode
-      }
-      const response = await handleAddPaymentCard(card, authToken)
+        cvv: securityCode,
+      };
+      const response = await handleAddPaymentCard(card, authToken);
       if (response.status == 200) {
-        ErrorShow('success', 'Congratulation!', response?.data?.message , onHide)
-        dispatch(addPaymentCard(card))
-        setLoader(false)
+        ErrorShow(
+          'success',
+          'Congratulation!',
+          response?.data?.message,
+          onHide,
+        );
+        dispatch(addPaymentCard(card));
+        setLoader(false);
       } else {
-        setLoader(false)
-        ErrorShow('error', 'Error!', response?.data?.message)
+        setLoader(false);
+        ErrorShow('error', 'Error!', response?.data?.message);
       }
     } catch (error) {
-      setLoader(false)
+      setLoader(false);
       console.log(error);
-      ErrorShow('error', 'Error!', error?.message)
+      ErrorShow('error', 'Error!', error?.message);
     }
-  }
+  };
 
   const onHide = () => {
-    navigation.goBack()
-  }
+    navigation.goBack();
+  };
   return (
     <SafeAreaView>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.allignment}>
-            <View style={styles.arrowTop}>
-              <BackArrow onPress={() => navigation.goBack()} />
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <View style={styles.allignment}>
+              <View style={styles.arrowTop}>
+                <BackArrow onPress={() => navigation.goBack()} />
+              </View>
+              <Text style={styles.headerText}>Add Card</Text>
             </View>
-            <Text style={styles.headerText}>Add Card</Text>
           </View>
-        </View>
-        <View style={styles.addCardcontainer}>
-          <Text style={styles.title}>Name on Card</Text>
-          <TextInput
-            placeholderTextColor={colors.placeholdertextgray}
-            style={
-              Platform.OS == 'android'
-                ? styles.inputColor
-                : styles.inputColorIOS
-            }
-            placeholder="Name on Card"
-            value={cardName}
-            onChangeText={text => setCardname(text)}
-          />
-          <View style={styles.marginTop}>
-            <Text style={styles.title}>Card Number</Text>
+          <View style={styles.addCardcontainer}>
+            <Text style={styles.title}>Name on Card</Text>
             <TextInput
               placeholderTextColor={colors.placeholdertextgray}
               style={
@@ -132,59 +126,73 @@ export default function AddCard({ navigation }) {
                   ? styles.inputColor
                   : styles.inputColorIOS
               }
-              keyboardType="numeric"
-              placeholder="xxxx xxxx xxxx xxxx"
-              value={cardNumber}
-              // onChangeText={text => setCardname(text)}
-              onChangeText={handleFormatCardNumber}
-              maxLength={19}
+              placeholder="Name on Card"
+              value={cardName}
+              onChangeText={text => setCardname(text)}
             />
-          </View>
-          <View style={styles.marginTop}>
-            <View style={styles.row}>
-              <View style={styles.fullWidth}>
-                <Text style={styles.title}>Expiry Date</Text>
-                <TextInput
-                  placeholderTextColor={colors.placeholdertextgray}
-                  style={
-                    Platform.OS == 'android'
-                      ? styles.inputColor
-                      : styles.inputColorIOS
-                  }
-                  placeholder="Exp.Date"
-                  value={expiryDate}
-                  keyboardType="numeric"
-                  onChangeText={handleFormatExpiryDate}
-                  maxLength={5}
-                // onChangeText={text => setExpirydate(text)}
-                />
-              </View>
-              <View style={styles.fullWidth}>
-                <Text style={styles.title}>Security Code</Text>
-                <TextInput
-                  placeholderTextColor={colors.placeholdertextgray}
-                  style={
-                    Platform.OS == 'android'
-                      ? styles.inputColor
-                      : styles.inputColorIOS
-                  }
-                  keyboardType="numeric"
-                  placeholder="CVV"
-                  value={securityCode}
-                  onChangeText={text => setSecurityCode(text)}
-                  maxLength={3}
-                />
+            <View style={styles.marginTop}>
+              <Text style={styles.title}>Card Number</Text>
+              <TextInput
+                placeholderTextColor={colors.placeholdertextgray}
+                style={
+                  Platform.OS == 'android'
+                    ? styles.inputColor
+                    : styles.inputColorIOS
+                }
+                keyboardType="numeric"
+                placeholder="xxxx xxxx xxxx xxxx"
+                value={cardNumber}
+                // onChangeText={text => setCardname(text)}
+                onChangeText={handleFormatCardNumber}
+                maxLength={19}
+              />
+            </View>
+            <View style={styles.marginTop}>
+              <View style={styles.row}>
+                <View style={styles.fullWidth}>
+                  <Text style={styles.title}>Expiry Date</Text>
+                  <TextInput
+                    placeholderTextColor={colors.placeholdertextgray}
+                    style={
+                      Platform.OS == 'android'
+                        ? styles.inputColor
+                        : styles.inputColorIOS
+                    }
+                    placeholder="Exp.Date"
+                    value={expiryDate}
+                    keyboardType="numeric"
+                    onChangeText={handleFormatExpiryDate}
+                    maxLength={5}
+                    // onChangeText={text => setExpirydate(text)}
+                  />
+                </View>
+                <View style={styles.fullWidth}>
+                  <Text style={styles.title}>Security Code</Text>
+                  <TextInput
+                    placeholderTextColor={colors.placeholdertextgray}
+                    style={
+                      Platform.OS == 'android'
+                        ? styles.inputColor
+                        : styles.inputColorIOS
+                    }
+                    keyboardType="numeric"
+                    placeholder="CVV"
+                    value={securityCode}
+                    onChangeText={text => setSecurityCode(text)}
+                    maxLength={3}
+                  />
+                </View>
               </View>
             </View>
           </View>
-        </View>
-        <View style={styles.button}>
-          {
-            loader ? <Loader title={'Save'} /> :
+          <View style={styles.button}>
+            {loader ? (
+              <Loader title={'Save'} />
+            ) : (
               <Button onPress={handleConfirm} title={'Save'} />
-          }
-        </View>
-        {/* <Modal
+            )}
+          </View>
+          {/* <Modal
           isVisible={modalOpen}
           onBackdropPress={() => setModalopen(false)}
           backdropOpacity={0.5}>
@@ -201,8 +209,10 @@ export default function AddCard({ navigation }) {
             </View>
           </View>
         </Modal> */}
-      </View>
-      <Toast />
+        <Toast />
+
+        </View>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }

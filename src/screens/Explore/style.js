@@ -141,6 +141,13 @@ export const styles = StyleSheet.create({
     paddingRight: sizes.screenWidth * 0.08,
     paddingBottom: sizes.screenHeight * 0.08,
   },
+  cardRowIOS: {
+    marginStart: sizes.screenWidth * 0.05,
+    flexDirection: 'row',
+    gap: 12,
+    paddingRight: sizes.screenWidth * 0.08,
+    paddingBottom: sizes.screenHeight * 0.08,
+  },
   categoryBox: {
     height: sizes.screenHeight * 0.1,
     width: sizes.screenWidth * 0.45,
@@ -171,12 +178,34 @@ export const styles = StyleSheet.create({
     gap: sizes.screenWidth * 0.052,
   },
 
+  contentMargin: {
+    marginTop: sizes.screenHeight * 0.02,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    width: sizes.screenWidth*0.912,
+    alignSelf: 'center'
+  },
+
+  contentMarginIOS: {
+    marginTop: sizes.screenHeight * 0.02,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    width: sizes.screenWidth*0.912,
+    alignSelf: 'center'
+  },
+
   containerImage: {
-    // marginTop: sizes.screenHeight * 0.012,
-    width: sizes.screenHeight * 0.22,
+    width: sizes.screenWidth * 0.44,
     height: sizes.screenHeight * 0.24,
-    borderRadius: sizes.screenWidth * 0.042,
-    // borderRadius: 22,
+    borderRadius: 12,
+  },
+  
+  containerImageIOS: {
+    width: sizes.screenWidth * 0.44,
+    height: sizes.screenHeight * 0.24,
+    borderRadius: 12,
   },
 
   row: {
@@ -191,55 +220,52 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.small,
   },
 
-  marginCardtop: {
-    marginTop: sizes.screenHeight * 0.092,
-  },
+
   bluredImg: {
     height: sizes.screenHeight * 0.099,
-    marginLeft: sizes.screenWidth * 0.03,
-    marginRight: sizes.screenWidth * 0.03,
     borderRadius: sizes.screenHeight * 0.012,
     width: sizes.screenWidth * 0.392,
     opacity: 0.9,
+    position: 'absolute',
+    bottom: 10,
+    alignSelf: 'center'
   },
 
   textDarkerblack: {
-    // backgroundColor: 'orange',
-    color: colors.black,
+    color:colors.black,
     fontWeight: '700',
     fontSize: fontSize.small,
+    marginLeft: sizes.screenWidth*0.02,
+    marginTop: sizes.screenHeight*0.01
   },
   textBlack: {
     color: colors.black,
-    fontSize: fontSize.small,
+    fontSize: fontSize.extraSmall,
     fontWeight: '700',
   },
   appointmentContainer: {
-    // backgroundColor: 'red',
-    marginLeft: sizes.screenWidth * 0.042,
-    marginTop: sizes.screenHeight * 0.009,
-    gap: sizes.screenHeight * 0.007,
+    gap: 6,
   },
   locationContainer: {
-    // marginTop: sizes.screenHeight * 0.007,
+    left: sizes.screenWidth * 0.01,
     alignItems: 'center',
-    // justifyContent: 'center',
     flexDirection: 'row',
   },
+
   locationImg: {
     width: sizes.screenWidth * 0.04,
     // backgroundColor: 'purple',
     height: sizes.screenHeight * 0.013,
   },
   bookBtn: {
-    // marginBottom: sizes.screenHeight * 0.02,
     backgroundColor: colors.btnColor,
     height: sizes.screenHeight * 0.032,
-    width: sizes.screenWidth * 0.362,
+    width: sizes.screenWidth * 0.36,
     borderRadius: sizes.screenWidth * 0.022,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    alignSelf: 'center'
   },
   btnText: {
     fontSize: fontSize.small,

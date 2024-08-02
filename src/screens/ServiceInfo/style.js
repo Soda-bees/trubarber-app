@@ -171,6 +171,18 @@ export const styles = StyleSheet.create({
     borderColor: colors.borderColor,
     textAlignVertical:"top",
   },
+  descriptionTextContainerIOS: {
+    marginTop: sizes.screenHeight * 0.005,
+    color: colors.black,
+    backgroundColor: colors.white,
+    borderRadius: sizes.screenWidth * 0.02,
+    paddingVertical: sizes.screenHeight * 0.01,
+    paddingHorizontal: sizes.screenWidth * 0.02,
+    borderWidth: sizes.screenWidth * 0.003,
+    borderColor: colors.borderColor,
+    textAlignVertical:"top",
+    height:sizes.screenHeight * 0.1
+  },
   saveChangeBtn: {
     // position: 'absolute',
     // bottom: sizes.screenHeight*0.07,

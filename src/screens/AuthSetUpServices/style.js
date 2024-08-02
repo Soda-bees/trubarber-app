@@ -1,12 +1,12 @@
-import { StyleSheet } from 'react-native';
-import { colors, fontSize, sizes } from '../../services';
+import {StyleSheet} from 'react-native';
+import {colors, fontSize, sizes} from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.lightgray,
     height: sizes.screenHeight,
     justifyContent: 'space-between',
-    paddingBottom: sizes.screenWidth * 0.03
+    paddingBottom: sizes.screenWidth * 0.03,
   },
 
   backArrow: {
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.medium,
     paddingHorizontal: sizes.screenWidth * 0.06,
     marginTop: sizes.screenHeight * 0.01,
-    color:colors.black
+    color: colors.black,
   },
 
   serviceImagecontainer: {
@@ -46,7 +46,7 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.05,
     borderWidth: sizes.screenWidth * 0.003,
     borderColor: colors.selectorcolor,
-    marginBottom: sizes.screenHeight * 0.01
+    marginBottom: sizes.screenHeight * 0.01,
   },
 
   selectedServiceimagecontainer: {
@@ -58,7 +58,7 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.05,
     borderWidth: sizes.screenWidth * 0.003,
     borderColor: colors.black,
-    marginBottom: sizes.screenHeight * 0.01
+    marginBottom: sizes.screenHeight * 0.01,
   },
 
   serviceImageresize: {
@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.042,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: sizes.screenWidth * 0.012
+    borderRadius: sizes.screenWidth * 0.012,
   },
 
   textBlack: {
@@ -88,7 +88,7 @@ export const styles = StyleSheet.create({
     color: colors.black,
     marginTop: sizes.screenHeight * 0.01,
     fontWeight: 'bold',
-    fontSize: fontSize.medium
+    fontSize: fontSize.medium,
   },
   services: {
     flexDirection: 'row',
@@ -98,12 +98,14 @@ export const styles = StyleSheet.create({
   },
   nextBtn: {
     position: 'absolute',
-    bottom: sizes.screenHeight*0.07,
-    alignSelf: 'center'
+    bottom: sizes.screenHeight * 0.07,
+    alignSelf: 'center',
   },
 
   nextBtnIOS: {
-    top: sizes.screenHeight * 0.02
+    position: 'absolute',
+    bottom: sizes.screenHeight * 0.09,
+    alignSelf: 'center',
   },
 
   description: {
@@ -113,6 +115,5 @@ export const styles = StyleSheet.create({
   containerBody: {
     marginTop: sizes.screenHeight * 0.01,
     paddingHorizontal: sizes.screenWidth * 0.06,
-
   },
 });

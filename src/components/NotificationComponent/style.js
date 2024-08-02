@@ -31,5 +31,16 @@ export const styles = StyleSheet.create({
         borderRadius: 18,
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
+    unseenTextContainerIOS:{
+        position: 'absolute',
+        left: 42,
+        bottom: 45,
+        backgroundColor: colors.red,
+        height: 18,
+        width: 18,
+        borderRadius: 18,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
 })

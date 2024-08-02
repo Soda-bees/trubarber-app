@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
     paddingVertical: sizes.screenHeight * 0.02,
     width: sizes.screenWidth * 0.9,
     alignSelf: 'center',
-    marginTop: sizes.screenHeight * 0.015
+    marginTop: sizes.screenHeight * 0.015,
   },
   chatDetailContainer: {
     flexDirection: 'row',

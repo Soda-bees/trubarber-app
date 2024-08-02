@@ -21,12 +21,13 @@ import LocationServicesDialogBox from 'react-native-android-location-services-di
 import {useDispatch, useSelector} from 'react-redux';
 import {selectlocation, setLocation} from '../../store/location/index.js';
 import messaging from '@react-native-firebase/messaging';
+import { selectUserData } from '../../store/userData/index.js';
 
 export default function WelcomeScreen({navigation}) {
   const dispatch = useDispatch();
-  const location = useSelector(selectlocation);
-
-  console.log('getting location', location);
+  const userData = useSelector(selectUserData)
+  const location = useSelector(selectlocation) || userData?.location
+  console.log('location', location);
 
   const [imgActive, setImgActive] = useState(0);
   const [itemList, setItem] = useState(['Text1', 'Text3', 'Text4']);
@@ -80,17 +81,22 @@ export default function WelcomeScreen({navigation}) {
           console.log('error in get permission in app.js');
         });
     } else {
+      // requestUserPermission();
+      initializeLocation();
     }
   }, []);
 
   const initializeLocation = async () => {
     const hasPermission = await requestLocationPermission();
+    console.log('has permission', hasPermission);
     if (hasPermission) {
       checkLocationServices()
         .then(() => {
+          console.log('then');
           getCurrentLocation(setRegion, dispatch);
         })
         .catch(error => {
+          console.log('catch');
           console.log('Location services not enabled', error.message);
           Alert.alert(
             'Location Services Disabled',
@@ -124,21 +130,43 @@ export default function WelcomeScreen({navigation}) {
         console.warn(err);
         return false;
       }
-    } else {
+    } 
+    else if (Platform.OS === 'ios') {
+      Geolocation.requestAuthorization();
       return true;
     }
   };
 
-  const checkLocationServices = () => {
-    return LocationServicesDialogBox.checkLocationServicesIsEnabled({
-      message:
-        '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
-      ok: 'YES',
-      cancel: 'NO',
-    });
+  const checkLocationServices = async () => {
+    // console.log("work checkLocationServices");
+    // return LocationServicesDialogBox.checkLocationServicesIsEnabled({
+    //   message:
+    //     '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
+    //   ok: 'YES',
+    //   cancel: 'NO',
+    // });
+
+    if (LocationServicesDialogBox) {
+      LocationServicesDialogBox.checkLocationServicesIsEnabled({
+        message:
+          '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
+        ok: 'YES',
+        cancel: 'NO',
+      })
+        .then(() => {
+          console.log('Location services enabled');
+        })
+        .catch(error => {
+          console.error('Location services not enabled', error.message);
+          throw error; // Re-throw the error to handle it in the calling function
+        });
+    } else {
+      console.error('LocationServicesDialogBox is not initialized');
+    }
   };
 
   const getCurrentLocation = (setRegion, dispatch) => {
+    console.log('work getCurrentLocation');
     Geolocation.getCurrentPosition(
       position => {
         const {latitude, longitude} = position.coords;
@@ -161,7 +189,7 @@ export default function WelcomeScreen({navigation}) {
           'Unable to retrieve your location. Please try again.',
         );
       },
-      // {enableHighAccuracy: true, timeout: 20000, maximumAge: 20000},
+      {enableHighAccuracy: false, timeout: 20000, maximumAge: 20000},
     );
   };
 

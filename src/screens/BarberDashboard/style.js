@@ -119,10 +119,11 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.grayBg,
     width: sizes.screenWidth * 0.43,
     borderRadius: sizes.screenWidth * 0.02,
-    flexDirection: 'row',
+    flexDirection: 'column',
     paddingHorizontal: sizes.screenWidth * 0.02,
     paddingBottom: sizes.screenHeight * 0.01,
-    justifyContent: 'space-between',
+    height:sizes.screenHeight * 0.07
+    // justifyContent: 'space-between',
   },
   boxImg: {
     height: sizes.screenHeight * 0.04,
@@ -131,7 +132,7 @@ export const styles = StyleSheet.create({
   },
   detailTxt: {
     color: colors.blackishGray,
-    fontWeight: '500',
+    fontWeight: '400',
     textAlign: 'right',
     fontSize: fontSize.small,
   },
@@ -219,7 +220,7 @@ export const styles = StyleSheet.create({
   statusHeadingTwoIOS: {
     color: colors.red,
     fontSize: fontSize.smallM,
-    width: sizes.screenWidth * 0.17,
+    width: sizes.screenWidth * 0.18,
     textAlign: 'right',
     // backgroundColor:'white'
   },

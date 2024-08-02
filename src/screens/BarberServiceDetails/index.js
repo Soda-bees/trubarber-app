@@ -7,6 +7,7 @@ import {
   ScrollView,
   SafeAreaView,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import {styles} from './style.js';
@@ -172,7 +173,14 @@ export default function BarberServiceDetails({route, navigation}) {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.modalRow}
-                onPress={() => setDeletePermission(true)}>
+                onPress={() => {
+                  Platform.OS === 'android'
+                    ? setDeletePermission(true)
+                    : setModalVisible(false);
+                  setTimeout(() => {
+                    setDeletePermission(true);
+                  }, 500);
+                }}>
                 <Image source={images.deleteIcon} />
                 <Text style={styles.modalText}>Delete</Text>
               </TouchableOpacity>

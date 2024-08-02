@@ -20,13 +20,15 @@ import {useSelector} from 'react-redux';
 import {selectbarber} from '../../store/barber/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import {selectlocation} from '../../store/location/index.js';
+import { selectUserData } from '../../store/userData/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
 export default function Catalogue({navigation}) {
   const barbers = useSelector(selectbarber);
+  const userData = useSelector(selectUserData)
   // console.log('all barbers', formatToJSON(barbers));
   const [btnActive, setactive] = useState('barber');
-  const location = useSelector(selectlocation);
+  const location = useSelector(selectlocation) || userData?.location
   const [search, setSearch] = useState('');
   const [barberData, setBarberdata] = useState([]);
   const [servicesData, setserviceData] = useState([]);
@@ -184,7 +186,9 @@ export default function Catalogue({navigation}) {
                       Platform.OS == 'android'
                         ? styles.containerImage
                         : styles.containerImageIOS
-                    }>
+                    }
+                    style={styles.containerImage}
+                    >
                     <View style={styles.row}>
                       <Text style={styles.textWhite}>
                         {calculateAverageRating(item.reviews)}
@@ -196,10 +200,10 @@ export default function Catalogue({navigation}) {
                         rating={1}
                       />
                     </View>
-                    <View style={styles.marginTop}>
                       <ImageBackground
                         source={images.bluredImg}
-                        imageStyle={styles.bluredImg}>
+                        imageStyle={styles.bluredImg}
+                        style={styles.bluredImg}>
                         <View style={styles.appointmentContainer}>
                           <Text style={styles.textDarkerblack}>
                             {item?.name}
@@ -231,7 +235,6 @@ export default function Catalogue({navigation}) {
                           </TouchableOpacity>
                         </View>
                       </ImageBackground>
-                    </View>
                   </ImageBackground>
                 );
               })}
@@ -239,7 +242,7 @@ export default function Catalogue({navigation}) {
             <View
               style={{
                 paddingBottom:
-                  Platform.OS == 'ios' && sizes.screenHeight * 0.08,
+                  Platform.OS == 'ios' && sizes.screenHeight * 0.18,
               }}
             />
           </ScrollView>

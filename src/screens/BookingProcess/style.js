@@ -313,6 +313,11 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.02,
     marginBottom: sizes.screenHeight * 0.03,
   },
+  btnMarginIOS: {
+    position:'absolute',
+    alignSelf:'center',
+    bottom:sizes.screenHeight * 0.09
+  },
   textContainer: {
     // backgroundColor: 'orange',
     marginTop: sizes.screenHeight * 0.01,

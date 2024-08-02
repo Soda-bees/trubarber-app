@@ -25,9 +25,9 @@ import { selectUserData } from '../../store/userData/index.js';
 
 export default function HaircutServices({navigation, route}) {
   const {name} = route?.params;
-  const barbers = useSelector(selectbarber);
   const userData = useSelector(selectUserData)
-  const location = useSelector(selectlocation) || userData.location
+  const barbers = useSelector(selectbarber);
+  const location = useSelector(selectlocation) || userData?.location
   const [barberData, setBarberdata] = useState([]);
   useEffect(() => {
     getSpecificBarberBarber();
@@ -93,10 +93,10 @@ export default function HaircutServices({navigation, route}) {
               {barberData?.length > 0 &&
                 barberData?.map((item, index) => {
                   const distance = calculateDistance(
-                    location.latitude,
-                    location.longitude,
-                    item.location.latitude,
-                    item.location.longitude,
+                    location?.latitude,
+                    location?.longitude,
+                    item?.location?.latitude,
+                    item?.location?.longitude,
                   );
                   return (
                     <ImageBackground
@@ -107,8 +107,7 @@ export default function HaircutServices({navigation, route}) {
                           ? styles.containerImage
                           : styles.containerImageIOS
                       }
-                      style={styles.containerImage}
-                      >
+                      style={styles.containerImage}>
                       <View style={styles.row}>
                         <Text style={styles.textWhite}>
                           {calculateAverageRating(item.reviews)}
@@ -120,105 +119,55 @@ export default function HaircutServices({navigation, route}) {
                           rating={1}
                         />
                       </View>
-                        <ImageBackground
-                          source={images.bluredImg}
-                          imageStyle={styles.bluredImg}
-                          style={styles.bluredImg}>
-                          <View style={styles.appointmentContainer}>
-                            <Text style={styles.textDarkerblack}>
-                              {item.name}
+                      <ImageBackground
+                        source={images.bluredImg}
+                        imageStyle={styles.bluredImg}
+                        style={styles.bluredImg}>
+                        <View style={styles.appointmentContainer}>
+                          <Text style={styles.textDarkerblack}>
+                            {item.name}
+                          </Text>
+                          <View style={styles.locationContainer}>
+                            <Image
+                              source={images.Location}
+                              resizeMode="contain"
+                              style={styles.locationImg}
+                            />
+                            <Text style={styles.textBlack}>
+                              {distance !== null && (
+                                <Text style={styles.textBlack}>
+                                  {`${distance.toFixed(2)} km`}
+                                </Text>
+                              )}
                             </Text>
-                            <View style={styles.locationContainer}>
-                              <Image
-                                source={images.Location}
-                                resizeMode="contain"
-                                style={styles.locationImg}
-                              />
-                              <Text style={styles.textBlack}>
-                                {distance !== null && (
-                                  <Text style={styles.textBlack}>
-                                    {`${distance.toFixed(2)} km`}
-                                  </Text>
-                                )}
-                              </Text>
-                            </View>
-                            <TouchableOpacity
-                              style={styles.bookBtn}
-                              onPress={() =>
-                                navigation.navigate('BookAppointment', {item , tabName:'About'})
-                              }>
-                              <Text style={styles.btnText}>
-                                Book Appointment
-                              </Text>
-                              <Image
-                                source={images.arrowIcon}
-                                resizeMode="contain"
-                                style={styles.arrowStyle}
-                              />
-                            </TouchableOpacity>
                           </View>
-                        </ImageBackground>
+                          <TouchableOpacity
+                            style={styles.bookBtn}
+                            onPress={() =>
+                              navigation.navigate('BookAppointment', {
+                                item,
+                                tabName: 'About',
+                              })
+                            }>
+                            <Text style={styles.btnText}>Book Appointment</Text>
+                            <Image
+                              source={images.arrowIcon}
+                              resizeMode="contain"
+                              style={styles.arrowStyle}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </ImageBackground>
                     </ImageBackground>
-                    //   <ImageBackground
-                    //   key={index}
-                    //   source={{uri: item.profile}}
-                    //   imageStyle={styles.containerImage}
-                    //   // style={}
-                    // >
-                    //   <View style={styles.row}>
-                    //     <Text style={styles.textWhite}>5.0</Text>
-                    //     <StarRating
-                    //       maxStars={1}
-                    //       starSize={12}
-                    //       color={colors.gold}
-                    //       rating={1}
-                    //     />
-                    //   </View>
-                    //   <View style={styles.marginCardtop}>
-                    //     <ImageBackground
-                    //       source={images.bluredImg}
-                    //       imageStyle={styles.bluredImg}>
-                    //       <View style={styles.appointmentContainer}>
-                    //         <Text style={styles.textDarkerblack}>
-                    //           {item.name}
-                    //         </Text>
-                    //         <View style={styles.locationContainer}>
-                    //           <Image
-                    //             source={images.Location}
-                    //             resizeMode="contain"
-                    //             style={styles.locationImg}
-                    //           />
-                    //           <Text style={styles.textBlack}>
-                    //             {/* {`Lat: ${item.location.latitude}, Long: ${item.location.longitude}`} */}
-                    //             {distance !== null && (
-                    //               <Text style={styles.textBlack}>
-                    //                 {`Distance: ${distance.toFixed(2)} km`}
-                    //               </Text>
-                    //             )}
-                    //           </Text>
-                    //         </View>
-                    //         <TouchableOpacity
-                    //           style={styles.bookBtn}
-                    //           onPress={() =>
-                    //             navigation.navigate('BookAppointment')
-                    //           }>
-                    //           <Text style={styles.btnText}>
-                    //             Book Appointment
-                    //           </Text>
-                    //           <Image
-                    //             source={images.arrowIcon}
-                    //             resizeMode="contain"
-                    //             style={styles.arrowStyle}
-                    //           />
-                    //         </TouchableOpacity>
-                    //       </View>
-                    //     </ImageBackground>
-                    //   </View>
-                    // </ImageBackground>
                   );
                 })}
             </View>
-            <View style={{paddingBottom: sizes.screenHeight * 0.05}}></View>
+            <View
+              style={
+                Platform.OS == 'android'
+                  ? {paddingBottom: sizes.screenHeight * 0.05}
+                  : {paddingBottom: sizes.screenHeight * 0.1}
+              }></View>
           </ScrollView>
         </View>
       </View>

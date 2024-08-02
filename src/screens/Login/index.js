@@ -1,11 +1,13 @@
 import {
   Image,
+  Keyboard,
   Platform,
   SafeAreaView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {styles} from './style';
@@ -22,6 +24,7 @@ import {setAuthToken} from '../../store/authToken';
 import Loader from '../../components/Loader';
 import {addPaymentCard} from '../../store/paymentCard';
 import messaging from '@react-native-firebase/messaging';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 export default function Login({navigation}) {
   const dispatch = useDispatch();
@@ -96,8 +99,30 @@ export default function Login({navigation}) {
     }
   };
 
+  // const getFcmToken = async () => {
+  //   try {
+  //     const token = await messaging().getToken();
+  //     setDeviceToken(token);
+  //     console.log('Notification token Login=', token);
+  //     return token;
+  //   } catch (error) {
+  //     console.log('Error in generating token:', error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   getFcmToken();
+  // }, []);
+
   const getFcmToken = async () => {
     try {
+      // Register the device for remote messages (iOS only)
+      if (Platform.OS === 'ios') {
+        await messaging().registerDeviceForRemoteMessages();
+        await messaging().setAutoInitEnabled(true);
+      }
+
+      // Get the FCM token
       const token = await messaging().getToken();
       setDeviceToken(token);
       console.log('Notification token Login=', token);
@@ -108,113 +133,139 @@ export default function Login({navigation}) {
   };
 
   useEffect(() => {
-    getFcmToken();
+    // Request notification permission (iOS only)
+    const requestPermission = async () => {
+      if (Platform.OS === 'ios') {
+        const authStatus = await messaging().requestPermission();
+        const enabled =
+          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+        if (enabled) {
+          console.log('Authorization status:', authStatus);
+          getFcmToken();
+        } else {
+          console.log('Notification permission denied');
+        }
+      } else {
+        getFcmToken();
+      }
+    };
+
+    requestPermission();
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.toggleContainer}>
-        <TouchableOpacity
-          style={role === 'user' ? styles.active : styles.inActive}
-          onPress={
-            () => handleChangeRole('user')
-            // setactive('user')
-          }>
-          <Text
-            style={
-              role == 'user' ? styles.textColorwhite : styles.toggleTextsize
-            }>
-            User
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={role == 'barber' ? styles.active : styles.inActive}
-          onPress={
-            () => handleChangeRole('barber')
-            // setactive('barber')
-          }>
-          <Text
-            style={
-              role == 'barber' ? styles.textColorwhite : styles.toggleTextsize
-            }>
-            Barber
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.loginText}>Login</Text>
-      <View style={styles.inputFields}>
-        <View style={styles.wholeContainer}>
-          <Image
-            source={images.Message}
-            style={styles.inputImage}
-            resizeMode="contain"
-          />
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor={colors.placeholdertext}
-            style={styles.input}
-            value={email}
-            onChangeText={text => {
-              setEmail(text);
-            }}
-          />
-        </View>
-        <View style={styles.passwordInput}>
-          <Image
-            source={images.lock}
-            style={styles.inputImage}
-            resizeMode="contain"
-          />
-          <TextInput
-            placeholder="Password"
-            placeholderTextColor={colors.placeholdertext}
-            style={styles.input}
-            secureTextEntry={!showPass}
-            value={password}
-            onChangeText={text => {
-              setPassword(text);
-            }}
-          />
-          {!showPass ? (
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View>
+          <View style={styles.toggleContainer}>
             <TouchableOpacity
-              styles={styles.paddingRight}
-              onPress={() => setShowpass(!showPass)}>
+              style={role === 'user' ? styles.active : styles.inActive}
+              onPress={
+                () => handleChangeRole('user')
+                // setactive('user')
+              }>
+              <Text
+                style={
+                  role == 'user' ? styles.textColorwhite : styles.toggleTextsize
+                }>
+                User
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={role == 'barber' ? styles.active : styles.inActive}
+              onPress={
+                () => handleChangeRole('barber')
+                // setactive('barber')
+              }>
+              <Text
+                style={
+                  role == 'barber'
+                    ? styles.textColorwhite
+                    : styles.toggleTextsize
+                }>
+                Barber
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.loginText}>Login</Text>
+          <View style={styles.inputFields}>
+            <View style={styles.wholeContainer}>
               <Image
-                source={images.hidden}
-                style={styles.eyeicon}
+                source={images.Message}
+                style={styles.inputImage}
                 resizeMode="contain"
               />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={() => setShowpass(!showPass)}>
+              <TextInput
+                placeholder="Email"
+                placeholderTextColor={colors.placeholdertext}
+                style={styles.input}
+                value={email}
+                onChangeText={text => {
+                  setEmail(text);
+                }}
+              />
+            </View>
+            <View style={styles.passwordInput}>
               <Image
-                source={images.show}
-                style={styles.eyeicon}
+                source={images.lock}
+                style={styles.inputImage}
                 resizeMode="contain"
               />
+              <TextInput
+                placeholder="Password"
+                placeholderTextColor={colors.placeholdertext}
+                style={styles.input}
+                secureTextEntry={!showPass}
+                value={password}
+                onChangeText={text => {
+                  setPassword(text);
+                }}
+              />
+              {!showPass ? (
+                <TouchableOpacity
+                  styles={styles.paddingRight}
+                  onPress={() => setShowpass(!showPass)}>
+                  <Image
+                    source={images.hidden}
+                    style={styles.eyeicon}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={() => setShowpass(!showPass)}>
+                  <Image
+                    source={images.show}
+                    style={styles.eyeicon}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+            <TouchableOpacity
+              style={styles.flexEnd}
+              onPress={handleForgotPassword}>
+              <Text style={styles.forgotPass}>Forgot password?</Text>
             </TouchableOpacity>
-          )}
+          </View>
+          <View style={styles.buttonTop}>
+            {loader ? (
+              <Loader title={'Login'} />
+            ) : (
+              <Button title={'Login'} onPress={handleSignIn} />
+            )}
+          </View>
+          <View style={styles.signupContainer}>
+            <View style={styles.centerText}>
+              <Text style={styles.textColor}>Don’t have an account?</Text>
+            </View>
+            <Button title={'Sign Up'} light={true} onPress={handleSignUP} />
+            {/* <Button title={'Sign Up'} light={true} onPress={handleSignUP}/> */}
+          </View>
+          <Toast />
         </View>
-        <TouchableOpacity style={styles.flexEnd} onPress={handleForgotPassword}>
-          <Text style={styles.forgotPass}>Forgot password?</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.buttonTop}>
-        {loader ? (
-          <Loader title={'Login'} />
-        ) : (
-          <Button title={'Login'} onPress={handleSignIn} />
-        )}
-      </View>
-
-      <View style={styles.signupContainer}>
-        <View style={styles.centerText}>
-          <Text style={styles.textColor}>Don’t have an account?</Text>
-        </View>
-        <Button title={'Sign Up'} light={true} onPress={handleSignUP} />
-        {/* <Button title={'Sign Up'} light={true} onPress={handleSignUP}/> */}
-      </View>
-      <Toast />
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }

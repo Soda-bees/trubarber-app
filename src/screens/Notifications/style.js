@@ -31,6 +31,9 @@ export const styles = StyleSheet.create({
   scrollContianer: {
     marginTop: sizes.screenHeight * 0.02,
   },
+  scrollContianerIOS:{
+    marginBottom: sizes.screenHeight * 0.08,
+  },
   notficationContainer: {
     justifyContent: 'flex-start',
     alignItems: 'center',
