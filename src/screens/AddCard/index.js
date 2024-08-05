@@ -85,7 +85,7 @@ export default function AddCard({navigation}) {
       if (response.status == 200) {
         ErrorShow(
           'success',
-          'Congratulation!',
+          'Congratulations!',
           response?.data?.message,
           onHide,
         );

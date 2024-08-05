@@ -248,7 +248,7 @@ export default function AppoinmentBarber({navigation}) {
       if (response?.status == 200) {
         setLoader(false);
         setModalVisible(false);
-        ErrorShow('success', 'Congratulation!', response?.data?.message);
+        ErrorShow('success', 'Congratulations!', response?.data?.message);
       } else {
         setLoader(false);
         setModalVisible(false);

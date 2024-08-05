@@ -296,7 +296,7 @@ export default function BookingProcess({navigation, route}) {
       if (response.status == 200) {
         ErrorShow(
           'success',
-          'Congratulation!',
+          'Congratulations!',
           response?.data?.message,
           onHide,
         );

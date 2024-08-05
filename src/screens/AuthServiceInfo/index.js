@@ -242,7 +242,7 @@ export default function AuthServiceInfo({ navigation, route }) {
         const response = await addServices(body, authToken)
         if (response?.status == 201) {
           setLoader(false)
-          ErrorShow('success', 'Congratulation!', response?.data?.message, onHide)
+          ErrorShow('success', 'Congratulations!', response?.data?.message, onHide)
           dispatch(setUserData(response?.data?.updateUser))
         } else {
           setLoader(false)
@@ -282,7 +282,7 @@ export default function AuthServiceInfo({ navigation, route }) {
       const response = await updateService(servicesData[0], authToken)
       if (response?.status == 200) {
         setLoader(false)
-        ErrorShow('success', 'Congratulation!', response?.data?.message, onHide)
+        ErrorShow('success', 'Congratulations!', response?.data?.message, onHide)
         dispatch(updateServiceRedux(response?.data?.updatedService))
       } else {
         setLoader(false)

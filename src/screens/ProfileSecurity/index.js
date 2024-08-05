@@ -61,7 +61,7 @@ export default function ProfileSecurity({navigation}) {
         setLoader(false);
         ErrorShow(
           'success',
-          'Congratulation!',
+          'Congratulations!',
           response?.data?.message,
           onHide,
         );

@@ -76,7 +76,7 @@ export default function BarberServiceDetails({route, navigation}) {
         setLoader(false);
         ErrorShow(
           'success',
-          'Congratulation!',
+          'Congratulations!',
           response?.data?.message,
           onHide,
         );

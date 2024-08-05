@@ -255,7 +255,7 @@ export default function ServiceInfo({navigation, route}) {
           setLoader(false);
           ErrorShow(
             'success',
-            'Congratulation!',
+            'Congratulations!',
             response?.data?.message,
             onHide,
           );
@@ -316,7 +316,7 @@ export default function ServiceInfo({navigation, route}) {
         setLoader(false);
         ErrorShow(
           'success',
-          'Congratulation!',
+          'Congratulations!',
           response?.data?.message,
           onHide,
         );

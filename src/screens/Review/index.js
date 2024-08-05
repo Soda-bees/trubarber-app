@@ -106,7 +106,7 @@ export default function Review({navigation, route}) {
           setLoader(false);
           ErrorShow(
             'success',
-            'Congratulation!',
+            'Congratulations!',
             response?.data?.message,
             onHide,
           );
@@ -186,7 +186,7 @@ export default function Review({navigation, route}) {
         setRating(0);
         ErrorShow(
           'success',
-          'Congratulation!',
+          'Congratulations!',
           response?.data?.message,
           onHide,
         );
