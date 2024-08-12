@@ -1,6 +1,6 @@
 import axios from 'axios';
-import {axiosInstance} from '../AxiosInstance';
-import {BASE_URL} from '../AxiosInstance';
+import { axiosInstance } from '../AxiosInstance';
+import { BASE_URL } from '../AxiosInstance';
 
 export const checkServerConnection = async () => {
   try {
@@ -15,7 +15,7 @@ export const validateEmailAvailability = async email => {
   try {
     const response = await axiosInstance.post(
       'auth/validateEmailAvailability',
-      {email},
+      { email },
     );
     return response;
   } catch (error) {
@@ -188,7 +188,7 @@ export const getAddressFromCoordinates = async (latitude, longitude) => {
         addressComponents.find(component =>
           component.types.includes('locality'),
         )?.long_name || '';
-      return {area, city};
+      return { area, city };
       // setAddress({ area, city });
       // console.log(area, city);
     } else {
@@ -225,7 +225,7 @@ export const deleteService = async (token, id) => {
     const response = await axiosInstance.post(
       `barber/deleteService/${id}`,
       {},
-      {headers},
+      { headers },
     );
     return response;
   } catch (error) {
@@ -241,8 +241,8 @@ export const handleAddPaymentCard = async (card, token) => {
     };
     const response = await axiosInstance.post(
       'user/addPaymentCard',
-      {card},
-      {headers},
+      { card },
+      { headers },
     );
     return response;
   } catch (error) {
@@ -273,7 +273,7 @@ export const hanleGetBookedAppoinment = async (token, id) => {
     };
     const response = await axiosInstance.get(
       `user/getBookedAppoinmentTime/${id}`,
-      {headers},
+      { headers },
     );
     return response;
   } catch (error) {
@@ -290,7 +290,7 @@ export const updateAppointmentStatus = async (token, id) => {
     const response = await axiosInstance.post(
       `barber/updateAppoinmentStatus/${id}`,
       {},
-      {headers},
+      { headers },
     );
     return response;
   } catch (error) {
@@ -322,7 +322,7 @@ export const sendMessage = async (token, chatId, body) => {
     const response = await axiosInstance.post(
       `user/sendMessage/${chatId}`,
       body,
-      {headers},
+      { headers },
     );
     return response;
   } catch (error) {
@@ -338,8 +338,8 @@ export const setSeenTrue = async (token, messageIds) => {
     };
     const response = await axiosInstance.post(
       `user/setSeenTrue`,
-      {messageIds},
-      {headers},
+      { messageIds },
+      { headers },
     );
     return response;
   } catch (error) {
@@ -381,11 +381,7 @@ export const deleteReview = async (reviewId, token) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post(
-      `user/deleteReview/${reviewId}`,
-      {},
-      {headers},
-    );
+    const response = await axiosInstance.post(`user/deleteReview/${reviewId}`, {}, { headers },);
     return response;
   } catch (error) {
     return error;
@@ -417,7 +413,7 @@ export const handleGetUserDetails = async token => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.get('user/userData', {headers});
+    const response = await axiosInstance.get('user/userData', { headers });
     return response;
   } catch (error) {
     return error;
@@ -432,8 +428,8 @@ export const handleNotificationSeenTrue = async (token, notificationsIds) => {
     };
     const response = await axiosInstance.post(
       'user/setNotificationTrue',
-      {notificationsIds},
-      {headers},
+      { notificationsIds },
+      { headers },
     );
     return response;
   } catch (error) {

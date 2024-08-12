@@ -9,30 +9,30 @@ import {
   ScrollView,
   ActivityIndicator,
   Platform,
+  FlatList,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style';
 import images from '../../services/utilities/images';
-import {colors, sizes} from '../../services';
+import { colors, sizes } from '../../services';
 import Timetable from 'react-native-calendar-timetable';
 import moment from 'moment';
-import {useSelector} from 'react-redux';
-import {selectUserData} from '../../store/userData';
+import { useSelector } from 'react-redux';
+import { selectUserData } from '../../store/userData';
 import DatePicker from 'react-native-date-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Modal from 'react-native-modal';
 import Loader from '../../components/Loader';
-import {ErrorShow} from '../../components/Error';
-import {selectAuthToken} from '../../store/authToken';
-import {updateAppointmentStatus} from '../../services/config/API';
+import { ErrorShow } from '../../components/Error';
+import { selectAuthToken } from '../../store/authToken';
+import { updateAppointmentStatus } from '../../services/config/API';
 import formatToJSON from '../../services/config/FormatToJson';
 import Toast from 'react-native-toast-message';
 import ChatConponent from '../../components/ChatComponent';
 import NotificationComponent from '../../components/NotificationComponent';
-export default function AppoinmentBarber({navigation}) {
+export default function AppoinmentBarber({ navigation }) {
   const barber = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken);
-  // console.log(formatToJSON(barber?.appoinment?.length));
 
   const [startTime, setStartTime] = useState(new Date());
   const [clientName, setClientName] = useState('');
@@ -56,6 +56,7 @@ export default function AppoinmentBarber({navigation}) {
   const [from, setFrom] = useState();
   const [to, setTo] = useState();
   const [loader, setLoader] = useState(false);
+  const [tab, setTab] = useState('schedule')
 
   const roundUpTime = time => {
     const hour = moment(time, 'h:mm A').hour();
@@ -82,7 +83,7 @@ export default function AppoinmentBarber({navigation}) {
     if (!date) return '';
 
     const day = date.getDate();
-    const month = date.toLocaleString('default', {month: 'long'});
+    const month = date.toLocaleString('default', { month: 'long' });
     return `${day} ${month}`;
   };
 
@@ -126,7 +127,7 @@ export default function AppoinmentBarber({navigation}) {
     setAppointmentTimeline2(transformedData);
   };
 
-  const RenderItem = ({style, item}) => {
+  const RenderItem = ({ style, item }) => {
     if (!item) return null;
 
     return (
@@ -161,7 +162,7 @@ export default function AppoinmentBarber({navigation}) {
 
     const dateObj = new Date(year, month, day);
 
-    const options = {weekday: 'short', month: 'short', day: 'numeric'};
+    const options = { weekday: 'short', month: 'short', day: 'numeric' };
 
     return dateObj.toLocaleDateString('en-US', options);
   };
@@ -211,7 +212,8 @@ export default function AppoinmentBarber({navigation}) {
 
   useEffect(() => {
     if (barber?.appoinment) {
-      mapBackendDataToAppointmentTimeline(barber.appoinment);
+      const filteredAppointment = barber?.appoinment.filter(item => item.status !== "Pending")
+      mapBackendDataToAppointmentTimeline(filteredAppointment);
     }
     if (barber?.time) {
       setTimesFromDuration(barber.time);
@@ -261,6 +263,111 @@ export default function AppoinmentBarber({navigation}) {
     }
   };
 
+  const handleChangeTab = async (name) => {
+    setTab(name)
+  }
+
+  const requestAppointment = barber?.appoinment?.filter(item => item.status === "Completed")
+
+  const calculateTotalAmount = services => {
+    return services.reduce(
+      (total, service) => total + parseFloat(service.price),
+      0,
+    );
+  };
+
+  const convertDateFormat = dateString => {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+
+    // Split the input date string into parts
+    const [month, day, year] = dateString.split('-');
+
+    // Get the month name from the months array
+    const monthName = months[parseInt(month, 10) - 1];
+
+    // Format the date in "DD/MM" format
+    return `${day}-${monthName}`;
+  };
+  const renderRequest = ({ item }) => (
+    // console.log(formatToJSON(item))
+
+    <View style={styles.requestContainer}>
+      <View style={styles.requestContainerFirst}>
+        <View style={styles.userView}>
+          <Image style={styles.userImg} source={{ uri: item?.user?.profile }} />
+          <Text style={styles.userName}>{item?.user?.name}</Text>
+        </View>
+        <TouchableOpacity style={styles.seeDetailsView}
+        // onPress={() =>
+        //   navigation.navigate('AppointmentDetails', { item })
+        // }
+        >
+          <Text style={styles.seeDetailsText}>See Details</Text>
+          <Image style={styles.rightRedArrow} source={images.rightRedArrow} />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.requestContainerSecond}>
+        <View style={styles.serviceContainer}>
+          <View style={styles.serviceContainerFirst}>
+            <View style={styles.serviceImagecontainer}>
+              <Image source={{ uri: item?.services[0].serviceIcon }} style={styles.serviceIcon} />
+            </View>
+            <View >
+              <Text style={styles.textBlackBold}>
+                {item?.services[0]?.serviceName}
+              </Text>
+              <Text style={styles.durationText}>
+                {item?.services[0]?.name}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.price}>
+            <Text style={styles.priceText}>
+              {`$ ${item?.services[0].price}`}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.line}></View>
+        <View style={[styles.serviceContainerFirst, { marginTop: sizes.screenWidth * 0.035 }]}>
+          <View>
+            <Text>Total Amount</Text>
+            <Text>{`${convertDateFormat(item?.date)} / ${item?.time} (60min)`}</Text>
+          </View>
+          <View style={styles.price}>
+            <Text>
+              {`$ ${calculateTotalAmount(item?.services)}`}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.btnView}>
+          <TouchableOpacity style={styles.acceptBtn}>
+            <Text style={styles.btnText}>
+              Accept
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.declineBtn}>
+            <Text style={styles.btnText}>
+              Reject
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  )
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -272,7 +379,7 @@ export default function AppoinmentBarber({navigation}) {
             <View style={styles.topIconRow}>
               <View
                 style={styles.locationRow}
-                // onPress={() => navigation.navigate('WholeMap')}
+              // onPress={() => navigation.navigate('WholeMap')}
               >
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
@@ -289,6 +396,18 @@ export default function AppoinmentBarber({navigation}) {
                 <ChatConponent />
               </View>
             </View>
+            <View style={styles.tabContainer}>
+              <TouchableOpacity style={tab === "schedule" ? styles.selectedTab : styles.unSelectedTab}
+                onPress={() => handleChangeTab('schedule')}
+              >
+                <Text style={tab === "schedule" ? styles.selectedText : styles.unSelectedText}>Schedule</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={tab === "request" ? styles.selectedTab : styles.unSelectedTab}
+                onPress={() => handleChangeTab('request')}
+              >
+                <Text style={tab === "request" ? styles.selectedText : styles.unSelectedText}>Request</Text>
+              </TouchableOpacity>
+            </View>
           </ImageBackground>
         </View>
         {Platform.OS === 'ios' && (
@@ -303,8 +422,8 @@ export default function AppoinmentBarber({navigation}) {
               is24Hour={false}
               display="spinner"
               // textColor="red"
-              positiveButton={{label: 'Done'}}
-              negativeButton={{label: 'Cancel'}}
+              positiveButton={{ label: 'Done' }}
+              negativeButton={{ label: 'Cancel' }}
               onChange={
                 Platform.OS === 'android' ? handleSetDate : handleSetDateIOS
               }
@@ -317,109 +436,124 @@ export default function AppoinmentBarber({navigation}) {
           </Modal>
         )}
 
-        <ScrollView
-          style={styles.scrollContianer}
-          showsVerticalScrollIndicator={false}>
-          <View style={styles.containerBody}>
-            <Text style={styles.headingSchedule}>My Schedule</Text>
-            <Text style={styles.txtBelowSchedule}>
-              Your Schedule Overview: Keep track of upcoming and completed
-              appointments here.
-            </Text>
-            {clientName || clientDate ? (
-              <View style={styles.clientView}>
-                <Text style={styles.clientHeading}>Next client</Text>
-                <View style={styles.clientContianer}>
-                  <View style={styles.containerRow}>
-                    <View style={styles.clientRowBox}>
-                      <Image
-                        source={images.profileSmall}
-                        style={styles.clientBoxImg}
-                      />
-                      <Text style={styles.clientDetailTxt}>{clientName}</Text>
+        {
+          tab === "schedule" &&
+          <ScrollView
+            style={styles.scrollContianer}
+            showsVerticalScrollIndicator={false}>
+            <View style={styles.containerBody}>
+              <Text style={styles.headingSchedule}>My Schedule</Text>
+              <Text style={styles.txtBelowSchedule}>
+                Your Schedule Overview: Keep track of upcoming and completed
+                appointments here.
+              </Text>
+              {clientName || clientDate ? (
+                <View style={styles.clientView}>
+                  <Text style={styles.clientHeading}>Next client</Text>
+                  <View style={styles.clientContianer}>
+                    <View style={styles.containerRow}>
+                      <View style={styles.clientRowBox}>
+                        <Image
+                          source={images.profileSmall}
+                          style={styles.clientBoxImg}
+                        />
+                        <Text style={styles.clientDetailTxt}>{clientName}</Text>
+                      </View>
+                      <View style={styles.clientRowBox}>
+                        <Image
+                          source={images.calendarSmall}
+                          style={styles.clientBoxImg}
+                        />
+                        <Text style={styles.clientDetailTxt}>{clientDate}</Text>
+                      </View>
+                      <View style={styles.clientRowBox}>
+                        <Image
+                          source={images.clockSmall}
+                          style={styles.clientBoxImg}
+                        />
+                        <Text style={styles.clientDetailTxt}>{clientTime}</Text>
+                      </View>
                     </View>
-                    <View style={styles.clientRowBox}>
-                      <Image
-                        source={images.calendarSmall}
-                        style={styles.clientBoxImg}
-                      />
-                      <Text style={styles.clientDetailTxt}>{clientDate}</Text>
-                    </View>
-                    <View style={styles.clientRowBox}>
-                      <Image
-                        source={images.clockSmall}
-                        style={styles.clientBoxImg}
-                      />
-                      <Text style={styles.clientDetailTxt}>{clientTime}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.containerRowTwo}>
-                    <View style={styles.containerRowThree}>
-                      <Text style={styles.clientDetailTxtBlackTwo}>
-                        Service
-                      </Text>
-                      {/* <Image
+                    <View style={styles.containerRowTwo}>
+                      <View style={styles.containerRowThree}>
+                        <Text style={styles.clientDetailTxtBlackTwo}>
+                          Service
+                        </Text>
+                        {/* <Image
                         source={images.arrowForward}
                         style={styles.forwardArrow}
                       /> */}
-                      <Text style={styles.serviceDetailTxt}>{service}</Text>
-                    </View>
-                    <View style={styles.containerRowThree}>
-                      <Text style={styles.clientDetailTxtBlackTwo}>Style</Text>
-                      {/* <Image
+                        <Text style={styles.serviceDetailTxt}>{service}</Text>
+                      </View>
+                      <View style={styles.containerRowThree}>
+                        <Text style={styles.clientDetailTxtBlackTwo}>Style</Text>
+                        {/* <Image
                         source={images.arrowForward}
                         style={styles.forwardArrow}
                       /> */}
-                      <Text style={styles.serviceDetailTxt}>{style}</Text>
+                        <Text style={styles.serviceDetailTxt}>{style}</Text>
+                      </View>
                     </View>
                   </View>
                 </View>
-              </View>
-            ) : null}
-            <View style={styles.calenderView}>
-              <View style={styles.containerRow}>
-                <Text style={styles.calenderHeaidng}>Calender</Text>
-                <TouchableOpacity
-                  style={styles.optionRow}
-                  onPress={() => {
-                    setOpen(true);
-                  }}>
-                  <Text style={styles.clientDetailTxtBlack}>
-                    {formatDate(date)}
-                  </Text>
-                  <Image source={images.calendar} style={styles.arrowImg} />
-                </TouchableOpacity>
-              </View>
+              ) : null}
+              <View style={styles.calenderView}>
+                <View style={styles.containerRow}>
+                  <Text style={styles.calenderHeaidng}>Calender</Text>
+                  <TouchableOpacity
+                    style={styles.optionRow}
+                    onPress={() => {
+                      setOpen(true);
+                    }}>
+                    <Text style={styles.clientDetailTxtBlack}>
+                      {formatDate(date)}
+                    </Text>
+                    <Image source={images.calendar} style={styles.arrowImg} />
+                  </TouchableOpacity>
+                </View>
 
-              <Timetable
-                items={appointmentTimeline2}
-                renderItem={props => <RenderItem {...props} />}
-                date={date}
-                // // timeStyle={colors}
-                // fromHour={from ? from : 0}
-                // toHour={to ? to : 24}
-                fromHour={0}
-                toHour={24}
-                is12Hour
-                hourHeight={70}
-                style={{
-                  time: {color: colors.disabledBg2},
-                  timeContainer: {backgroundColor: 'transparent'},
-                  contentContainer: {width: sizes.screenWidth * 0.88},
-                  lines: {
-                    width: sizes.screenWidth * 0.75,
-                    marginLeft: sizes.screenWidth * 0.14,
-                  },
-                  nowLine: {
-                    dot: {backgroundColor: colors.red},
-                    line: {backgroundColor: colors.red},
-                  },
-                }}
-              />
+                <Timetable
+                  items={appointmentTimeline2}
+                  renderItem={props => <RenderItem {...props} />}
+                  date={date}
+                  // // timeStyle={colors}
+                  // fromHour={from ? from : 0}
+                  // toHour={to ? to : 24}
+                  fromHour={0}
+                  toHour={24}
+                  is12Hour
+                  hourHeight={70}
+                  style={{
+                    time: { color: colors.disabledBg2 },
+                    timeContainer: { backgroundColor: 'transparent' },
+                    contentContainer: { width: sizes.screenWidth * 0.88 },
+                    lines: {
+                      width: sizes.screenWidth * 0.75,
+                      marginLeft: sizes.screenWidth * 0.14,
+                    },
+                    nowLine: {
+                      dot: { backgroundColor: colors.red },
+                      line: { backgroundColor: colors.red },
+                    },
+                  }}
+                />
+              </View>
             </View>
+            <View style={Platform.OS == 'ios' && styles.paddingBtm} />
+          </ScrollView>
+        }
+        {
+          tab === "request" &&
+          <View style={{ marginTop: sizes.screenWidth * 0.06 }}>
+            <FlatList
+              data={requestAppointment}
+              renderItem={renderRequest}
+              keyExtractor={item => item._id}
+            />
           </View>
-          <View style={Platform.OS == 'ios' && styles.paddingBtm} />
-        </ScrollView>
+
+        }
+
         {Platform.OS === 'android' && open && (
           <DateTimePicker
             testID="startTimePicker"
@@ -429,8 +563,8 @@ export default function AppoinmentBarber({navigation}) {
             display="spinner"
             // themeVariant="dark"
             // textColor="red"
-            positiveButton={{label: 'Done'}}
-            negativeButton={{label: 'Cancel'}}
+            positiveButton={{ label: 'Done' }}
+            negativeButton={{ label: 'Cancel' }}
             onChange={handleSetDate}
           />
         )}
@@ -463,9 +597,8 @@ export default function AppoinmentBarber({navigation}) {
               <Image source={images.clockIconFill} />
               <Text style={styles.modalServiceTxtFour}>
                 {modalItem?.date
-                  ? `${formatDateShort(modalItem?.date)} - ${
-                      modalItem?.duration
-                    }`
+                  ? `${formatDateShort(modalItem?.date)} - ${modalItem?.duration
+                  }`
                   : null}
               </Text>
             </View>
@@ -488,7 +621,7 @@ export default function AppoinmentBarber({navigation}) {
                 }
                 style={
                   isFutureTime(modalItem?.time, modalItem?.date) ||
-                  modalItem?.status === 'Completed'
+                    modalItem?.status === 'Completed'
                     ? styles.modalBtnViewDisable
                     : styles.modalBtnView
                 }
@@ -496,7 +629,7 @@ export default function AppoinmentBarber({navigation}) {
                 <Text
                   style={
                     isFutureTime(modalItem?.time, modalItem?.date) ||
-                    modalItem?.status === 'Completed'
+                      modalItem?.status === 'Completed'
                       ? styles.modalBtnTextDissable
                       : styles.modalBtnText
                   }>
@@ -506,7 +639,7 @@ export default function AppoinmentBarber({navigation}) {
                   source={images.arrowIcon}
                   style={
                     isFutureTime(modalItem?.time, modalItem?.date) ||
-                    modalItem?.status === 'Completed'
+                      modalItem?.status === 'Completed'
                       ? styles.modalArrowIconDsiable
                       : styles.modalArrowIcon
                   }

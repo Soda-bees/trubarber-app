@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
@@ -46,7 +46,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: sizes.screenWidth * 0.05,
     height: sizes.screenHeight * 0.064,
-    marginTop: sizes.screenHeight * 0.05,
+    marginTop: sizes.screenHeight * 0.02,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
@@ -202,7 +202,7 @@ export const styles = StyleSheet.create({
   },
   scrollContianer: {
     // marginTop: sizes.screenHeight * 0.01,
-    paddingTop:sizes.screenWidth * 0.02,
+    paddingTop: sizes.screenWidth * 0.08,
     marginBottom: sizes.screenHeight * 0.08,
     // paddingBottom: sizes.screenHeight*0.02
   },
@@ -293,7 +293,7 @@ export const styles = StyleSheet.create({
   modalArrowIconDsiable: {
     height: sizes.screenHeight * 0.02,
     width: sizes.screenHeight * 0.02,
-    tintColor:colors.black
+    tintColor: colors.black
   },
   modalArrowIcon: {
     height: sizes.screenHeight * 0.02,
@@ -303,6 +303,17 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontSize: fontSize.smallM,
   },
+  textBlackBold: {
+    color: colors.black,
+    fontSize: fontSize.medium,
+    fontWeight: '500',
+    marginLeft: sizes.screenWidth * 0.03
+  },
+  durationText: {
+    color: colors.darkGray,
+    fontSize: fontSize.smallM,
+    marginLeft: sizes.screenWidth * 0.03
+  },
   textGray: {
     color: colors.darkGray,
     fontSize: fontSize.smallM,
@@ -311,4 +322,165 @@ export const styles = StyleSheet.create({
   paddingBtm: {
     paddingBottom: sizes.screenHeight * 0.11,
   },
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: sizes.screenWidth * 0.015,
+    width: sizes.screenWidth * 0.9,
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: colors.disabledBg,
+    borderRadius: sizes.screenWidth * 0.02,
+    paddingHorizontal: sizes.screenWidth * 0.02,
+    // bottom: 25,
+    zIndex: 10,
+    backgroundColor: colors.white,
+    top:20
+  },
+  selectedTab: {
+    backgroundColor: colors.red,
+    paddingVertical: sizes.screenWidth * 0.015,
+    width: sizes.screenWidth * 0.42,
+    alignItems: 'center',
+    borderRadius: sizes.screenWidth * 0.015
+  },
+  unSelectedTab: {
+    paddingVertical: sizes.screenWidth * 0.015,
+    width: sizes.screenWidth * 0.42,
+    alignItems: 'center',
+    borderRadius: sizes.screenWidth * 0.015
+  },
+  selectedText: {
+    color: colors.white,
+    fontSize: fontSize.medium,
+    fontWeight: '400'
+  },
+  unSelectedText: {
+    color: colors.black,
+    fontSize: fontSize.medium,
+    fontWeight: '400'
+  },
+  requestContainer: {
+    width: sizes.screenWidth * 0.9,
+    backgroundColor: colors.disabledBg,
+    alignSelf: 'center',
+    borderRadius: sizes.screenWidth * 0.04,
+    marginTop:sizes.screenWidth * 0.02
+    // paddingHorizontal:sizes.screenWidth * 0.1
+  },
+  userImg: {
+    width: sizes.screenWidth * 0.12,
+    height: sizes.screenWidth * 0.12,
+    resizeMode: 'contain',
+    borderRadius: sizes.screenWidth * 0.1
+  },
+  userName: {
+    fontSize: fontSize.medium,
+    fontWeight: '600',
+    color: 'black',
+    marginLeft: sizes.screenWidth * 0.03
+  },
+  userView: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  requestContainerFirst: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: sizes.screenWidth * 0.03,
+    paddingVertical: sizes.screenWidth * 0.04
+  },
+  seeDetailsView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  rightRedArrow: {
+    width: sizes.screenWidth * 0.024,
+    height: sizes.screenWidth * 0.035,
+    resizeMode: 'contain',
+    marginLeft: sizes.screenWidth * 0.025
+  },
+  seeDetailsText: {
+    color: colors.red,
+    fontWeight: '500',
+    fontSize: fontSize.smallM
+  },
+  requestContainerSecond: {
+    backgroundColor: colors.white,
+    width: sizes.screenWidth * 0.88,
+    // height: sizes.screenHeight * 0.2,
+    borderRadius: sizes.screenWidth * 0.04,
+    paddingHorizontal: sizes.screenWidth * 0.025,
+    paddingVertical: sizes.screenWidth * 0.025,
+    alignSelf: 'center',
+    marginBottom: 4
+  },
+  serviceIcon: {
+    resizeMode: 'contain',
+    height: sizes.screenWidth * 0.07,
+    width: sizes.screenWidth * 0.07,
+  },
+  serviceImagecontainer: {
+    backgroundColor: colors.selectorcolor,
+    width: sizes.screenWidth * 0.14,
+    height: sizes.screenHeight * 0.072,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: sizes.screenWidth * 0.02,
+  },
+  serviceContainer: {
+    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: 'space-between',
+  },
+  serviceContainerFirst: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  price: {
+    borderWidth: sizes.screenWidth * 0.002,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: sizes.screenHeight * 0.0325,
+    width: sizes.screenWidth * 0.14,
+    borderRadius: sizes.screenWidth * 0.018,
+  },
+  priceText: {
+    fontSize: fontSize.small,
+    color: colors.black,
+  },
+  line: {
+    width: sizes.screenWidth * 0.89,
+    height: 2,
+    alignSelf: 'center',
+    backgroundColor: colors.grayBg2,
+    marginTop: sizes.screenWidth * 0.035,
+  },
+  btnView:{
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between',
+    marginTop:sizes.screenWidth * 0.05,
+    gap:4
+  },
+  acceptBtn:{
+    backgroundColor:colors.red,
+    flexGrow:1,
+    alignItems:'center',
+    paddingVertical:sizes.screenWidth * 0.015,
+    borderRadius:sizes.screenWidth * 0.015
+  },
+  declineBtn:{
+    backgroundColor:colors.placeholdertext,
+    flexGrow:1,
+    alignItems:'center',
+    paddingVertical:sizes.screenWidth * 0.015,
+    borderRadius:sizes.screenWidth * 0.015
+  },
+  btnText:{
+    fontSize:fontSize.smallM,
+    color:colors.white
+  }
 });

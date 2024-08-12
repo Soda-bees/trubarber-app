@@ -12,32 +12,32 @@ import {
   PermissionsAndroid,
   Alert,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
-import {styles} from './style';
+import React, { useCallback, useEffect, useState } from 'react';
+import { styles } from './style';
 import images from '../../services/utilities/images';
-import {colors, sizes} from '../../services';
-import {StarRatingDisplay} from 'react-native-star-rating-widget';
+import { colors, sizes } from '../../services';
+import { StarRatingDisplay } from 'react-native-star-rating-widget';
 import * as Progress from 'react-native-progress';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import {useDispatch, useSelector} from 'react-redux';
-import {setLocation} from '../../store/location';
-import {socket, socketService} from '../../services/Socket';
-import {selectUserData, setUserData} from '../../store/userData';
-import {selectAuthToken} from '../../store/authToken';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLocation } from '../../store/location';
+import { socket, socketService } from '../../services/Socket';
+import { selectUserData, setUserData } from '../../store/userData';
+import { selectAuthToken } from '../../store/authToken';
 import formatToJSON from '../../services/config/FormatToJson';
 import ChatConponent from '../../components/ChatComponent';
 import moment from 'moment';
-import {handleGetUserDetails} from '../../services/config/API';
-import {useFocusEffect} from '@react-navigation/native';
+import { handleGetUserDetails } from '../../services/config/API';
+import { useFocusEffect } from '@react-navigation/native';
 import NotificationComponent from '../../components/NotificationComponent';
 
-export default function BarberDashboard({navigation}) {
+export default function BarberDashboard({ navigation }) {
   const dispatch = useDispatch();
   const userData = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken);
 
-  const [numberOfCompletedAppointments, setNumberOfCompletedAppointments] =
+  const [numberOfScheduledAppointments, setNumberOfScheduledAppointments] =
     useState(0);
   const [numberOfPendingAppointments, setNumberOfPendingAppointments] =
     useState(0);
@@ -82,7 +82,7 @@ export default function BarberDashboard({navigation}) {
     const month = parseInt(parts[0], 10) - 1;
     const year = parseInt(parts[2], 10);
     const dateObj = new Date(year, month, day);
-    const options = {month: 'short', day: 'numeric'};
+    const options = { month: 'short', day: 'numeric' };
 
     return dateObj.toLocaleDateString('en-US', options);
   };
@@ -96,13 +96,13 @@ export default function BarberDashboard({navigation}) {
 
   const filterAndSetAppointments = appointments => {
     const completedAppointments = appointments.filter(
-      appointment => appointment?.status.toLowerCase() === 'completed',
+      appointment => appointment?.status.toLowerCase() === 'scheduled',
     );
     const pendingAppointments = appointments.filter(
       appointment => appointment?.status.toLowerCase() === 'pending',
     );
 
-    setNumberOfCompletedAppointments(completedAppointments.length);
+    setNumberOfScheduledAppointments(completedAppointments.length);
     setNumberOfPendingAppointments(pendingAppointments.length);
   };
 
@@ -201,23 +201,24 @@ export default function BarberDashboard({navigation}) {
           <View style={styles.containerBody}>
             <View style={styles.detailRow}>
               <View style={styles.detailContainer}>
-                <View style={{flexDirection:"row" ,alignItems:'center' , justifyContent:'space-between'}}>
-                <Image style={styles.boxImg} source={images.appointment} />
-                  <Text style={styles.appoitmentNumberTxt}>
-                    {numberOfCompletedAppointments}
-                  </Text>
-                </View>
-                  <Text style={styles.detailTxt}>Completed Appointments</Text>
-              </View>
-              <View style={styles.detailContainer}>
-                <View style={{flexDirection:"row" ,alignItems:'center' , justifyContent:'space-between'}}>
-                <Image style={styles.boxImg} source={images.appointment} />
+                <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Image style={styles.boxImg} source={images.appointment} />
                   <Text style={styles.appoitmentNumberTxt}>
                     {numberOfPendingAppointments}
                   </Text>
                 </View>
-                  <Text style={styles.detailTxt}>Pending Appointments</Text>
+                <Text style={styles.detailTxt}>Pending Appointments</Text>
               </View>
+              <View style={styles.detailContainer}>
+                <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Image style={styles.boxImg} source={images.appointment} />
+                  <Text style={styles.appoitmentNumberTxt}>
+                    {numberOfScheduledAppointments}
+                  </Text>
+                </View>
+                <Text style={styles.detailTxt}>Scheduled Appointments</Text>
+              </View>
+
             </View>
             {userData.appoinment?.length == 0 ? (
               <View style={styles.noAppointmentMainView}>
@@ -230,7 +231,7 @@ export default function BarberDashboard({navigation}) {
                 </Text>
               </View>
             ) : (
-              <View style={{marginBottom: 15}}>
+              <View style={{ marginBottom: 15 }}>
                 <View style={styles.appointmentBtn}>
                   <Text style={styles.headingSummary}>Appointments</Text>
                   <TouchableOpacity
@@ -344,7 +345,7 @@ export default function BarberDashboard({navigation}) {
                     <View style={styles.ratingData}>
                       <View style={styles.rowAndmargin}>
                         <Image
-                          source={{uri: item?.userData?.profile}}
+                          source={{ uri: item?.userData?.profile }}
                           style={styles.profilePic}
                         />
                         <View style={styles.alignItems}>

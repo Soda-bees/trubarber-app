@@ -126,8 +126,10 @@ import sendSecond from "../../../assets/sendSecond.png"
 import noChatImg from "../../../assets/noChatImg.png"
 import chatScroll from "../../../assets/chatScroll.png"
 import noNotification from "../../../assets/noNotification.png"
+import rightRedArrow from "../../../assets/rightRedArrow.png"
 
 const images = {
+  rightRedArrow,
   noNotification,
   chatScroll,
   noChatImg,
