@@ -38,7 +38,7 @@ import {
   bookAppoinment,
   hanleGetBookedAppoinment,
 } from '../../services/config/API/index.js';
-import {addAppoinment} from '../../store/userData/index.js';
+import {addAppoinment, selectUserData} from '../../store/userData/index.js';
 import {socket, socketService} from '../../services/Socket';
 import Header from '../../components/Header/index.js';
 
@@ -57,6 +57,8 @@ export default function BookingProcess({navigation, route}) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [loader, setLoader] = useState(false);
   const [bookedTime, setBookedTime] = useState([]);
+
+  const userData = useSelector(selectUserData);
 
   useEffect(() => {
     const backAction = () => {
@@ -272,7 +274,82 @@ export default function BookingProcess({navigation, route}) {
     }
   };
 
+  const canBook = (array, barberId, date, time) =>
+    array.some(
+      ({barber, status, date, time}) =>
+        barber._id === barberId &&
+        status === 'Pending' &&
+        selectedDate === date &&
+        selected === time,
+    );
+
+  // const handleConfirm = async () => {
+  //   // Logging for debugging purposes
+  //   // console.log("Can book:", canBook(userData.appoinment, barber._id, selectedDate, selected));
+  //   console.log(
+  //     'Can book:',
+  //     canBook(userData.appoinment, barber._id, selectedDate, selected),
+  //   );
+
+  //   // Validate input fields
+  //   if (!selectedDate) {
+  //     return ErrorShow('error', 'Oops!', 'Please select a date');
+  //   }
+  //   if (!selected) {
+  //     return ErrorShow('error', 'Oops!', 'Please select a time');
+  //   }
+  //   if (cart?.services?.length === 0) {
+  //     return ErrorShow('error', 'Oops!', 'Please select a service');
+  //   }
+  //   if (!paymentCard) {
+  //     return ErrorShow('error', 'Oops!', 'Please enter card info');
+  //   }
+
+  //   // Check if booking can proceed
+  //   if (!canBook(userData.appoinment, barber._id, selectedDate, selected)) {
+  //     const obj = {
+  //       ...cart,
+  //       date: selectedDate,
+  //       time: selected,
+  //     };
+
+  //     try {
+  //       setLoader(true); // Show loader
+  //       const response = await bookAppoinment(obj, authToken);
+
+  //       // Handle response
+  //       if (response.status === 200) {
+  //         ErrorShow(
+  //           'success',
+  //           'Congratulations!',
+  //           response?.data?.message,
+  //           onHide,
+  //         );
+  //       } else {
+  //         ErrorShow('error', 'Oops!', response?.data?.message);
+  //       }
+  //     } catch (error) {
+  //       console.error(error); // Log the error
+  //     } finally {
+  //       setLoader(false); // Hide loader in both success and error cases
+  //     }
+  //   } else {
+  //     ErrorShow('error', 'Oops!', 'You already have requested appointment for this time slot');
+  //     console.log('Cannot book at this time');
+  //   }
+  // };
+
   const handleConfirm = async () => {
+    console.log(
+      canBook(userData.appoinment, barber._id, selectedDate, selected),
+    );
+    if (canBook(userData.appoinment, barber._id, selectedDate, selected)) {
+      return ErrorShow(
+        'error',
+        'Oops!',
+        'You have already scheduled an appointment for this time slot.',
+      );
+    }
     if (!selectedDate) {
       return ErrorShow('error', 'Oops!', 'Please select date');
     }
@@ -293,7 +370,9 @@ export default function BookingProcess({navigation, route}) {
     try {
       setLoader(true);
       const response = await bookAppoinment(obj, authToken);
+      console.log(response.status);
       if (response.status == 200) {
+        setLoader(false);
         ErrorShow(
           'success',
           'Congratulation!',
@@ -506,7 +585,10 @@ export default function BookingProcess({navigation, route}) {
             )}
           </View>
         </ScrollView>
-        <View style={Platform.OS == 'android' ? styles.btnMargin : styles.btnMarginIOS}>
+        <View
+          style={
+            Platform.OS == 'android' ? styles.btnMargin : styles.btnMarginIOS
+          }>
           {loader ? (
             <Loader title={'Book'} />
           ) : (

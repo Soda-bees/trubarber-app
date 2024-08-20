@@ -112,7 +112,9 @@ export default function BarberServiceDetails({route, navigation}) {
             <Image source={images.threeDots} />
           </TouchableOpacity>
         </View>
-        <ScrollView style={styles.ScrollViewContainer}>
+        <ScrollView
+          // style={styles.ScrollViewContainer}
+          contentContainerStyle={styles.ScrollViewContainer}>
           <View style={styles.containerBody}>
             <View style={styles.aboutContainer}>
               <Text style={styles.aboutHeading}>About</Text>
@@ -132,7 +134,10 @@ export default function BarberServiceDetails({route, navigation}) {
             </View>
           </View>
         </ScrollView>
-        <View style={styles.imageView}>
+        <View
+          style={
+            Platform.OS == 'android' ? styles.imageView : styles.imageViewIOS
+          }>
           <Text style={styles.imageHeading}>Images</Text>
           <ScrollView showsHorizontalScrollIndicator={false} horizontal>
             <View style={{width: sizes.screenWidth * 0.04}}></View>

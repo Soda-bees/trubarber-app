@@ -34,4 +34,19 @@ export const styles = StyleSheet.create({
         fontWeight: '600',
         fontSize: fontSize.h6,
       },
+
+      acceptBtn:{
+        // backgroundColor:colors.red,
+        flexGrow:1,
+        alignItems:'center',
+        paddingVertical:sizes.screenWidth * 0.02,
+        borderRadius:sizes.screenWidth * 0.02,
+        justifyContent:'center',
+        width:50
+      },
+
+      btnText1:{
+        fontSize:fontSize.smallM,
+        color:colors.white
+      }
 });

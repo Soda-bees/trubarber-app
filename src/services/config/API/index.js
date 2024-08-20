@@ -281,7 +281,7 @@ export const hanleGetBookedAppoinment = async (token, id) => {
   }
 };
 
-export const updateAppointmentStatus = async (token, id) => {
+export const updateAppointmentStatus = async (token, id , status) => {
   try {
     const headers = {
       'Content-Type': 'application/json',
@@ -289,7 +289,7 @@ export const updateAppointmentStatus = async (token, id) => {
     };
     const response = await axiosInstance.post(
       `barber/updateAppoinmentStatus/${id}`,
-      {},
+      {status},
       { headers },
     );
     return response;

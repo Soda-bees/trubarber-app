@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native';
-import { colors, fontSize, sizes } from '../../services';
-import { black } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
+import {StyleSheet} from 'react-native';
+import {colors, fontSize, sizes} from '../../services';
+import {black} from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 export const styles = StyleSheet.create({
   container: {
@@ -12,9 +12,9 @@ export const styles = StyleSheet.create({
     // marginBottom: sizes.screenHeight * 0.12,
     // height: sizes.screenHeight * 0.2
     flexDirection: 'row',
-    alignItems: "center",
+    alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: sizes.screenHeight * 0.02
+    marginTop: sizes.screenHeight * 0.02,
   },
   dateRound: {
     flexDirection: 'column',
@@ -36,17 +36,17 @@ export const styles = StyleSheet.create({
     height: sizes.screenWidth * 0.14,
     width: sizes.screenWidth * 0.14,
     borderRadius: sizes.screenWidth * 0.15,
-    backgroundColor: colors.lightRed
+    backgroundColor: colors.lightRed,
   },
   dateRoundText: {
     color: colors.disabledBg2,
     fontSize: fontSize.smallM,
-    fontWeight: '500'
+    fontWeight: '500',
   },
   dateRoundTextSelected: {
     color: colors.red,
     fontSize: fontSize.medium,
-    fontWeight: '500'
+    fontWeight: '500',
   },
   calender: {
     height: sizes.screenHeight * 0.2,
@@ -144,9 +144,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     // gap: sizes.screenWidth * 0.07,
     alignItems: 'center',
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
     // backgroundColor:'red',
-    width:sizes.screenWidth * 0.95
+    width: sizes.screenWidth * 0.95,
   },
   bookContainer: {
     marginTop: sizes.screenHeight * 0.04,
@@ -179,10 +179,10 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  flexRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+  // flexRow: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  // },
   textBlack: {
     color: colors.disabledBg2,
     fontWeight: '500',
@@ -206,6 +206,8 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.16,
     height: sizes.screenHeight * 0.07,
     borderRadius: sizes.screenWidth * 0.04,
+    resizeMode: 'contain',
+    backgroundColor: 'white',
   },
   barberContainer: {
     // backgroundColor: 'red',
@@ -249,7 +251,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: sizes.screenWidth * 0.03,
-    marginTop: sizes.screenHeight * 0.02,
+    marginTop: sizes.screenHeight * 0.01,
     borderColor: colors.lightBordercolor,
   },
 
@@ -340,19 +342,62 @@ export const styles = StyleSheet.create({
   flexRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems:'center',
+    alignItems: 'center',
+    marginTop: 20,
   },
   flexRow1: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems:'center',
+    alignItems: 'center',
   },
   disabledText: {
     color: colors.grayBorder,
     fontWeight: '600',
   },
+
+  disabledTextShowButton: {
+    color: colors.black,
+    fontWeight: '600',
+  },
+
+  horizontalLine: {
+    width: sizes.screenWidth * 0.9,
+    height: sizes.screenHeight * 0.001,
+    backgroundColor: colors.grayBorder,
+    alignSelf: 'center',
+    marginTop: 20,
+  },
+
   disabledText1: {
     color: colors.grayBorder,
     fontWeight: '800',
+  },
+  btnView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: sizes.screenWidth * 0.05,
+    gap: 4,
+    paddingHorizontal: 20,
+    position: 'absolute',
+    bottom: sizes.screenHeight * 0.11,
+  },
+  acceptBtn: {
+    backgroundColor: colors.red,
+    flexGrow: 1,
+    alignItems: 'center',
+    paddingVertical: sizes.screenWidth * 0.03,
+    borderRadius: sizes.screenWidth * 0.02,
+  },
+  btnText: {
+    fontSize: fontSize.medium,
+    color: colors.white,
+  },
+  declineBtn: {
+    backgroundColor: colors.placeholdertext,
+    flexGrow: 1,
+    alignItems: 'center',
+    paddingVertical: sizes.screenWidth * 0.03,
+    borderRadius: sizes.screenWidth * 0.02,
   },
 });

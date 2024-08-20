@@ -373,7 +373,7 @@ export const styles = StyleSheet.create({
   },
 
   paddingBtm: {
-    paddingBottom: sizes.screenHeight * 0.1,
+    paddingBottom: sizes.screenHeight * 0.3,
   },
 
   appointmentStyle: {

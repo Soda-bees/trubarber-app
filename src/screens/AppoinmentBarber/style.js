@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { colors, fontSize, sizes } from '../../services';
+import {StyleSheet} from 'react-native';
+import {colors, fontSize, sizes} from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
@@ -201,8 +201,14 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.medium,
   },
   scrollContianer: {
-    // marginTop: sizes.screenHeight * 0.01,
+    // marginTop: sizes.screenHeight * 0.022,
     paddingTop: sizes.screenWidth * 0.08,
+    marginBottom: sizes.screenHeight * 0.08,
+    // paddingBottom: sizes.screenHeight*0.02
+  },
+  scrollContianerIOS: {
+    marginTop: sizes.screenHeight * 0.022,
+    paddingTop: sizes.screenWidth * 0.03,
     marginBottom: sizes.screenHeight * 0.08,
     // paddingBottom: sizes.screenHeight*0.02
   },
@@ -293,7 +299,7 @@ export const styles = StyleSheet.create({
   modalArrowIconDsiable: {
     height: sizes.screenHeight * 0.02,
     width: sizes.screenHeight * 0.02,
-    tintColor: colors.black
+    tintColor: colors.black,
   },
   modalArrowIcon: {
     height: sizes.screenHeight * 0.02,
@@ -307,12 +313,12 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontSize: fontSize.medium,
     fontWeight: '500',
-    marginLeft: sizes.screenWidth * 0.03
+    marginLeft: sizes.screenWidth * 0.03,
   },
   durationText: {
     color: colors.darkGray,
     fontSize: fontSize.smallM,
-    marginLeft: sizes.screenWidth * 0.03
+    marginLeft: sizes.screenWidth * 0.03,
   },
   textGray: {
     color: colors.darkGray,
@@ -321,6 +327,9 @@ export const styles = StyleSheet.create({
 
   paddingBtm: {
     paddingBottom: sizes.screenHeight * 0.11,
+  },
+  marginBottom: {
+    marginBottom: sizes.screenHeight * 0.32,
   },
   tabContainer: {
     flexDirection: 'row',
@@ -335,61 +344,62 @@ export const styles = StyleSheet.create({
     // bottom: 25,
     zIndex: 10,
     backgroundColor: colors.white,
-    top:20
+    top: 20,
   },
   selectedTab: {
     backgroundColor: colors.red,
     paddingVertical: sizes.screenWidth * 0.015,
     width: sizes.screenWidth * 0.42,
     alignItems: 'center',
-    borderRadius: sizes.screenWidth * 0.015
+    borderRadius: sizes.screenWidth * 0.02,
   },
   unSelectedTab: {
     paddingVertical: sizes.screenWidth * 0.015,
     width: sizes.screenWidth * 0.42,
     alignItems: 'center',
-    borderRadius: sizes.screenWidth * 0.015
+    borderRadius: sizes.screenWidth * 0.015,
   },
   selectedText: {
     color: colors.white,
     fontSize: fontSize.medium,
-    fontWeight: '400'
+    fontWeight: '400',
   },
   unSelectedText: {
     color: colors.black,
     fontSize: fontSize.medium,
-    fontWeight: '400'
+    fontWeight: '400',
   },
   requestContainer: {
     width: sizes.screenWidth * 0.9,
     backgroundColor: colors.disabledBg,
     alignSelf: 'center',
     borderRadius: sizes.screenWidth * 0.04,
-    marginTop:sizes.screenWidth * 0.02
+    marginTop: sizes.screenWidth * 0.02,
     // paddingHorizontal:sizes.screenWidth * 0.1
   },
   userImg: {
     width: sizes.screenWidth * 0.12,
     height: sizes.screenWidth * 0.12,
     resizeMode: 'contain',
-    borderRadius: sizes.screenWidth * 0.1
+    borderRadius: sizes.screenWidth * 0.1,
+    backgroundColor: colors.bgLight,
   },
   userName: {
     fontSize: fontSize.medium,
     fontWeight: '600',
     color: 'black',
-    marginLeft: sizes.screenWidth * 0.03
+    marginLeft: sizes.screenWidth * 0.03,
   },
   userView: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   requestContainerFirst: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: sizes.screenWidth * 0.03,
-    paddingVertical: sizes.screenWidth * 0.04
+    paddingVertical: sizes.screenWidth * 0.04,
   },
   seeDetailsView: {
     flexDirection: 'row',
@@ -399,12 +409,12 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.024,
     height: sizes.screenWidth * 0.035,
     resizeMode: 'contain',
-    marginLeft: sizes.screenWidth * 0.025
+    marginLeft: sizes.screenWidth * 0.025,
   },
   seeDetailsText: {
     color: colors.red,
     fontWeight: '500',
-    fontSize: fontSize.smallM
+    fontSize: fontSize.smallM,
   },
   requestContainerSecond: {
     backgroundColor: colors.white,
@@ -414,7 +424,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: sizes.screenWidth * 0.025,
     paddingVertical: sizes.screenWidth * 0.025,
     alignSelf: 'center',
-    marginBottom: 4
+    marginBottom: 4,
   },
   serviceIcon: {
     resizeMode: 'contain',
@@ -431,7 +441,7 @@ export const styles = StyleSheet.create({
   },
   serviceContainer: {
     flexDirection: 'row',
-    alignItems: "center",
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
   serviceContainerFirst: {
@@ -458,29 +468,51 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.grayBg2,
     marginTop: sizes.screenWidth * 0.035,
   },
-  btnView:{
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'space-between',
-    marginTop:sizes.screenWidth * 0.05,
-    gap:4
+  btnView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: sizes.screenWidth * 0.05,
+    gap: 4,
   },
-  acceptBtn:{
-    backgroundColor:colors.red,
-    flexGrow:1,
-    alignItems:'center',
-    paddingVertical:sizes.screenWidth * 0.015,
-    borderRadius:sizes.screenWidth * 0.015
+  acceptBtn: {
+    backgroundColor: colors.red,
+    flexGrow: 1,
+    alignItems: 'center',
+    paddingVertical: sizes.screenWidth * 0.02,
+    borderRadius: sizes.screenWidth * 0.02,
+    width: 50,
   },
-  declineBtn:{
-    backgroundColor:colors.placeholdertext,
-    flexGrow:1,
-    alignItems:'center',
-    paddingVertical:sizes.screenWidth * 0.015,
-    borderRadius:sizes.screenWidth * 0.015
+  declineBtn: {
+    backgroundColor: colors.placeholdertext,
+    flexGrow: 1,
+    alignItems: 'center',
+    paddingVertical: sizes.screenWidth * 0.02,
+    borderRadius: sizes.screenWidth * 0.02,
+    width: 50,
   },
-  btnText:{
+  btnText: {
+    fontSize: fontSize.smallM,
+    color: colors.white,
+  },
+
+  noAppointment:{
+    justifyContent:'center',
+    alignItems:'center',
+    alignSelf:'center',
+    height:sizes.screenHeight * 0.6,
+  },
+
+  noAppointmentImg:{
+    resizeMode:'contain',
+    width:sizes.screenWidth * 0.1,
+    height:sizes.screenWidth * 0.1,
+  },
+
+  noAppointmentText:{
+    color:colors.black,
     fontSize:fontSize.smallM,
-    color:colors.white
-  }
+    marginTop:10,
+    // backgroundColor:'red'
+  },
 });

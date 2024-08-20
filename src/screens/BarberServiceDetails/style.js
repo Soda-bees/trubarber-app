@@ -94,6 +94,10 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.03,
     paddingBottom: sizes.screenHeight * 0.02,
   },
+  imageViewIOS: {
+    marginTop: sizes.screenHeight * 0.01,
+    paddingBottom: sizes.screenHeight * 0.1,
+  },
   imageHeading: {
     fontSize: fontSize.medium,
     color: colors.black,
@@ -109,7 +113,7 @@ export const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   ScrollViewContainer: {
-    marginTop: sizes.screenHeight * 0.02,
+    // marginTop: sizes.screenHeight * 0.02,
   },
   modalView: {
     backgroundColor: colors.lightgray,

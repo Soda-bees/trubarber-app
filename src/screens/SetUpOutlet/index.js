@@ -212,7 +212,7 @@ export default function SetUpOutlet({navigation, route}) {
             <BackArrow onPress={() => navigation.goBack()} />
           </View>
           <Text style={styles.Forgotpass}>Set-Up Business Profile</Text>
-          <KeyboardAwareScrollView enableOnAndroid={true}>
+          <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={Platform.OS == 'ios' && sizes.screenHeight * 0.9}>
             <View>
               <TouchableOpacity
                 style={imgUri ? {

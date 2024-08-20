@@ -23,7 +23,7 @@ import Header from '../../components/Header/index.js';
 
 export default function AppointmentDetails({navigation, route}) {
   const today = moment();
-  const {item} = route?.params;
+  const {item, showButtons} = route?.params;
   const [selected, setSelected] = useState(null);
 
   const currentDate = moment();
@@ -198,13 +198,24 @@ export default function AppointmentDetails({navigation, route}) {
           <View style={styles.barberContainer}>
             <View style={styles.barberNameImage}>
               <View style={styles.imageContainer}>
-                <Image
-                  source={{uri: item?.barber?.profile}}
-                  style={styles.imageContainer}
-                />
+                {showButtons ? (
+                  <Image
+                    source={{uri: item?.user?.profile}}
+                    style={styles.imageContainer}
+                  />
+                ) : (
+                  <Image
+                    source={{uri: item?.barber?.profile}}
+                    style={styles.imageContainer}
+                  />
+                )}
               </View>
               <View>
-                <Text style={styles.barberName}>{item?.barber?.name}</Text>
+                {showButtons ? (
+                  <Text style={styles.barberName}>{item?.user?.name}</Text>
+                ) : (
+                  <Text style={styles.barberName}>{item?.barber?.name}</Text>
+                )}
                 <Text style={styles.time}>
                   {`${item?.time} - ${getOneHourLater(item?.time)}`}
                 </Text>
@@ -216,17 +227,31 @@ export default function AppointmentDetails({navigation, route}) {
               return (
                 <View style={styles.flexRow} key={index}>
                   <View style={styles.flexRow1}>
-                    <Text style={styles.disabledText}>{item?.name}</Text>
                     <Text
                       style={
-                        styles.disabledText1
+                        showButtons
+                          ? styles.disabledTextShowButton
+                          : styles.disabledText
+                      }>
+                      {item?.name}
+                    </Text>
+                    <Text
+                      style={
+                        showButtons
+                          ? styles.disabledTextShowButton
+                          : styles.disabledText1
                       }>{` (${item?.serviceName})`}</Text>
                   </View>
                   <Text
-                    style={styles.disabledText}>{`$ ${item.price}.00`}</Text>
+                    style={
+                      showButtons
+                        ? styles.disabledTextShowButton
+                        : styles.disabledText
+                    }>{`$ ${item.price}.00`}</Text>
                 </View>
               );
             })}
+            {showButtons && <View style={styles.horizontalLine} />}
           </View>
           <View style={styles.total}>
             <Text style={styles.totalText}>Total:</Text>
@@ -235,6 +260,16 @@ export default function AppointmentDetails({navigation, route}) {
             )?.toFixed(2)}`}</Text>
           </View>
         </View>
+        {/* {showButtons && (
+          <View style={styles.btnView}>
+            <TouchableOpacity style={styles.acceptBtn}>
+              <Text style={styles.btnText}>Accept</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.declineBtn}>
+              <Text style={styles.btnText}>Reject</Text>
+            </TouchableOpacity>
+          </View>
+        )} */}
       </View>
     </SafeAreaView>
   );
