@@ -200,12 +200,12 @@ export default function AppointmentDetails({navigation, route}) {
               <View style={styles.imageContainer}>
                 {showButtons ? (
                   <Image
-                    source={{uri: item?.user?.profile}}
+                  source={item?.user?.profile ? {uri: item?.user?.profile} : item?.user?.gender === "male" ? images.male : images.female}
                     style={styles.imageContainer}
                   />
                 ) : (
                   <Image
-                    source={{uri: item?.barber?.profile}}
+                  source={item?.barber?.profile ? {uri: item?.barber?.profile} : item?.barber?.gender === "male" ? images.male : images.female}
                     style={styles.imageContainer}
                   />
                 )}

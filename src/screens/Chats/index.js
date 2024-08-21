@@ -83,17 +83,17 @@ export default function Chats({ navigation }) {
   }, [userData]);
 
   const handleBackNavigation = () => {
-   
-      if (userData?.role === 'user') {
-        navigation.navigate('MyTabs');
-        return true
-      }
-      else{
-        navigation.navigate('BarberTabs')
-        return true
-      }
+
+    if (userData?.role === 'user') {
+      navigation.navigate('MyTabs');
+      return true
     }
-  
+    else {
+      navigation.navigate('BarberTabs')
+      return true
+    }
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -155,41 +155,42 @@ export default function Chats({ navigation }) {
                         //     style={styles.chatSwipeContainer}
                         //     swipeContainerStyle={{}}
                         //     leftButtons={leftButton(index)}>
-                            <View style={styles.chatContainer} key={index}>
-                              <TouchableOpacity
-                                style={styles.chatDetailContainer}
-                                onPress={() => {
-                                  navigation.navigate('ChatDetails', { chatRoomId: item?._id });
-                                }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                  <Image
-                                    source={userData?.role == 'user' ? { uri: item?.barber?.profile } : { uri: item?.user?.profile }}
-                                    style={styles.profileImage} />
-                                  <View style={styles.chatDetailsColumn}>
-                                    <Text style={styles.chatName}>
-                                      {userData?.role == 'user' ? item?.barber.name : item?.user?.name}
-                                    </Text>
-                                    <Text style={styles.chatDetail} numberOfLines={1}>
-                                      {lastMessage?.image?.length > 0 ? "Photo" : lastMessage?.text}
-                                    </Text>
-                                  </View>
-                                </View>
-                                <View style={{ height: sizes.screenHeight * 0.06, flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'flex-start'}}>
-                                  <Text style={styles.chatTime}>
-                                    {timeAgo}
-                                  </Text>
-                                  {
-                                    unseenMessages?.length > 0 ?
-                                      <View style={styles.newMsgsContainer}>
-                                        <Text style={{ color: 'black', fontSize: fontSize.small, fontWeight: '500' }}>
-                                          {unseenMessages?.length > 0 && unseenMessages?.length}
-                                        </Text>
-                                      </View> : null
-                                  }
-
-                                </View>
-                              </TouchableOpacity>
+                        <View style={styles.chatContainer} key={index}>
+                          <TouchableOpacity
+                            style={styles.chatDetailContainer}
+                            onPress={() => {
+                              navigation.navigate('ChatDetails', { chatRoomId: item?._id });
+                            }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                              <Image
+                                source={userData?.role == 'user' ? item?.barber?.profile ? { uri: item?.barber?.profile } : item?.barber?.gender === 'male' ? images.male : images.female
+                                  : item?.user?.profile ? { uri: item?.user?.profile } : item?.user?.gender === "male" ? images.male : images.female}
+                                style={styles.profileImage} />
+                              <View style={styles.chatDetailsColumn}>
+                                <Text style={styles.chatName}>
+                                  {userData?.role == 'user' ? item?.barber.name : item?.user?.name}
+                                </Text>
+                                <Text style={styles.chatDetail} numberOfLines={1}>
+                                  {lastMessage?.image?.length > 0 ? "Photo" : lastMessage?.text}
+                                </Text>
+                              </View>
                             </View>
+                            <View style={{ height: sizes.screenHeight * 0.06, flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'flex-start' }}>
+                              <Text style={styles.chatTime}>
+                                {timeAgo}
+                              </Text>
+                              {
+                                unseenMessages?.length > 0 ?
+                                  <View style={styles.newMsgsContainer}>
+                                    <Text style={{ color: 'black', fontSize: fontSize.small, fontWeight: '500' }}>
+                                      {unseenMessages?.length > 0 && unseenMessages?.length}
+                                    </Text>
+                                  </View> : null
+                              }
+
+                            </View>
+                          </TouchableOpacity>
+                        </View>
                         //   </SwipeItem>
                         // </SwipeProvider>
                       )
@@ -197,7 +198,7 @@ export default function Chats({ navigation }) {
                 }
               </View>
             ) : (<View style={styles.noChatView}>
-              <Image source={images.noChatImg} style={styles.noChatImg}/>
+              <Image source={images.noChatImg} style={styles.noChatImg} />
               <Text style={styles.noChatText}>There is currently no chat to show</Text>
             </View>)
           }

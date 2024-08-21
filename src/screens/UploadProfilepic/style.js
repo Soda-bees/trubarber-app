@@ -1,10 +1,10 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.lightgray,
-    height: sizes.screenHeight,
+    height: sizes.screenHeight * 1.05,
   },
 
   backArrow: {
@@ -88,11 +88,50 @@ export const styles = StyleSheet.create({
 
   nextBtn: {
     position: 'absolute',
-    bottom: sizes.screenHeight*0.07,
-    alignSelf: 'center'
+    bottom: sizes.screenHeight * 0.06,
+    alignSelf: 'center',
   },
 
   nextBtnIOS: {
-   top: sizes.screenHeight * 0.24,
+    top: sizes.screenHeight * 0.24,
   },
+  genderContainer: {
+    alignSelf: 'center',
+    width: sizes.screenWidth * 0.85,
+    height: sizes.screenWidth * 0.12,
+    paddingHorizontal: sizes.screenWidth * 0.04,
+    borderWidth: 1,
+    borderColor: colors.black,
+    borderRadius: sizes.screenWidth * 0.04,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: colors.bluishWhite,
+    zIndex: 1
+  },
+  genderSelectText: {
+    fontSize: fontSize.medium,
+    color: colors.black,
+    fontWeight: '500'
+  },
+  genderArrow: {
+    width: sizes.screenWidth * 0.03,
+    height: sizes.screenWidth * 0.03,
+  },
+  dropdownContainer: {
+    width: sizes.screenWidth * 0.85,
+    alignSelf: 'center',
+    backgroundColor: colors.selectorcolor,
+    borderRadius:sizes.screenWidth * 0.02
+  },
+  optionTouchable: {
+    paddingHorizontal: sizes.screenWidth * 0.04,
+    paddingVertical: sizes.screenWidth * 0.015,
+  },
+  genderMainContainer: { 
+    marginTop: 13, 
+    backgroundColor: colors.selectorcolor, 
+    width: sizes.screenWidth * 0.85, 
+    alignSelf: 'center', 
+    borderRadius: sizes.screenWidth * 0.04, }
 });

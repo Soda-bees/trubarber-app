@@ -127,8 +127,16 @@ import noChatImg from "../../../assets/noChatImg.png"
 import chatScroll from "../../../assets/chatScroll.png"
 import noNotification from "../../../assets/noNotification.png"
 import rightRedArrow from "../../../assets/rightRedArrow.png"
+import genderUp from "../../../assets/genderUp.png"
+import genderDown from "../../../assets/genderDown.png"
+import female from "../../../assets/female.png"
+import male from "../../../assets/male.png"
 
 const images = {
+  female,
+  male,
+  genderUp,
+  genderDown,
   rightRedArrow,
   noNotification,
   chatScroll,

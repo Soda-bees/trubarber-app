@@ -9,24 +9,24 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
-import {styles} from './style.js';
+import React, { useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
-import {colors, sizes} from '../../services';
+import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
+import { colors, sizes } from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
-import {useDispatch, useSelector} from 'react-redux';
-import {removeAuthToken, selectAuthToken} from '../../store/authToken/index.js';
-import {removeRole} from '../../store/role/index.js';
-import {removeUserData, selectUserData} from '../../store/userData/index.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeAuthToken, selectAuthToken } from '../../store/authToken/index.js';
+import { removeRole } from '../../store/role/index.js';
+import { removeUserData, selectUserData } from '../../store/userData/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
-import {removePaymentCard} from '../../store/paymentCard/index.js';
-import {removeCart} from '../../store/cart/index.js';
-import {deleteDeviceToken} from '../../services/config/API/index.js';
+import { removePaymentCard } from '../../store/paymentCard/index.js';
+import { removeCart } from '../../store/cart/index.js';
+import { deleteDeviceToken } from '../../services/config/API/index.js';
 import Header from '../../components/Header/index.js';
 
-export default function Profile({navigation}) {
+export default function Profile({ navigation }) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const authToken = useSelector(selectAuthToken);
@@ -58,7 +58,7 @@ export default function Profile({navigation}) {
           <View style={styles.contentContainer}>
             <View style={styles.contentAlligment}>
               <Image
-                source={{uri: userData?.profile}}
+                source={userData?.profile ? { uri: userData?.profile } : userData?.gender === 'male' ? images.male : images.female}
                 style={styles.youngMan}
               />
               <View style={styles.nameContainer}>
@@ -135,7 +135,7 @@ export default function Profile({navigation}) {
           </View>
         </View>
 
-        <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}> 
+        <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
           <Button title={'Logout'} onPress={() => handleLogout()} />
         </View>
       </View>

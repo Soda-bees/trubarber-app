@@ -1,18 +1,20 @@
-import {View, Text, SafeAreaView, Platform} from 'react-native';
+import { View, Text, SafeAreaView, Platform } from 'react-native';
 import React from 'react';
-import {styles} from './style';
+import { styles } from './style';
 import BackArrow from '../../components/BackArrow';
 import Button from '../../components/Button';
 
-export default function ProfileSetupPrompt({navigation, route}) {
-  const {userData} = route.params;
-  
+export default function ProfileSetupPrompt({ navigation, route }) {
+  const { userData } = route.params;
+  console.log(userData);
+
+
   const handlegoBack = () => {
     navigation.goBack();
   };
 
   const handleSurveryPrompt = () => {
-    navigation.navigate('SurveyPrompt', {userData});
+    navigation.navigate('SurveyPrompt', { userData });
   };
   return (
     <SafeAreaView>

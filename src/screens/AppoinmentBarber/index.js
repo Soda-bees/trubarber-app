@@ -332,7 +332,7 @@ export default function AppoinmentBarber({navigation}) {
     <View style={styles.requestContainer}>
       <View style={styles.requestContainerFirst}>
         <View style={styles.userView}>
-          <Image style={styles.userImg} source={{uri: item?.user?.profile}} />
+          <Image style={styles.userImg} source={item?.user?.profile ? {uri: item?.user?.profile} : item?.user?.gender === "male" ? images.male : images.female} />
           <Text style={styles.userName}>{item?.user?.name}</Text>
         </View>
         <TouchableOpacity
