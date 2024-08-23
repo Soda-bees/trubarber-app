@@ -13,29 +13,29 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import React, {useEffect, useState, useCallback} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import images from '../../services/utilities/images';
-import {styles} from './style';
-import {colors, sizes} from '../../services';
-import MapView, {Marker} from 'react-native-maps';
+import { styles } from './style';
+import { colors, sizes } from '../../services';
+import MapView, { Marker } from 'react-native-maps';
 import StarRating from 'react-native-star-rating-widget';
 import LottieView from 'lottie-react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectAuthToken} from '../../store/authToken';
-import {getAllBarber, handleGetUserDetails} from '../../services/config/API';
-import {ErrorShow} from '../../components/Error';
-import {selectlocation, setLocation} from '../../store/location';
-import {setBarber} from '../../store/barber';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAuthToken } from '../../store/authToken';
+import { getAllBarber, handleGetUserDetails } from '../../services/config/API';
+import { ErrorShow } from '../../components/Error';
+import { selectlocation, setLocation } from '../../store/location';
+import { setBarber } from '../../store/barber';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import {useFocusEffect} from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import formatToJSON from '../../services/config/FormatToJson';
-import {socket, socketService} from '../../services/Socket';
-import {selectUserData, setUserData} from '../../store/userData';
+import { socket, socketService } from '../../services/Socket';
+import { selectUserData, setUserData } from '../../store/userData';
 import ChatConponent from '../../components/ChatComponent';
 import NotificationComponent from '../../components/NotificationComponent';
 
-export default function Explore({navigation}) {
+export default function Explore({ navigation }) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const location = useSelector(selectlocation) || userData?.location;
@@ -137,9 +137,9 @@ export default function Explore({navigation}) {
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c;
     return distance;
@@ -207,7 +207,7 @@ export default function Explore({navigation}) {
   const getCurrentLocation = (setRegion, dispatch) => {
     Geolocation.getCurrentPosition(
       position => {
-        const {latitude, longitude} = position.coords;
+        const { latitude, longitude } = position.coords;
         // console.log(
         //   position.coords,
         //   '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
@@ -256,12 +256,12 @@ export default function Explore({navigation}) {
 
   const filteredBarbers = search
     ? (() => {
-        const searchLower = search.toLowerCase();
-        const filtered = barberData.filter(item =>
-          item.name.toLowerCase().includes(searchLower),
-        );
-        return filtered.length > 0 ? filtered : null;
-      })()
+      const searchLower = search.toLowerCase();
+      const filtered = barberData.filter(item =>
+        item.name.toLowerCase().includes(searchLower),
+      );
+      return filtered.length > 0 ? filtered : null;
+    })()
     : null;
 
   const calculateAverageRating = reviews => {
@@ -360,7 +360,7 @@ export default function Explore({navigation}) {
                         return (
                           <ImageBackground
                             key={index}
-                            source={{uri: item?.profile}}
+                            source={{ uri: item?.businessProfile }}
                             imageStyle={styles.containerImage}>
                             <View style={styles.row}>
                               <Text style={styles.textWhite}>5.0</Text>
@@ -445,7 +445,7 @@ export default function Explore({navigation}) {
                             style={styles.locationImgIcon}
                             resizeMode="contain">
                             <Image
-                              source={{uri: item.profile}}
+                              source={{ uri: item.businessProfile                              }}
                               style={styles.markerIngStyle}
                             />
                           </ImageBackground>
@@ -472,7 +472,7 @@ export default function Explore({navigation}) {
                                 })
                               }>
                               <Image
-                                source={{uri: item?.icon}}
+                                source={{ uri: item?.icon }}
                                 style={styles.imageResize}
                                 resizeMode="contain"
                               />
@@ -511,7 +511,7 @@ export default function Explore({navigation}) {
                               })
                             }>
                             <ImageBackground
-                              source={{uri: item.profile}}
+                              source={{ uri: item.businessProfile}}
                               imageStyle={styles.containerImage}
                               style={styles.containerImage}>
                               <View style={styles.row}>

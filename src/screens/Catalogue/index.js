@@ -181,7 +181,7 @@ export default function Catalogue({navigation}) {
                 return (
                   <ImageBackground
                     key={index}
-                    source={{uri: item?.profile}}
+                    source={{uri: item?.businessProfile                    }}
                     imageStyle={
                       Platform.OS == 'android'
                         ? styles.containerImage

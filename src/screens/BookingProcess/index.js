@@ -9,18 +9,18 @@ import {
   ToastAndroid,
   Platform,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style.js';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
-import {Calendar, LocaleConfig} from 'react-native-calendars';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
 import BackArrow from '../../components/BackArrow';
-import {colors} from '../../services/utilities/colors';
-import {sizes} from '../../services/index.js';
+import { colors } from '../../services/utilities/colors';
+import { sizes } from '../../services/index.js';
 import Button from '../../components/Button/index.js';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectbarber} from '../../store/barber/index.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectbarber } from '../../store/barber/index.js';
 import {
   deleteCartItem,
   removeCart,
@@ -29,20 +29,20 @@ import {
   updateCart,
 } from '../../store/cart/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
-import {ErrorShow} from '../../components/Error/index.js';
+import { ErrorShow } from '../../components/Error/index.js';
 import Toast from 'react-native-toast-message';
-import {selectPaymentCard} from '../../store/paymentCard/index.js';
+import { selectPaymentCard } from '../../store/paymentCard/index.js';
 import Loader from '../../components/Loader/index.js';
-import {selectAuthToken} from '../../store/authToken/index.js';
+import { selectAuthToken } from '../../store/authToken/index.js';
 import {
   bookAppoinment,
   hanleGetBookedAppoinment,
 } from '../../services/config/API/index.js';
-import {addAppoinment, selectUserData} from '../../store/userData/index.js';
-import {socket, socketService} from '../../services/Socket';
+import { addAppoinment, selectUserData } from '../../store/userData/index.js';
+import { socket, socketService } from '../../services/Socket';
 import Header from '../../components/Header/index.js';
 
-export default function BookingProcess({navigation, route}) {
+export default function BookingProcess({ navigation, route }) {
   const dispatch = useDispatch();
   const barbers = useSelector(selectbarber);
   const cart = useSelector(selectCart);
@@ -126,12 +126,12 @@ export default function BookingProcess({navigation, route}) {
       if (modifier === 'AM' && hour === 12) {
         hour = 0;
       }
-      return {hour, minutes};
+      return { hour, minutes };
     };
 
-    let {hour: startHour, minutes: startMinutes} =
+    let { hour: startHour, minutes: startMinutes } =
       convertTo24HourFormat(startTime);
-    let {hour: endHour, minutes: endMinutes} = convertTo24HourFormat(endTime);
+    let { hour: endHour, minutes: endMinutes } = convertTo24HourFormat(endTime);
 
     // Adjust the endHour to include the last slot
     if (endMinutes > 0) {
@@ -276,7 +276,7 @@ export default function BookingProcess({navigation, route}) {
 
   const canBook = (array, barberId, date, time) =>
     array.some(
-      ({barber, status, date, time}) =>
+      ({ barber, status, date, time }) =>
         barber._id === barberId &&
         status === 'Pending' &&
         selectedDate === date &&
@@ -435,19 +435,19 @@ export default function BookingProcess({navigation, route}) {
                     paddingTop: sizes.screenHeight * 0.01,
                     // paddingBottom: sizes.screenHeight * 0.02,
                   }}
-                  dayContainerStyle={{borderWidth: 1}}
+                  dayContainerStyle={{ borderWidth: 1 }}
                   scrollerPaging
                   useNativeDriver
                   scrollable
-                  highlightDateNumberStyle={{color: colors.red}}
-                  calendarHeaderStyle={{color: colors.black}}
-                  highlightDateNameStyle={{color: colors.red}}
+                  highlightDateNumberStyle={{ color: colors.red }}
+                  calendarHeaderStyle={{ color: colors.black }}
+                  highlightDateNameStyle={{ color: colors.red }}
                   highlightDateContainerStyle={{
                     backgroundColor: colors.dateSelected,
                     borderColor: colors.red,
                   }}
-                  dateNameStyle={{color: colors.black}}
-                  dateNumberStyle={{color: colors.black}}
+                  dateNameStyle={{ color: colors.black }}
+                  dateNumberStyle={{ color: colors.black }}
                   leftSelector={[]}
                   rightSelector={[]}
                   onDateSelected={handleDateSelected}
@@ -488,7 +488,7 @@ export default function BookingProcess({navigation, route}) {
                 <View style={styles.barberNameImage}>
                   <View style={styles.imageContainer}>
                     <Image
-                      source={{uri: barber?.profile}}
+                      source={{ uri: barber?.businessProfile }}
                       style={styles.imageContainer}
                     />
                   </View>
@@ -500,7 +500,7 @@ export default function BookingProcess({navigation, route}) {
                   </View>
                 </View>
               </View>
-              <View style={{marginTop: 20}}>
+              <View style={{ marginTop: 20 }}>
                 {cart &&
                   cart?.services?.map((item, index) => {
                     return (
@@ -540,7 +540,7 @@ export default function BookingProcess({navigation, route}) {
               <TouchableOpacity
                 style={styles.textContainer}
                 onPress={() =>
-                  navigation.navigate('BookAppointment', {item: barber})
+                  navigation.navigate('BookAppointment', { item: barber })
                 }>
                 <Text style={styles.addAnotherservice}>
                   + Add Another Service

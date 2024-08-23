@@ -114,6 +114,18 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.02,
     position: 'relative',
   },
+  time: {
+    color: colors.black,
+    fontWeight: '600',
+    textAlignVertical: 'top',
+    width: sizes.screenWidth * 0.9,
+    backgroundColor: colors.selectorcolor,
+    borderRadius: sizes.screenWidth * 0.02,
+    position: 'relative',
+    height:sizes.screenWidth * 0.09,
+    alignItems:'start',
+    justifyContent:'center'
+  },
   descriptionIOS: {
     color: colors.black,
     fontWeight: '600',

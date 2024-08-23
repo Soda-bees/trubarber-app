@@ -83,7 +83,10 @@ export default function Profile({navigation}) {
         <Header title={'Profile'} />
         <View style={styles.contentContainer}>
           <View style={styles.contentAlligment}>
-            <Image source={{uri: userData?.profile}} style={styles.youngMan} />
+            <Image 
+            // source={{uri: userData?.profile}} 
+            source={userData?.profile ? { uri: userData?.profile } : userData?.gender === 'male' ? images.male : images.female}
+            style={styles.youngMan} />
             <View style={styles.nameContainer}>
               <Text style={styles.firstName}>{userData?.name}</Text>
               {/* <Text style={styles.lastName}>Williamson</Text> */}
@@ -121,6 +124,17 @@ export default function Profile({navigation}) {
             style={styles.naviRow}
             onPress={() => navigation.navigate('EditScreen')}>
             <Text style={styles.navText}>Edit Profile</Text>
+            <Image
+              source={images.arrowRight}
+              style={styles.arrowRight}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.naviRow}
+            // onPress={() => navigation.navigate('EditScreen')}
+            >
+            <Text style={styles.navText}>Edit Business Profile</Text>
             <Image
               source={images.arrowRight}
               style={styles.arrowRight}

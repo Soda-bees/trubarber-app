@@ -9,22 +9,22 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style.js';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
-import {colors, sizes} from '../../services';
+import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
+import { colors, sizes } from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
-import {useSelector} from 'react-redux';
-import {selectbarber} from '../../store/barber/index.js';
+import { useSelector } from 'react-redux';
+import { selectbarber } from '../../store/barber/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
-import {selectlocation} from '../../store/location/index.js';
+import { selectlocation } from '../../store/location/index.js';
 import { selectUserData } from '../../store/userData/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
-export default function HaircutServices({navigation, route}) {
-  const {name} = route?.params;
+export default function HaircutServices({ navigation, route }) {
+  const { name } = route?.params;
   const userData = useSelector(selectUserData)
   const barbers = useSelector(selectbarber);
   const location = useSelector(selectlocation) || userData?.location
@@ -48,9 +48,9 @@ export default function HaircutServices({navigation, route}) {
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c;
     return distance;
@@ -101,7 +101,7 @@ export default function HaircutServices({navigation, route}) {
                   return (
                     <ImageBackground
                       key={index}
-                      source={{uri: item?.profile}}
+                      source={{ uri: item?.businessProfile }}
                       imageStyle={
                         Platform.OS == 'android'
                           ? styles.containerImage
@@ -165,8 +165,8 @@ export default function HaircutServices({navigation, route}) {
             <View
               style={
                 Platform.OS == 'android'
-                  ? {paddingBottom: sizes.screenHeight * 0.05}
-                  : {paddingBottom: sizes.screenHeight * 0.1}
+                  ? { paddingBottom: sizes.screenHeight * 0.05 }
+                  : { paddingBottom: sizes.screenHeight * 0.1 }
               }></View>
           </ScrollView>
         </View>

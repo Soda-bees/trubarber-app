@@ -280,7 +280,7 @@ export default function BookAppointment({navigation, route}) {
       <View style={styles.container}>
         <ImageBackground
           imageStyle={styles.headerImage}
-          source={{uri: barbar?.profile}}
+          source={{uri: barbar?.businessProfile          }}
           // style={}
         >
           <View style={styles.headerContainer}>

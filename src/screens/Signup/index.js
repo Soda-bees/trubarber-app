@@ -10,21 +10,21 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import {colors} from '../../services';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectRole, setRole} from '../../store/role';
-import {validateEmailAvailability} from '../../services/config/API';
+import { colors } from '../../services';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectRole, setRole } from '../../store/role';
+import { validateEmailAvailability } from '../../services/config/API';
 import Toast from 'react-native-toast-message';
-import {ErrorShow} from '../../components/Error';
+import { ErrorShow } from '../../components/Error';
 import Loader from '../../components/Loader';
-import {setAuthToken} from '../../store/authToken';
+import { setAuthToken } from '../../store/authToken';
 import messaging from '@react-native-firebase/messaging';
 
-export default function Signup({navigation}) {
+export default function Signup({ navigation }) {
   const role = useSelector(selectRole);
   const dispatch = useDispatch();
 
@@ -35,6 +35,7 @@ export default function Signup({navigation}) {
   const [loader, setLoader] = useState(false);
   const [checked, setChecked] = useState(false);
   const [deviceToken, setDeviceToken] = useState(null);
+  const [phone, setPhone] = useState('')
 
   const handleSignIn = () => {
     navigation.navigate('Login');
@@ -64,14 +65,56 @@ export default function Signup({navigation}) {
               role,
               deviceToken,
             };
+            // if (role === 'user') {
+              navigation.navigate('ProfilePrompt', { userData });
+            // } else {
+            //   navigation.navigate('SetUpOutlet', { userData });
+            // }
+            setLoader(false);
+          } else {
+            setLoader(false);
+            return ErrorShow('error', 'Oops!', response.data.message);
+          }
+        } catch (error) {
+          console.log(error);
+          setLoader(false);
+        }
+      } else {
+        ErrorShow('error', 'Oops!', 'All fields are required');
+      }
+    } else {
+      ErrorShow('error', 'Oops!', 'Please select your Role');
+    }
+  };
 
-            console.log(userData);
-
-            if (role === 'user') {
-              navigation.navigate('ProfilePrompt', {userData});
-            } else {
-              navigation.navigate('SetUpOutlet', {userData});
-            }
+  const handleEmailValidationBarber = async () => {
+    if (role !== null) {
+      if (email && password && userName && phone) {
+        if (password.length < 8) {
+          return ErrorShow(
+            'error',
+            'Oops!',
+            'Password must contain atleast 8 characters',
+          );
+        }
+        try {
+          setLoader(true);
+          const response = await validateEmailAvailability(email);
+          if (response.data.success) {
+            const userData = {
+              name: userName,
+              email,
+              password,
+              role,
+              deviceToken,
+              phone
+            };
+            // if (role === 'user') {
+            //   navigation.navigate('ProfilePrompt', { userData });
+            // } else {
+              // navigation.navigate('SetUpOutlet', { userData })
+              navigation.navigate('UploadProfileBarber', { userData })
+            // }
             setLoader(false);
           } else {
             setLoader(false);
@@ -174,6 +217,27 @@ export default function Signup({navigation}) {
                 }}
               />
             </View>
+            {
+              role === "barber" &&
+              <View style={styles.inputEmailcontainer}>
+                <Image
+                  source={images.Call}
+                  style={styles.inputImage}
+                  resizeMode="contain"
+                />
+                <TextInput
+                  placeholder="Phone"
+                  style={styles.input}
+                  placeholderTextColor={colors.placeholdertextgray}
+                  keyboardType='numeric'
+                  value={phone}
+                  onChangeText={text => {
+                    setPhone(text);
+                  }}
+                />
+              </View>
+            }
+
             <View style={styles.inputPasswordcontainer}>
               <Image
                 source={images.lock}
@@ -208,36 +272,40 @@ export default function Signup({navigation}) {
                 </TouchableOpacity>
               )}
             </View>
-            <View
-              style={
-                Platform.OS == 'android'
-                  ? styles.checkboxView
-                  : styles.checkboxViewIOS
-              }>
-              <View>
-                {checked ? (
-                  <TouchableOpacity onPress={() => setChecked(!checked)}>
-                    <Image
-                      source={images.checked}
-                      resizeMode="contain"
-                      style={styles.checked}
-                    />
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity onPress={() => setChecked(!checked)}>
-                    <Image
-                      source={images.unchecked}
-                      resizeMode="contain"
-                      style={[styles.checked, styles.tintColor]}
-                    />
-                  </TouchableOpacity>
-                )}
+            {
+              role === 'user' &&
+              <View
+                style={
+                  Platform.OS == 'android'
+                    ? styles.checkboxView
+                    : styles.checkboxViewIOS
+                }>
+                <View>
+                  {checked ? (
+                    <TouchableOpacity onPress={() => setChecked(!checked)}>
+                      <Image
+                        source={images.checked}
+                        resizeMode="contain"
+                        style={styles.checked}
+                      />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity onPress={() => setChecked(!checked)}>
+                      <Image
+                        source={images.unchecked}
+                        resizeMode="contain"
+                        style={[styles.checked, styles.tintColor]}
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
+                <Text style={styles.checkboxTitle}>
+                  By selecting the checkbox, you are indicating your agreement to
+                  the Terms and Policies.
+                </Text>
               </View>
-              <Text style={styles.checkboxTitle}>
-                By selecting the checkbox, you are indicating your agreement to
-                the Terms and Policies.
-              </Text>
-            </View>
+            }
+
           </View>
           <View style={Platform.OS == 'ios' && styles.forgotPassIOS}>
             <View style={styles.forgotPass}>
@@ -246,7 +314,7 @@ export default function Signup({navigation}) {
               ) : (
                 <Button
                   title={'Sign Up'}
-                  onPress={() => handleEmailValidation()}
+                  onPress={() => role === 'user' ? handleEmailValidation() : handleEmailValidationBarber()}
                 />
               )}
             </View>

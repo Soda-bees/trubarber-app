@@ -12,33 +12,33 @@ import {
   Keyboard,
   Touchable,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style.js';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
+import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
 import BackArrow from '../../components/BackArrow/index.js';
-import {colors} from '../../services/index.js';
-import {PermissionsAndroid, PermissionsIOS} from 'react-native';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectUserData, setUserData} from '../../store/userData/index.js';
-import {updateProfile, uploadProfile} from '../../services/config/API/index.js';
+import { colors } from '../../services/index.js';
+import { PermissionsAndroid, PermissionsIOS } from 'react-native';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserData, setUserData } from '../../store/userData/index.js';
+import { updateProfile, uploadProfile } from '../../services/config/API/index.js';
 import Loader from '../../components/Loader/index.js';
-import {selectAuthToken} from '../../store/authToken/index.js';
-import {ErrorShow} from '../../components/Error/index.js';
+import { selectAuthToken } from '../../store/authToken/index.js';
+import { ErrorShow } from '../../components/Error/index.js';
 import Toast from 'react-native-toast-message';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import TimePickerComponent from '../../components/TimePicketComponent/index.js';
-import {selectRole} from '../../store/role/index.js';
-import {parse, format} from 'date-fns';
+import { selectRole } from '../../store/role/index.js';
+import { parse, format } from 'date-fns';
 import Header from '../../components/Header/index.js';
 
 // import {colors, sizes} from 'borderBottomcomponents/BackArrow/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
-export default function EditScreen({navigation}) {
+export default function EditScreen({ navigation }) {
   const userData = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken);
   const role = useSelector(selectRole);
@@ -52,12 +52,13 @@ export default function EditScreen({navigation}) {
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [description, setDescription] = useState('');
+  const [phone, setPhone] = useState('');
 
   const parseTimeString = time => {
     const [startTimeString, endTimeString] = time.split(' - ');
     const startTime = parseSingleTimeString(startTimeString);
     const endTime = parseSingleTimeString(endTimeString);
-    return {startTime, endTime};
+    return { startTime, endTime };
   };
 
   const parseSingleTimeString = timeString => {
@@ -91,9 +92,10 @@ export default function EditScreen({navigation}) {
         setEmail(userData?.email);
         setName(userData?.name);
         setDescription(userData?.description);
-        const {startTime, endTime} = parseTimeString(userData?.time);
+        const { startTime, endTime } = parseTimeString(userData?.time);
         setStartTime(startTime);
         setEndTime(endTime);
+        setPhone(userData?.phone)
       }
     }
   }, [userData]);
@@ -249,8 +251,8 @@ export default function EditScreen({navigation}) {
 
   return (
     <SafeAreaView>
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    <View style={styles.container}>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={styles.container}>
           <View style={styles.borderBottom}>
             <Header title={'Edit Profile'} />
           </View>
@@ -258,7 +260,7 @@ export default function EditScreen({navigation}) {
             <TouchableOpacity onPress={() => uploadPhoto('library')}>
               {/* {imgUri ? ( */}
               <Image
-                source={{uri: imgUri}}
+                source={imgUri ? { uri: imgUri } : userData?.gender === "male" ? images.male : images.female}
                 style={styles.youngMan}
                 resizeMode="cover"
               />
@@ -315,7 +317,30 @@ export default function EditScreen({navigation}) {
                   />
                 </View>
               </View>
-              {role == 'barber' && (
+              {role == 'barber' &&
+                <View style={styles.inputField}>
+                  <View style={styles.rowInput}>
+                    <Image
+                      source={images.Call}
+                      style={styles.inputImage}
+                      resizeMode="contain"
+                    />
+                    <TextInput
+                      placeholder="Phone"
+                      style={styles.input}
+                      placeholderTextColor={colors.placeholdertext}
+                      keyboardType='numeric'
+                      value={phone}
+                      onChangeText={text => {
+                        setPhone(text);
+                      }}
+                    />
+                  </View>
+                </View>
+              }
+
+
+              {/* {role == 'barber' && (
                 <View style={styles.inputField}>
                   <View style={styles.description}>
                     <TimePickerComponent
@@ -332,8 +357,8 @@ export default function EditScreen({navigation}) {
                     />
                   </View>
                 </View>
-              )}
-              {role == 'barber' && (
+              )} */}
+              {/* {role == 'barber' && (
                 <View style={styles.inputFieldDes}>
                   <TextInput
                     style={
@@ -349,7 +374,7 @@ export default function EditScreen({navigation}) {
                     placeholderTextColor="black"
                   />
                 </View>
-              )}
+              )} */}
             </View>
           </KeyboardAwareScrollView>
           <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>

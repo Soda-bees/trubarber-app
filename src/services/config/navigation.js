@@ -60,6 +60,7 @@ import AuthSetUpServices from '../../screens/AuthSetUpServices';
 import AuthServiceInfo from '../../screens/AuthServiceInfo';
 import { socketService, socket } from '../Socket';
 import BarberDirection from '../../screens/BarberDirection';
+import UploadProfileBarber from '../../screens/UploadProfileBarber';
 
 
 
@@ -210,6 +211,7 @@ export default function MainNavigator() {
             component={BusinessVerfication}
           />
           <Stack.Screen name="OutletCreated" component={OutletCreated} />
+          <Stack.Screen name="UploadProfileBarber" component={UploadProfileBarber} />
         </Stack.Navigator>
       ) : role === 'user' ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>

@@ -8,24 +8,24 @@ import {
   Platform,
   Dimensions,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import images from '../../services/utilities/images';
-import {styles} from './style.js';
+import { styles } from './style.js';
 import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {PermissionsAndroid} from 'react-native';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { PermissionsAndroid } from 'react-native';
 import TimePickerComponent from '../../components/TimePicketComponent';
 import Loader from '../../components/Loader';
-import {uploadProfile} from '../../services/config/API';
-import {ErrorShow} from '../../components/Error';
+import { uploadProfile } from '../../services/config/API';
+import { ErrorShow } from '../../components/Error';
 import Toast from 'react-native-toast-message';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { colors, sizes } from '../../services';
 
-export default function SetUpOutlet({navigation, route}) {
-  const {userData} = route.params;
-  const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
+export default function SetUpOutlet({ navigation, route }) {
+  const { userData } = route.params;
+  const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
   const [outletName, setOutletName] = useState('RedBox Barber');
   const [description, setDescription] = useState('');
@@ -34,7 +34,7 @@ export default function SetUpOutlet({navigation, route}) {
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [loader, setLoader] = useState(false);
-  const [dimensions, setDimensions] = useState({width: 0, height: 0});
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
@@ -143,8 +143,11 @@ export default function SetUpOutlet({navigation, route}) {
     if (!description) {
       return ErrorShow('error', 'Oops!', 'Please fill the description');
     }
-    const time = `${formatTime(startTime)} - ${formatTime(endTime)}`;
-    Object.assign(userData, {profile: imgUri, description, time});
+    // const time = `${formatTime(startTime)} - ${formatTime(endTime)}`;
+    const time = `6:00 AM - 10:00 PM`;
+    Object.assign(userData, {businessProfile: imgUri, description, time});
+    console.log(userData);
+    
     navigation.navigate('AuthSetUpServices', {userData});
   };
 
@@ -174,12 +177,12 @@ export default function SetUpOutlet({navigation, route}) {
             calculatedHeight = height;
           }
 
-          if (calculatedHeight > screenHeight *0.3) {
+          if (calculatedHeight > screenHeight * 0.3) {
             calculatedHeight = screenHeight * 0.3;
             calculatedWidth = calculatedHeight * aspectRatio;
           }
 
-          resolve({width: calculatedWidth, height: calculatedHeight});
+          resolve({ width: calculatedWidth, height: calculatedHeight });
         },
         error => {
           reject(error);
@@ -194,8 +197,8 @@ export default function SetUpOutlet({navigation, route}) {
         if (!imgUri) {
           return;
         }
-        const {width, height} = await checkDimensions(imgUri);
-        setDimensions({width, height});
+        const { width, height } = await checkDimensions(imgUri);
+        setDimensions({ width, height });
       } catch (error) {
         console.error('Error calculating image dimensions:', error);
       }
@@ -220,12 +223,12 @@ export default function SetUpOutlet({navigation, route}) {
                   height: dimensions.height,
                   borderRadius: sizes.screenWidth * 0.04,
                   alignSelf: 'center',
-                  marginTop: sizes.screenHeight*0.03
+                  marginTop: sizes.screenHeight * 0.03
                 } : styles.uploadImage}
                 onPress={() => uploadPhoto('library')}>
                 {imgUri ? (
                   <Image
-                    source={{uri: imgUri}}
+                    source={{ uri: imgUri }}
                     style={{
                       width: dimensions.width,
                       height: dimensions.height,
@@ -257,7 +260,7 @@ export default function SetUpOutlet({navigation, route}) {
                   Description
                 </Text>
                 <TextInput
-                  style={Platform.OS == 'android' ? styles.description :styles.descriptionIOS}
+                  style={Platform.OS == 'android' ? styles.description : styles.descriptionIOS}
                   onChangeText={setDescription}
                   value={description}
                   multiline={true}
@@ -267,6 +270,19 @@ export default function SetUpOutlet({navigation, route}) {
                 />
               </View>
               <View style={styles.timeContainer}>
+                <Text style={
+                  Platform.OS == 'android' ? styles.title : styles.titleIOS
+                }>Time</Text>
+                <View style={styles.time}>
+                  <Text style={styles.description}>6:00 AM - 10:00 PM</Text>
+                  <Image
+                    source={images.clockIcon}
+                    style={styles.clockIcon}
+                    resizeMode="contain"
+                  />
+                </View>
+              </View>
+              {/* <View style={styles.timeContainer}>
                 <View style={styles.description}>
                   <TimePickerComponent
                     startTime={startTime}
@@ -281,7 +297,7 @@ export default function SetUpOutlet({navigation, route}) {
                     resizeMode="contain"
                   />
                 </View>
-              </View>
+              </View> */}
             </View>
           </KeyboardAwareScrollView>
         </View>
