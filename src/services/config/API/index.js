@@ -281,7 +281,7 @@ export const hanleGetBookedAppoinment = async (token, id) => {
   }
 };
 
-export const updateAppointmentStatus = async (token, id , status) => {
+export const updateAppointmentStatus = async (token, id, status) => {
   try {
     const headers = {
       'Content-Type': 'application/json',
@@ -289,7 +289,7 @@ export const updateAppointmentStatus = async (token, id , status) => {
     };
     const response = await axiosInstance.post(
       `barber/updateAppoinmentStatus/${id}`,
-      {status},
+      { status },
       { headers },
     );
     return response;
@@ -443,15 +443,22 @@ export const deleteDeviceToken = async token => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-    const response = await axiosInstance.post(
-      'user/deleteDeviceToken',
-      {},
-      {
-        headers,
-      },
-    );
+    const response = await axiosInstance.post('user/deleteDeviceToken', {}, { headers },);
     return response;
   } catch (error) {
     return error;
   }
 };
+
+export const addFavourite = async (token, body) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post('user/addFavourite', body, { headers })
+    return response
+  } catch (error) {
+    return error
+  }
+}

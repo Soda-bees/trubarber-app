@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
   },
   borderBottom: {
     // backgroundColor: colors.lightgray,
-    borderBottomWidth: sizes.screenWidth* 0.002,
+    borderBottomWidth: sizes.screenWidth * 0.002,
     borderColor: colors.grayBorder,
     // marginTop: sizes.screenHeight * 0.021
     // opacity: 0.4,
@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
     marginLeft: sizes.screenWidth * 0.072,
     marginRight: sizes.screenWidth * 0.072,
     height: sizes.screenHeight * 0.21,
-    borderWidth: sizes.screenWidth* 0.002,
+    borderWidth: sizes.screenWidth * 0.002,
     borderColor: colors.selectorcolor,
     borderRadius: sizes.screenWidth * 0.042,
   },
@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
   photoText: {
     color: colors.black,
     fontWeight: '500',
-    borderBottomWidth: sizes.screenWidth* 0.002,
+    borderBottomWidth: sizes.screenWidth * 0.002,
     borderColor: colors.black,
     fontSize: fontSize.medium,
     // paddingTop: sizes.screenHeight
@@ -132,19 +132,19 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.7,
     color: colors.black,
     fontSize: fontSize.small,
-    marginLeft:sizes.screenWidth * 0.01
+    marginLeft: sizes.screenWidth * 0.01
   },
 
   btn: {
     // top: sizes.screenHeight  * 0.182
-    position:'absolute',
-    alignSelf:'center',
+    position: 'absolute',
+    alignSelf: 'center',
     bottom: sizes.screenHeight * 0.03,
   },
   btnIOS: {
-    position:'absolute',
-    alignSelf:"center",
-    bottom:sizes.screenHeight * 0.1
+    position: 'absolute',
+    alignSelf: "center",
+    bottom: sizes.screenHeight * 0.1
   },
   description: {
     color: colors.black,
@@ -165,8 +165,8 @@ export const styles = StyleSheet.create({
     paddingHorizontal: sizes.screenWidth * 0.03,
     borderRadius: sizes.screenWidth * 0.02,
     position: 'relative',
-    height:sizes.screenHeight * 0.1,
-    paddingTop:sizes.screenHeight * 0.01
+    height: sizes.screenHeight * 0.1,
+    paddingTop: sizes.screenHeight * 0.01
   },
   clockIcon: {
     height: sizes.screenHeight * 0.0222,
@@ -175,5 +175,34 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     right: sizes.screenWidth * 0.03,
     top: sizes.screenWidth * 0.025
+  },
+  modalContainer: {
+    paddingVertical:sizes.screenWidth * 0.03,
+    width: sizes.screenWidth,
+    // height: sizes.screenHeight * 0.12,
+    backgroundColor: colors.disabledBg,
+    alignSelf: 'center',
+    // position: 'absolute',
+    bottom: 0,
+    borderTopRightRadius: sizes.screenWidth * 0.05,
+    borderTopLeftRadius: sizes.screenWidth * 0.05,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-around'
+  },
+
+  imgStyle:{
+    resizeMode:'contain',
+    width:sizes.screenWidth * 0.07,
+    height:sizes.screenWidth * 0.07,
+    // backgroundColor:'yellow'
+  },
+
+  bottomViewImg:{
+    padding:10,
+    // backgroundColor:'red',
+    borderRadius:sizes.screenHeight * 0.1,
+    borderWidth:1,
+    borderColor:colors.black,
   },
 });

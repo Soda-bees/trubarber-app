@@ -61,6 +61,7 @@ import AuthServiceInfo from '../../screens/AuthServiceInfo';
 import { socketService, socket } from '../Socket';
 import BarberDirection from '../../screens/BarberDirection';
 import UploadProfileBarber from '../../screens/UploadProfileBarber';
+import EditBusinessProfile from '../../screens/EditBusinessProfile';
 
 
 
@@ -265,6 +266,7 @@ export default function MainNavigator() {
           <Stack.Screen name="Chats" component={Chats} />
           <Stack.Screen name="ChatDetails" component={ChatDetails} />
           <Stack.Screen name="AddServices" component={AddServices} />
+          <Stack.Screen name="EditBusinessProfile" component={EditBusinessProfile} />
         </Stack.Navigator>
       )}
     </NavigationContainer>

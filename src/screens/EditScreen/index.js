@@ -18,7 +18,7 @@ import images from '../../services/utilities/images';
 import Button from '../../components/Button';
 import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
 import BackArrow from '../../components/BackArrow/index.js';
-import { colors } from '../../services/index.js';
+import { colors, sizes } from '../../services/index.js';
 import { PermissionsAndroid, PermissionsIOS } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -34,6 +34,7 @@ import TimePickerComponent from '../../components/TimePicketComponent/index.js';
 import { selectRole } from '../../store/role/index.js';
 import { parse, format } from 'date-fns';
 import Header from '../../components/Header/index.js';
+import Modal from "react-native-modal"
 
 // import {colors, sizes} from 'borderBottomcomponents/BackArrow/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
@@ -53,6 +54,7 @@ export default function EditScreen({ navigation }) {
   const [endTime, setEndTime] = useState(new Date());
   const [description, setDescription] = useState('');
   const [phone, setPhone] = useState('');
+  const [isVisible, setIsVisible] = useState(false)
 
   const parseTimeString = time => {
     const [startTimeString, endTimeString] = time.split(' - ');
@@ -248,16 +250,63 @@ export default function EditScreen({ navigation }) {
       ErrorShow('error', 'Oops!', error?.message);
     }
   };
+  const handleDeleteProfile = async () => {
+    try {
+      setIsVisible(false)
+      setLoader(true);
+      const userBody = {
+        profile: '',
+      };
+      const BarberBody = {
+        profile: '',
+      };
+      const response = await updateProfile(
+        role == 'user' ? userBody : BarberBody,
+        authToken,
+      );
+      if (response.status == 200) {
+        setImgUri('')
+        setLoader(false);
+        ErrorShow(
+          'success',
+          'Congratulation!',
+          response?.data?.message,
+          onHide,
+        );
+        dispatch(setUserData(response?.data?.updatedUser));
+      } else {
+        setLoader(false);
+        ErrorShow('error', 'Oops!', response?.data?.message);
+      }
+    } catch (error) {
+      setLoader(false);
+      console.log(error);
+      ErrorShow('error', 'Oops!', error?.message);
+    }
+  };
+
+  const handleLibrary = () => {
+    setIsVisible(false)
+    setTimeout(() => {
+      uploadPhoto('library')
+    }, 1000);
+  }
 
   return (
     <SafeAreaView>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <TouchableWithoutFeedback onPress={() => {
+        Keyboard.dismiss()
+        setIsVisible(false)
+      }}>
         <View style={styles.container}>
           <View style={styles.borderBottom}>
             <Header title={'Edit Profile'} />
           </View>
           <View style={styles.contentAlligment}>
-            <TouchableOpacity onPress={() => uploadPhoto('library')}>
+            <TouchableOpacity
+              onPress={() => setIsVisible(true)}
+            // onPress={() => uploadPhoto('library')}
+            >
               {/* {imgUri ? ( */}
               <Image
                 source={imgUri ? { uri: imgUri } : userData?.gender === "male" ? images.male : images.female}
@@ -270,7 +319,10 @@ export default function EditScreen({ navigation }) {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.uploadPhoto}
-              onPress={() => uploadPhoto('library')}>
+              // onPress={() => uploadPhoto('library')}
+
+              onPress={() => setIsVisible(true)}
+            >
               <Image
                 source={images.editProfileimg}
                 style={styles.editProfileimg}
@@ -385,6 +437,24 @@ export default function EditScreen({ navigation }) {
             )}
           </View>
           <Toast />
+          {
+            isVisible &&
+            <View style={styles.modalContainer}
+              onStartShouldSetResponder={() => true}
+            >
+              <TouchableOpacity style={styles.bottomViewImg}
+                onPress={handleLibrary}
+              // onPress={
+              //   () => uploadPhoto('library')}
+              >
+                <Image source={images.uploadimg} style={styles.imgStyle} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.bottomViewImg} onPress={handleDeleteProfile}>
+
+                <Image source={images.deleteIconBig} style={styles.imgStyle} />
+              </TouchableOpacity>
+            </View>
+          }
         </View>
       </TouchableWithoutFeedback>
     </SafeAreaView>

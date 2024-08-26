@@ -132,7 +132,7 @@ export default function Profile({navigation}) {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.naviRow}
-            // onPress={() => navigation.navigate('EditScreen')}
+            onPress={() => navigation.navigate('EditBusinessProfile')}
             >
             <Text style={styles.navText}>Edit Business Profile</Text>
             <Image

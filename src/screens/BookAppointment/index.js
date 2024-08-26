@@ -9,23 +9,23 @@ import {
   Platform,
   ToastAndroid,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
-import {styles} from './style.js';
+import React, { useCallback, useEffect, useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import {StarRatingDisplay} from 'react-native-star-rating-widget';
-import {colors, sizes} from '../../services';
+import { StarRatingDisplay } from 'react-native-star-rating-widget';
+import { colors, sizes } from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import moment from 'moment';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectUserData} from '../../store/userData/index.js';
-import {selectAuthToken} from '../../store/authToken/index.js';
-import {createChatRoom, getAllBarber} from '../../services/config/API/index.js';
-import {selectbarber, setBarber} from '../../store/barber/index.js';
-import {useFocusEffect} from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserData } from '../../store/userData/index.js';
+import { selectAuthToken } from '../../store/authToken/index.js';
+import { addFavourite, createChatRoom, getAllBarber } from '../../services/config/API/index.js';
+import { selectbarber, setBarber } from '../../store/barber/index.js';
+import { useFocusEffect } from '@react-navigation/native';
 
-export default function BookAppointment({navigation, route}) {
+export default function BookAppointment({ navigation, route }) {
   const barbarId = route?.params?.item._id;
   const tabName = route?.params?.tabName;
   const allBarbers = useSelector(selectbarber);
@@ -221,7 +221,7 @@ export default function BookAppointment({navigation, route}) {
 
   const handleNavigateToChat = async () => {
     if (chatRoomId) {
-      navigation.navigate('ChatDetails', {chatRoomId});
+      navigation.navigate('ChatDetails', { chatRoomId });
     } else {
       ToastAndroid.show(
         'Something wents wrong, Please try again',
@@ -275,13 +275,25 @@ export default function BookAppointment({navigation, route}) {
     }
   };
 
+  const handleAddFavourites = async () => {
+    try {
+      const body = { barberId: barbar?._id }
+      const response = await addFavourite(authToken, body)
+      console.log(response?.data);
+
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(barbar?.name);
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <ImageBackground
           imageStyle={styles.headerImage}
-          source={{uri: barbar?.businessProfile          }}
-          // style={}
+          source={{ uri: barbar?.businessProfile }}
+        // style={}
         >
           <View style={styles.headerContainer}>
             <BackArrow light={true} onPress={handleGoback} />
@@ -318,7 +330,7 @@ export default function BookAppointment({navigation, route}) {
           <View style={styles.call}>
             <TouchableOpacity
               style={styles.btnColor}
-              onPress={() => navigation.navigate('BarberDirection', {barbar})}>
+              onPress={() => navigation.navigate('BarberDirection', { barbar })}>
               <Image
                 style={styles.direction}
                 source={images.direction}
@@ -330,7 +342,9 @@ export default function BookAppointment({navigation, route}) {
           <View>
             <TouchableOpacity
               style={styles.btnColor}
-              onPress={handleNavigateToChat}>
+              // onPress={handleNavigateToChat}
+              onPress={handleAddFavourites}
+            >
               <Image
                 style={styles.direction}
                 source={images.Send}
@@ -380,7 +394,7 @@ export default function BookAppointment({navigation, route}) {
                   <View style={styles.servicesContainer}>
                     <View style={styles.serviceImagecontainer}>
                       <Image
-                        source={{uri: item?.icon}}
+                        source={{ uri: item?.icon }}
                         style={styles.serviceImageresize}
                         resizeMode="contain"
                       />
@@ -398,7 +412,7 @@ export default function BookAppointment({navigation, route}) {
                       <TouchableOpacity
                         style={styles.bookButton}
                         onPress={() =>
-                          navigation.navigate('ServiceDetails', {item})
+                          navigation.navigate('ServiceDetails', { item })
                         }>
                         <Text style={styles.bookWhite}>Book</Text>
                       </TouchableOpacity>
@@ -445,7 +459,7 @@ export default function BookAppointment({navigation, route}) {
                   {tab === 'Reviews' ? (
                     <TouchableOpacity
                       onPress={() => {
-                        navigation.navigate('Review', {barbar});
+                        navigation.navigate('Review', { barbar });
                       }}
                       style={styles.reviewBtn}>
                       <Image source={images.pencil} style={styles.pencil} />
@@ -464,7 +478,7 @@ export default function BookAppointment({navigation, route}) {
                   <View style={styles.ratingData}>
                     <View style={styles.rowAndmargin}>
                       <Image
-                        source={{uri: item?.userData?.profile}}
+                        source={{ uri: item?.userData?.profile }}
                         style={styles.profilePic}
                       />
                       <View style={styles.alignItems}>
@@ -482,7 +496,7 @@ export default function BookAppointment({navigation, route}) {
                         color={colors.gold}
                         starSize={20}
                         starStyle={styles.startContainer}
-                        // style={styles.startContainer}
+                      // style={styles.startContainer}
                       />
                     </View>
                   </View>
