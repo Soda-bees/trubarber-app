@@ -34,6 +34,7 @@ import { socket, socketService } from '../../services/Socket';
 import { selectUserData, setUserData } from '../../store/userData';
 import ChatConponent from '../../components/ChatComponent';
 import NotificationComponent from '../../components/NotificationComponent';
+import Favourites from '../../components/FavouriteComponent';
 
 export default function Explore({ navigation }) {
   const userData = useSelector(selectUserData);
@@ -44,7 +45,7 @@ export default function Explore({ navigation }) {
   const authToken = useSelector(selectAuthToken);
   const [loader, setLoader] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(
-    'Rachael McPhail Street...',
+    'Rachael McPhail Street ',
   );
   const [search, setSearch] = useState('');
   const [categories, setCategories] = useState([]);
@@ -309,22 +310,13 @@ export default function Explore({ navigation }) {
                       </View>
                       <View style={styles.locationDetailColumn}>
                         <Text style={styles.nearbyTxt}>Find barber near</Text>
-                        <Text style={styles.currentLocationTxt}>
+                        <Text style={styles.currentLocationTxt} numberOfLines={1} ellipsizeMode="tail">
                           {currentLocation}
                         </Text>
                       </View>
                     </TouchableOpacity>
                     <View style={styles.otherIconRow}>
-                      {/* <TouchableOpacity
-                    style={styles.notificationContainer}
-                    onPress={() => {
-                      navigation.navigate('Notifications');
-                    }}>
-                    <Image
-                      style={styles.iconImage}
-                      source={images.notification}
-                    />
-                  </TouchableOpacity> */}
+                      <Favourites />
                       <NotificationComponent />
                       <ChatConponent />
                     </View>
@@ -445,7 +437,7 @@ export default function Explore({ navigation }) {
                             style={styles.locationImgIcon}
                             resizeMode="contain">
                             <Image
-                              source={{ uri: item.businessProfile                              }}
+                              source={{ uri: item.businessProfile }}
                               style={styles.markerIngStyle}
                             />
                           </ImageBackground>
@@ -511,7 +503,7 @@ export default function Explore({ navigation }) {
                               })
                             }>
                             <ImageBackground
-                              source={{ uri: item.businessProfile}}
+                              source={{ uri: item.businessProfile }}
                               imageStyle={styles.containerImage}
                               style={styles.containerImage}>
                               <View style={styles.row}>

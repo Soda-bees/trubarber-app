@@ -189,6 +189,19 @@ const userDataSlice = createSlice({
         };
         state.userData = updatedUserData;
       }
+    },
+    addFavouritesRedux: (state, action) => {
+      const barber = action.payload; 
+      const barberId = barber._id;
+
+      const index = state.userData.favourites.findIndex(fav => fav._id === barberId);
+      if (index > -1) {
+        state.userData.favourites.splice(index, 1);
+      } else {
+        state.userData.favourites.push(barber);
+      }
+
+
     }
   }
 })
@@ -208,7 +221,8 @@ export const {
   updateReview,
   deleteReview,
   addNewNotificationRedux,
-  setNotificationSeenTrueRedux
+  setNotificationSeenTrueRedux,
+  addFavouritesRedux
 } = userDataSlice.actions
 export const selectUserData = state => state.user.userData
 export default userDataSlice.reducer

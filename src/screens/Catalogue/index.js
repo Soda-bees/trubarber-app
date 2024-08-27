@@ -9,21 +9,21 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style.js';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Backarrow from '../../components/BackArrow/index.js';
 import Button from '../../components/Button';
-import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
-import {colors, sizes} from '../../services';
-import {useSelector} from 'react-redux';
-import {selectbarber} from '../../store/barber/index.js';
+import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
+import { colors, sizes } from '../../services';
+import { useSelector } from 'react-redux';
+import { selectbarber } from '../../store/barber/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
-import {selectlocation} from '../../store/location/index.js';
+import { selectlocation } from '../../store/location/index.js';
 import { selectUserData } from '../../store/userData/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
-export default function Catalogue({navigation}) {
+export default function Catalogue({ navigation }) {
   const barbers = useSelector(selectbarber);
   const userData = useSelector(selectUserData)
   // console.log('all barbers', formatToJSON(barbers));
@@ -40,9 +40,9 @@ export default function Catalogue({navigation}) {
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c;
     return distance;
@@ -85,18 +85,18 @@ export default function Catalogue({navigation}) {
 
   const filteredBarbers = search
     ? barbers.filter(item => {
-        const searchLower = search.toLowerCase();
-        const nameMatches = item.name.toLowerCase().includes(searchLower);
-        return nameMatches;
-      })
+      const searchLower = search.toLowerCase();
+      const nameMatches = item.name.toLowerCase().includes(searchLower);
+      return nameMatches;
+    })
     : barbers;
 
   const filteredServices = search
     ? servicesData.filter(item => {
-        const searchLower = search.toLowerCase();
-        const nameMatches = item.name.toLowerCase().includes(searchLower);
-        return nameMatches;
-      })
+      const searchLower = search.toLowerCase();
+      const nameMatches = item.name.toLowerCase().includes(searchLower);
+      return nameMatches;
+    })
     : servicesData;
 
   const calculateAverageRating = reviews => {
@@ -181,14 +181,14 @@ export default function Catalogue({navigation}) {
                 return (
                   <ImageBackground
                     key={index}
-                    source={{uri: item?.businessProfile                    }}
+                    source={{ uri: item?.businessProfile }}
                     imageStyle={
                       Platform.OS == 'android'
                         ? styles.containerImage
                         : styles.containerImageIOS
                     }
                     style={styles.containerImage}
-                    >
+                  >
                     <View style={styles.row}>
                       <Text style={styles.textWhite}>
                         {calculateAverageRating(item.reviews)}
@@ -200,41 +200,41 @@ export default function Catalogue({navigation}) {
                         rating={1}
                       />
                     </View>
-                      <ImageBackground
-                        source={images.bluredImg}
-                        imageStyle={styles.bluredImg}
-                        style={styles.bluredImg}>
-                        <View style={styles.appointmentContainer}>
-                          <Text style={styles.textDarkerblack}>
-                            {item?.name}
-                          </Text>
-                          <View style={styles.locationContainer}>
-                            <Image
-                              source={images.Location}
-                              resizeMode="contain"
-                              style={styles.locationImg}
-                            />
-                            {/* <Text style={styles.textBlack}>{item.location}</Text> */}
-                            {distance !== null && (
-                              <Text style={styles.textBlack}>
-                                {`${distance.toFixed(2)} km`}
-                              </Text>
-                            )}
-                          </View>
-                          <TouchableOpacity
-                            style={styles.bookBtn}
-                            onPress={() =>
-                              navigation.navigate('BookAppointment', {item , tabName:'About'})
-                            }>
-                            <Text style={styles.btnText}>Book Appointment</Text>
-                            <Image
-                              source={images.arrowIcon}
-                              resizeMode="contain"
-                              style={styles.arrowStyle}
-                            />
-                          </TouchableOpacity>
+                    <ImageBackground
+                      source={images.bluredImg}
+                      imageStyle={styles.bluredImg}
+                      style={styles.bluredImg}>
+                      <View style={styles.appointmentContainer}>
+                        <Text style={styles.textDarkerblack}>
+                          {item?.name}
+                        </Text>
+                        <View style={styles.locationContainer}>
+                          <Image
+                            source={images.Location}
+                            resizeMode="contain"
+                            style={styles.locationImg}
+                          />
+                          {/* <Text style={styles.textBlack}>{item.location}</Text> */}
+                          {distance !== null && (
+                            <Text style={styles.textBlack}>
+                              {`${distance.toFixed(2)} km`}
+                            </Text>
+                          )}
                         </View>
-                      </ImageBackground>
+                        <TouchableOpacity
+                          style={styles.bookBtn}
+                          onPress={() =>
+                            navigation.navigate('BookAppointment', { item, tabName: 'About' })
+                          }>
+                          <Text style={styles.btnText}>Book Appointment</Text>
+                          <Image
+                            source={images.arrowIcon}
+                            resizeMode="contain"
+                            style={styles.arrowStyle}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </ImageBackground>
                   </ImageBackground>
                 );
               })}
@@ -255,10 +255,10 @@ export default function Catalogue({navigation}) {
                     key={index}
                     style={styles.serviceImagecontainer}
                     onPress={() =>
-                      navigation.navigate('HaircutServices', {name: item?.name})
+                      navigation.navigate('HaircutServices', { name: item?.name })
                     }>
                     <Image
-                      source={{uri: item?.icon}}
+                      source={{ uri: item?.icon }}
                       style={styles.serviceImageresize}
                       resizeMode="contain"
                     />

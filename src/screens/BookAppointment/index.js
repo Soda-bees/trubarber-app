@@ -19,11 +19,13 @@ import BackArrow from '../../components/BackArrow/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUserData } from '../../store/userData/index.js';
+import { addFavouritesRedux, selectUserData } from '../../store/userData/index.js';
 import { selectAuthToken } from '../../store/authToken/index.js';
 import { addFavourite, createChatRoom, getAllBarber } from '../../services/config/API/index.js';
 import { selectbarber, setBarber } from '../../store/barber/index.js';
 import { useFocusEffect } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
+import { ErrorShow } from '../../components/Error/index.js';
 
 export default function BookAppointment({ navigation, route }) {
   const barbarId = route?.params?.item._id;
@@ -33,6 +35,8 @@ export default function BookAppointment({ navigation, route }) {
   const barbar = allBarbers?.find(barber => barber?._id === barbarId);
   // console.log(barbar);
   const userData = useSelector(selectUserData);
+  console.log("favourites", userData?.favourites?.length);
+
   const authToken = useSelector(selectAuthToken);
   const [services, setServices] = useState([]);
   const [chatRoomId, setChatRoomId] = useState(null);
@@ -280,11 +284,13 @@ export default function BookAppointment({ navigation, route }) {
       const body = { barberId: barbar?._id }
       const response = await addFavourite(authToken, body)
       console.log(response?.data);
-
+      if (response?.data?.success) {
+        dispatch(addFavouritesRedux(barbar))
+        ErrorShow('success', 'Congratulation!', response?.data?.message);
+      }
     } catch (error) {
       console.log(error);
     }
-    console.log(barbar?.name);
   }
 
   return (
@@ -515,6 +521,7 @@ export default function BookAppointment({ navigation, route }) {
             </ScrollView>
           </View>
         ) : null}
+        <Toast />
       </View>
     </SafeAreaView>
   );

@@ -62,6 +62,7 @@ import { socketService, socket } from '../Socket';
 import BarberDirection from '../../screens/BarberDirection';
 import UploadProfileBarber from '../../screens/UploadProfileBarber';
 import EditBusinessProfile from '../../screens/EditBusinessProfile';
+import UserFavourites from '../../screens/UserFavourites';
 
 
 
@@ -239,6 +240,7 @@ export default function MainNavigator() {
           <Stack.Screen name="ChatDetails" component={ChatDetails} />
           <Stack.Screen name="Review" component={Review} />
           <Stack.Screen name="BarberDirection" component={BarberDirection} />
+          <Stack.Screen name="UserFavourites" component={UserFavourites} />
         </Stack.Navigator>
       ) : (
         <Stack.Navigator screenOptions={{ headerShown: false }}>

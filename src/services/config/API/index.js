@@ -408,7 +408,6 @@ export const uploadMultiplesChatImages = async (formData, token) => {
 
 export const handleGetUserDetails = async token => {
   try {
-    console.log(token);
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,

@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
   },
 
   barberHat: {
-    backgroundColor: colors.red,
+    // backgroundColor: colors.red,
     marginLeft: sizes.screenWidth * 0.042,
     marginRight: sizes.screenWidth * 0.042,
     marginTop: sizes.screenWidth * 0.042,

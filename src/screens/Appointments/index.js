@@ -9,21 +9,21 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style.js';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
-import {colors, sizes} from '../../services';
+import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
+import { colors, sizes } from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectUserData} from '../../store/userData/index.js';
-import {removeCart, selectCart} from '../../store/cart/index.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserData } from '../../store/userData/index.js';
+import { removeCart, selectCart } from '../../store/cart/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import Header from '../../components/Header/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
-export default function Appointments({navigation}) {
+export default function Appointments({ navigation }) {
   const dispatch = useDispatch();
   const userData = useSelector(selectUserData);
   const [appointmentData, setappointmentData] = useState([
@@ -124,7 +124,7 @@ export default function Appointments({navigation}) {
                 return (
                   <View key={index}>
                     <ImageBackground
-                      source={{uri: item?.barber?.profile}}
+                      source={{ uri: item?.barber?.businessProfile }}
                       imageStyle={styles.barberHat}
                       resizeMode="cover">
                       <View style={styles.innerContainer}>
@@ -150,7 +150,7 @@ export default function Appointments({navigation}) {
                             <View style={styles.directionRow}>
                               <View style={styles.serviceImagecontainer}>
                                 <Image
-                                  source={{uri: item?.serviceIcon}}
+                                  source={{ uri: item?.serviceIcon }}
                                   style={styles.serviceImageresize}
                                   resizeMode="contain"
                                 />
@@ -186,14 +186,14 @@ export default function Appointments({navigation}) {
                         <View style={styles.dateAndtimeView}>
                           <Text
                             style={styles.dateAndtime}>{`${convertDateFormat(
-                            item?.date,
-                          )}/${item?.time} (60min)`}</Text>
+                              item?.date,
+                            )}/${item?.time} (60min)`}</Text>
                         </View>
                       </View>
                       <TouchableOpacity
                         style={styles.bookBtn}
                         onPress={() =>
-                          navigation.navigate('AppointmentDetails', {item})
+                          navigation.navigate('AppointmentDetails', { item })
                         }>
                         <Text style={styles.btnText}>See Details</Text>
                         <Image

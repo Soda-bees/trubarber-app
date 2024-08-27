@@ -60,6 +60,7 @@ export const styles = StyleSheet.create({
   locationRow: {
     flexDirection: 'row',
     height: sizes.screenHeight * 0.064,
+    width:sizes.screenWidth * 0.45,
     backgroundColor: colors.lightgray,
     borderRadius: sizes.screenWidth * 0.04,
     paddingHorizontal: sizes.screenWidth * 0.03,
@@ -80,6 +81,8 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontSize: fontSize.small,
     fontWeight: 'bold',
+    width:sizes.screenWidth * 0.27,
+    overflow: 'hidden',
   },
   locationContainertop: {
     backgroundColor: colors.pinkBtnbackground,
@@ -110,7 +113,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-end',
     justifyContent: 'space-between',
-    width: sizes.screenWidth * 0.29,
+    width: sizes.screenWidth * 0.43,
   },
   mapStyle: {
     height: sizes.screenHeight * 0.3,
