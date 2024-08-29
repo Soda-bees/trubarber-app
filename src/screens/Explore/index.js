@@ -283,7 +283,7 @@ export default function Explore({ navigation }) {
         <View style={styles.laoderContainer}>
           <LottieView
             ref={animation}
-            source={require('../../assestsAnimation/Flow3.json')}
+            source={require('../../assestsAnimation/Flow4.json')}
             autoPlay
             loop
             style={styles.lottie}
