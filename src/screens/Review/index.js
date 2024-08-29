@@ -20,13 +20,15 @@ import {colors, sizes} from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import moment from 'moment';
-import {useSelector} from 'react-redux';
-import {selectUserData} from '../../store/userData/index.js';
+import {useDispatch, useSelector} from 'react-redux';
+import {addFavouritesRedux, selectUserData} from '../../store/userData/index.js';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {selectAuthToken} from '../../store/authToken/index.js';
 import Modal from 'react-native-modal';
 import {
+  addFavourite,
   deleteReview,
+  getAddressFromCoordinates,
   postReview,
   updateReview,
 } from '../../services/config/API/index.js';
@@ -39,6 +41,7 @@ export default function Review({navigation, route}) {
   const barber = route?.params.barbar;
   const user = useSelector(selectUserData);
   const token = useSelector(selectAuthToken);
+  const dispatch = useDispatch()
   const [showModal1, setShowModal1] = useState(false);
 
   const [services, setServices] = useState([]);
@@ -49,6 +52,11 @@ export default function Review({navigation, route}) {
   const [loader2, setLoader2] = useState(false);
   const [review, setReview] = useState();
   const [errMsg, setErrMsg] = useState('');
+
+  const [fav, setFav] = useState();
+  const [favLoader, setFavLoader] = useState(false);
+  const [address, setAddress] = useState(null);
+  const [locationLoader, setLocationLoader] = useState(false);
 
   const handleGoback = () => {
     navigation.goBack();
@@ -240,43 +248,98 @@ export default function Review({navigation, route}) {
     }
   }, []);
 
+  useEffect(() => {
+    const isFavourite = user?.favourites?.some(
+      fav => fav._id === barber._id,
+    );
+    setFav(isFavourite);
+  }, [user, barber._id]);
+
+  const handleAddFavourites = async () => {
+    try {
+      setFavLoader(true);
+      const body = { barberId: barber?._id };
+      const response = await addFavourite(token, body);
+      console.log(response?.data);
+      if (response?.data?.success) {
+        dispatch(addFavouritesRedux(barber));
+        ErrorShow('success', 'Congratulation!', response?.data?.message);
+        setFavLoader(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setFavLoader(false);
+    }
+  };
+
+  const getAddress = async (latitude, longitude) => {
+    setLocationLoader(true);
+    try {
+      const response = await getAddressFromCoordinates(latitude, longitude);
+      setAddress(response);
+      setLocationLoader(false);
+    } catch (error) {
+      console.log(error);
+      setLocationLoader(false);
+    }
+  };
+
+  useEffect(() => {
+    getAddress(barber?.location?.latitude, barber?.location?.longitude);
+    console.log("worj");
+
+  }, []);
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <ImageBackground
+      <ImageBackground
           imageStyle={styles.headerImage}
-          source={{uri: barber?.businessProfile}}
+          source={{ uri: barber?.businessProfile }}
         >
           <View style={styles.headerContainer}>
-            <View style={styles.arrowTop}>
-              <BackArrow light={true} onPress={handleGoback} />
-            </View>
-            <View style={styles.openButtonborder}>
-              <Text style={styles.openButton}>{status}</Text>
-            </View>
+            <BackArrow light={false} onPress={handleGoback} />
+            <TouchableOpacity
+              source={images.bookMarkedConatiner}
+              style={
+                fav ? styles.bookMarkedConatiner2 : styles.bookMarkedConatiner
+              }
+              onPress={() => {
+                if (!favLoader) {
+                  handleAddFavourites();
+                }
+              }}>
+              {favLoader ? (
+                <ActivityIndicator
+                  size={22}
+                  color={fav ? '#00000088' : colors.disabledBg}
+                />
+              ) : (
+                <Image
+                  source={fav ? images.Bookmark : images.bookMarkedFalse}
+                  style={styles.bookMarkedFalse}
+                />
+              )}
+            </TouchableOpacity>
           </View>
           <View style={styles.centerContent}>
-            <View style={styles.barberDetailscontainer}>
-              <View style={styles.alignedDetails}>
-                <Text style={styles.barberName}>{barber?.name}</Text>
-                <View style={styles.row}>
-                  <Image
-                    source={images.redLocation}
-                    resizeMode="contain"
-                    style={styles.redLocation}
-                  />
-                  <Text style={styles.barberLocation}>
-                    Royal Ln. Mesa, New Jersey
-                  </Text>
-                </View>
-              </View>
-              {/* <TouchableOpacity style={styles.containBookmark}>
+            <View style={styles.alignedDetails}>
+              <View style={styles.maleContainer}>
                 <Image
-                  source={images.Bookmark}
-                  resizeMode="contain"
-                  style={styles.bookmark}
+                  source={
+                    barber?.profile
+                      ? { uri: barber?.profile }
+                      : barber?.gender === 'male'
+                        ? images.male
+                        : images.female
+                  }
+                  style={styles.male}
                 />
-              </TouchableOpacity> */}
+              </View>
+              <View style={styles.barberNameContainer}>
+                <Text style={styles.barberName}>{barber?.name}</Text>
+              </View>
+
             </View>
           </View>
         </ImageBackground>

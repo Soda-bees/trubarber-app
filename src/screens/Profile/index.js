@@ -61,8 +61,7 @@ export default function Profile({ navigation }) {
     setLocationLoader(true);
     try {
       const response = await getAddressFromCoordinates(latitude, longitude);
-      setAddress({ area: response?.area, city: response?.city });
-      console.log('Locaasddsastion', response);
+      setAddress(response);
       setLocationLoader(false);
     } catch (error) {
       console.log(error);
@@ -102,7 +101,7 @@ export default function Profile({ navigation }) {
                     style={styles.redLocation}
                   />
                   <Text style={styles.locationText}>
-                    {address ? `${address?.area}, ${address?.city}.` : 'Location'}
+                    {address ? `${address}.` : 'Location'}
                   </Text>
                 </View>
               )}

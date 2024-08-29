@@ -14,7 +14,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: sizes.screenWidth * 0.05,
     marginTop: sizes.screenHeight * 0.05,
   },
-
   openButtonborder: {
     borderStyle: 'solid',
     borderColor: colors.white,
@@ -34,10 +33,32 @@ export const styles = StyleSheet.create({
   },
 
   headerImage: {
-    height: sizes.screenHeight * 0.4,
+    height: sizes.screenHeight * 0.32,
     width: sizes.screenWidth,
     borderBottomLeftRadius: sizes.screenWidth * 0.0562,
     borderBottomRightRadius: sizes.screenWidth * 0.0562,
+  },
+
+  bookMarkedConatiner: {
+    height: 44,
+    width: 44,
+    backgroundColor: '#00000099',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bookMarkedConatiner2: {
+    height: 44,
+    width: 44,
+    backgroundColor: '#ffffff99',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  bookMarkedFalse: {
+    height: 24,
+    resizeMode: 'contain',
   },
 
   openBg: {
@@ -47,9 +68,50 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   centerContent: {
-    marginTop: sizes.screenHeight * 0.27,
+    marginTop: sizes.screenHeight * 0.12,
     alignItems: 'center',
   },
+  alignedDetails: {
+    alignItems: 'center',
+  },
+  maleContainer: {
+    height: sizes.screenWidth * 0.3,
+    width: sizes.screenWidth * 0.3,
+    overflow: 'hidden',
+    borderWidth: 3,
+    borderColor: 'white',
+    borderRadius: sizes.screenWidth * 0.3,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.white,
+    // Shadow properties for iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    // Elevation for Android
+    elevation: 5,
+  },
+  male: {
+    height: sizes.screenWidth * 0.3,
+    width: sizes.screenWidth * 0.3,
+    borderRadius: sizes.screenWidth * 0.3,
+  },
+  barberNameContainer: {
+    borderWidth: 1,
+    borderRadius: 12,
+    borderColor: colors.disabledBg,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    marginVertical: 8,
+  },
+  barberName: {
+    fontSize: fontSize.large,
+    marginLeft: sizes.screenWidth * 0.012,
+    color: colors.black,
+    fontWeight: '800',
+  },
+
   barberDetailscontainer: {
     backgroundColor: colors.lightgray,
     borderStyle: 'solid',
@@ -61,17 +123,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  barberName: {
-    fontSize: fontSize.large,
-    marginLeft: sizes.screenWidth * 0.012,
-    color: colors.black,
-    fontWeight: '800',
-  },
-  alignedDetails: {
-    marginTop: sizes.screenHeight * 0.012,
-    marginLeft: sizes.screenHeight * 0.022,
-    // backgroundColor: 'red',
-  },
+
   row: {
     flexDirection: 'row',
     alignItems: 'center',
