@@ -9,25 +9,34 @@ import {
   Platform,
   ToastAndroid,
 } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
-import { styles } from './style.js';
+import React, {useCallback, useEffect, useState} from 'react';
+import {styles} from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import { StarRatingDisplay } from 'react-native-star-rating-widget';
-import { colors, sizes } from '../../services';
+import {StarRatingDisplay} from 'react-native-star-rating-widget';
+import {colors, sizes} from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import moment from 'moment';
-import { useDispatch, useSelector } from 'react-redux';
-import { addFavouritesRedux, selectUserData } from '../../store/userData/index.js';
-import { selectAuthToken } from '../../store/authToken/index.js';
-import { addFavourite, createChatRoom, getAllBarber } from '../../services/config/API/index.js';
-import { selectbarber, setBarber } from '../../store/barber/index.js';
-import { useFocusEffect } from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  addFavouritesRedux,
+  selectUserData,
+} from '../../store/userData/index.js';
+import {selectAuthToken} from '../../store/authToken/index.js';
+import {
+  addFavourite,
+  createChatRoom,
+  getAllBarber,
+} from '../../services/config/API/index.js';
+import {selectbarber, setBarber} from '../../store/barber/index.js';
+import {useFocusEffect} from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
-import { ErrorShow } from '../../components/Error/index.js';
+import {ErrorShow} from '../../components/Error/index.js';
+import {ActivityIndicator} from 'react-native-paper';
+import {Linking} from 'react-native';
 
-export default function BookAppointment({ navigation, route }) {
+export default function BookAppointment({navigation, route}) {
   const barbarId = route?.params?.item._id;
   const tabName = route?.params?.tabName;
   const allBarbers = useSelector(selectbarber);
@@ -35,13 +44,16 @@ export default function BookAppointment({ navigation, route }) {
   const barbar = allBarbers?.find(barber => barber?._id === barbarId);
   // console.log(barbar);
   const userData = useSelector(selectUserData);
-  console.log("favourites", userData?.favourites?.length);
+  console.log('favourites', userData?.favourites?.length);
 
   const authToken = useSelector(selectAuthToken);
   const [services, setServices] = useState([]);
   const [chatRoomId, setChatRoomId] = useState(null);
   const [barberReviews, setBarberReviews] = useState([]);
   const [userReview, setUserReview] = useState(null);
+  const [fav, setFav] = useState();
+  const [loader, setLoader] = useState(false);
+
   // console.log('==========', userReview, '==========', barberReviews);
   const [rating, setRatings] = useState([
     {
@@ -225,7 +237,7 @@ export default function BookAppointment({ navigation, route }) {
 
   const handleNavigateToChat = async () => {
     if (chatRoomId) {
-      navigation.navigate('ChatDetails', { chatRoomId });
+      navigation.navigate('ChatDetails', {chatRoomId});
     } else {
       ToastAndroid.show(
         'Something wents wrong, Please try again',
@@ -281,34 +293,74 @@ export default function BookAppointment({ navigation, route }) {
 
   const handleAddFavourites = async () => {
     try {
-      const body = { barberId: barbar?._id }
-      const response = await addFavourite(authToken, body)
+      setLoader(true);
+      const body = {barberId: barbar?._id};
+      const response = await addFavourite(authToken, body);
       console.log(response?.data);
       if (response?.data?.success) {
-        dispatch(addFavouritesRedux(barbar))
+        dispatch(addFavouritesRedux(barbar));
         ErrorShow('success', 'Congratulation!', response?.data?.message);
+        setLoader(false);
       }
     } catch (error) {
       console.log(error);
+      setLoader(false);
     }
-  }
+  };
+
+  useEffect(() => {
+    const isFavourite = userData?.favourites?.some(
+      fav => fav._id === barbar._id,
+    );
+    setFav(isFavourite);
+  }, [userData, barbar._id]);
+
+  const dialNumber = phoneNumber => {
+    let phoneUrl = `tel:${phoneNumber}`;
+    Linking.openURL(phoneUrl).catch(err =>
+      console.error('Error in opening dial pad', err),
+    );
+  };
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <ImageBackground
           imageStyle={styles.headerImage}
-          source={{ uri: barbar?.businessProfile }}
-        // style={}
+          source={{uri: barbar?.businessProfile}}
+          // style={}
         >
           <View style={styles.headerContainer}>
             <BackArrow light={true} onPress={handleGoback} />
-            <View style={styles.openButtonborder}>
+            {/* <View style={styles.openButtonborder}>
               <Text style={styles.openButton}>{status}</Text>
-            </View>
+            </View> */}
+
+            <TouchableOpacity
+              source={images.bookMarkedConatiner}
+              style={
+                fav ? styles.bookMarkedConatiner2 : styles.bookMarkedConatiner
+              }
+              onPress={() => {
+                if (!loader) {
+                  handleAddFavourites();
+                }
+              }}>
+              {loader ? (
+                <ActivityIndicator
+                  size={22}
+                  color={fav ? '#00000088' : colors.disabledBg}
+                />
+              ) : (
+                <Image
+                  source={fav ? images.Bookmark : images.bookMarkedFalse}
+                  style={styles.bookMarkedFalse}
+                />
+              )}
+            </TouchableOpacity>
           </View>
           <View style={styles.centerContent}>
-            <View style={styles.barberDetailscontainer}>
+            {/* <View style={styles.barberDetailscontainer}>
               <View style={styles.alignedDetails}>
                 <Text style={styles.barberName}>{barbar?.name}</Text>
                 <View style={styles.row}>
@@ -322,42 +374,86 @@ export default function BookAppointment({ navigation, route }) {
                   </Text>
                 </View>
               </View>
-              {/* <TouchableOpacity style={styles.containBookmark}>
+              <TouchableOpacity style={styles.containBookmark}>
                 <Image
                   source={images.Bookmark}
                   resizeMode="contain"
                   style={styles.bookmark}
                 />
-              </TouchableOpacity> */}
+              </TouchableOpacity>
+            </View> */}
+
+            <View style={styles.alignedDetails}>
+              <View style={styles.maleContainer}>
+                <Image
+                  source={
+                    barbar?.profile
+                      ? {uri: barbar?.profile}
+                      : barbar?.gender === 'male'
+                      ? images.male
+                      : images.female
+                  }
+                  style={styles.male}
+                />
+              </View>
+              <View style={styles.barberNameContainer}>
+                <Text style={styles.barberName}>{barbar?.name}</Text>
+              </View>
+              <View style={styles.row}>
+                <Image
+                  source={images.redLocation}
+                  resizeMode="contain"
+                  style={styles.redLocation}
+                />
+                <Text style={styles.barberLocation}>
+                  Royal Ln. Mesa, New Jersey
+                </Text>
+              </View>
             </View>
           </View>
         </ImageBackground>
         <View style={styles.todoButtonscontainer}>
-          <View style={styles.call}>
+          <View style={styles.btnColorContainer}>
             <TouchableOpacity
               style={styles.btnColor}
-              onPress={() => navigation.navigate('BarberDirection', { barbar })}>
+              onPress={() => navigation.navigate('BarberDirection', {barbar})}>
               <Image
                 style={styles.direction}
                 source={images.direction}
                 resizeMode="contain"
               />
-              <Text style={styles.btnText}>Direction</Text>
             </TouchableOpacity>
+            <Text style={styles.btnText}>Direction</Text>
           </View>
-          <View>
+
+          <View style={styles.devider}></View>
+          <View style={styles.btnColorContainer}>
             <TouchableOpacity
               style={styles.btnColor}
               // onPress={handleNavigateToChat}
-              onPress={handleAddFavourites}
-            >
+              onPress={() => {
+                dialNumber(barbar.phone);
+              }}>
+              <Image
+                style={styles.direction}
+                source={images.redCall}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+            <Text style={styles.btnText}>Call</Text>
+          </View>
+          <View style={styles.devider}></View>
+          <View style={styles.btnColorContainer}>
+            <TouchableOpacity
+              style={styles.btnColor}
+              onPress={handleNavigateToChat}>
               <Image
                 style={styles.direction}
                 source={images.Send}
                 resizeMode="contain"
               />
-              <Text style={styles.btnText}>Message</Text>
             </TouchableOpacity>
+            <Text style={styles.btnText}>Message</Text>
           </View>
         </View>
         <View style={styles.tabContainer}>
@@ -400,7 +496,7 @@ export default function BookAppointment({ navigation, route }) {
                   <View style={styles.servicesContainer}>
                     <View style={styles.serviceImagecontainer}>
                       <Image
-                        source={{ uri: item?.icon }}
+                        source={{uri: item?.icon}}
                         style={styles.serviceImageresize}
                         resizeMode="contain"
                       />
@@ -418,7 +514,7 @@ export default function BookAppointment({ navigation, route }) {
                       <TouchableOpacity
                         style={styles.bookButton}
                         onPress={() =>
-                          navigation.navigate('ServiceDetails', { item })
+                          navigation.navigate('ServiceDetails', {item})
                         }>
                         <Text style={styles.bookWhite}>Book</Text>
                       </TouchableOpacity>
@@ -465,7 +561,7 @@ export default function BookAppointment({ navigation, route }) {
                   {tab === 'Reviews' ? (
                     <TouchableOpacity
                       onPress={() => {
-                        navigation.navigate('Review', { barbar });
+                        navigation.navigate('Review', {barbar});
                       }}
                       style={styles.reviewBtn}>
                       <Image source={images.pencil} style={styles.pencil} />
@@ -484,7 +580,7 @@ export default function BookAppointment({ navigation, route }) {
                   <View style={styles.ratingData}>
                     <View style={styles.rowAndmargin}>
                       <Image
-                        source={{ uri: item?.userData?.profile }}
+                        source={{uri: item?.userData?.profile}}
                         style={styles.profilePic}
                       />
                       <View style={styles.alignItems}>
@@ -502,7 +598,7 @@ export default function BookAppointment({ navigation, route }) {
                         color={colors.gold}
                         starSize={20}
                         starStyle={styles.startContainer}
-                      // style={styles.startContainer}
+                        // style={styles.startContainer}
                       />
                     </View>
                   </View>

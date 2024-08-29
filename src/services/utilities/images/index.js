@@ -120,17 +120,18 @@ import calendar from '../../../assets/calendar.png';
 import noAppointment from '../../../assets/noAppointment.png';
 import pencil from '../../../assets/pencil.png';
 import deleteIconn from '../../../assets/deleteIconn.png';
-import chatImg from "../../../assets/chatImg.png"
-import cancel from "../../../assets/cancel.png"
-import sendSecond from "../../../assets/sendSecond.png"
-import noChatImg from "../../../assets/noChatImg.png"
-import chatScroll from "../../../assets/chatScroll.png"
-import noNotification from "../../../assets/noNotification.png"
-import rightRedArrow from "../../../assets/rightRedArrow.png"
-import genderUp from "../../../assets/genderUp.png"
-import genderDown from "../../../assets/genderDown.png"
-import female from "../../../assets/female.png"
-import male from "../../../assets/male.png"
+import chatImg from '../../../assets/chatImg.png';
+import cancel from '../../../assets/cancel.png';
+import sendSecond from '../../../assets/sendSecond.png';
+import noChatImg from '../../../assets/noChatImg.png';
+import chatScroll from '../../../assets/chatScroll.png';
+import noNotification from '../../../assets/noNotification.png';
+import rightRedArrow from '../../../assets/rightRedArrow.png';
+import genderUp from '../../../assets/genderUp.png';
+import genderDown from '../../../assets/genderDown.png';
+import female from '../../../assets/female.png';
+import male from '../../../assets/male.png';
+import bookMarkedFalse from '../../../assets/bookMarkedFalse.png';
 
 const images = {
   female,
@@ -266,6 +267,7 @@ const images = {
   noAppointment,
   pencil,
   deleteIconn,
+  bookMarkedFalse,
 };
 
 export default images;
