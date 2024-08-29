@@ -134,8 +134,12 @@ import male from "../../../assets/male.png"
 import bookMarkedFalse from '../../../assets/bookMarkedFalse.png';
 import noBookmark from '../../../assets/noBookmark.png';
 import noSearch from '../../../assets/noSearch.png';
+import logoBlack from '../../../assets/logoBlack.png';
+import congratulationUpdated from '../../../assets/congratulationUpdated.png';
 
 const images = {
+  congratulationUpdated,
+  logoBlack,
   noSearch,
   noBookmark,
   bookMarkedFalse,

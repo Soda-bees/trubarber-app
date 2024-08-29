@@ -6,27 +6,27 @@ import {
   PermissionsAndroid,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import BackArrow from '../../components/BackArrow';
 import images from '../../services/utilities/images';
-import {styles} from './style';
+import { styles } from './style';
 import Button from '../../components/Button';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectAuthToken, setAuthToken} from '../../store/authToken';
-import {selectUserData, setUserData} from '../../store/userData';
-import {signup} from '../../services/config/API';
-import {ErrorShow} from '../../components/Error';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAuthToken, setAuthToken } from '../../store/authToken';
+import { selectUserData, setUserData } from '../../store/userData';
+import { signup } from '../../services/config/API';
+import { ErrorShow } from '../../components/Error';
 import Toast from 'react-native-toast-message';
 import Loader from '../../components/Loader';
-import {ActivityIndicator} from 'react-native-paper';
-import {colors} from '../../services';
-import {selectlocation, setLocation} from '../../store/location';
+import { ActivityIndicator } from 'react-native-paper';
+import { colors } from '../../services';
+import { selectlocation, setLocation } from '../../store/location';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 
-export default function Congratulation({route}) {
+export default function Congratulation({ route }) {
   const dispatch = useDispatch();
-  const {userData} = route.params;
+  const { userData } = route.params;
   const location = useSelector(selectlocation)
 
   const [loader, setLoader] = useState(false);
@@ -94,7 +94,7 @@ export default function Congratulation({route}) {
   const getCurrentLocation = (setRegion, dispatch) => {
     Geolocation.getCurrentPosition(
       position => {
-        const {latitude, longitude} = position.coords;
+        const { latitude, longitude } = position.coords;
         // console.log(
         //   position.coords,
         //   '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
@@ -153,10 +153,10 @@ export default function Congratulation({route}) {
           <BackArrow />
         </View>
         <View style={styles.mainView}>
-          <Text style={styles.textStyle}>“Enhance Your Experience”</Text>
+          {/* <Text style={styles.textStyle}>“Enhance Your Experience”</Text> */}
           <View style={styles.centerView}>
-            <Image source={images.congoImg} style={styles.imgStyle} />
             <Text style={styles.textStyle}>Congratulations!</Text>
+            <Image source={images.congratulationUpdated} style={styles.imgStyle} />
             <Text style={styles.textStyle1}>
               Your profile creation is now complete and ready to go.
             </Text>

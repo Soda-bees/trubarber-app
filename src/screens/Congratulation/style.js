@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
@@ -15,28 +15,31 @@ export const styles = StyleSheet.create({
   },
 
   centerView: {
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
+    height: sizes.screenHeight * 0.7
   },
   imgStyle: {
-    width: sizes.screenWidth * 0.2,
-    height: sizes.screenWidth * 0.2,
+    width: sizes.screenWidth * 0.3,
+    height: sizes.screenWidth * 0.4,
     marginBottom: 15,
+    resizeMode: 'contain'
   },
 
   textStyle: {
     color: colors.black,
-    fontSize: fontSize.h3,
-    fontWeight: '600',
-    width: sizes.screenWidth * 0.7,
+    fontSize: fontSize.h1,
+    fontWeight: '700',
+    width: sizes.screenWidth * 0.8,
     textAlign: 'center',
   },
 
   textStyle1: {
-    color: colors.disabledBg3,
+    color: colors.black,
     width: sizes.screenWidth * 0.7,
     textAlign: 'center',
-    fontSize: fontSize.medium,
+    fontSize: fontSize.large,
+    fontWeight: '500'
   },
 
   backArrowStyle: {

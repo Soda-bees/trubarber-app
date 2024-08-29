@@ -55,4 +55,9 @@ export const styles = StyleSheet.create({
     bottom: sizes.screenHeight * 0.09,
     alignSelf: 'center'
   },
+  logoBlack: {
+    width: sizes.screenWidth * 0.35,
+    height: sizes.screenWidth * 0.25,
+    resizeMode: 'contain'
+  }
 });

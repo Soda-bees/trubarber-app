@@ -40,4 +40,9 @@ export const styles = StyleSheet.create({
     marginLeft: sizes.screenWidth * 0.04,
     marginTop: sizes.screenHeight * 0.04,
   },
+  logoBlack: {
+    width: sizes.screenWidth * 0.35,
+    height: sizes.screenWidth * 0.25,
+    resizeMode: 'contain'
+  }
 });

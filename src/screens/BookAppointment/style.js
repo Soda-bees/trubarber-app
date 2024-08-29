@@ -61,10 +61,6 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.021,
     justifyContent: 'center',
   },
-  centerContent: {
-    marginTop: sizes.screenHeight * 0.12,
-    alignItems: 'center',
-  },
   barberDetailscontainer: {
     backgroundColor: colors.lightgray,
     borderStyle: 'solid',
@@ -75,6 +71,10 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.79,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  centerContent: {
+    marginTop: sizes.screenHeight * 0.12,
+    alignItems: 'center',
   },
   alignedDetails: {
     alignItems: 'center',

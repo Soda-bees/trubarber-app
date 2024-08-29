@@ -9,6 +9,7 @@ const fontFamily = {
   appTextCondensed: Platform.OS !== 'ios' ? 'sans-serif-condensed' : 'Arial',
 };
 const fontSize = {
+  custom:totalSize(7),
   h1: totalSize(4.5),
   h2: totalSize(4),
   h3: totalSize(3.5),
