@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
   toggleContainer: {
     backgroundColor: colors.userBarbertoggle,
     height: sizes.screenHeight * 0.06,
-    marginTop: sizes.screenHeight * 0.1,
+    marginTop: sizes.screenHeight * 0.08,
     borderRadius: sizes.screenWidth * 0.04,
     width: sizes.screenWidth * 0.7,
     alignSelf: 'center',
@@ -43,7 +43,7 @@ export const styles = StyleSheet.create({
   loginText: {
     fontSize: fontSize.h2,
     marginLeft: sizes.screenWidth * 0.05,
-    marginTop: sizes.screenWidth * 0.12,
+    marginTop: sizes.screenWidth * 0.1,
     // marginTop: sizes.screenWidth * 0.12,
     marginBottom: sizes.screenWidth * 0.032,
     fontWeight: '700',
@@ -96,11 +96,14 @@ export const styles = StyleSheet.create({
   },
 
   forgotPass: {
-    marginTop: sizes.screenHeight * 0.06,
+    marginTop: sizes.screenHeight * 0.04,
   },
-  forgotPassIOS: {
+  BottomBtnView: {
+    // position:'absolute',
+    // bottom:0,
+    // alignSelf:'center'
     // marginTop: sizes.screenHeight * 0.06,
-    bottom:sizes.screenHeight * 0.2
+    // bottom:sizes.screenHeight * 0.2,
   },
 
   inputPasswordcontainer: {
@@ -154,7 +157,7 @@ export const styles = StyleSheet.create({
     alignItems: 'start',
     // marginHorizontal: sizes.screenWidth * 0.05,
     marginTop: sizes.screenHeight * 0.02,
-    marginBottom: sizes.screenHeight * 0.22,
+    // marginBottom: sizes.screenHeight * 0.22,
 
   },
 

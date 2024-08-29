@@ -479,7 +479,7 @@ export default function Explore({ navigation }) {
                 </View>
                 <View style={styles.marginTop}>
                   <Text style={styles.heading}>Recommended</Text>
-                  <ScrollView horizontal>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     <View
                       style={
                         Platform.OS == 'android'
