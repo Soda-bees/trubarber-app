@@ -21,6 +21,7 @@ import { selectbarber } from '../../store/barber/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import { selectlocation } from '../../store/location/index.js';
 import { selectUserData } from '../../store/userData/index.js';
+import Header from '../../components/Header/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
 export default function HaircutServices({ navigation, route }) {
@@ -72,7 +73,8 @@ export default function HaircutServices({ navigation, route }) {
     <SafeAreaView>
       <View style={styles.container}>
         <View style={styles.backgroundColor}>
-          <ImageBackground
+          <Header title={`${name} Services`} />
+          {/* <ImageBackground
             source={images.transparentBg}
             resizeMode="contain"
             style={styles.transparentBg}>
@@ -82,7 +84,7 @@ export default function HaircutServices({ navigation, route }) {
                 <Text style={styles.headerText}> {`${name} Services`}</Text>
               </View>
             </View>
-          </ImageBackground>
+          </ImageBackground> */}
           <ScrollView>
             <View
               style={

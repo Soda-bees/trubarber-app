@@ -1,19 +1,17 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
-
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
+import Signup from '../Signup';
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.lightgray,
     height: sizes.screenHeight,
   },
-
   headerImage: {
-    height: sizes.screenHeight * 0.4,
+    height: sizes.screenHeight * 0.32,
     width: sizes.screenWidth,
     borderBottomLeftRadius: sizes.screenWidth * 0.0562,
     borderBottomRightRadius: sizes.screenWidth * 0.0562,
   },
-
   headerContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',
@@ -21,7 +19,26 @@ export const styles = StyleSheet.create({
     paddingHorizontal: sizes.screenWidth * 0.05,
     marginTop: sizes.screenHeight * 0.05,
   },
-
+  bookMarkedConatiner: {
+    height: 44,
+    width: 44,
+    backgroundColor: '#00000099',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bookMarkedConatiner2: {
+    height: 44,
+    width: 44,
+    backgroundColor: '#ffffff99',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bookMarkedFalse: {
+    height: 24,
+    resizeMode: 'contain',
+  },
   openButtonborder: {
     borderStyle: 'solid',
     borderColor: colors.white,
@@ -33,13 +50,11 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 2,
   },
-
   openButton: {
     fontSize: fontSize.smallM,
     color: colors.white,
     bottom: 1,
   },
-
   openBg: {
     alignItems: 'center',
     width: sizes.screenWidth * 0.148,
@@ -47,7 +62,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   centerContent: {
-    marginTop: sizes.screenHeight * 0.27,
+    marginTop: sizes.screenHeight * 0.12,
     alignItems: 'center',
   },
   barberDetailscontainer: {
@@ -61,16 +76,45 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  alignedDetails: {
+    alignItems: 'center',
+  },
+  maleContainer: {
+    height: sizes.screenWidth * 0.3,
+    width: sizes.screenWidth * 0.3,
+    overflow: 'hidden',
+    borderWidth: 3,
+    borderColor: 'white',
+    borderRadius: sizes.screenWidth * 0.3,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.white,
+    // Shadow properties for iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    // Elevation for Android
+    elevation: 5,
+  },
+  male: {
+    height: sizes.screenWidth * 0.3,
+    width: sizes.screenWidth * 0.3,
+    borderRadius: sizes.screenWidth * 0.3,
+  },
+  barberNameContainer: {
+    borderWidth: 1,
+    borderRadius: 12,
+    borderColor: colors.disabledBg,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    marginVertical: 8,
+  },
   barberName: {
     fontSize: fontSize.large,
     marginLeft: sizes.screenWidth * 0.012,
     color: colors.black,
     fontWeight: '800',
-  },
-  alignedDetails: {
-    marginTop: sizes.screenHeight * 0.012,
-    marginLeft: sizes.screenHeight * 0.022,
-    // backgroundColor: 'red',
   },
   row: {
     flexDirection: 'row',
@@ -80,7 +124,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-
   row3: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -88,11 +131,9 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'space-between',
   },
-
   disabledText: {
     color: colors.disabledBg2,
   },
-
   reviewBtn: {
     width: sizes.screenWidth * 0.34,
     height: 32,
@@ -103,30 +144,29 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.black,
   },
-
   pencil: {
     resizeMode: 'contain',
     height: 16,
     width: 16,
     marginRight: 8,
   },
-
   reviewBtnText: {
     color: colors.black,
     fontSize: fontSize.regular,
   },
-
   barberLocation: {
     fontSize: fontSize.small,
     color: colors.grayText,
+    maxWidth: sizes.screenWidth * 0.7,
+    textAlign: 'center'
   },
   redLocation: {
     justifyContent: 'flex-start',
     paddingRight: sizes.screenWidth * 0.021,
     height: sizes.screenHeight * 0.021,
+    tintColor: colors.black
     // backgroundColor : 'red',
   },
-
   containBookmark: {
     marginTop: sizes.screenHeight * 0.022,
     marginRight: sizes.screenHeight * 0.022,
@@ -139,35 +179,39 @@ export const styles = StyleSheet.create({
   bookmark: {
     height: sizes.screenHeight * 0.0262,
   },
-
   todoButtonscontainer: {
     marginTop: sizes.screenHeight * 0.032,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     flexDirection: 'row',
+    alignSelf: 'center',
+    width: sizes.screenWidth * 0.7,
+  },
+  devider: {
+    backgroundColor: colors.grayBorder,
+    width: 1,
+    height: sizes.screenHeight * 0.07,
   },
   btnColor: {
-    backgroundColor: colors.pinkBtnbackground,
+    backgroundColor: colors.grayBorder,
     alignItems: 'center',
     justifyContent: 'center',
-    height: sizes.screenHeight * 0.06,
-    width: sizes.screenWidth * 0.42,
-    borderRadius: sizes.screenWidth * 0.04,
-    marginRight: sizes.screenWidth * 0.03,
-    marginLeft: sizes.screenWidth * 0.03,
+    height: sizes.screenHeight * 0.058,
+    width: sizes.screenWidth * 0.19,
+    borderRadius: 16,
+    // marginRight: sizes.screenWidth * 0.03,
+    // marginLeft: sizes.screenWidth * 0.03,
     flexDirection: 'row',
   },
   direction: {
-    height: sizes.screenHeight * 0.026,
+    height: 20,
+    tintColor: colors.black
   },
   btnText: {
-    textAlign: 'center',
-    color: colors.red,
-    fontSize: fontSize.medium,
-  },
-  call: {
-    borderStyle: 'solid',
-    borderRightWidth: 0.5,
+    color: colors.disabledBg2,
+    fontSize: fontSize.smallM,
+    marginTop: 8,
+    alignSelf: 'center',
   },
   tabContainer: {
     marginTop: sizes.screenHeight * 0.032,
@@ -197,17 +241,16 @@ export const styles = StyleSheet.create({
   },
   btn: {
     position: 'absolute',
-    top: sizes.screenHeight * 0.3,
+    top: sizes.screenHeight * 0.25,
     left: sizes.screenWidth * 0.08,
   },
   btnIOS: {
     position: 'absolute',
-    bottom:0,
-    alignSelf:'center'
+    bottom: 0,
+    alignSelf: 'center',
     // top: sizes.screenHeight * 0.3,
     // left: sizes.screenWidth * 0.08,
   },
-
   servicesContainer: {
     flexDirection: 'row',
     marginTop: sizes.screenHeight * 0.02,
@@ -257,7 +300,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   bookButton: {
-    backgroundColor: colors.btnColor,
+    backgroundColor: colors.black,
     marginLeft: sizes.screenWidth * 0.022,
     marginBottom: sizes.screenHeight * 0.005,
     height: sizes.screenHeight * 0.027,
@@ -347,13 +390,11 @@ export const styles = StyleSheet.create({
     marginBottom: sizes.screenHeight * 0.02,
     alignSelf: 'flex-start',
   },
-
   scrollView: {
     height: sizes.screenHeight * 0.28,
     marginTop: 10,
     // flex: 1,
   },
-
   // reviewContainer: {
   //   height : sizes.screenHeight
   // },

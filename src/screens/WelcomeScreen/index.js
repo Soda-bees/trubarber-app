@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,19 +11,19 @@ import {
   PermissionsAndroid,
   Alert,
 } from 'react-native';
-import {styles} from './style.js';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
-import {colors, sizes} from '../../services';
+import { colors, sizes } from '../../services';
 import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectlocation, setLocation} from '../../store/location/index.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectlocation, setLocation } from '../../store/location/index.js';
 import messaging from '@react-native-firebase/messaging';
 import { selectUserData } from '../../store/userData/index.js';
 
-export default function WelcomeScreen({navigation}) {
+export default function WelcomeScreen({ navigation }) {
   const dispatch = useDispatch();
   const userData = useSelector(selectUserData)
   const location = useSelector(selectlocation) || userData?.location
@@ -130,7 +130,7 @@ export default function WelcomeScreen({navigation}) {
         console.warn(err);
         return false;
       }
-    } 
+    }
     else if (Platform.OS === 'ios') {
       Geolocation.requestAuthorization();
       return true;
@@ -169,7 +169,7 @@ export default function WelcomeScreen({navigation}) {
     console.log('work getCurrentLocation');
     Geolocation.getCurrentPosition(
       position => {
-        const {latitude, longitude} = position.coords;
+        const { latitude, longitude } = position.coords;
         const locationObj = {
           latitude,
           longitude,
@@ -189,7 +189,7 @@ export default function WelcomeScreen({navigation}) {
           'Unable to retrieve your location. Please try again.',
         );
       },
-      {enableHighAccuracy: false, timeout: 20000, maximumAge: 20000},
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 20000 },
     );
   };
 
@@ -197,12 +197,12 @@ export default function WelcomeScreen({navigation}) {
     <SafeAreaView>
       <View style={styles.container}>
         <ScrollView
-          style={{flex: 1}}
+          style={{ flex: 1 }}
           horizontal={true}
           scrollEventThrottle={16}
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
-          onScroll={({nativeEvent}) => onchange(nativeEvent)}>
+          onScroll={({ nativeEvent }) => onchange(nativeEvent)}>
           <View style={Platform.OS == 'android' ? styles.body : styles.bodyIOS}>
             <ImageBackground
               style={styles.letsGetStartedImg1}
@@ -308,7 +308,7 @@ export default function WelcomeScreen({navigation}) {
               resizeMode="contain"
             />
           </TouchableOpacity>
-          <Button title={'Sign Up'} onPress={handleSignUP} />
+          <Button title={'Sign Up'} onPress={handleSignUP} light />
         </View>
         {/* <View style={Platform.OS == 'ios' ? styles.wrapDotIOS : styles.wrapDot}>
           {item?.map((item, index) => {

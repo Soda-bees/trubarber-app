@@ -129,7 +129,8 @@ export default function UserFavourites({ navigation }) {
                                 ? styles.contentMargin
                                 : styles.contentMarginIOS
                         }>
-                        {filteredBarbers?.map((item, index) => {
+                        {filteredBarbers?.length > 0 ? filteredBarbers?.map((item, index) => {
+                            console.log("filter length", filteredBarbers?.length);
                             const distance = calculateDistance(
                                 location?.latitude,
                                 location?.longitude,
@@ -172,7 +173,6 @@ export default function UserFavourites({ navigation }) {
                                                     resizeMode="contain"
                                                     style={styles.locationImg}
                                                 />
-                                                {/* <Text style={styles.textBlack}>{item.location}</Text> */}
                                                 {distance !== null && (
                                                     <Text style={styles.textBlack}>
                                                         {`${distance.toFixed(2)} km`}
@@ -195,7 +195,17 @@ export default function UserFavourites({ navigation }) {
                                     </ImageBackground>
                                 </ImageBackground>
                             );
-                        })}
+                        })
+                            : userData?.favourites?.length > 0 ?
+                                <View style={styles.noFavConatiner}>
+                                    <Image style={styles.noFavIcon} source={images.noSearch} />
+                                    <Text style={styles.noFavText}>Not found</Text>
+                                </View> :
+                                <View style={styles.noFavConatiner}>
+                                    <Image style={styles.noFavIcon} source={images.noBookmark} />
+                                    <Text style={styles.noFavText}>You don't have any favourite barbers</Text>
+                                </View>
+                        }
                     </View>
                     <View
                         style={{
@@ -209,18 +219,3 @@ export default function UserFavourites({ navigation }) {
     );
 }
 
-{
-    /* <View style={styles.navMargin}>
-    <View style={styles.navSelect}>
-      <Image
-        source={images.Discovery}
-        style={styles.bottonNavimg}
-        resizeMode="contain"
-      />
-      <Text>Explore</Text>
-    </View>
-    <Image source={images.Discovery} />
-    <Image source={images.Discovery} />
-    <Image source={images.Discovery} />
-  </View> */
-}

@@ -111,7 +111,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.013,
   },
   bookBtn: {
-    backgroundColor: colors.btnColor,
+    backgroundColor: colors.black,
     height: sizes.screenHeight * 0.032,
     width: sizes.screenWidth * 0.36,
     borderRadius: sizes.screenWidth * 0.022,

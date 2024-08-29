@@ -28,12 +28,8 @@ import Header from '../../components/Header';
 export default function ServiceDetails({navigation, route}) {
   const dispatch = useDispatch();
   const cart = useSelector(selectCart);
-  // const reduxCart =       useSelector(selectCart)
-  // console.log(reduxCart);
   const {item} = route.params;
   const userData = useSelector(selectUserData);
-  // const barber = useSelector(selectbarber)
-  // console.log('barber wala naya data h bhaiii', formatToJSON(barber));
   const [modalOpen, setModalopen] = useState(false);
   const [selectedIndices, setSelectedIndices] = useState(null);
   const [styleMenu, setStyleMenu] = useState([]);
@@ -45,22 +41,12 @@ export default function ServiceDetails({navigation, route}) {
     }
   }, [route.params.item]);
 
-  // useEffect(() => {
-  //   // console.log(selectedIndices);
-  //   const total = selectedIndices.reduce(
-  //     (sum, idx) => sum + parseFloat(styleMenu[idx]?.price || 0),
-  //     0,
-  //   );
-  //   setTotalAmount(total);
-  // }, [selectedIndices, styleMenu]);
-
   const handleMenu = (index, price) => {
     console.log(price);
     setSelectedIndices(prevIndex => {
       if (prevIndex === index) {
         setTotalAmount(prevAmount => prevAmount - price);
-        // Deselect the current index
-        return null; // Or whatever initial value you want for deselection
+        return null; 
       } else {
         // Select a new index
         setTotalAmount(prevAmount => prevAmount - prevAmount);
@@ -115,7 +101,6 @@ export default function ServiceDetails({navigation, route}) {
     if (cart) {
       if (cart?.barber !== item?.barber) {
         setModalopen(true);
-        // console.log('barber not same open modal');
       } else {
         const serviceNameExists = cart.services.some(
           service => service.serviceName === item.name,

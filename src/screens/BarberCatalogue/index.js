@@ -29,10 +29,10 @@ export default function BaberCatalogue({ navigation }) {
 
   const filteredServices = search
     ? userData?.services?.filter(item => {
-        const searchLower = search.toLowerCase();
-        const nameMatches = item.name.toLowerCase().includes(searchLower);
-        return nameMatches;
-      })
+      const searchLower = search.toLowerCase();
+      const nameMatches = item.name.toLowerCase().includes(searchLower);
+      return nameMatches;
+    })
     : userData?.services;
 
 
@@ -47,8 +47,7 @@ export default function BaberCatalogue({ navigation }) {
             <View style={styles.topIconRow}>
               <View
                 style={styles.locationRow}
-                // onPress={() => navigation.navigate('WholeMap')}
-                >
+              >
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
                 </View>
@@ -60,23 +59,7 @@ export default function BaberCatalogue({ navigation }) {
                 </View>
               </View>
               <View style={styles.otherIconRow}>
-                {/* <TouchableOpacity
-                  style={styles.notificationContainer}
-                  onPress={() => {
-                    navigation.navigate('Notifications');
-                  }}>
-                  <Image
-                    style={styles.iconImage}
-                    source={images.notification}
-                  />
-                </TouchableOpacity> */}
                 <NotificationComponent />
-                {/* <TouchableOpacity style={styles.notificationContainer}
-                  onPress={() => {
-                    navigation.navigate('Chats');
-                  }}>
-                  <Image style={styles.iconImage} source={images.chat} />
-                </TouchableOpacity> */}
                 <ChatConponent />
               </View>
             </View>
@@ -90,7 +73,7 @@ export default function BaberCatalogue({ navigation }) {
                 placeholderTextColor={colors.placeholdertextgray}
                 style={styles.input}
                 placeholder="Search..."
-                onChangeText={(text)=>{
+                onChangeText={(text) => {
                   setSearch(text)
                 }}
               />
@@ -108,7 +91,6 @@ export default function BaberCatalogue({ navigation }) {
                     style={styles.serviceBox}
                     key={index}
                     onPress={() => navigation.navigate('BarberSevriceDetails', { item })}
-                  // onPress={() => navigation.navigate('BarberSevriceDetails', { serviceNameHeading: item.serviceName, serviceName: item.serviceName })}
                   >
                     <Image
                       source={{ uri: item.icon }}

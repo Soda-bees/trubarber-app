@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   locationContainertop: {
-    backgroundColor: colors.pinkBtnbackground,
+    backgroundColor: colors.grayBorder,
     height: sizes.screenHeight * 0.046,
     width: sizes.screenWidth * 0.09,
     borderRadius: sizes.screenWidth * 0.03,
@@ -94,6 +94,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.03,
     width: sizes.screenWidth * 0.042,
     resizeMode: 'contain',
+    tintColor:colors.black
   },
   otherIconRow: {
     flexDirection: 'row',
@@ -250,7 +251,7 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
   },
   modalServiceTxtThree: {
-    color: colors.red,
+    color: colors.black,
     fontSize: fontSize.smallM,
     fontWeight: '500',
   },
@@ -262,7 +263,7 @@ export const styles = StyleSheet.create({
   },
   modalBtnView: {
     marginTop: sizes.screenHeight * 0.025,
-    backgroundColor: colors.btnColor,
+    backgroundColor: colors.black,
     paddingHorizontal: sizes.screenHeight * 0.015,
     paddingVertical: sizes.screenHeight * 0.015,
     width: sizes.screenWidth * 0.65,
@@ -347,7 +348,7 @@ export const styles = StyleSheet.create({
     top: 20,
   },
   selectedTab: {
-    backgroundColor: colors.red,
+    backgroundColor: colors.black,
     paddingVertical: sizes.screenWidth * 0.015,
     width: sizes.screenWidth * 0.42,
     alignItems: 'center',
@@ -410,9 +411,10 @@ export const styles = StyleSheet.create({
     height: sizes.screenWidth * 0.035,
     resizeMode: 'contain',
     marginLeft: sizes.screenWidth * 0.025,
+    tintColor:colors.black
   },
   seeDetailsText: {
-    color: colors.red,
+    color: colors.black,
     fontWeight: '500',
     fontSize: fontSize.smallM,
   },
@@ -476,7 +478,7 @@ export const styles = StyleSheet.create({
     gap: 4,
   },
   acceptBtn: {
-    backgroundColor: colors.red,
+    backgroundColor: colors.black,
     flexGrow: 1,
     alignItems: 'center',
     paddingVertical: sizes.screenWidth * 0.02,
@@ -484,7 +486,7 @@ export const styles = StyleSheet.create({
     width: 50,
   },
   declineBtn: {
-    backgroundColor: colors.placeholdertext,
+    backgroundColor: colors.grayBorder,
     flexGrow: 1,
     alignItems: 'center',
     paddingVertical: sizes.screenWidth * 0.02,

@@ -125,8 +125,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     height: sizes.screenHeight * 0.04,
     borderRadius: sizes.screenWidth * 0.03,
-    backgroundColor: colors.dateSelected,
-    borderColor: colors.red,
+    backgroundColor: colors.grayBorder,
+    borderColor: colors.black,
   },
   notSelected: {
     borderWidth: 0,
@@ -138,7 +138,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.lightgray,
   },
   selectedTextcolor: {
-    color: colors.red,
+    color: colors.black,
     fontWeight: '600',
   },
 
@@ -246,7 +246,7 @@ export const styles = StyleSheet.create({
     marginBottom: sizes.screenHeight * 0.01,
   },
   addAnotherservice: {
-    color: colors.btnColor,
+    color: colors.black,
     fontWeight: '600',
     borderColor: colors.btnColor,
   },

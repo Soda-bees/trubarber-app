@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   locationContainertop: {
-    backgroundColor: colors.pinkBtnbackground,
+    backgroundColor: colors.grayBorder,
     height: sizes.screenHeight * 0.046,
     width: sizes.screenWidth * 0.09,
     borderRadius: sizes.screenWidth * 0.03,
@@ -94,6 +94,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.03,
     width: sizes.screenWidth * 0.042,
     resizeMode: 'contain',
+    tintColor:colors.black
   },
   otherIconRow: {
     flexDirection: 'row',

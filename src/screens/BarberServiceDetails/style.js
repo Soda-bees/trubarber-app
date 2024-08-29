@@ -169,7 +169,7 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.4,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.btnColor,
+    backgroundColor: colors.black,
   },
   btnText1: {
     color: colors.white,

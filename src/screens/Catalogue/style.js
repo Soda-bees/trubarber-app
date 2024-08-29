@@ -46,7 +46,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   active: {
-    backgroundColor: colors.red,
+    backgroundColor: colors.black,
     width: sizes.screenWidth * 0.32,
     height: sizes.screenHeight * 0.044,
     alignItems: 'center',
@@ -151,7 +151,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.013,
   },
   bookBtn: {
-    backgroundColor: colors.btnColor,
+    backgroundColor: colors.black,
     height: sizes.screenHeight * 0.032,
     width: sizes.screenWidth * 0.36,
     borderRadius: sizes.screenWidth * 0.022,

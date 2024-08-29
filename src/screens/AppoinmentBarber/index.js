@@ -11,26 +11,26 @@ import {
   Platform,
   FlatList,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style';
 import images from '../../services/utilities/images';
-import {colors, sizes} from '../../services';
+import { colors, sizes } from '../../services';
 import Timetable from 'react-native-calendar-timetable';
 import moment from 'moment';
-import {useSelector} from 'react-redux';
-import {selectUserData} from '../../store/userData';
+import { useSelector } from 'react-redux';
+import { selectUserData } from '../../store/userData';
 import DatePicker from 'react-native-date-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Modal from 'react-native-modal';
 import Loader from '../../components/Loader';
-import {ErrorShow} from '../../components/Error';
-import {selectAuthToken} from '../../store/authToken';
-import {updateAppointmentStatus} from '../../services/config/API';
+import { ErrorShow } from '../../components/Error';
+import { selectAuthToken } from '../../store/authToken';
+import { updateAppointmentStatus } from '../../services/config/API';
 import formatToJSON from '../../services/config/FormatToJson';
 import Toast from 'react-native-toast-message';
 import ChatConponent from '../../components/ChatComponent';
 import NotificationComponent from '../../components/NotificationComponent';
-export default function AppoinmentBarber({navigation}) {
+export default function AppoinmentBarber({ navigation }) {
   const barber = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken);
 
@@ -85,7 +85,7 @@ export default function AppoinmentBarber({navigation}) {
     if (!date) return '';
 
     const day = date.getDate();
-    const month = date.toLocaleString('default', {month: 'long'});
+    const month = date.toLocaleString('default', { month: 'long' });
     return `${day} ${month}`;
   };
 
@@ -129,7 +129,7 @@ export default function AppoinmentBarber({navigation}) {
     setAppointmentTimeline2(transformedData);
   };
 
-  const RenderItem = ({style, item}) => {
+  const RenderItem = ({ style, item }) => {
     if (!item) return null;
 
     return (
@@ -164,7 +164,7 @@ export default function AppoinmentBarber({navigation}) {
 
     const dateObj = new Date(year, month, day);
 
-    const options = {weekday: 'short', month: 'short', day: 'numeric'};
+    const options = { weekday: 'short', month: 'short', day: 'numeric' };
 
     return dateObj.toLocaleDateString('en-US', options);
   };
@@ -326,20 +326,18 @@ export default function AppoinmentBarber({navigation}) {
     // Format the date in "DD/MM" format
     return `${day}-${monthName}`;
   };
-  const renderRequest = ({item}) => (
-    // console.log(formatToJSON(item))
-
+  const renderRequest = ({ item }) => (
     <View style={styles.requestContainer}>
       <View style={styles.requestContainerFirst}>
         <View style={styles.userView}>
-          <Image style={styles.userImg} source={item?.user?.profile ? {uri: item?.user?.profile} : item?.user?.gender === "male" ? images.male : images.female} />
+          <Image style={styles.userImg} source={item?.user?.profile ? { uri: item?.user?.profile } : item?.user?.gender === "male" ? images.male : images.female} />
           <Text style={styles.userName}>{item?.user?.name}</Text>
         </View>
         <TouchableOpacity
           style={styles.seeDetailsView}
           // onPress={() => navigation.navigate('AppointmentDetails', {item})}
           onPress={() =>
-            navigation.navigate('AppointmentDetails', {item, showButtons: true})
+            navigation.navigate('AppointmentDetails', { item, showButtons: true })
           }>
           <Text style={styles.seeDetailsText}>See Details</Text>
           <Image style={styles.rightRedArrow} source={images.rightRedArrow} />
@@ -350,7 +348,7 @@ export default function AppoinmentBarber({navigation}) {
           <View style={styles.serviceContainerFirst}>
             <View style={styles.serviceImagecontainer}>
               <Image
-                source={{uri: item?.services[0].serviceIcon}}
+                source={{ uri: item?.services[0].serviceIcon }}
                 style={styles.serviceIcon}
               />
             </View>
@@ -371,13 +369,12 @@ export default function AppoinmentBarber({navigation}) {
         <View
           style={[
             styles.serviceContainerFirst,
-            {marginTop: sizes.screenWidth * 0.035},
+            { marginTop: sizes.screenWidth * 0.035 },
           ]}>
           <View>
             <Text>Total Amount</Text>
-            <Text>{`${convertDateFormat(item?.date)} / ${
-              item?.time
-            } (60min)`}</Text>
+            <Text>{`${convertDateFormat(item?.date)} / ${item?.time
+              } (60min)`}</Text>
           </View>
           <View style={styles.price}>
             <Text>{`$ ${calculateTotalAmount(item?.services)}`}</Text>
@@ -392,7 +389,7 @@ export default function AppoinmentBarber({navigation}) {
             onPress={() =>
               handleUpdateAppointmentStatus('Scheduled', item?._id)
             }
-            // onPress={() => setAcceptLoader(!acceptLoader)}
+          // onPress={() => setAcceptLoader(!acceptLoader)}
           >
             <Text style={styles.btnText}>Accept</Text>
           </TouchableOpacity>
@@ -403,7 +400,7 @@ export default function AppoinmentBarber({navigation}) {
           <TouchableOpacity
             style={styles.declineBtn}
             onPress={() => handleUpdateAppointmentStatus('Rejected', item?._id)}
-            // onPress={() => setRejectLoader(!rejectLoader)}
+          // onPress={() => setRejectLoader(!rejectLoader)}
           >
             <Text style={styles.btnText}>Reject</Text>
           </TouchableOpacity>
@@ -424,7 +421,6 @@ export default function AppoinmentBarber({navigation}) {
             <View style={styles.topIconRow}>
               <View
                 style={styles.locationRow}
-                // onPress={() => navigation.navigate('WholeMap')}
               >
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
@@ -485,8 +481,8 @@ export default function AppoinmentBarber({navigation}) {
               is24Hour={false}
               display="spinner"
               // textColor="red"
-              positiveButton={{label: 'Done'}}
-              negativeButton={{label: 'Cancel'}}
+              positiveButton={{ label: 'Done' }}
+              negativeButton={{ label: 'Cancel' }}
               onChange={
                 Platform.OS === 'android' ? handleSetDate : handleSetDateIOS
               }
@@ -592,9 +588,9 @@ export default function AppoinmentBarber({navigation}) {
                   is12Hour
                   hourHeight={70}
                   style={{
-                    time: {color: colors.disabledBg2},
-                    timeContainer: {backgroundColor: 'transparent'},
-                    contentContainer: {width: sizes.screenWidth * 0.88},
+                    time: { color: colors.disabledBg2 },
+                    timeContainer: { backgroundColor: 'transparent' },
+                    contentContainer: { width: sizes.screenWidth * 0.88 },
                     lines: {
                       width:
                         Platform.OS == 'android'
@@ -603,8 +599,8 @@ export default function AppoinmentBarber({navigation}) {
                       marginLeft: sizes.screenWidth * 0.14,
                     },
                     nowLine: {
-                      dot: {backgroundColor: colors.red},
-                      line: {backgroundColor: colors.red},
+                      dot: { backgroundColor: colors.red },
+                      line: { backgroundColor: colors.red },
                     },
                   }}
                 />
@@ -614,7 +610,7 @@ export default function AppoinmentBarber({navigation}) {
           </ScrollView>
         )}
         {tab === 'request' && (
-          <View style={{marginTop: sizes.screenWidth * 0.06}}>
+          <View style={{ marginTop: sizes.screenWidth * 0.06 }}>
             {barber?.appoinment?.filter(item => item.status === 'Pending')
               ?.length > 0 ? (
               <FlatList
@@ -646,8 +642,8 @@ export default function AppoinmentBarber({navigation}) {
             display="spinner"
             // themeVariant="dark"
             // textColor="red"
-            positiveButton={{label: 'Done'}}
-            negativeButton={{label: 'Cancel'}}
+            positiveButton={{ label: 'Done' }}
+            negativeButton={{ label: 'Cancel' }}
             onChange={handleSetDate}
           />
         )}
@@ -680,9 +676,8 @@ export default function AppoinmentBarber({navigation}) {
               <Image source={images.clockIconFill} />
               <Text style={styles.modalServiceTxtFour}>
                 {modalItem?.date
-                  ? `${formatDateShort(modalItem?.date)} - ${
-                      modalItem?.duration
-                    }`
+                  ? `${formatDateShort(modalItem?.date)} - ${modalItem?.duration
+                  }`
                   : null}
               </Text>
             </View>
@@ -705,7 +700,7 @@ export default function AppoinmentBarber({navigation}) {
                 }
                 style={
                   isFutureTime(modalItem?.time, modalItem?.date) ||
-                  modalItem?.status === 'Completed'
+                    modalItem?.status === 'Completed'
                     ? styles.modalBtnViewDisable
                     : styles.modalBtnView
                 }
@@ -715,7 +710,7 @@ export default function AppoinmentBarber({navigation}) {
                 <Text
                   style={
                     isFutureTime(modalItem?.time, modalItem?.date) ||
-                    modalItem?.status === 'Completed'
+                      modalItem?.status === 'Completed'
                       ? styles.modalBtnTextDissable
                       : styles.modalBtnText
                   }>
@@ -725,7 +720,7 @@ export default function AppoinmentBarber({navigation}) {
                   source={images.arrowIcon}
                   style={
                     isFutureTime(modalItem?.time, modalItem?.date) ||
-                    modalItem?.status === 'Completed'
+                      modalItem?.status === 'Completed'
                       ? styles.modalArrowIconDsiable
                       : styles.modalArrowIcon
                   }

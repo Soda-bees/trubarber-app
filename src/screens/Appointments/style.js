@@ -160,7 +160,7 @@ export const styles = StyleSheet.create({
   bookBtn: {
     marginTop: sizes.screenHeight * 0.012,
     marginHorizontal: sizes.screenWidth * 0.012,
-    backgroundColor: colors.btnColor,
+    backgroundColor: colors.black,
     height: sizes.screenHeight * 0.042,
     width: sizes.screenWidth * 0.762,
     borderRadius: sizes.screenWidth * 0.022,
@@ -198,7 +198,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   statusText: {
-    backgroundColor: colors.red,
+    backgroundColor: colors.black,
     paddingHorizontal: sizes.screenWidth * 0.05,
     fontSize: fontSize.medium,
     fontWeight: '500',

@@ -10,29 +10,28 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style.js';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
-import {colors, sizes} from '../../services';
+import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
+import { colors, sizes } from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
-import {useDispatch, useSelector} from 'react-redux';
-import {removeAuthToken, selectAuthToken} from '../../store/authToken/index.js';
-import {removeRole} from '../../store/role/index.js';
-import {selectUserData} from '../../store/userData/index.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeAuthToken, selectAuthToken } from '../../store/authToken/index.js';
+import { removeRole } from '../../store/role/index.js';
+import { selectUserData } from '../../store/userData/index.js';
 import axios from 'axios';
-import {selectlocation} from '../../store/location/index.js';
+import { selectlocation } from '../../store/location/index.js';
 import {
   deleteDeviceToken,
   getAddressFromCoordinates,
 } from '../../services/config/API/index.js';
-import {removeCart} from '../../store/cart/index.js';
+import { removeCart } from '../../store/cart/index.js';
 import Header from '../../components/Header/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
-export default function Profile({navigation}) {
-  const GOOGLE_MAPS_API_KEY = 'AIzaSyCbWOArVUIn-uRQ8S3fsvayHrep5El4ab4';
+export default function Profile({ navigation }) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const authToken = useSelector(selectAuthToken);
@@ -45,7 +44,8 @@ export default function Profile({navigation}) {
     setLocationLoader(true);
     try {
       const response = await getAddressFromCoordinates(latitude, longitude);
-      setAddress({area: response?.area, city: response?.city});
+      // setAddress({ area: response?.area, city: response?.city });
+      setAddress(response)
       console.log('Location', response);
       setLocationLoader(false);
     } catch (error) {
@@ -54,9 +54,9 @@ export default function Profile({navigation}) {
     }
   };
 
-  // useEffect(() => {
-  //   getAddress(location?.latitude, location?.longitude);
-  // }, []);
+  useEffect(() => {
+    getAddress(location?.latitude, location?.longitude);
+  }, []);
 
   const handleDeleteDeviceToken = async () => {
     try {
@@ -83,10 +83,10 @@ export default function Profile({navigation}) {
         <Header title={'Profile'} />
         <View style={styles.contentContainer}>
           <View style={styles.contentAlligment}>
-            <Image 
-            // source={{uri: userData?.profile}} 
-            source={userData?.profile ? { uri: userData?.profile } : userData?.gender === 'male' ? images.male : images.female}
-            style={styles.youngMan} />
+            <Image
+              // source={{uri: userData?.profile}} 
+              source={userData?.profile ? { uri: userData?.profile } : userData?.gender === 'male' ? images.male : images.female}
+              style={styles.youngMan} />
             <View style={styles.nameContainer}>
               <Text style={styles.firstName}>{userData?.name}</Text>
               {/* <Text style={styles.lastName}>Williamson</Text> */}
@@ -95,7 +95,7 @@ export default function Profile({navigation}) {
           <View style={styles.locationPhonecontainer}>
             {locationLoader ? (
               <View style={styles.locationRow}>
-                <ActivityIndicator size={15} color={'red'} />
+                <ActivityIndicator size={15} color={colors.black} />
               </View>
             ) : (
               <View style={styles.locationRow}>
@@ -105,19 +105,12 @@ export default function Profile({navigation}) {
                   style={styles.redLocation}
                 />
                 <Text style={styles.locationText}>
-                  {address ? `${address.area}, ${address.city}.` : 'Location'}
+                  {address ? `${address}.` : 'Location'}
                 </Text>
               </View>
             )}
-            {/* <View style={styles.locationRow}>
-              <Image
-                source={images.redCall}
-                resizeMode="contain"
-                style={styles.redLocation}
-              />
-              <Text style={styles.locationText}>+1 1256864515</Text>
-            </View> */}
           </View>
+
         </View>
         <View style={styles.navigation}>
           <TouchableOpacity
@@ -133,7 +126,7 @@ export default function Profile({navigation}) {
           <TouchableOpacity
             style={styles.naviRow}
             onPress={() => navigation.navigate('EditBusinessProfile')}
-            >
+          >
             <Text style={styles.navText}>Edit Business Profile</Text>
             <Image
               source={images.arrowRight}
@@ -141,14 +134,6 @@ export default function Profile({navigation}) {
               resizeMode="contain"
             />
           </TouchableOpacity>
-          {/* <TouchableOpacity style={styles.naviRow}>
-            <Text style={styles.navText}>Edit Shop</Text>
-            <Image
-              source={images.arrowRight}
-              style={styles.arrowRight}
-              resizeMode="contain"
-            />
-          </TouchableOpacity> */}
           <TouchableOpacity
             style={styles.naviRow}
             onPress={() => navigation.navigate('ProfileSecurity')}>

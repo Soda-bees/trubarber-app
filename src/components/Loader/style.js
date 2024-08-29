@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
       },
 
       btnView: {
-        backgroundColor: colors.btnColor,
+        backgroundColor: colors.black,
         // padding: sizes.screenHeight * 0.02,
         width: sizes.screenWidth * 0.85,
         height:sizes.screenHeight * 0.07,

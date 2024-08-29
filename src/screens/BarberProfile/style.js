@@ -80,6 +80,7 @@ export const styles = StyleSheet.create({
   redLocation: {
     width: sizes.screenHeight * 0.022,
     height: sizes.screenHeight * 0.015,
+    tintColor:colors.black
   },
   locationText: {
     fontSize: fontSize.small,

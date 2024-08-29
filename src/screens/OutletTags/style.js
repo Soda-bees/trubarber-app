@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
   },
   tagContainerselected: {
     marginRight: sizes.screenWidth * 0.017,
-    backgroundColor: colors.selected,
+    backgroundColor: colors.blackGrey,
     marginBottom: sizes.screenHeight * 0.009,
     height: sizes.screenHeight * 0.06,
     justifyContent: 'center',
@@ -67,7 +67,7 @@ export const styles = StyleSheet.create({
     paddingRight: sizes.screenWidth * 0.02,
   },
   selectedText:{
-    color: colors.black,
+    color: colors.white,
     fontWeight: '400',
     paddingLeft: sizes.screenWidth * 0.02,
     paddingRight: sizes.screenWidth * 0.02,

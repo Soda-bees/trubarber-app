@@ -8,8 +8,9 @@ import {
   TextInput,
   SafeAreaView,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
@@ -23,13 +24,18 @@ import { removeUserData, selectUserData } from '../../store/userData/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import { removePaymentCard } from '../../store/paymentCard/index.js';
 import { removeCart } from '../../store/cart/index.js';
-import { deleteDeviceToken } from '../../services/config/API/index.js';
+import { deleteDeviceToken, getAddressFromCoordinates } from '../../services/config/API/index.js';
 import Header from '../../components/Header/index.js';
+import { selectlocation } from '../../store/location/index.js';
 
 export default function Profile({ navigation }) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const authToken = useSelector(selectAuthToken);
+  const location = useSelector(selectlocation) || userData?.location
+
+  const [address, setAddress] = useState('')
+  const [locationLoader, setLocationLoader] = useState(false);
 
   const handleDeleteDeviceToken = async () => {
     try {
@@ -50,6 +56,23 @@ export default function Profile({ navigation }) {
     dispatch(removeCart());
     dispatch(removeUserData());
   };
+
+  const getAddress = async (latitude, longitude) => {
+    setLocationLoader(true);
+    try {
+      const response = await getAddressFromCoordinates(latitude, longitude);
+      setAddress({ area: response?.area, city: response?.city });
+      console.log('Locaasddsastion', response);
+      setLocationLoader(false);
+    } catch (error) {
+      console.log(error);
+      setLocationLoader(false);
+    }
+  };
+
+  useEffect(() => {
+    getAddress(location?.latitude, location?.longitude);
+  }, [])
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -67,14 +90,32 @@ export default function Profile({ navigation }) {
               </View>
             </View>
             <View style={styles.locationPhonecontainer}>
-              <View style={styles.locationRow}>
+              {locationLoader ? (
+                <View style={styles.locationRow}>
+                  <ActivityIndicator size={15} color={colors.black} />
+                </View>
+              ) : (
+                <View style={styles.locationRow}>
+                  <Image
+                    source={images.redLocation}
+                    resizeMode="contain"
+                    style={styles.redLocation}
+                  />
+                  <Text style={styles.locationText}>
+                    {address ? `${address?.area}, ${address?.city}.` : 'Location'}
+                  </Text>
+                </View>
+              )}
+              {/* <View style={styles.locationRow}>
                 <Image
                   source={images.redLocation}
                   resizeMode="contain"
                   style={styles.redLocation}
                 />
-                <Text style={styles.locationText}>Location</Text>
-              </View>
+                <Text style={styles.locationText}>
+                  {address ? `${address.area}, ${address.city}.` : 'Location'}
+                </Text>
+              </View> */}
               {/* <View style={styles.locationRow}>
               <Image
                 source={images.redCall}

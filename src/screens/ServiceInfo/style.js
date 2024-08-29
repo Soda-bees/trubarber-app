@@ -137,7 +137,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 7,
   },
   addMoreBtn: {
-    backgroundColor: colors.btnColor,
+    backgroundColor: colors.black,
     width: sizes.screenWidth * 0.27,
     height: sizes.screenHeight * 0.05,
     alignSelf: 'flex-end',

@@ -77,4 +77,5 @@ export const colors = {
   lightRed: '#FFDCDD',
   chatRecievedBg: '#ECECEC',
   darkGray: '#888888',
+  blackGrey:'#464646'
 };

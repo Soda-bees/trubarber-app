@@ -3,7 +3,7 @@ import {colors, fontSize, sizes} from '../../services';
 
 export const styles = StyleSheet.create({
   btnView: {
-    backgroundColor: colors.btnColor,
+    backgroundColor: colors.black,
     width: sizes.screenWidth * 0.85,
     height:sizes.screenHeight * 0.07,
     paddingHorizontal:sizes.screenWidth * 0.05,
@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   btnView2: {
-    backgroundColor: colors.btnColor,
+    backgroundColor: colors.black,
     width: sizes.screenWidth * 0.85,
     height:sizes.screenHeight * 0.07,
     paddingHorizontal:sizes.screenWidth * 0.05,
@@ -45,7 +45,7 @@ export const styles = StyleSheet.create({
   },
 
     btnViewLight: {
-      backgroundColor: colors.lightgray,
+      backgroundColor: colors.blackGrey,
       padding: sizes.screenHeight * 0.02,
       width: sizes.screenWidth * 0.85,
       alignSelf: 'center',
@@ -53,12 +53,12 @@ export const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      borderWidth: sizes.screenWidth * 0.003
+      borderWidth: sizes.screenWidth * 0.003,
+      borderColor:colors.white
     },
     btnTextLight: {
-      color: colors.black,
+      color: colors.white,
       marginLeft : sizes.screenWidth * 0.032,
-
       fontSize: fontSize.medium,
       fontWeight: '600',
       fontSize: fontSize.h6,
@@ -67,6 +67,6 @@ export const styles = StyleSheet.create({
       marginRight : sizes.screenWidth * 0.03,
       height: sizes.screenHeight * 0.02,
       width: sizes.screenHeight * 0.02,
-      tintColor: colors.black,
+      tintColor: colors.white,
     },
 });

@@ -151,7 +151,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.013,
   },
   bookBtn: {
-    backgroundColor: colors.btnColor,
+    backgroundColor: colors.black,
     height: sizes.screenHeight * 0.032,
     width: sizes.screenWidth * 0.36,
     borderRadius: sizes.screenWidth * 0.022,
@@ -212,4 +212,24 @@ export const styles = StyleSheet.create({
     // marginBottom: sizes.screenHeight * 0.09,
     // backgroundColor:''
   },
+
+
+
+  noFavConatiner:{
+    alignSelf: 'center',
+    alignItems: 'center',
+    width:sizes.screenWidth * 0.91,
+    marginTop: sizes.screenHeight*0.5
+  }
+,
+  noFavIcon:{
+    height: 50,
+    width: 50
+  },
+
+  noFavText:{
+    color: colors.black,
+    fontWeight: '600',
+    fontSize: fontSize.medium
+  }
 });

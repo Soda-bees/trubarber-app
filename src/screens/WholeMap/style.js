@@ -189,7 +189,7 @@ export const styles = StyleSheet.create({
   },
   bookBtn: {
     // marginTop: sizes.screenHeight * 0.002,
-    backgroundColor: colors.btnColor,
+    backgroundColor: colors.black,
     height: sizes.screenHeight * 0.042,
     width: sizes.screenWidth * 0.7,
     borderRadius: sizes.screenWidth * 0.022,

@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   locationContainertop: {
-    backgroundColor: colors.pinkBtnbackground,
+    backgroundColor: colors.grayBorder,
     height: sizes.screenHeight * 0.046,
     width: sizes.screenWidth * 0.09,
     borderRadius: sizes.screenWidth * 0.03,
@@ -95,6 +95,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.03,
     width: sizes.screenWidth * 0.042,
     resizeMode: 'contain',
+    tintColor:colors.black
   },
   otherIconRow: {
     flexDirection: 'row',
@@ -212,13 +213,13 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
   statusHeadingTwo: {
-    color: colors.red,
+    color: colors.black,
     fontSize: fontSize.smallM,
     width: sizes.screenWidth * 0.17,
     textAlign: 'right',
   },
   statusHeadingTwoIOS: {
-    color: colors.red,
+    color: colors.black,
     fontSize: fontSize.smallM,
     width: sizes.screenWidth * 0.18,
     textAlign: 'right',
@@ -245,7 +246,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   viewAllBtn: {
-    borderColor: colors.red,
+    borderColor: colors.black,
     alignItems: 'center',
     borderWidth: sizes.screenWidth * 0.003,
     width: sizes.screenWidth * 0.23,
@@ -255,7 +256,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   viewAllText: {
-    color: colors.red,
+    color: colors.black,
     fontSize: fontSize.smallM,
     fontWeight: '500',
   },
@@ -263,6 +264,7 @@ export const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: sizes.screenWidth * 0.025,
     marginStart: sizes.screenWidth * 0.01,
+    tintColor:colors.black
   },
   reviewContainer: {
     marginTop: sizes.screenHeight * 0.01,

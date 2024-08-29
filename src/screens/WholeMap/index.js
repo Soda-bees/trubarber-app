@@ -8,21 +8,21 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import images from '../../services/utilities/images';
-import {styles} from './style';
-import {colors, sizes} from '../../services';
-import MapView, {Marker} from 'react-native-maps';
+import { styles } from './style';
+import { colors, sizes } from '../../services';
+import MapView, { Marker } from 'react-native-maps';
 import StarRating from 'react-native-star-rating-widget';
 import Modal from 'react-native-modal';
 import BackArrow from '../../components/BackArrow';
-import {useSelector} from 'react-redux';
-import {selectlocation} from '../../store/location';
-import {selectbarber} from '../../store/barber';
+import { useSelector } from 'react-redux';
+import { selectlocation } from '../../store/location';
+import { selectbarber } from '../../store/barber';
 import formatToJSON from '../../services/config/FormatToJson';
 import { selectUserData } from '../../store/userData';
 
-export default function WholeMap({navigation}) {
+export default function WholeMap({ navigation }) {
   const barberData = useSelector(selectbarber);
   const userData = useSelector(selectUserData)
   const [selectedBarber, setSelectedBarber] = useState('');
@@ -48,9 +48,9 @@ export default function WholeMap({navigation}) {
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c;
     return distance;
@@ -59,7 +59,7 @@ export default function WholeMap({navigation}) {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <View style={[styles.backgroundColor, {zIndex: 1}]}>
+        <View style={[styles.backgroundColor, { zIndex: 1 }]}>
           <ImageBackground
             source={images.transparentBg}
             resizeMode="contain"
@@ -102,13 +102,13 @@ export default function WholeMap({navigation}) {
             </View> */}
           </ImageBackground>
         </View>
-        <View style={[styles.mapContainer, {zIndex: 0}]}>
+        <View style={[styles.mapContainer, { zIndex: 0 }]}>
           <MapView
             style={styles.mapStyle}
             initialRegion={{
               latitude: location?.latitude,
               longitude: location?.longitude,
-              latitudeDelta: 0.001, 
+              latitudeDelta: 0.001,
               longitudeDelta: 0.001,
             }}
             followsUserLocation={true}
@@ -129,7 +129,7 @@ export default function WholeMap({navigation}) {
                     style={styles.locationImgIcon}
                     resizeMode="contain">
                     <Image
-                      source={{uri: item.profile}}
+                      source={{ uri: item.businessProfile }}
                       style={styles.markerIngStyle}
                     />
                   </ImageBackground>
@@ -146,9 +146,9 @@ export default function WholeMap({navigation}) {
         style={styles.modalPosition}>
         {selectedBarber && (
           <ImageBackground
-            source={{uri: selectedBarber.profile}}
+            source={{ uri: selectedBarber.businessProfile }}
             imageStyle={styles.containerImage}
-            // style={}
+          // style={}
           >
             <View style={styles.spaceBetween}>
               <View style={styles.row}>

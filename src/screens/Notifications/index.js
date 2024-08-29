@@ -32,6 +32,7 @@ import moment from 'moment';
 import {handleNotificationSeenTrue} from '../../services/config/API';
 import {selectAuthToken} from '../../store/authToken';
 import Header from '../../components/Header';
+import { sizes } from '../../services';
 
 export default function Notifications({navigation}) {
   const authToken = useSelector(selectAuthToken);
@@ -140,7 +141,7 @@ export default function Notifications({navigation}) {
                     //     swipeContainerStyle={{}}
                     //     leftButtons={leftButton(index)}>
                     <View style={styles.notficationContainer} key={index}>
-                      <Image source={images.calendarIcon} />
+                      <Image source={images.calendarIcon} style={{height:sizes.screenWidth * 0.12, width:sizes.screenWidth * 0.12,}}/>
                       <View style={styles.notficationDetailContainer}>
                         <Text style={styles.notificationTitle}>
                           {item.title}

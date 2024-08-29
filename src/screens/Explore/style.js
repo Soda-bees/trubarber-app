@@ -85,7 +85,7 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   locationContainertop: {
-    backgroundColor: colors.pinkBtnbackground,
+    backgroundColor: colors.grayBorder,
     height: sizes.screenHeight * 0.046,
     width: sizes.screenWidth * 0.09,
     borderRadius: sizes.screenWidth * 0.03,
@@ -105,6 +105,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.03,
     width: sizes.screenWidth * 0.042,
     resizeMode: 'contain',
+    tintColor:colors.black
   },
   otherIconRow: {
     flexDirection: 'row',
@@ -261,7 +262,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.013,
   },
   bookBtn: {
-    backgroundColor: colors.btnColor,
+    backgroundColor: colors.black,
     height: sizes.screenHeight * 0.032,
     width: sizes.screenWidth * 0.36,
     borderRadius: sizes.screenWidth * 0.022,

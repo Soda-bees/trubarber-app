@@ -245,8 +245,7 @@ export default function Review({navigation, route}) {
       <View style={styles.container}>
         <ImageBackground
           imageStyle={styles.headerImage}
-          source={{uri: barber?.profile}}
-          // style={}
+          source={{uri: barber?.businessProfile}}
         >
           <View style={styles.headerContainer}>
             <View style={styles.arrowTop}>

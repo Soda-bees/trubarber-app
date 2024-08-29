@@ -65,7 +65,7 @@ export const styles = StyleSheet.create({
 
   btnView: {
     marginTop:sizes.screenHeight* 0.02,
-    backgroundColor: colors.btnColor,
+    backgroundColor: colors.black,
     padding: sizes.screenWidth * 0.04,
     width: sizes.screenWidth * 0.85,
     alignSelf: 'center',
@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
   },
   btnViewLoader: {
     marginTop:sizes.screenHeight* 0.02,
-    backgroundColor: colors.btnColor,
+    backgroundColor: colors.black,
     padding: sizes.screenWidth * 0.03,
     width: sizes.screenWidth * 0.85,
     alignSelf: 'center',

@@ -1,10 +1,10 @@
 import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {sizes} from '../utilities/sizes';
-import {colors} from '../utilities/colors';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { sizes } from '../utilities/sizes';
+import { colors } from '../utilities/colors';
 import images from '../utilities/images';
-import {Image, Platform, Text, View} from 'react-native';
-import {fontSize} from '../utilities/fonts';
+import { Image, Platform, Text, View } from 'react-native';
+import { fontSize } from '../utilities/fonts';
 import Profile from '../../screens/Profile';
 import Explore from '../../screens/Explore';
 import Catalogue from '../../screens/Catalogue';
@@ -32,19 +32,20 @@ export default function TabNavigation() {
         name="Explore"
         component={Explore}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <Image
-              source={!focused ? images.exploreTabBerfore : images.exploreTabAfter}
+              source={images.exploreTabBerfore}
               style={{
                 resizeMode: 'contain',
                 width: sizes.screenWidth * 0.05,
                 height: focused
                   ? sizes.screenWidth * 0.05
                   : sizes.screenWidth * 0.05,
+                tintColor: focused ? colors.black : colors.grayBorder
               }}
             />
           ),
-          tabBarLabel: ({focused}) => (
+          tabBarLabel: ({ focused }) => (
             <CustomTabLabel focused={focused} label="Explore" />
           ),
         }}
@@ -53,21 +54,22 @@ export default function TabNavigation() {
         name="Catalogue"
         component={Catalogue}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View>
               <Image
-                source={!focused ? images.catalogueTabBefore : images.catalogueTabAfter}
+                source={images.catalogueTabBefore}
                 style={{
                   resizeMode: 'contain',
                   width: sizes.screenWidth * 0.05,
                   height: focused
                     ? sizes.screenWidth * 0.05
                     : sizes.screenWidth * 0.05,
+                  tintColor: focused ? colors.black : colors.grayBorder
                 }}
               />
             </View>
           ),
-          tabBarLabel: ({focused}) => (
+          tabBarLabel: ({ focused }) => (
             <CustomTabLabel focused={focused} label="Catalogue" />
           ),
         }}
@@ -77,21 +79,22 @@ export default function TabNavigation() {
         name="Appointments"
         component={Appointments}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View>
               <Image
-                source={!focused ? images.appointmentTabBefore : images.appointmentTabAfter}
+                source={images.appointmentTabBefore}
                 style={{
                   resizeMode: 'contain',
                   width: sizes.screenWidth * 0.05,
                   height: focused
                     ? sizes.screenWidth * 0.05
                     : sizes.screenWidth * 0.05,
+                  tintColor: focused ? colors.black : colors.grayBorder
                 }}
               />
             </View>
           ),
-          tabBarLabel: ({focused}) => (
+          tabBarLabel: ({ focused }) => (
             <CustomTabLabel focused={focused} label="Appointments" />
           ),
         }}
@@ -100,22 +103,23 @@ export default function TabNavigation() {
         name="Profile"
         component={Profile}
         options={{
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View>
               <Image
-                source={!focused ? images.profileTabBefore : images.profileTabAfter}
+                source={images.profileTabBefore}
                 style={{
                   resizeMode: 'contain',
                   width: sizes.screenWidth * 0.05,
                   height: focused
                     ? sizes.screenWidth * 0.05
                     : sizes.screenWidth * 0.05,
+                  tintColor: focused ? colors.black : colors.grayBorder
                 }}
               />
             </View>
           ),
-         
-          tabBarLabel: ({focused}) => (
+
+          tabBarLabel: ({ focused }) => (
             <CustomTabLabel focused={focused} label="Profile" />
           ),
         }}
@@ -124,16 +128,16 @@ export default function TabNavigation() {
   );
 }
 
-const CustomTabLabel = ({focused, label}) => {
+const CustomTabLabel = ({ focused, label }) => {
   const inactiveColor = colors.black;
   const activeColor = colors.tealMix;
   return (
     <Text
       style={{
-        color: focused ? colors.btnColor : colors.gray,
+        color: focused ? colors.black : colors.grayBorder,
         fontSize: fontSize.small,
-        marginBottom:sizes.screenHeight * 0.01,
-        
+        marginBottom: sizes.screenHeight * 0.01,
+        fontWeight: focused ? '500' : '400'
       }}>
       {label}
     </Text>

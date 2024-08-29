@@ -251,7 +251,7 @@ export default function Login({navigation}) {
           </View>
           <View style={styles.buttonTop}>
             {loader ? (
-              <Loader title={'Login'} />
+              <Loader title={'Login'}  />
             ) : (
               <Button title={'Login'} onPress={handleSignIn} />
             )}

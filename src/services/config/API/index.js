@@ -173,31 +173,42 @@ export const addServices = async (body, token) => {
 };
 
 export const getAddressFromCoordinates = async (latitude, longitude) => {
-  const GOOGLE_MAPS_API_KEY = 'AIzaSyCbWOArVUIn-uRQ8S3fsvayHrep5El4ab4';
+  const GOOGLE_MAPS_API_KEY = 'AIzaSyDZHd__SjxYxquisLR6VcqIF1VuyVD4aiY';
+  // try {
+  //   const response = await axios.get(
+  //     `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_MAPS_API_KEY}`,
+  //   );
+  //   if (response.data.status === 'OK') {
+  //     const addressComponents = response.data.results[0].address_components;
+  //     const area =
+  //       addressComponents.find(component =>
+  //         component.types.includes('sublocality_level_1'),
+  //       )?.long_name || '';
+  //     const city =
+  //       addressComponents.find(component =>
+  //         component.types.includes('locality'),
+  //       )?.long_name || '';
+  //     return { area, city };
+  //   } else {
+  //     console.log('Error fetching address:', response.data.status);
+  //     return response?.data?.status;
+  //   }
+  // } catch (error) {
+  //   console.log('Error in geocoding:', error);
+  //   return error;
+  // }
   try {
     const response = await axios.get(
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_MAPS_API_KEY}`,
     );
     if (response.data.status === 'OK') {
-      const addressComponents = response.data.results[0].address_components;
-      const area =
-        addressComponents.find(component =>
-          component.types.includes('sublocality_level_1'),
-        )?.long_name || '';
-      const city =
-        addressComponents.find(component =>
-          component.types.includes('locality'),
-        )?.long_name || '';
-      return { area, city };
-      // setAddress({ area, city });
-      // console.log(area, city);
+      const fullAddress = response.data.results[0].formatted_address;
+      return(fullAddress);
     } else {
       console.log('Error fetching address:', response.data.status);
-      return response?.data?.status;
     }
   } catch (error) {
     console.log('Error in geocoding:', error);
-    return error;
   }
 };
 

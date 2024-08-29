@@ -26,52 +26,6 @@ import Header from '../../components/Header/index.js';
 export default function Appointments({ navigation }) {
   const dispatch = useDispatch();
   const userData = useSelector(selectUserData);
-  const [appointmentData, setappointmentData] = useState([
-    {
-      image: images.largerBarberhat,
-      productTitle: 'REDBOX BARBER',
-      product: images.hairCut,
-      name: 'Alex WILLIAMS',
-      price: '$25',
-      duration: '42min',
-      time: '02 Feb/02:00AM',
-      productName: 'Haircuts',
-      location: 'Royal Ln. Mesa, New Jersey',
-    },
-    {
-      image: images.largerBarberhat,
-      productTitle: 'REDBOX BARBER',
-      product: images.hairCut,
-      name: 'Alex WILLIAMS',
-      price: '$25',
-      duration: '42min',
-      time: '02 Feb/02:00AM',
-      productName: 'Haircuts',
-      location: 'Royal Ln. Mesa, New Jersey',
-    },
-    {
-      image: images.largerBarberhat,
-      productTitle: 'REDBOX BARBER',
-      product: images.hairCut,
-      name: 'Alex WILLIAMS',
-      price: '$25',
-      duration: '42min',
-      time: '02 Feb/02:00AM',
-      productName: 'Haircuts',
-      location: 'Royal Ln. Mesa, New Jersey',
-    },
-    {
-      image: images.largerBarberhat,
-      productTitle: 'REDBOX BARBER',
-      product: images.hairCut,
-      name: 'Alex WILLIAMS',
-      price: '$25',
-      duration: '42min',
-      time: '02 Feb/02:00AM',
-      productName: 'Haircuts',
-      location: 'Royal Ln. Mesa, New Jersey',
-    },
-  ]);
 
   const calculateTotalAmount = services => {
     return services.reduce(

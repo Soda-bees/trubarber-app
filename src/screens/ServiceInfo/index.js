@@ -454,7 +454,7 @@ export default function ServiceInfo({navigation, route}) {
             <TouchableOpacity
               style={styles.uplaodImageContianer}
               onPress={() => uploadPhoto('library')}>
-              <Image source={images.plusRed} />
+              <Image source={images.plusRed} style={{tintColor:colors.black}}/>
               <Text style={styles.uploadImgText}>Add Service Pictures</Text>
             </TouchableOpacity>
           </View>
@@ -476,7 +476,7 @@ export default function ServiceInfo({navigation, route}) {
                   <View style={styles.serviceContentRow} key={index}>
                     <TouchableOpacity
                       onPress={() => deleteServiceDetails(index)}>
-                      <Image source={images.minusRed} resizeMode="contain" />
+                      <Image source={images.minusRed} resizeMode="contain" style={{tintColor:colors.black}}/>
                     </TouchableOpacity>
                     <TextInput
                       onChangeText={text =>

@@ -433,18 +433,17 @@ export default function BookingProcess({ navigation, route }) {
                   style={{
                     height: sizes.screenHeight * 0.12,
                     paddingTop: sizes.screenHeight * 0.01,
-                    // paddingBottom: sizes.screenHeight * 0.02,
                   }}
                   dayContainerStyle={{ borderWidth: 1 }}
                   scrollerPaging
                   useNativeDriver
                   scrollable
-                  highlightDateNumberStyle={{ color: colors.red }}
+                  highlightDateNumberStyle={{ color: colors.black }}
                   calendarHeaderStyle={{ color: colors.black }}
-                  highlightDateNameStyle={{ color: colors.red }}
+                  highlightDateNameStyle={{ color: colors.black }}
                   highlightDateContainerStyle={{
-                    backgroundColor: colors.dateSelected,
-                    borderColor: colors.red,
+                    backgroundColor: colors.grayBorder,
+                    borderColor: colors.black,
                   }}
                   dateNameStyle={{ color: colors.black }}
                   dateNumberStyle={{ color: colors.black }}

@@ -31,12 +31,12 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    borderColor: colors.red,
+    borderColor: colors.black,
     borderWidth: 1,
     height: sizes.screenWidth * 0.14,
     width: sizes.screenWidth * 0.14,
     borderRadius: sizes.screenWidth * 0.15,
-    backgroundColor: colors.lightRed,
+    backgroundColor: colors.grayBorder,
   },
   dateRoundText: {
     color: colors.disabledBg2,
@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
   },
   dateRoundTextSelected: {
-    color: colors.red,
+    color: colors.black,
     fontSize: fontSize.medium,
     fontWeight: '500',
   },
@@ -162,8 +162,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     height: sizes.screenHeight * 0.04,
     borderRadius: sizes.screenWidth * 0.03,
-    backgroundColor: colors.dateSelected,
-    borderColor: colors.red,
+    backgroundColor: colors.grayBorder,
+    borderColor: colors.black,
   },
   notSelected: {
     borderWidth: 0,
@@ -175,7 +175,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.lightgray,
   },
   selectedTextcolor: {
-    color: colors.red,
+    color: colors.black,
     fontWeight: '600',
   },
 

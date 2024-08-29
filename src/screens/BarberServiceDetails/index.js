@@ -9,25 +9,25 @@ import {
   ActivityIndicator,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
-import {styles} from './style.js';
+import React, { useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import {StarRatingDisplay} from 'react-native-star-rating-widget';
-import {colors, sizes} from '../../services';
+import { StarRatingDisplay } from 'react-native-star-rating-widget';
+import { colors, sizes } from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
 import Modal from 'react-native-modal';
-import {deleteService} from '../../services/config/API/index.js';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectAuthToken} from '../../store/authToken/index.js';
+import { deleteService } from '../../services/config/API/index.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAuthToken } from '../../store/authToken/index.js';
 import Toast from 'react-native-toast-message';
-import {ErrorShow} from '../../components/Error/index.js';
-import {deleteServiceRedux} from '../../store/userData/index.js';
+import { ErrorShow } from '../../components/Error/index.js';
+import { deleteServiceRedux } from '../../store/userData/index.js';
 
-export default function BarberServiceDetails({route, navigation}) {
+export default function BarberServiceDetails({ route, navigation }) {
   // const [serviceNameHeading, setserviceNameHeading] = useState('Hair Cuts');
   // const {serviceNameHeading, serviceName} = route.params;
-  const {item} = route?.params;
+  const { item } = route?.params;
   const dispatch = useDispatch();
   const authToken = useSelector(selectAuthToken);
 
@@ -56,11 +56,11 @@ export default function BarberServiceDetails({route, navigation}) {
     },
   ]);
   const [serviceImage, setServiceImage] = useState([
-    {image: images.barberUsingdry},
-    {image: images.barberUsingdry},
-    {image: images.barberUsingdry},
-    {image: images.barberUsingdry},
-    {image: images.barberUsingdry},
+    { image: images.barberUsingdry },
+    { image: images.barberUsingdry },
+    { image: images.barberUsingdry },
+    { image: images.barberUsingdry },
+    { image: images.barberUsingdry },
   ]);
   const [loader, setLoader] = useState(false);
   const [deletePermission, setDeletePermission] = useState(false);
@@ -105,7 +105,7 @@ export default function BarberServiceDetails({route, navigation}) {
 
           <Text style={styles.headerText}>{item?.name}</Text>
           <TouchableOpacity
-            style={{padding: sizes.screenWidth * 0.02}}
+            style={{ padding: sizes.screenWidth * 0.02 }}
             onPress={() => {
               setModalVisible(!modalVisible);
             }}>
@@ -140,10 +140,10 @@ export default function BarberServiceDetails({route, navigation}) {
           }>
           <Text style={styles.imageHeading}>Images</Text>
           <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-            <View style={{width: sizes.screenWidth * 0.04}}></View>
+            <View style={{ width: sizes.screenWidth * 0.04 }}></View>
             {item?.pictures?.map((item, index) => (
               <View key={index}>
-                <Image style={styles.imageContainer} source={{uri: item}} />
+                <Image style={styles.imageContainer} source={{ uri: item }} />
               </View>
             ))}
           </ScrollView>
@@ -166,12 +166,12 @@ export default function BarberServiceDetails({route, navigation}) {
                     isEdit: true,
                   });
                 }}
-                // onPress={() => {
-                //   navigation.navigate('EditService', {
-                //     serviceNameHeading,
-                //     serviceName,
-                //   });
-                // }}
+              // onPress={() => {
+              //   navigation.navigate('EditService', {
+              //     serviceNameHeading,
+              //     serviceName,
+              //   });
+              // }}
               >
                 <Image source={images.editIcon} />
                 <Text style={styles.modalText}>Edit</Text>

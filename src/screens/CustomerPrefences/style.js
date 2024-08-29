@@ -84,7 +84,7 @@ export const styles = StyleSheet.create({
   },
 
   selected: {
-    backgroundColor: colors.selected,
+    backgroundColor: colors.grayBorder,
     marginTop: sizes.screenHeight * 0.04,
     alignItems: 'center',
     color: colors.black,

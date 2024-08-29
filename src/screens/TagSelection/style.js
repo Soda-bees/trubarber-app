@@ -51,7 +51,7 @@ export const styles = StyleSheet.create({
   },
   tagContainerselected: {
     marginRight: sizes.screenWidth * 0.017,
-    backgroundColor: colors.selected,
+    backgroundColor: colors.grayBorder,
     marginBottom: sizes.screenHeight * 0.009,
     height: sizes.screenHeight * 0.06,
     justifyContent: 'center',

@@ -98,7 +98,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   btn: {
-    backgroundColor: colors.btnColor,
+    backgroundColor: colors.black,
     justifyContent: 'center',
     width: sizes.screenWidth * 0.312,
     height: sizes.screenHeight * 0.05,
@@ -106,7 +106,7 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.03,
   },
   btn2: {
-    backgroundColor: colors.lightRed,
+    backgroundColor: colors.grayBorder,
     justifyContent: 'center',
     width: sizes.screenWidth * 0.312,
     height: sizes.screenHeight * 0.05,
@@ -160,7 +160,7 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.9,
     height: sizes.screenHeight * 0.07,
     borderRadius: sizes.screenWidth * 0.03,
-    backgroundColor: colors.lightRed,
+    backgroundColor: colors.grayBorder,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -238,6 +238,6 @@ export const styles = StyleSheet.create({
     width:sizes.screenWidth * 0.4, 
     justifyContent:'center',
     alignItems:'center',
-    backgroundColor:colors.btnColor,
+    backgroundColor:colors.black,
   },
 });
