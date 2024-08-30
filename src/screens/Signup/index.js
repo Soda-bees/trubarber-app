@@ -307,7 +307,7 @@ export default function Signup({ navigation }) {
             }
 
           </View>
-          <View style={Platform.OS == 'ios' && styles.forgotPassIOS}>
+          <View style={Platform.OS == 'ios' && styles.BottomBtnView}>
             <View style={styles.forgotPass}>
               {loader ? (
                 <Loader title={'Sign Up'} />

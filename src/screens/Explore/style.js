@@ -150,7 +150,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 12,
     paddingRight: sizes.screenWidth * 0.08,
-    paddingBottom: sizes.screenHeight * 0.08,
+    paddingBottom: sizes.screenHeight * 0.055,
+    // backgroundColor:'red'
   },
   categoryBox: {
     height: sizes.screenHeight * 0.1,

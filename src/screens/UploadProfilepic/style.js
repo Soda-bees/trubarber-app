@@ -6,6 +6,10 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.lightgray,
     height: sizes.screenHeight * 1.05,
   },
+  containerIOS: {
+    backgroundColor: colors.lightgray,
+    height: sizes.screenHeight * 0.9,
+  },
 
   backArrow: {
     marginLeft: sizes.screenWidth * 0.04,
@@ -13,7 +17,7 @@ export const styles = StyleSheet.create({
 
   },
   forgetPass: {
-    marginTop: sizes.screenHeight * 0.05,
+    marginTop: sizes.screenHeight * 0.03,
     textAlign: 'center',
     fontSize: fontSize.h5,
     color: colors.black,
@@ -93,7 +97,9 @@ export const styles = StyleSheet.create({
   },
 
   nextBtnIOS: {
-    top: sizes.screenHeight * 0.24,
+    position:'absolute',
+    alignSelf:'center',
+    bottom: sizes.screenHeight * 0.02,
   },
   genderContainer: {
     alignSelf: 'center',

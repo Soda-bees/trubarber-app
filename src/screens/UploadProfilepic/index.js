@@ -10,25 +10,25 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import images from '../../services/utilities/images';
-import { styles } from './style.js';
+import {styles} from './style.js';
 import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { PermissionsAndroid, PermissionsIOS } from 'react-native';
-import { ErrorShow } from '../../components/Error';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {PermissionsAndroid, PermissionsIOS} from 'react-native';
+import {ErrorShow} from '../../components/Error';
 import Toast from 'react-native-toast-message';
-import { uploadProfile } from '../../services/config/API';
+import {uploadProfile} from '../../services/config/API';
 import Loader from '../../components/Loader';
-import { colors, sizes } from '../../services';
+import {colors, sizes} from '../../services';
 
-export default function UploadProfilepic({ navigation, route }) {
-  const { userData } = route.params;
+export default function UploadProfilepic({navigation, route}) {
+  const {userData} = route.params;
   const [imgUri, setImgUri] = useState(null);
   const [loader, setLoader] = useState(false);
-  const [showGenderDropdown, setShowGenderDropdown] = useState(false)
-  const [gender, setGender] = useState('')
+  const [showGenderDropdown, setShowGenderDropdown] = useState(false);
+  const [gender, setGender] = useState('');
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
@@ -106,14 +106,13 @@ export default function UploadProfilepic({ navigation, route }) {
     navigation.goBack();
   };
 
-
   const handlePhoteUpdate = () => {
     if (!gender) {
       return ErrorShow('error', 'Oops!', 'Please select gender');
     }
     userData.profile = imgUri;
     userData.gender = gender;
-    navigation.navigate('ProfileSetupPrompt', { userData });
+    navigation.navigate('ProfileSetupPrompt', {userData});
   };
 
   const handleUploadProfile = async image => {
@@ -145,16 +144,15 @@ export default function UploadProfilepic({ navigation, route }) {
     }
   };
 
-  const handleSelectGender = async (value) => {
-    setGender(value)
-    setShowGenderDropdown(false)
-  }
+  const handleSelectGender = async value => {
+    setGender(value);
+    setShowGenderDropdown(false);
+  };
 
   return (
     <SafeAreaView>
       <ScrollView>
-
-        <View style={styles.container}>
+        <View style={Platform.OS  == 'android' ? styles.container : styles.containerIOS}>
           <View style={styles.backArrow}>
             <BackArrow onPress={handlegoBack} />
           </View>
@@ -165,7 +163,7 @@ export default function UploadProfilepic({ navigation, route }) {
             onPress={() => uploadPhoto('library')}>
             {imgUri ? (
               <Image
-                source={{ uri: imgUri }}
+                source={{uri: imgUri}}
                 style={styles.imagestyle}
                 resizeMode="cover"
               />
@@ -190,29 +188,41 @@ export default function UploadProfilepic({ navigation, route }) {
             <Text style={styles.textSize}>Choose picture from gallery</Text>
           </TouchableOpacity>
 
-
           <Text style={styles.forgetPass}>Select Your Gender</Text>
           <View style={styles.genderMainContainer}>
             <TouchableOpacity
               activeOpacity={1}
-              style={styles.genderContainer} onPress={() => setShowGenderDropdown(!showGenderDropdown)}>
-              <Text style={styles.genderSelectText}>{gender ? gender : 'Select your gender'}</Text>
-              <Image style={styles.genderArrow} source={showGenderDropdown ? images.genderDown : images.genderUp} />
+              style={styles.genderContainer}
+              onPress={() => setShowGenderDropdown(!showGenderDropdown)}>
+              <Text style={styles.genderSelectText}>
+                {gender ? gender : 'Select your gender'}
+              </Text>
+              <Image
+                style={styles.genderArrow}
+                source={
+                  showGenderDropdown ? images.genderDown : images.genderUp
+                }
+              />
             </TouchableOpacity>
-            {
-              showGenderDropdown &&
+            {showGenderDropdown && (
               <View style={styles.dropdownContainer}>
-                <TouchableOpacity style={styles.optionTouchable} onPress={() => handleSelectGender('male')}>
+                <TouchableOpacity
+                  style={styles.optionTouchable}
+                  onPress={() => handleSelectGender('male')}>
                   <Text style={styles.genderSelectText}>Male</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.optionTouchable} onPress={() => handleSelectGender('female')}>
+                <TouchableOpacity
+                  style={styles.optionTouchable}
+                  onPress={() => handleSelectGender('female')}>
                   <Text style={styles.genderSelectText}>Female</Text>
                 </TouchableOpacity>
               </View>
-            }
+            )}
           </View>
           <View
-            style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
+            style={
+              Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS
+            }>
             {loader ? (
               <Loader title={'Next'} />
             ) : (
@@ -223,7 +233,6 @@ export default function UploadProfilepic({ navigation, route }) {
 
         <Toast />
       </ScrollView>
-
     </SafeAreaView>
   );
 }

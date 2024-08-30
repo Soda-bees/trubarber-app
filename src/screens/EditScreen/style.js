@@ -190,6 +190,20 @@ export const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent:'space-around'
   },
+  modalContainerIOS: {
+    paddingVertical:sizes.screenWidth * 0.05,
+    width: sizes.screenWidth,
+    // height: sizes.screenHeight * 0.12,
+    backgroundColor: colors.disabledBg,
+    alignSelf: 'center',
+    // position: 'absolute',
+    bottom: sizes.screenHeight * 0.06,
+    borderTopRightRadius: sizes.screenWidth * 0.05,
+    borderTopLeftRadius: sizes.screenWidth * 0.05,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-around'
+  },
 
   imgStyle:{
     resizeMode:'contain',

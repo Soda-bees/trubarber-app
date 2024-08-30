@@ -1,19 +1,22 @@
-import { StyleSheet } from 'react-native';
-import { colors, fontSize, sizes } from '../../services';
+import {StyleSheet} from 'react-native';
+import {colors, fontSize, sizes} from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.lightgray,
     height: sizes.screenHeight * 1.05,
   },
+  containerIOS: {
+    backgroundColor: colors.lightgray,
+    height: sizes.screenHeight * 0.9,
+  },
 
   backArrow: {
     marginLeft: sizes.screenWidth * 0.04,
     marginTop: sizes.screenHeight * 0.04,
-
   },
   forgetPass: {
-    marginTop: sizes.screenHeight * 0.05,
+    marginTop: sizes.screenHeight * 0.03,
     textAlign: 'center',
     fontSize: fontSize.h5,
     color: colors.black,
@@ -46,7 +49,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    backgroundColor: colors.selectorcolor
+    backgroundColor: colors.selectorcolor,
   },
 
   imagestyle: {
@@ -93,7 +96,9 @@ export const styles = StyleSheet.create({
   },
 
   nextBtnIOS: {
-    top: sizes.screenHeight * 0.24,
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: sizes.screenHeight * 0.02,
   },
   genderContainer: {
     alignSelf: 'center',
@@ -107,12 +112,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: colors.bluishWhite,
-    zIndex: 1
+    zIndex: 1,
   },
   genderSelectText: {
     fontSize: fontSize.medium,
     color: colors.black,
-    fontWeight: '500'
+    fontWeight: '500',
   },
   genderArrow: {
     width: sizes.screenWidth * 0.03,
@@ -122,16 +127,17 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.85,
     alignSelf: 'center',
     backgroundColor: colors.selectorcolor,
-    borderRadius:sizes.screenWidth * 0.02
+    borderRadius: sizes.screenWidth * 0.02,
   },
   optionTouchable: {
     paddingHorizontal: sizes.screenWidth * 0.04,
     paddingVertical: sizes.screenWidth * 0.015,
   },
-  genderMainContainer: { 
-    marginTop: 13, 
-    backgroundColor: colors.selectorcolor, 
-    width: sizes.screenWidth * 0.85, 
-    alignSelf: 'center', 
-    borderRadius: sizes.screenWidth * 0.04, }
+  genderMainContainer: {
+    marginTop: 13,
+    backgroundColor: colors.selectorcolor,
+    width: sizes.screenWidth * 0.85,
+    alignSelf: 'center',
+    borderRadius: sizes.screenWidth * 0.04,
+  },
 });

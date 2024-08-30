@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { colors, fontSize, sizes } from '../../services';
+import {StyleSheet} from 'react-native';
+import {colors, fontSize, sizes} from '../../services';
 import Signup from '../Signup';
 export const styles = StyleSheet.create({
   container: {
@@ -91,7 +91,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.white,
     // Shadow properties for iOS
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     // Elevation for Android
@@ -118,7 +118,7 @@ export const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   row2: {
     flexDirection: 'row',
@@ -158,13 +158,13 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.small,
     color: colors.grayText,
     maxWidth: sizes.screenWidth * 0.7,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   redLocation: {
     justifyContent: 'flex-start',
-    paddingRight: sizes.screenWidth * 0.021,
-    height: sizes.screenHeight * 0.021,
-    tintColor: colors.black
+    paddingRight: 6,
+    height: 16,
+    tintColor: colors.black,
     // backgroundColor : 'red',
   },
   containBookmark: {
@@ -205,7 +205,7 @@ export const styles = StyleSheet.create({
   },
   direction: {
     height: 20,
-    tintColor: colors.black
+    tintColor: colors.black,
   },
   btnText: {
     color: colors.disabledBg2,
@@ -246,10 +246,8 @@ export const styles = StyleSheet.create({
   },
   btnIOS: {
     position: 'absolute',
-    bottom: 0,
+    bottom: sizes.screenHeight * 0.045,
     alignSelf: 'center',
-    // top: sizes.screenHeight * 0.3,
-    // left: sizes.screenWidth * 0.08,
   },
   servicesContainer: {
     flexDirection: 'row',

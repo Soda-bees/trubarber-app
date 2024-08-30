@@ -439,7 +439,7 @@ export default function EditScreen({ navigation }) {
           <Toast />
           {
             isVisible &&
-            <View style={styles.modalContainer}
+            <View style={Platform.OS == 'android' ? styles.modalContainer : styles.modalContainerIOS}
               onStartShouldSetResponder={() => true}
             >
               <TouchableOpacity style={styles.bottomViewImg}
