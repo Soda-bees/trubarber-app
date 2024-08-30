@@ -271,7 +271,7 @@ export default function EditScreen({ navigation }) {
           'success',
           'Congratulation!',
           response?.data?.message,
-          onHide,
+          // onHide,
         );
         dispatch(setUserData(response?.data?.updatedUser));
       } else {

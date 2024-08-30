@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
   },
 
   buttonTopIOS: {
-    marginTop: sizes.screenHeight * 0.34,
+    // marginTop: sizes.screenHeight * 0.34,
   },
 
   backArrow: {

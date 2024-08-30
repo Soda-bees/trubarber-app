@@ -54,7 +54,7 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.35,
   },
   Nextbtn1IOS: {
-    marginTop: sizes.screenHeight * 0.33,
+    // marginTop: sizes.screenHeight * 0.33,
   },
   logoBlack: {
     width: sizes.screenWidth * 0.35,

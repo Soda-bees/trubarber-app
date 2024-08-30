@@ -51,9 +51,9 @@ export const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   NextbtnIOS: {
-    position: 'absolute',
-    bottom: sizes.screenHeight * 0.09,
-    alignSelf: 'center'
+    // position: 'absolute',
+    // bottom: sizes.screenHeight * 0.09,
+    // alignSelf: 'center'
   },
   logoBlack: {
     width: sizes.screenWidth * 0.35,
