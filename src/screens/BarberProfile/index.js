@@ -10,7 +10,7 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
@@ -29,12 +29,15 @@ import {
 } from '../../services/config/API/index.js';
 import { removeCart } from '../../store/cart/index.js';
 import Header from '../../components/Header/index.js';
+import { useFocusEffect } from '@react-navigation/native';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
 export default function Profile({ navigation }) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const authToken = useSelector(selectAuthToken);
+  console.log(userData?.location, "barber profile");
+
   const location = useSelector(selectlocation) || userData?.location
 
   const [address, setAddress] = useState(null);
@@ -54,9 +57,26 @@ export default function Profile({ navigation }) {
     }
   };
 
-  useEffect(() => {
-    getAddress(location?.latitude, location?.longitude);
-  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log("location profile barber work");
+  
+      if (userData?.location?.latitude && userData?.location?.longitude) {
+        getAddress(userData.location.latitude, userData.location.longitude);
+      }
+  
+      // If there's any cleanup logic, it should be returned here.
+    }, [userData]) // Add dependencies here
+  );
+
+  // useFocusEffect(() => {
+
+  //   console.log("location profile barber work");
+
+  //   getAddress(userData?.location?.latitude, userData?.location?.longitude);
+  // } 
+  // );
 
   const handleDeleteDeviceToken = async () => {
     try {

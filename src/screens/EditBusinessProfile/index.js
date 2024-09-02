@@ -7,6 +7,7 @@ import {
     SafeAreaView,
     Platform,
     Dimensions,
+    ActivityIndicator,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import images from '../../services/utilities/images';
@@ -16,7 +17,7 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { PermissionsAndroid } from 'react-native';
 import TimePickerComponent from '../../components/TimePicketComponent';
 import Loader from '../../components/Loader';
-import { updateProfile, uploadProfile } from '../../services/config/API';
+import { getAddressFromCoordinates, updateProfile, uploadProfile } from '../../services/config/API';
 import { ErrorShow } from '../../components/Error';
 import Toast from 'react-native-toast-message';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -27,6 +28,10 @@ import formatToJSON from '../../services/config/FormatToJson';
 import { selectAuthToken } from '../../store/authToken';
 import { styles } from './style';
 import Header from '../../components/Header';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import Geolocation from '@react-native-community/geolocation';
+import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
+import { setLocation } from '../../store/location';
 
 export default function EditBusinessProfile({ navigation, route }) {
     // const { userData } = route.params;
@@ -34,11 +39,15 @@ export default function EditBusinessProfile({ navigation, route }) {
     const authToken = useSelector(selectAuthToken)
     const dispatch = useDispatch()
 
+    console.log(userData?.location ,  "edit business profile");
+    
+
     useEffect(() => {
         if (userData) {
             setImgUri(userData?.businessProfile)
             setDescription(userData?.description)
             setTime(userData?.time)
+            setLocation(userData?.location)
         }
     }, [userData])
 
@@ -46,13 +55,15 @@ export default function EditBusinessProfile({ navigation, route }) {
 
     const [outletName, setOutletName] = useState('RedBox Barber');
     const [description, setDescription] = useState('');
-    const [location, setLocation] = useState('United States');
     const [imgUri, setImgUri] = useState(null);
     const [startTime, setStartTime] = useState(new Date());
     const [endTime, setEndTime] = useState(new Date());
     const [loader, setLoader] = useState(false);
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const [time, setTime] = useState('')
+    const [address, setAddress] = useState(null);
+    const [locationLoader, setLocationLoader] = useState(false);
+    const [location, setLocalLocation] = useState()
 
     const requestCameraPermission = async () => {
         const granted = await PermissionsAndroid.request(
@@ -166,6 +177,7 @@ export default function EditBusinessProfile({ navigation, route }) {
             const body = {
                 businessProfile: imgUri,
                 description,
+                location
             };
             const response = await updateProfile(
                 body,
@@ -248,6 +260,117 @@ export default function EditBusinessProfile({ navigation, route }) {
 
         calculateDimensions();
     }, [imgUri]);
+    const getAddress = async (latitude, longitude) => {
+        setLocationLoader(true);
+        try {
+            const response = await getAddressFromCoordinates(latitude, longitude);
+            setAddress(response)
+            setLocationLoader(false);
+        } catch (error) {
+            console.log(error);
+            setLocationLoader(false);
+        }
+    };
+
+    useEffect(() => {
+        getAddress(userData?.location?.latitude, userData?.location?.longitude);
+    }, []);
+
+    const handleLocation = () => {
+        console.log("handleLocation");
+
+        const initializeLocation = async () => {
+            const hasPermission = await requestLocationPermission();
+            if (hasPermission) {
+                checkLocationServices()
+                    .then(() => {
+                        getCurrentLocation();
+                    })
+                    .catch(error => {
+                        console.log('Location services not enabled', error.message);
+                        Alert.alert(
+                            'Location Services Disabled',
+                            'Please enable location services to use this feature.',
+                        );
+                    });
+            }
+        };
+
+        initializeLocation();
+    };
+
+    const requestLocationPermission = async () => {
+        if (Platform.OS === 'android') {
+            try {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                    {
+                        title: 'Location Permission',
+                        message:
+                            'This app needs access to your location to show your current position on the map.',
+                        buttonPositive: 'OK',
+                    },
+                );
+
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    console.log('Location permission granted');
+                    return true;
+                } else {
+                    console.log('Location permission denied');
+                    return false;
+                }
+            } catch (err) {
+                console.warn(err);
+                return false;
+            }
+        } else {
+            return true;
+        }
+    };
+
+    const checkLocationServices = () => {
+        return LocationServicesDialogBox.checkLocationServicesIsEnabled({
+            message:
+                '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
+            ok: 'YES',
+            cancel: 'NO',
+        });
+    };
+
+    const getCurrentLocation = () => {
+        Geolocation.getCurrentPosition(
+            position => {
+                const { latitude, longitude } = position.coords;
+                // console.log(
+                //   position.coords,
+                //   '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
+                // );
+                const locationObj = {
+                    ...location,
+                    latitude: latitude,
+                    longitude: longitude,
+                };
+                console.log("location object ", locationObj);
+                setLocalLocation(locationObj)
+                getAddress(locationObj?.latitude, locationObj?.longitude);
+                dispatch(setLocation(locationObj));
+                // setRegion({
+                //   latitude,
+                //   longitude,
+                //   latitudeDelta: 0.01,
+                //   longitudeDelta: 0.01,
+                // });
+            },
+            error => {
+                console.log('Error getting location: ', error.message);
+                Alert.alert(
+                    'Error',
+                    'Unable to retrieve your location. Please try again.',
+                );
+            },
+            // {enableHighAccuracy: true, timeout: 20000, maximumAge: 20000},
+        );
+    };
 
     return (
         <SafeAreaView>
@@ -321,6 +444,23 @@ export default function EditBusinessProfile({ navigation, route }) {
                                     />
                                 </View>
                             </View>
+                            <TouchableOpacity style={styles.timeContainer} activeOpacity={1} onPress={handleLocation}>
+                                <Text style={
+                                    Platform.OS == 'android' ? styles.title : styles.titleIOS
+                                }>Location</Text>
+                                <View style={styles.time}>
+                                    {
+                                        locationLoader ?
+                                            <View style={{ position: 'absolute', right: 10 }}>
+                                                <ActivityIndicator color={colors.black} size={20} />
+                                            </View>
+                                            :
+                                            <Text style={styles.description} numberOfLines={1} ellipsizeMode="tail">
+                                                {address}
+                                            </Text>
+                                    }
+                                </View>
+                            </TouchableOpacity>
                             {/* <View style={styles.timeContainer}>
                   <View style={styles.description}>
                     <TimePickerComponent
