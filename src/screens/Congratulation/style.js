@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
 
   textStyle: {
     color: colors.black,
-    fontSize: fontSize.h1,
+    fontSize: fontSize.h2,
     fontWeight: '700',
     width: sizes.screenWidth * 0.8,
     textAlign: 'center',
@@ -68,6 +68,6 @@ export const styles = StyleSheet.create({
   buttonStyleIOS: {
     position: 'absolute',
     alignSelf: 'center',
-    bottom: sizes.screenHeight * 0.09,
+    bottom: sizes.screenHeight * 0.11,
   },
 });

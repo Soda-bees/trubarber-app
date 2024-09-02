@@ -320,8 +320,8 @@ export default function CustomerPreferences({navigation, route}) {
           style={Platform.OS == 'android' ? styles.Nextbtn : styles.NextbtnIOS}>
           <Button title={'Next'} onPress={next} />
         </View>
-      </View>
       <Toast />
+      </View>
 
     </SafeAreaView>
   );
