@@ -36,7 +36,6 @@ export default function Profile({ navigation }) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const authToken = useSelector(selectAuthToken);
-  console.log(userData?.location, "barber profile");
 
   const location = useSelector(selectlocation) || userData?.location
 
@@ -59,24 +58,13 @@ export default function Profile({ navigation }) {
 
 
   useFocusEffect(
-    useCallback(() => {
-      console.log("location profile barber work");
-  
+    useCallback(() => {  
       if (userData?.location?.latitude && userData?.location?.longitude) {
         getAddress(userData.location.latitude, userData.location.longitude);
       }
   
-      // If there's any cleanup logic, it should be returned here.
-    }, [userData]) // Add dependencies here
+    }, [userData]) 
   );
-
-  // useFocusEffect(() => {
-
-  //   console.log("location profile barber work");
-
-  //   getAddress(userData?.location?.latitude, userData?.location?.longitude);
-  // } 
-  // );
 
   const handleDeleteDeviceToken = async () => {
     try {

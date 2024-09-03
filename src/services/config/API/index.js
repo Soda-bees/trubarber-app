@@ -203,7 +203,7 @@ export const getAddressFromCoordinates = async (latitude, longitude) => {
     );
     if (response.data.status === 'OK') {
       const fullAddress = response.data.results[0].formatted_address;
-      return(fullAddress);
+      return (fullAddress);
     } else {
       console.log('Error fetching address:', response.data.status);
     }
@@ -294,6 +294,8 @@ export const hanleGetBookedAppoinment = async (token, id) => {
 
 export const updateAppointmentStatus = async (token, id, status) => {
   try {
+    console.log("API" , id);
+    
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -467,6 +469,19 @@ export const addFavourite = async (token, body) => {
       Authorization: `Bearer ${token}`,
     };
     const response = await axiosInstance.post('user/addFavourite', body, { headers })
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const acceptAppointment = async (token, body) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post('barber/acceptAndRejectAppointment', body, { headers })
     return response
   } catch (error) {
     return error

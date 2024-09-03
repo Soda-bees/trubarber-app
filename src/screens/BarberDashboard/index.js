@@ -31,6 +31,7 @@ import moment from 'moment';
 import { handleGetUserDetails } from '../../services/config/API';
 import { useFocusEffect } from '@react-navigation/native';
 import NotificationComponent from '../../components/NotificationComponent';
+import BarberLocation from '../../components/BarberLocationBox';
 
 export default function BarberDashboard({ navigation }) {
   const dispatch = useDispatch();
@@ -174,7 +175,7 @@ export default function BarberDashboard({ navigation }) {
             resizeMode="contain"
             style={styles.transparentBg}>
             <View style={styles.topIconRow}>
-              <View style={styles.locationRow}>
+              {/* <View style={styles.locationRow}>
                 <View style={styles.locationContainertop}>
                   <Image style={styles.iconImage} source={images.redLocation} />
                 </View>
@@ -184,7 +185,8 @@ export default function BarberDashboard({ navigation }) {
                     {currentLocation}
                   </Text>
                 </View>
-              </View>
+              </View> */}
+              <BarberLocation />
               <View style={styles.otherIconRow}>
                 <NotificationComponent />
                 <ChatConponent />

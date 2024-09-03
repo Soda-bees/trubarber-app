@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style';
 import BackArrow from '../../components/BackArrow';
 import images from '../../services/utilities/images';
 import {
@@ -22,19 +22,19 @@ import {
   formatDistanceToNow,
   parse,
 } from 'date-fns';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   selectUserData,
   setNotificationSeenTrueRedux,
 } from '../../store/userData';
 import formatToJSON from '../../services/config/FormatToJson';
 import moment from 'moment';
-import {handleNotificationSeenTrue} from '../../services/config/API';
-import {selectAuthToken} from '../../store/authToken';
+import { handleNotificationSeenTrue } from '../../services/config/API';
+import { selectAuthToken } from '../../store/authToken';
 import Header from '../../components/Header';
 import { sizes } from '../../services';
 
-export default function Notifications({navigation}) {
+export default function Notifications({ navigation }) {
   const authToken = useSelector(selectAuthToken);
   const dispatch = useDispatch();
   const [notification, setNotification] = useState([
@@ -65,15 +65,30 @@ export default function Notifications({navigation}) {
     const minutes = Math.floor(timeDifference / 60000);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
+    const months = Math.floor(days / 30);
+    const years = Math.floor(days / 365);
 
+    // if (minutes < 1) {
+    //   return 'just now';
+    // } else if (minutes < 60) {
+    //   return `${minutes}m ago`;
+    // } else if (hours < 24) {
+    //   return `${hours}h ago`;
+    // } else {
+    //   return `${days}d ago`;
+    // }
     if (minutes < 1) {
       return 'just now';
     } else if (minutes < 60) {
       return `${minutes}m ago`;
     } else if (hours < 24) {
       return `${hours}h ago`;
-    } else {
+    } else if (days < 30) {
       return `${days}d ago`;
+    } else if (months < 12) {
+      return `${months}month${months > 1 ? 's' : ''} ago`;
+    } else {
+      return `${years}year${years > 1 ? 's' : ''} ago`;
     }
   };
 
@@ -141,7 +156,7 @@ export default function Notifications({navigation}) {
                     //     swipeContainerStyle={{}}
                     //     leftButtons={leftButton(index)}>
                     <View style={styles.notficationContainer} key={index}>
-                      <Image source={images.calendarIcon} style={{height:sizes.screenWidth * 0.12, width:sizes.screenWidth * 0.12,}}/>
+                      <Image source={images.calendarIcon} style={{ height: sizes.screenWidth * 0.12, width: sizes.screenWidth * 0.12, }} />
                       <View style={styles.notficationDetailContainer}>
                         <Text style={styles.notificationTitle}>
                           {item.title}

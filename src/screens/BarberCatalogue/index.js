@@ -16,6 +16,7 @@ import { selectUserData } from '../../store/userData';
 import formatToJSON from '../../services/config/FormatToJson';
 import ChatConponent from '../../components/ChatComponent';
 import NotificationComponent from '../../components/NotificationComponent';
+import BarberLocation from '../../components/BarberLocationBox';
 
 export default function BaberCatalogue({ navigation }) {
   const userData = useSelector(selectUserData)
@@ -45,19 +46,7 @@ export default function BaberCatalogue({ navigation }) {
             resizeMode="contain"
             style={styles.transparentBg}>
             <View style={styles.topIconRow}>
-              <View
-                style={styles.locationRow}
-              >
-                <View style={styles.locationContainertop}>
-                  <Image style={styles.iconImage} source={images.redLocation} />
-                </View>
-                <View style={styles.locationDetailColumn}>
-                  <Text style={styles.nearbyTxt}>Barber’s Location</Text>
-                  <Text style={styles.currentLocationTxt}>
-                    {currentLocation}
-                  </Text>
-                </View>
-              </View>
+              <BarberLocation />
               <View style={styles.otherIconRow}>
                 <NotificationComponent />
                 <ChatConponent />

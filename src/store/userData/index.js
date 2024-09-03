@@ -46,6 +46,26 @@ const userDataSlice = createSlice({
         );
       }
     },
+    acceptAppointment: (state, action) => {
+      const { status, acceptAppointment, rejectedAppointment, rejectedStatus } = action.payload;
+
+      state.userData.appoinment = state.userData.appoinment.map(appointment => {
+        if (appointment._id === acceptAppointment) {
+          // If the appointment matches the acceptAppointment _id, update its status
+          return {
+            ...appointment,
+            status: status
+          };
+        } else if (rejectedAppointment.includes(appointment._id)) {
+          // If the appointment is in the rejectedAppointment array, update its status
+          return {
+            ...appointment,
+            status: rejectedStatus
+          };
+        }
+        return appointment; // Otherwise, return the appointment unchanged
+      });
+    },
     addMessageInChatRoom: (state, action) => {
       const { chatRoomId, newMessage } = action.payload
       const chatIndex = state.userData.chat.findIndex(chat => chat._id === chatRoomId);
@@ -191,7 +211,7 @@ const userDataSlice = createSlice({
       }
     },
     addFavouritesRedux: (state, action) => {
-      const barber = action.payload; 
+      const barber = action.payload;
       const barberId = barber._id;
 
       const index = state.userData.favourites.findIndex(fav => fav._id === barberId);
@@ -222,7 +242,8 @@ export const {
   deleteReview,
   addNewNotificationRedux,
   setNotificationSeenTrueRedux,
-  addFavouritesRedux
+  addFavouritesRedux,
+  acceptAppointment
 } = userDataSlice.actions
 export const selectUserData = state => state.user.userData
 export default userDataSlice.reducer

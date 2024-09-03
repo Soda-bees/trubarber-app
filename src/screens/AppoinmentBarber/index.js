@@ -25,11 +25,12 @@ import Modal from 'react-native-modal';
 import Loader from '../../components/Loader';
 import { ErrorShow } from '../../components/Error';
 import { selectAuthToken } from '../../store/authToken';
-import { updateAppointmentStatus } from '../../services/config/API';
+import { acceptAppointment, updateAppointmentStatus } from '../../services/config/API';
 import formatToJSON from '../../services/config/FormatToJson';
 import Toast from 'react-native-toast-message';
 import ChatConponent from '../../components/ChatComponent';
 import NotificationComponent from '../../components/NotificationComponent';
+import BarberLocation from '../../components/BarberLocationBox';
 export default function AppoinmentBarber({ navigation }) {
   const barber = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken);
@@ -262,26 +263,27 @@ export default function AppoinmentBarber({ navigation }) {
         // } else if (status === 'Rejected') {
         //   setRejectLoader(true);
       }
+      console.log("function==>", _id);
+
       const response = await updateAppointmentStatus(authToken, _id, status);
-      console.log('heeee', formatToJSON(response.data));
       if (response?.status == 200) {
         setLoader(false);
-        setAcceptLoader(false);
-        setRejectLoader(false);
-        setModalVisible(false);
+        // setAcceptLoader(false);
+        // setRejectLoader(false);
+        // setModalVisible(false);
         ErrorShow('success', 'Congratulation!', response?.data?.message);
       } else {
         setLoader(false);
-        setAcceptLoader(false);
-        setRejectLoader(false);
-        setModalVisible(false);
+        // setAcceptLoader(false);
+        // setRejectLoader(false);
+        // setModalVisible(false);
         ErrorShow('error', 'Error!', response?.data?.message);
       }
     } catch (error) {
       setLoader(false);
-      setAcceptLoader(false);
-      setRejectLoader(false);
-      console.log(error?.message);
+      // setAcceptLoader(false);
+      // setRejectLoader(false);
+      // console.log(error?.message);
       ErrorShow('error', 'Error!', error?.message);
     }
   };
@@ -335,7 +337,6 @@ export default function AppoinmentBarber({ navigation }) {
         </View>
         <TouchableOpacity
           style={styles.seeDetailsView}
-          // onPress={() => navigation.navigate('AppointmentDetails', {item})}
           onPress={() =>
             navigation.navigate('AppointmentDetails', { item, showButtons: true })
           }>
@@ -386,10 +387,12 @@ export default function AppoinmentBarber({ navigation }) {
           ) : ( */}
           <TouchableOpacity
             style={styles.acceptBtn}
+            // onPress={() =>
+            //   handleUpdateAppointmentStatus('Scheduled', item?._id)
+            // }
             onPress={() =>
-              handleUpdateAppointmentStatus('Scheduled', item?._id)
+              handleAcceptAppointment('Scheduled', item)
             }
-          // onPress={() => setAcceptLoader(!acceptLoader)}
           >
             <Text style={styles.btnText}>Accept</Text>
           </TouchableOpacity>
@@ -410,6 +413,69 @@ export default function AppoinmentBarber({ navigation }) {
     </View>
   );
 
+  const handleAcceptAppointment = async (status, appointment) => {
+    // try {
+
+    //   console.log(formatToJSON(appointment?._id));
+    //   const sameDateAndTimeAppointments = requestAppointment.filter(req =>
+    //     req.date === appointment.date &&
+    //     req.time === appointment.time &&
+    //     req._id !== appointment._id
+    //   );
+    //   const sameAppointmentIds = sameDateAndTimeAppointments?.map(req => req._id);
+    //   const body = {
+    //     status: status,
+    //     acceptAppointment: appointment?._id,
+    //     rejectedAppointment: sameAppointmentIds,
+    //     rejectedStatus: 'Rejected'
+    //   }
+    //   const response = await acceptAppointment(authToken, body)
+    //   console.log(response?.data);
+    //   if (response?.success) {
+    //     ErrorShow('success', 'Congratulation!', response?.data?.message);
+    //   } else {
+    //     console.log(response?.data);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    try {
+
+      await handleUpdateAppointmentStatus(status, appointment?._id)
+      console.log("id=====>", appointment?._id);
+      const sameDateAndTimeAppointments = requestAppointment.filter(req =>
+        req.date === appointment.date &&
+        req.time === appointment.time &&
+        req._id !== appointment._id
+      );
+      const sameAppointmentIds = sameDateAndTimeAppointments?.map(req => req._id);
+      console.log("ids=====>", sameAppointmentIds);
+
+      if (sameAppointmentIds?.length > 0) {
+        for (const id of sameAppointmentIds) {
+          await handleUpdateAppointmentStatus('Rejected', id);
+        }
+      }
+      // handleUpdateAppointmentStatus('Completed', modalItem?.id)
+
+      // const body = {
+      //   status: status,
+      //   acceptAppointment: appointment?._id,
+      //   rejectedAppointment: sameAppointmentIds,
+      //   rejectedStatus: 'Rejected'
+      // }
+      // const response = await acceptAppointment(authToken, body)
+      // console.log(response?.data);
+      // if (response?.success) {
+      //   ErrorShow('success', 'Congratulation!', response?.data?.message);
+      // } else {
+      //   console.log(response?.data);
+      // }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -419,19 +485,7 @@ export default function AppoinmentBarber({ navigation }) {
             resizeMode="contain"
             style={styles.transparentBg}>
             <View style={styles.topIconRow}>
-              <View
-                style={styles.locationRow}
-              >
-                <View style={styles.locationContainertop}>
-                  <Image style={styles.iconImage} source={images.redLocation} />
-                </View>
-                <View style={styles.locationDetailColumn}>
-                  <Text style={styles.nearbyTxt}>Barber’s Location</Text>
-                  <Text style={styles.currentLocationTxt}>
-                    {currentLocation}
-                  </Text>
-                </View>
-              </View>
+              <BarberLocation />
               <View style={styles.otherIconRow}>
                 <NotificationComponent />
                 <ChatConponent />
@@ -610,7 +664,7 @@ export default function AppoinmentBarber({ navigation }) {
           </ScrollView>
         )}
         {tab === 'request' && (
-          <View style={{ marginTop: sizes.screenWidth * 0.06 }}>
+          <View style={{ marginTop: sizes.screenWidth * 0.06, maxHeight: sizes.screenHeight * 0.75 }}>
             {barber?.appoinment?.filter(item => item.status === 'Pending')
               ?.length > 0 ? (
               <FlatList
@@ -618,6 +672,7 @@ export default function AppoinmentBarber({ navigation }) {
                 renderItem={renderRequest}
                 keyExtractor={item => item._id}
                 style={Platform.OS == 'ios' && styles.marginBottom}
+              // inverted
               />
             ) : (
               <View style={styles.noAppointment}>

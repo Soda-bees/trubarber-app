@@ -10,6 +10,7 @@ import {
   deleteReview,
   updateReview,
   addNewNotificationRedux,
+  acceptAppointment,
 } from '../../store/userData';
 
 let socket;
@@ -63,6 +64,10 @@ const socketService = (dispatch, authToken, userData) => {
     dispatch(addNewNotificationRedux(data));
   };
 
+  const handleAppointmentAccepted = data => {
+    dispatch(acceptAppointment(data));
+  };
+
   socket.on('newAppoinment', handleReceivedNewAppoinment);
   socket.on('appointmentStatusUpdate', handleUpdateAppointmendStatus);
   socket.on('newMessage', handleAddNewMessage);
@@ -72,6 +77,7 @@ const socketService = (dispatch, authToken, userData) => {
   socket.on('updateReview', handleUpdateReview);
   socket.on('deleteReview', handleDeleteReview);
   socket.on('newNotification', handleNewNotification);
+  socket.on('appointmentAccepted', handleAppointmentAccepted);
 
   const cleanup = () => {
     socket.off('newAppoinment', handleReceivedNewAppoinment);
@@ -83,6 +89,7 @@ const socketService = (dispatch, authToken, userData) => {
     socket.off('updateReview', handleUpdateReview);
     socket.off('deleteReview', handleDeleteReview);
     socket.off('newNotification', handleNewNotification);
+    socket.off('appointmentAccepted', handleAppointmentAccepted);
   };
   return cleanup;
 };

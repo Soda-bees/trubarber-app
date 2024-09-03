@@ -37,10 +37,7 @@ export default function EditBusinessProfile({ navigation, route }) {
     // const { userData } = route.params;
     const userData = useSelector(selectUserData)
     const authToken = useSelector(selectAuthToken)
-    const dispatch = useDispatch()
-
-    console.log(userData?.location ,  "edit business profile");
-    
+    const dispatch = useDispatch()    
 
     useEffect(() => {
         if (userData) {

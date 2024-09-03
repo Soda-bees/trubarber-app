@@ -35,6 +35,7 @@ import { selectUserData, setUserData } from '../../store/userData';
 import ChatConponent from '../../components/ChatComponent';
 import NotificationComponent from '../../components/NotificationComponent';
 import Favourites from '../../components/FavouriteComponent';
+import BarberLocation from '../../components/BarberLocationBox';
 
 export default function Explore({ navigation }) {
   const userData = useSelector(selectUserData);
@@ -299,22 +300,7 @@ export default function Explore({ navigation }) {
                   resizeMode="contain"
                   style={styles.transparentBg}>
                   <View style={styles.topIconRow}>
-                    <TouchableOpacity
-                      style={styles.locationRow}
-                      onPress={() => navigation.navigate('WholeMap')}>
-                      <View style={styles.locationContainertop}>
-                        <Image
-                          style={styles.iconImage}
-                          source={images.redLocation}
-                        />
-                      </View>
-                      <View style={styles.locationDetailColumn}>
-                        <Text style={styles.nearbyTxt}>Find barber near</Text>
-                        <Text style={styles.currentLocationTxt} numberOfLines={1} ellipsizeMode="tail">
-                          {currentLocation}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
+                    <BarberLocation user={true}/>
                     <View style={styles.otherIconRow}>
                       <Favourites />
                       <NotificationComponent />
