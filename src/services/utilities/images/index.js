@@ -136,8 +136,10 @@ import noBookmark from '../../../assets/noBookmark.png';
 import noSearch from '../../../assets/noSearch.png';
 import logoBlack from '../../../assets/logoBlack.png';
 import congratulationUpdated from '../../../assets/congratulationUpdated.png';
+import instagram from '../../../assets/instagram.png';
 
 const images = {
+  instagram,
   congratulationUpdated,
   logoBlack,
   noSearch,

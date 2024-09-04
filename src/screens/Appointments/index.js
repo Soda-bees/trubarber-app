@@ -78,9 +78,11 @@ export default function Appointments({ navigation }) {
                 return (
                   <View key={index}>
                     <ImageBackground
-                      source={{ uri: item?.barber?.businessProfile }}
+                      // source={{ uri: item?.barber?.businessProfile }}
+                      source={item?.profile ? { uri: item?.profile } : item?.gender === "male" ? images.male : images.female}
                       imageStyle={styles.barberHat}
-                      resizeMode="cover">
+                      resizeMode='contain'
+                      >
                       <View style={styles.innerContainer}>
                         <View style={styles.nameView}>
                           <Text style={styles.contextText}>

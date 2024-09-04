@@ -140,7 +140,8 @@ export default function UserFavourites({ navigation }) {
                             return (
                                 <ImageBackground
                                     key={index}
-                                    source={{ uri: item?.businessProfile }}
+                                    // source={{ uri: item?.businessProfile }}
+                                    source={item?.profile ? { uri: item?.profile } : item?.gender === "male" ? images.male : images.female}
                                     imageStyle={
                                         Platform.OS == 'android'
                                             ? styles.containerImage

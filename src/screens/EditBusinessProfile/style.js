@@ -163,4 +163,43 @@ export const styles = StyleSheet.create({
     bottom: sizes.screenHeight * 0.09,
     alignSelf: 'center'
   },
+  title: {
+    color: colors.durationColor,
+    fontSize: fontSize.small,
+    marginStart: sizes.screenWidth * 0.01,
+    paddingBottom: sizes.screenWidth * 0.01
+  },
+
+  titleIOS: {
+    color: colors.durationColor,
+    fontSize: fontSize.small,
+    marginVertical: sizes.screenHeight * 0.007,
+  },
+  timeSecond: {
+    color: colors.black,
+    fontWeight: '600',
+    textAlignVertical: 'top',
+    width: sizes.screenWidth * 0.9,
+    backgroundColor: colors.selectorcolor,
+    borderRadius: sizes.screenWidth * 0.02,
+    position: 'relative',
+    height:sizes.screenWidth * 0.1,
+    alignItems:'start',
+    justifyContent:'center',
+  },
+  instagramInput:{
+    // backgroundColor:'red',
+    fontSize:fontSize.small,
+    marginLeft:sizes.screenWidth * 0.08,
+    fontWeight:'500',
+    color:colors.black
+  },
+  instagramIcon: {
+    height: sizes.screenHeight * 0.0222,
+    width: sizes.screenWidth * 0.042,
+    position: 'absolute',
+    left: sizes.screenWidth * 0.03,
+    top: sizes.screenWidth * 0.026,
+    tintColor:colors.black
+  },
 });

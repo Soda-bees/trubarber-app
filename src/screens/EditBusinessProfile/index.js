@@ -37,7 +37,7 @@ export default function EditBusinessProfile({ navigation, route }) {
     // const { userData } = route.params;
     const userData = useSelector(selectUserData)
     const authToken = useSelector(selectAuthToken)
-    const dispatch = useDispatch()    
+    const dispatch = useDispatch()
 
     useEffect(() => {
         if (userData) {
@@ -45,6 +45,7 @@ export default function EditBusinessProfile({ navigation, route }) {
             setDescription(userData?.description)
             setTime(userData?.time)
             setLocation(userData?.location)
+            setInstagram(userData?.instagram)
         }
     }, [userData])
 
@@ -61,6 +62,7 @@ export default function EditBusinessProfile({ navigation, route }) {
     const [address, setAddress] = useState(null);
     const [locationLoader, setLocationLoader] = useState(false);
     const [location, setLocalLocation] = useState()
+    const [instagram, setInstagram] = useState('')
 
     const requestCameraPermission = async () => {
         const granted = await PermissionsAndroid.request(
@@ -163,8 +165,8 @@ export default function EditBusinessProfile({ navigation, route }) {
     };
 
     const handleConfirm = async () => {
-        if (!imgUri) {
-            return ErrorShow('error', 'Oops!', 'Please Upload photo');
+        if (!instagram) {
+            return ErrorShow('error', 'Oops!', 'Please provide your instagram profile link');
         }
         if (!description) {
             return ErrorShow('error', 'Oops!', 'Please fill the description');
@@ -174,7 +176,8 @@ export default function EditBusinessProfile({ navigation, route }) {
             const body = {
                 businessProfile: imgUri,
                 description,
-                location
+                location,
+                instagram
             };
             const response = await updateProfile(
                 body,
@@ -375,7 +378,7 @@ export default function EditBusinessProfile({ navigation, route }) {
                 <View>
                     <Header title={'Edit Business Profile'} />
                     <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={Platform.OS == 'ios' && sizes.screenHeight * 0.9}>
-                        <View>
+                        {/* <View>
                             <TouchableOpacity
                                 style={imgUri ? {
                                     width: dimensions.width,
@@ -409,6 +412,26 @@ export default function EditBusinessProfile({ navigation, route }) {
                                     : styles.uploadPressIOS
                             }>
                             <Text style={styles.uploadCover}>Change Photo</Text>
+                        </View> */}
+                        <View style={{ marginTop: sizes.screenHeight * 0.04 }}></View>
+                        <View style={styles.timeContainer}>
+                            <Text style={
+                                Platform.OS == 'android' ? styles.title : styles.titleIOS
+                            }>Update Instagram account</Text>
+                            <View style={styles.timeSecond}>
+                                <Image
+                                    source={images.instagram}
+                                    style={styles.instagramIcon}
+                                    resizeMode="contain"
+                                />
+                                <TextInput
+                                    placeholder='Add Link'
+                                    style={styles.instagramInput}
+                                    placeholderTextColor={colors.black}
+                                    onChangeText={setInstagram}
+                                    value={instagram}
+                                />
+                            </View>
                         </View>
                         <View style={styles.content}>
                             <View style={styles.textContainer}>

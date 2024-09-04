@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
 import Signup from '../Signup';
 export const styles = StyleSheet.create({
   container: {
@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight,
   },
   headerImage: {
-    height: sizes.screenHeight * 0.32,
+    // height: sizes.screenHeight * 0.44,
     width: sizes.screenWidth,
     borderBottomLeftRadius: sizes.screenWidth * 0.0562,
     borderBottomRightRadius: sizes.screenWidth * 0.0562,
@@ -34,6 +34,8 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
+    borderColor: '#00000099',
+    borderWidth: 1
   },
   bookMarkedFalse: {
     height: 24,
@@ -91,7 +93,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.white,
     // Shadow properties for iOS
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     // Elevation for Android
@@ -185,7 +187,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignSelf: 'center',
-    width: sizes.screenWidth * 0.7,
+    width: sizes.screenWidth * 0.8,
   },
   devider: {
     backgroundColor: colors.grayBorder,
@@ -197,7 +199,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: sizes.screenHeight * 0.058,
-    width: sizes.screenWidth * 0.19,
+    width: sizes.screenWidth * 0.16,
     borderRadius: 16,
     // marginRight: sizes.screenWidth * 0.03,
     // marginLeft: sizes.screenWidth * 0.03,

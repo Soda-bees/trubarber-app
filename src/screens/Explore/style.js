@@ -141,9 +141,16 @@ export const styles = StyleSheet.create({
   cardRow: {
     marginStart: sizes.screenWidth * 0.05,
     flexDirection: 'row',
-    gap: sizes.screenWidth * 0.08,
+    gap: sizes.screenWidth * 0.04,
     paddingRight: sizes.screenWidth * 0.08,
     paddingBottom: sizes.screenHeight * 0.08,
+  },
+  cardRowNew: {
+    marginStart: sizes.screenWidth * 0.05,
+    flexDirection: 'row',
+    gap: sizes.screenWidth * 0.04,
+    paddingRight: sizes.screenWidth * 0.08,
+    paddingBottom: sizes.screenHeight * 0.02,
   },
   cardRowIOS: {
     marginStart: sizes.screenWidth * 0.05,
@@ -221,7 +228,7 @@ export const styles = StyleSheet.create({
   },
 
   textWhite: {
-    color: colors.white,
+    color: colors.black,
     fontSize: fontSize.small,
   },
 

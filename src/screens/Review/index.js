@@ -295,7 +295,7 @@ export default function Review({navigation, route}) {
       <View style={styles.container}>
       <ImageBackground
           imageStyle={styles.headerImage}
-          source={{ uri: barber?.businessProfile }}
+          // source={{ uri: barber?.businessProfile }}
         >
           <View style={styles.headerContainer}>
             <BackArrow light={false} onPress={handleGoback} />

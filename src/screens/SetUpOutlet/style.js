@@ -18,7 +18,8 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.h5,
     color: colors.black,
     fontWeight: '700',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginBottom:sizes.screenHeight * 0.05
   },
   addimage: {
     width: sizes.screenWidth * 0.2,
@@ -79,7 +80,17 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.042,
     position: 'absolute',
     right: sizes.screenWidth * 0.03,
-    top: sizes.screenWidth * 0.025
+    top: sizes.screenWidth * 0.025,
+    tintColor:colors.black
+
+  },
+  instagramIcon: {
+    height: sizes.screenHeight * 0.0222,
+    width: sizes.screenWidth * 0.042,
+    position: 'absolute',
+    left: sizes.screenWidth * 0.03,
+    top: sizes.screenWidth * 0.026,
+    tintColor:colors.black
   },
   clockIcon1: {
     height: sizes.screenHeight * 0.0222,
@@ -125,6 +136,25 @@ export const styles = StyleSheet.create({
     height:sizes.screenWidth * 0.09,
     alignItems:'start',
     justifyContent:'center'
+  },
+  timeSecond: {
+    color: colors.black,
+    fontWeight: '600',
+    textAlignVertical: 'top',
+    width: sizes.screenWidth * 0.9,
+    backgroundColor: colors.selectorcolor,
+    borderRadius: sizes.screenWidth * 0.02,
+    position: 'relative',
+    height:sizes.screenWidth * 0.1,
+    alignItems:'start',
+    justifyContent:'center'
+  },
+  instagramInput:{
+    // backgroundColor:'red',
+    fontSize:fontSize.small,
+    marginLeft:sizes.screenWidth * 0.08,
+    fontWeight:'500',
+    color:colors.black
   },
   descriptionIOS: {
     color: colors.black,

@@ -300,7 +300,7 @@ export default function Explore({ navigation }) {
                   resizeMode="contain"
                   style={styles.transparentBg}>
                   <View style={styles.topIconRow}>
-                    <BarberLocation user={true}/>
+                    <BarberLocation user={true} />
                     <View style={styles.otherIconRow}>
                       <Favourites />
                       <NotificationComponent />
@@ -327,7 +327,7 @@ export default function Explore({ navigation }) {
               <ScrollView style={styles.scrollContainer}>
                 {filteredBarbers && (
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    <View style={styles.cardRow}>
+                    <View style={styles.cardRowNew}>
                       {filteredBarbers?.map((item, index) => {
                         const distance = calculateDistance(
                           location?.latitude,
@@ -336,26 +336,37 @@ export default function Explore({ navigation }) {
                           item.location.longitude,
                         );
                         return (
-                          <ImageBackground
+                          <TouchableOpacity
                             key={index}
-                            source={{ uri: item?.businessProfile }}
-                            imageStyle={styles.containerImage}>
-                            <View style={styles.row}>
-                              <Text style={styles.textWhite}>5.0</Text>
-                              <StarRating
-                                maxStars={1}
-                                starSize={12}
-                                color={colors.gold}
-                                rating={1}
-                              />
-                            </View>
-                            <View style={styles.marginCardtop}>
+                            onPress={() =>
+                              navigation.navigate('BookAppointment', {
+                                item,
+                                tabName: 'About',
+                              })
+                            }>
+                            <ImageBackground
+                              source={item?.profile ? { uri: item?.profile } : item?.gender === "male" ? images.male : images.female}
+                              imageStyle={styles.containerImage}
+                              style={styles.containerImage}>
+                              <View style={styles.row}>
+                                <Text style={styles.textWhite}>
+                                  {calculateAverageRating(item?.reviews)}
+                                </Text>
+                                <StarRating
+                                  maxStars={1}
+                                  starSize={12}
+                                  color={colors.gold}
+                                  rating={1}
+                                />
+                              </View>
+
                               <ImageBackground
                                 source={images.bluredImg}
-                                imageStyle={styles.bluredImg}>
+                                imageStyle={styles.bluredImg}
+                                style={styles.bluredImg}>
                                 <View style={styles.appointmentContainer}>
                                   <Text style={styles.textDarkerblack}>
-                                    {item?.name}
+                                    {item.name}
                                   </Text>
                                   <View style={styles.locationContainer}>
                                     <Image
@@ -376,6 +387,7 @@ export default function Explore({ navigation }) {
                                     onPress={() =>
                                       navigation.navigate('BookAppointment', {
                                         item,
+                                        tabName: 'Services',
                                       })
                                     }>
                                     <Text style={styles.btnText}>
@@ -389,8 +401,8 @@ export default function Explore({ navigation }) {
                                   </TouchableOpacity>
                                 </View>
                               </ImageBackground>
-                            </View>
-                          </ImageBackground>
+                            </ImageBackground>
+                          </TouchableOpacity>
                         );
                       })}
                     </View>
@@ -423,7 +435,7 @@ export default function Explore({ navigation }) {
                             style={styles.locationImgIcon}
                             resizeMode="contain">
                             <Image
-                              source={{ uri: item.businessProfile }}
+                              source={item?.profile ? { uri: item?.profile } : item?.gender === "male" ? images.male : images.female}
                               style={styles.markerIngStyle}
                             />
                           </ImageBackground>
@@ -489,7 +501,7 @@ export default function Explore({ navigation }) {
                               })
                             }>
                             <ImageBackground
-                              source={{ uri: item.businessProfile }}
+                              source={item?.profile ? { uri: item?.profile } : item?.gender === "male" ? images.male : images.female}
                               imageStyle={styles.containerImage}
                               style={styles.containerImage}>
                               <View style={styles.row}>

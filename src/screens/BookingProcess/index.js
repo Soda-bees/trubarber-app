@@ -487,7 +487,8 @@ export default function BookingProcess({ navigation, route }) {
                 <View style={styles.barberNameImage}>
                   <View style={styles.imageContainer}>
                     <Image
-                      source={{ uri: barber?.businessProfile }}
+                      // source={{ uri: barber?.businessProfile }}
+                      source={barber?.profile ? { uri: barber?.profile } : barber?.gender === "male" ? images.male : images.female}
                       style={styles.imageContainer}
                     />
                   </View>

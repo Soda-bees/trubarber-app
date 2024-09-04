@@ -35,6 +35,7 @@ export default function SetUpOutlet({ navigation, route }) {
   const [endTime, setEndTime] = useState(new Date());
   const [loader, setLoader] = useState(false);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [instagram , setInstagram] = useState('')
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
@@ -137,18 +138,18 @@ export default function SetUpOutlet({ navigation, route }) {
   };
 
   const handleConfirm = async () => {
-    if (!imgUri) {
-      return ErrorShow('error', 'Oops!', 'Please Upload photo');
+    if (!instagram) {
+      return ErrorShow('error', 'Oops!', 'Please provide your instagram profile link');
     }
     if (!description) {
       return ErrorShow('error', 'Oops!', 'Please fill the description');
     }
     // const time = `${formatTime(startTime)} - ${formatTime(endTime)}`;
     const time = `6:00 AM - 10:00 PM`;
-    Object.assign(userData, {businessProfile: imgUri, description, time});
+    Object.assign(userData, { businessProfile: imgUri, description, time , instagram});
     console.log(userData);
-    
-    navigation.navigate('AuthSetUpServices', {userData});
+
+    navigation.navigate('AuthSetUpServices', { userData });
   };
 
   const formatTime = date => {
@@ -217,7 +218,7 @@ export default function SetUpOutlet({ navigation, route }) {
           <Text style={styles.Forgotpass}>Set-Up Business Profile</Text>
           <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={Platform.OS == 'ios' && sizes.screenHeight * 0.9}>
             <View>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={imgUri ? {
                   width: dimensions.width,
                   height: dimensions.height,
@@ -241,16 +242,36 @@ export default function SetUpOutlet({ navigation, route }) {
                     source={images.uploadImgbarber}
                   />
                 )}
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
-            <View
+            {/* <View
               style={
                 Platform.OS == 'android'
                   ? styles.uploadPress
                   : styles.uploadPressIOS
               }>
               <Text style={styles.uploadCover}>Upload Photo</Text>
+            </View> */}
+            <View style={styles.timeContainer}>
+              <Text style={
+                Platform.OS == 'android' ? styles.title : styles.titleIOS
+              }>Instagram account</Text>
+              <View style={styles.timeSecond}>
+                <Image
+                  source={images.instagram}
+                  style={styles.instagramIcon}
+                  resizeMode="contain"
+                />
+                <TextInput 
+                placeholder='Add Link' 
+                style={styles.instagramInput} 
+                placeholderTextColor={colors.black}
+                onChangeText={setInstagram}
+                value={instagram}
+                />
+              </View>
             </View>
+
             <View style={styles.content}>
               <View style={styles.textContainer}>
                 <Text
@@ -282,6 +303,7 @@ export default function SetUpOutlet({ navigation, route }) {
                   />
                 </View>
               </View>
+
               {/* <View style={styles.timeContainer}>
                 <View style={styles.description}>
                   <TimePickerComponent

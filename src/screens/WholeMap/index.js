@@ -56,6 +56,18 @@ export default function WholeMap({ navigation }) {
     return distance;
   };
 
+  const calculateAverageRating = reviews => {
+    if (reviews && reviews.length > 0) {
+        const totalRating = reviews.reduce(
+            (sum, review) => sum + parseFloat(review.rating),
+            0,
+        );
+        return totalRating / reviews.length;
+    } else {
+        return 0;
+    }
+};
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -129,7 +141,8 @@ export default function WholeMap({ navigation }) {
                     style={styles.locationImgIcon}
                     resizeMode="contain">
                     <Image
-                      source={{ uri: item.businessProfile }}
+                      // source={{ uri: item.businessProfile }}
+                      source={item?.profile ? { uri: item?.profile } : item?.gender === "male" ? images.male : images.female}
                       style={styles.markerIngStyle}
                     />
                   </ImageBackground>
@@ -146,13 +159,14 @@ export default function WholeMap({ navigation }) {
         style={styles.modalPosition}>
         {selectedBarber && (
           <ImageBackground
-            source={{ uri: selectedBarber.businessProfile }}
+            // source={{ uri: selectedBarber.businessProfile }}
+            source={selectedBarber?.profile ? { uri: selectedBarber?.profile } : selectedBarber?.gender === "male" ? images.male : images.female}
             imageStyle={styles.containerImage}
           // style={}
           >
             <View style={styles.spaceBetween}>
               <View style={styles.row}>
-                <Text style={styles.textWhite}>5.0</Text>
+                <Text style={styles.textWhite}> {calculateAverageRating(selectedBarber.reviews)}</Text>
                 <StarRating
                   maxStars={1}
                   starSize={12}

@@ -339,15 +339,31 @@ export default function BookAppointment({ navigation, route }) {
 
   useEffect(() => {
     getAddress(barbar?.location?.latitude, barbar?.location?.longitude);
-    console.log("worj");
-
   }, []);
+
+  const handleNavigateToInstagram = async (instagramUrl) => {
+    try {
+      const supported = await Linking.canOpenURL(instagramUrl);
+      if (supported) {
+        await Linking.openURL(instagramUrl);
+      } else {
+        await Linking.openURL(instagramUrl);
+      }
+    } catch (error) {
+      ToastAndroid.show(
+        'Something went wrong, please try again.',
+        ToastAndroid.LONG,
+      );
+      console.error("Error opening Instagram URL:", error);
+    }
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <ImageBackground
-          imageStyle={styles.headerImage}
-          source={{ uri: barbar?.businessProfile }}
+        <View
+          style={styles.headerImage}
+        // source={{ uri: barbar?.businessProfile }}
         >
           <View style={styles.headerContainer}>
             <BackArrow light={false} onPress={handleGoback} />
@@ -408,7 +424,7 @@ export default function BookAppointment({ navigation, route }) {
               }
             </View>
           </View>
-        </ImageBackground>
+        </View>
         <View style={styles.todoButtonscontainer}>
           <View style={styles.btnColorContainer}>
             <TouchableOpacity
@@ -427,7 +443,6 @@ export default function BookAppointment({ navigation, route }) {
           <View style={styles.btnColorContainer}>
             <TouchableOpacity
               style={styles.btnColor}
-              // onPress={handleNavigateToChat}
               onPress={() => {
                 dialNumber(barbar.phone);
               }}>
@@ -452,6 +467,21 @@ export default function BookAppointment({ navigation, route }) {
             </TouchableOpacity>
             <Text style={styles.btnText}>Message</Text>
           </View>
+          <View style={styles.devider}></View>
+          <View style={styles.btnColorContainer}>
+            <TouchableOpacity
+              style={styles.btnColor}
+              onPress={() => handleNavigateToInstagram(barbar?.instagram)}
+            >
+              <Image
+                style={styles.direction}
+                source={images.instagram}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+            <Text style={styles.btnText}>Instagram</Text>
+          </View>
+
         </View>
         <View style={styles.tabContainer}>
           <TouchableOpacity onPress={() => setTabs('About')}>

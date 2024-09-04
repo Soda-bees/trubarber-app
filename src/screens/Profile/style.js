@@ -74,18 +74,20 @@ export const styles = StyleSheet.create({
   },
   locationRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    // alignItems: 'center',
     gap: sizes.screenWidth * 0.012,
   },
   redLocation: {
     width: sizes.screenHeight * 0.022,
     height: sizes.screenHeight * 0.015,
-    tintColor:colors.black
+    tintColor:colors.black,
+    marginTop:4
   },
   locationText: {
     fontSize: fontSize.small,
     color: colors.black,
     fontWeight: '500',
+    width:sizes.screenWidth * 0.7
   },
   navigation: {
     marginLeft: sizes.screenWidth * 0.07,
