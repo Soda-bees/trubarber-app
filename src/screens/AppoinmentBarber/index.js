@@ -456,7 +456,6 @@ export default function AppoinmentBarber({ navigation }) {
           await handleUpdateAppointmentStatus('Rejected', id);
         }
       }
-      // handleUpdateAppointmentStatus('Completed', modalItem?.id)
 
       // const body = {
       //   status: status,
