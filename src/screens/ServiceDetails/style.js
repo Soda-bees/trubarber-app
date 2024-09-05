@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
@@ -143,7 +143,7 @@ export const styles = StyleSheet.create({
     borderColor: 'white',
     alignSelf: 'center',
     width: sizes.screenWidth * 0.9,
-    height: sizes.screenHeight * 0.07,
+    // height: sizes.screenHeight * 0.07,
     borderRadius: sizes.screenWidth * 0.03,
     backgroundColor: colors.outlineColor,
     flexDirection: 'row',
@@ -151,6 +151,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: sizes.screenWidth * 0.04,
     marginTop: sizes.screenHeight * 0.004,
+    paddingVertical: sizes.screenWidth * 0.02
   },
 
   styleMainView2: {
@@ -158,7 +159,7 @@ export const styles = StyleSheet.create({
     borderColor: 'white',
     alignSelf: 'center',
     width: sizes.screenWidth * 0.9,
-    height: sizes.screenHeight * 0.07,
+    // height: sizes.screenHeight * 0.07,
     borderRadius: sizes.screenWidth * 0.03,
     backgroundColor: colors.grayBorder,
     flexDirection: 'row',
@@ -166,6 +167,13 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: sizes.screenWidth * 0.04,
     marginTop: sizes.screenHeight * 0.004,
+    paddingVertical: sizes.screenWidth * 0.02
+  },
+
+  timeText: {
+    color: colors.black,
+    fontWeight: '500',
+    fontSize: fontSize.small
   },
 
   styleName: {
@@ -193,51 +201,51 @@ export const styles = StyleSheet.create({
   modalMainView: {
     backgroundColor: colors.white,
     // height:sizes.screenHeight * 0.21,
-    width:sizes.screenWidth * 0.9,
-    borderRadius:sizes.screenWidth * 0.05,
-    paddingVertical:15
+    width: sizes.screenWidth * 0.9,
+    borderRadius: sizes.screenWidth * 0.05,
+    paddingVertical: 15
   },
 
-  modalMessage:{
-    color:colors.black,
-    alignSelf:'center',
-    paddingHorizontal:15,
-    fontSize:fontSize.medium,
-    width:sizes.screenWidth * 0.85,
-    textAlign:'center'
+  modalMessage: {
+    color: colors.black,
+    alignSelf: 'center',
+    paddingHorizontal: 15,
+    fontSize: fontSize.medium,
+    width: sizes.screenWidth * 0.85,
+    textAlign: 'center'
   },
 
-  btnText:{
-    color:colors.black,
-    fontSize:fontSize.h6,
+  btnText: {
+    color: colors.black,
+    fontSize: fontSize.h6,
   },
-  btnText1:{
-    color:colors.white,
-    fontSize:fontSize.h6,
-  },
-
-  btnMainView:{
-    flexDirection:'row',
-    justifyContent:'space-between',
-    paddingHorizontal:15,
-    marginTop:15
+  btnText1: {
+    color: colors.white,
+    fontSize: fontSize.h6,
   },
 
-  btnView:{
-    borderWidth:1,
-    borderRadius:sizes.screenWidth * 0.03,
-    height:sizes.screenHeight * 0.05, 
-    width:sizes.screenWidth * 0.4, 
-    justifyContent:'center',
-    alignItems:'center',
+  btnMainView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+    marginTop: 15
   },
-  btnView1:{
+
+  btnView: {
+    borderWidth: 1,
+    borderRadius: sizes.screenWidth * 0.03,
+    height: sizes.screenHeight * 0.05,
+    width: sizes.screenWidth * 0.4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnView1: {
     // borderWidth:1,
-    borderRadius:sizes.screenWidth * 0.03,
-    height:sizes.screenHeight * 0.05, 
-    width:sizes.screenWidth * 0.4, 
-    justifyContent:'center',
-    alignItems:'center',
-    backgroundColor:colors.black,
+    borderRadius: sizes.screenWidth * 0.03,
+    height: sizes.screenHeight * 0.05,
+    width: sizes.screenWidth * 0.4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.black,
   },
 });

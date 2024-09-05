@@ -76,7 +76,7 @@ export default function AuthSetUpServices({navigation, route}) {
       ...item,
       pictures: [],
       description: '',
-      options: [{name: '', price: ''}],
+      options: [{name: '', price: '' , time:''}],
     }));
     if (userData) {
       navigation.navigate('AuthServiceInfo', {

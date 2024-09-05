@@ -11,15 +11,15 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import images from '../../services/utilities/images';
-import {styles} from './style.js';
+import { styles } from './style.js';
 import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {PermissionsAndroid, PermissionsIOS} from 'react-native';
-import {colors, sizes} from '../../services';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { PermissionsAndroid, PermissionsIOS } from 'react-native';
+import { colors, sizes } from '../../services';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   addServices,
   updateService,
@@ -28,19 +28,19 @@ import {
 import formatToJSON from '../../services/config/FormatToJson';
 import Loader from '../../components/Loader';
 import Toast from 'react-native-toast-message';
-import {ErrorShow} from '../../components/Error';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectAuthToken} from '../../store/authToken';
-import {setUserData, updateServiceRedux} from '../../store/userData';
+import { ErrorShow } from '../../components/Error';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAuthToken } from '../../store/authToken';
+import { setUserData, updateServiceRedux } from '../../store/userData';
 
-export default function AuthServiceInfo({navigation, route}) {
+export default function AuthServiceInfo({ navigation, route }) {
   const dispatch = useDispatch();
 
   // const { userData, services } = route.params;
   const userData = route?.params?.userData;
   const services = route?.params?.services;
   const isAdd = route?.params?.isAdd;
-  const isEdit = route?.params?.isEdit;
+  const isEdit = route?.params?.isEdit;  
 
   const authToken = useSelector(selectAuthToken);
 
@@ -52,30 +52,15 @@ export default function AuthServiceInfo({navigation, route}) {
   const [serviceAbout, setServiceAbout] = useState(
     'Timeless styles rooted in tradition, offering a clean and polished appearance. These cuts, such as crew cuts and taper cuts, emphasize neatness and simplicity, making them versatile and suitable for various occasions.',
   );
-  const [serviceDetail, setServiceDetail] = useState([
-    // {
-    //   name: 'Buzz Cut',
-    //   price: '10',
-    // },
-    // {
-    //   name: 'Under Cut',
-    //   price: '10',
-    // },
-    // {
-    //   name: 'Crew Cut',
-    //   price: '10',
-    // },
-    // {
-    //   name: 'Traditional Cut',
-    //   price: '10',
-    // },
-  ]);
+  const [serviceDetail, setServiceDetail] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [servicesData, setServicesData] = useState();
   const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     if (services) {
+      console.log("service====?>", formatToJSON(services));
+
       setServicesData(services);
     }
   }, []);
@@ -188,7 +173,7 @@ export default function AuthServiceInfo({navigation, route}) {
     });
   };
 
-  const updateOption = (optionsArrayIndex, newName, newPrice) => {
+  const updateOption = (optionsArrayIndex, newName, newPrice, newTime) => {
     const sanitizedPrice = newPrice.replace(/[^0-9.]/g, '');
     setServicesData(prevServices => {
       const newServices = [...prevServices];
@@ -197,6 +182,7 @@ export default function AuthServiceInfo({navigation, route}) {
         ...updatedOptions[optionsArrayIndex],
         name: newName,
         price: sanitizedPrice,
+        time: newTime
       };
       newServices[currentIndex] = {
         ...newServices[currentIndex],
@@ -211,16 +197,32 @@ export default function AuthServiceInfo({navigation, route}) {
       const newServices = [...prevServices];
       newServices[currentIndex] = {
         ...newServices[currentIndex],
-        options: [...newServices[currentIndex].options, {name: '', price: ''}],
+        options: [...newServices[currentIndex].options, { name: '', price: '', time: '' }],
       };
       return newServices;
     });
   };
 
   const hasValidOptions = options => {
-    return options.some(
-      option => option.name.trim() !== '' && option.price.trim() !== '',
-    );
+    if (!options || options.length === 0) {
+      return { success: false, message: 'At least one catogery is required.' };
+    }
+
+    for (const [index, option] of options.entries()) {
+      const { name, price, time } = option;
+
+      if (name.trim() === '') {
+        return { success: false, message: `Please add catogery ${index + 1} name` };
+      }
+      if ('time' in option && time.trim() === '') {
+        return { success: false, message: `Please add catogery ${index + 1} time` };
+      }
+      if (price.trim() === '') {
+        return { success: false, message: `Please add catogery ${index + 1} price` };
+      }
+    }
+
+    return { success: true, message: '' };
   };
 
   const onHide = () => {
@@ -232,33 +234,21 @@ export default function AuthServiceInfo({navigation, route}) {
       const serviceLength = services.length - 1;
       if (currentIndex == serviceLength) {
         if (servicesData[currentIndex]?.pictures?.length == 0) {
-          return ErrorShow(
-            'error',
-            'Oops!',
-            'Please upload at least one picture',
-          );
+          return ErrorShow('error', 'Oops!', 'Please upload at least one picture',);
         }
-        if (!hasValidOptions(servicesData[currentIndex]?.options)) {
-          return ErrorShow(
-            'error',
-            'Oops!',
-            'Please add at least one valid option with both name and price',
-          );
+        const isValid = hasValidOptions(servicesData[currentIndex]?.options)
+        if (!isValid?.success) {
+          return ErrorShow('error', 'Oops!', isValid?.message);
         }
         if (!servicesData[currentIndex]?.description) {
           return ErrorShow('error', 'Oops!', 'Description required');
         }
         setLoader(true);
-        const body = {services: servicesData};
+        const body = { services: servicesData };
         const response = await addServices(body, authToken);
         if (response?.status == 201) {
           setLoader(false);
-          ErrorShow(
-            'success',
-            'Congratulation!',
-            response?.data?.message,
-            onHide,
-          );
+          ErrorShow('success', 'Congratulation!', response?.data?.message, onHide,);
           dispatch(setUserData(response?.data?.updateUser));
         } else {
           setLoader(false);
@@ -266,18 +256,11 @@ export default function AuthServiceInfo({navigation, route}) {
         }
       } else {
         if (servicesData[currentIndex]?.pictures?.length == 0) {
-          return ErrorShow(
-            'error',
-            'Oops!',
-            'Please upload at least one picture',
-          );
+          return ErrorShow('error', 'Oops!', 'Please upload at least one picture',);
         }
-        if (!hasValidOptions(servicesData[currentIndex]?.options)) {
-          return ErrorShow(
-            'error',
-            'Oops!',
-            'Please add at least one valid option with both name and price',
-          );
+        const isValid = hasValidOptions(servicesData[currentIndex]?.options)
+        if (!isValid?.success) {
+          return ErrorShow('error', 'Oops!', isValid?.message);
         }
         if (!servicesData[currentIndex]?.description) {
           return ErrorShow('error', 'Oops!', 'Description required');
@@ -294,18 +277,11 @@ export default function AuthServiceInfo({navigation, route}) {
   const handleUpdateService = async () => {
     try {
       if (servicesData[currentIndex]?.pictures?.length == 0) {
-        return ErrorShow(
-          'error',
-          'Oops!',
-          'Please upload at least one picture',
-        );
+        return ErrorShow('error', 'Oops!', 'Please upload at least one picture',);
       }
-      if (!hasValidOptions(servicesData[currentIndex]?.options)) {
-        return ErrorShow(
-          'error',
-          'Oops!',
-          'Please add at least one valid option with both name and price',
-        );
+      const isValid = hasValidOptions(servicesData[currentIndex]?.options)
+      if (!isValid?.success) {
+        return ErrorShow('error', 'Oops!', isValid?.message);
       }
       if (!servicesData[currentIndex]?.description) {
         return ErrorShow('error', 'Oops!', 'Description required');
@@ -314,10 +290,7 @@ export default function AuthServiceInfo({navigation, route}) {
       const response = await updateService(servicesData[0], authToken);
       if (response?.status == 200) {
         setLoader(false);
-        ErrorShow(
-          'success',
-          'Congratulation!',
-          response?.data?.message,
+        ErrorShow('success', 'Congratulation!', response?.data?.message,
           onHide,
         );
         dispatch(updateServiceRedux(response?.data?.updatedService));
@@ -332,42 +305,29 @@ export default function AuthServiceInfo({navigation, route}) {
     }
   };
 
+
   const handleConfirm = async () => {
     const serviceLength = services.length - 1;
     if (currentIndex == serviceLength) {
       if (servicesData[currentIndex]?.pictures?.length == 0) {
-        return ErrorShow(
-          'error',
-          'Oops!',
-          'Please upload at least one picture',
-        );
+        return ErrorShow('error', 'Oops!', 'Please upload at least one picture',);
       }
-      if (!hasValidOptions(servicesData[currentIndex]?.options)) {
-        return ErrorShow(
-          'error',
-          'Oops!',
-          'Please add atleast one valid option with both name and price',
-        );
+      const isValid = hasValidOptions(servicesData[currentIndex]?.options)
+      if (!isValid?.success) {
+        return ErrorShow('error', 'Oops!', isValid?.message);
       }
       if (!servicesData[currentIndex]?.description) {
         return ErrorShow('error', 'Oops!', 'Description required');
       }
       userData.services = servicesData;
-      navigation.navigate('OutletTags', {userData});
+      navigation.navigate('OutletTags', { userData });
     } else {
       if (servicesData[currentIndex]?.pictures?.length == 0) {
-        return ErrorShow(
-          'error',
-          'Oops!',
-          'Please upload at least one picture',
-        );
+        return ErrorShow('error', 'Oops!', 'Please upload at least one picture',);
       }
-      if (!hasValidOptions(servicesData[currentIndex]?.options)) {
-        return ErrorShow(
-          'error',
-          'Oops!',
-          'Please add atleast one valid option with both name and price',
-        );
+      const isValid = hasValidOptions(servicesData[currentIndex]?.options)
+      if (!isValid?.success) {
+        return ErrorShow('error', 'Oops!', isValid?.message);
       }
       if (!servicesData[currentIndex]?.description) {
         return ErrorShow('error', 'Oops!', 'Description required');
@@ -413,18 +373,18 @@ export default function AuthServiceInfo({navigation, route}) {
           extraHeight={sizes.screenHeight * 0.15}
           extraScrollHeight={sizes.screenHeight * 0.2}
           showsVerticalScrollIndicator={false}
-          >
+        >
           <View style={styles.serviceContainer}>
             <Text style={styles.serviceNameText}>
               {services[currentIndex]?.name} Details
             </Text>
             <View style={styles.uploadImage}>
               {servicesData &&
-              servicesData[currentIndex]?.pictures?.length > 0 ? (
+                servicesData[currentIndex]?.pictures?.length > 0 ? (
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   {servicesData[currentIndex]?.pictures?.map((item, index) => {
                     return (
-                      <View key={index} style={{position: 'relative'}}>
+                      <View key={index} style={{ position: 'relative' }}>
                         <TouchableOpacity
                           style={styles.crossImgTouchable}
                           onPress={() => deletePicture(index)}>
@@ -434,7 +394,7 @@ export default function AuthServiceInfo({navigation, route}) {
                           />
                         </TouchableOpacity>
                         <Image
-                          source={{uri: item}}
+                          source={{ uri: item }}
                           style={
                             index == 0 ? styles.imagestyle : styles.imagestyle2
                           }
@@ -455,7 +415,7 @@ export default function AuthServiceInfo({navigation, route}) {
             <TouchableOpacity
               style={styles.uplaodImageContianer}
               onPress={() => uploadPhoto('library')}>
-              <Image source={images.plusRed} style={{tintColor:colors.blackGrey}} />
+              <Image source={images.plusRed} style={{ tintColor: colors.blackGrey }} />
               <Text style={styles.uploadImgText}>Add Service Pictures</Text>
             </TouchableOpacity>
           </View>
@@ -472,7 +432,8 @@ export default function AuthServiceInfo({navigation, route}) {
                       {/* {serviceName} */}
                       {services[currentIndex]?.name}
                     </Text>
-                    <Text style={styles.tablePriceHeading}>Price</Text>
+                    <Text style={styles.tablePriceHeading}>Time</Text>
+                    <Text style={styles.tablePriceHeadingSecond}>Price</Text>
                   </View>
                 )}
               {servicesData &&
@@ -480,11 +441,11 @@ export default function AuthServiceInfo({navigation, route}) {
                   <View style={styles.serviceContentRow} key={index}>
                     <TouchableOpacity
                       onPress={() => deleteServiceDetails(index)}>
-                      <Image source={images.minusRed} resizeMode="contain" style={{tintColor:colors.black}}/>
+                      <Image source={images.minusRed} resizeMode="contain" style={{ tintColor: colors.black }} />
                     </TouchableOpacity>
                     <TextInput
                       onChangeText={text =>
-                        updateOption(index, text, item.price)
+                        updateOption(index, text, item.price, item.time)
                       }
                       value={item.name}
                       placeholder="Name"
@@ -497,7 +458,21 @@ export default function AuthServiceInfo({navigation, route}) {
                     />
                     <TextInput
                       onChangeText={text =>
-                        updateOption(index, item.name, text)
+                        updateOption(index, item.name, item.price, text)
+                      }
+                      value={item.time}
+                      keyboardType="numeric"
+                      placeholder="Minutes"
+                      style={
+                        Platform.OS == 'android'
+                          ? styles.serviceInputContainerTime
+                          : styles.serviceInputContainerIOS
+                      }
+                      placeholderTextColor={colors.black}
+                    />
+                    <TextInput
+                      onChangeText={text =>
+                        updateOption(index, item.name, text, item.time)
                       }
                       value={`$ ${item.price}`}
                       keyboardType="numeric"
@@ -560,7 +535,7 @@ export default function AuthServiceInfo({navigation, route}) {
           {/* </View> */}
         </KeyboardAwareScrollView>
         {/* </ScrollView> */}
-      <Toast />
+        <Toast />
       </View>
     </SafeAreaView>
   );

@@ -9,26 +9,26 @@ import {
   Platform,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style';
 import BackArrow from '../../components/BackArrow';
-import {colors, sizes} from '../../services';
+import { colors, sizes } from '../../services';
 import Button from '../../components/Button';
 import images from '../../services/utilities/images';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import formatToJSON from '../../services/config/FormatToJson';
-import {useDispatch, useSelector} from 'react-redux';
-import {removeCart, selectCart, setCart, updateCart} from '../../store/cart';
-import {selectbarber} from '../../store/barber';
-import {selectUserData} from '../../store/userData';
-import {ErrorShow} from '../../components/Error';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeCart, selectCart, setCart, updateCart } from '../../store/cart';
+import { selectbarber } from '../../store/barber';
+import { selectUserData } from '../../store/userData';
+import { ErrorShow } from '../../components/Error';
 import Toast from 'react-native-toast-message';
 import Header from '../../components/Header';
 
-export default function ServiceDetails({navigation, route}) {
+export default function ServiceDetails({ navigation, route }) {
   const dispatch = useDispatch();
   const cart = useSelector(selectCart);
-  const {item} = route.params;
+  const { item } = route.params;
   const userData = useSelector(selectUserData);
   const [modalOpen, setModalopen] = useState(false);
   const [selectedIndices, setSelectedIndices] = useState(null);
@@ -46,7 +46,7 @@ export default function ServiceDetails({navigation, route}) {
     setSelectedIndices(prevIndex => {
       if (prevIndex === index) {
         setTotalAmount(prevAmount => prevAmount - price);
-        return null; 
+        return null;
       } else {
         // Select a new index
         setTotalAmount(prevAmount => prevAmount - prevAmount);
@@ -166,7 +166,7 @@ export default function ServiceDetails({navigation, route}) {
             <View style={styles.row}>
               <View style={styles.serviceImagecontainer}>
                 <Image
-                  source={{uri: item.icon}}
+                  source={{ uri: item.icon }}
                   style={styles.serviceImageresize}
                   resizeMode="contain"
                 />
@@ -186,20 +186,23 @@ export default function ServiceDetails({navigation, route}) {
                     : styles.styleMainView
                 }
                 onPress={() => handleMenu(index, item?.price)}>
-                <Text style={styles.styleName}>{item?.name}</Text>
+                <View style={{ flexDirection: 'column'}}>
+                  <Text style={styles.styleName}>{item?.name}</Text>
+                  <Text style={styles.timeText}>{`${item?.time} min`}</Text>
+                </View>
                 <Text style={styles.styleName}>
-                  <Text style={{color: colors.red}}>$</Text>{' '}
+                  <Text style={{ color: colors.red }}>$</Text>{' '}
                   {`${parseFloat(item?.price)?.toFixed(2)}`}
                 </Text>
               </TouchableOpacity>
             );
           })}
           <Text style={styles.categoryImg}>Images</Text>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{marginHorizontal:12}}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ marginHorizontal: 12 }}>
             {item?.pictures.map((item, index) => {
               return (
                 <View style={styles.imageContainer} key={index}>
-                  <Image source={{uri: item}} style={styles.imgStyle} />
+                  <Image source={{ uri: item }} style={styles.imgStyle} />
                 </View>
               );
             })}
@@ -232,8 +235,8 @@ export default function ServiceDetails({navigation, route}) {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={{marginBottom: 20}} />
-        <View style={Platform.OS == 'ios' && {paddingBottom:sizes.screenHeight * 0.08}}/>
+          <View style={{ marginBottom: 20 }} />
+          <View style={Platform.OS == 'ios' && { paddingBottom: sizes.screenHeight * 0.08 }} />
 
         </ScrollView>
         <Toast />

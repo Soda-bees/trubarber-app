@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   centerContent: {
-    marginTop: sizes.screenHeight * 0.12,
+    marginTop: sizes.screenHeight * 0.06,
     alignItems: 'center',
   },
   alignedDetails: {

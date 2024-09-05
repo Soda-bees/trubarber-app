@@ -137,9 +137,19 @@ export default function SetUpOutlet({ navigation, route }) {
     }
   };
 
+  const isValidInstagramLink = (url) => {
+    const instagramRegex = /^(https?:\/\/)?(www\.)?instagram\.com\/([a-zA-Z0-9._]+)/;
+  
+    // Test the URL against the regex pattern
+    return instagramRegex.test(url);
+  };
+
   const handleConfirm = async () => {
     if (!instagram) {
       return ErrorShow('error', 'Oops!', 'Please provide your instagram profile link');
+    }
+    if (!isValidInstagramLink(instagram)) {
+      return ErrorShow('error', 'Oops!', 'Please provide your correct instagram profile link');
     }
     if (!description) {
       return ErrorShow('error', 'Oops!', 'Please fill the description');
