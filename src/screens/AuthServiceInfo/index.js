@@ -428,11 +428,11 @@ export default function AuthServiceInfo({ navigation, route }) {
               {servicesData &&
                 servicesData[currentIndex]?.options?.length > 0 && (
                   <View style={styles.tableHeadingRow}>
-                    <Text style={styles.tableServiceHeading}>
+                    <Text style={Platform.OS == 'android' ? styles.tableServiceHeading : styles.tableServiceHeadingIOS}>
                       {/* {serviceName} */}
                       {services[currentIndex]?.name}
                     </Text>
-                    <Text style={styles.tablePriceHeading}>Time</Text>
+                    <Text style={Platform.OS == 'android' ? styles.tablePriceHeading : styles.tablePriceHeadingIOS}>Time</Text>
                     <Text style={styles.tablePriceHeadingSecond}>Price</Text>
                   </View>
                 )}

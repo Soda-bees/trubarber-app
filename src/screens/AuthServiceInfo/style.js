@@ -84,6 +84,14 @@ export const styles = StyleSheet.create({
     // backgroundColor:'red',
     width:sizes.screenWidth * 0.33
   },
+  tableServiceHeadingIOS: {
+    fontSize: fontSize.medium,
+    color: colors.tableHeadingColor,
+    fontWeight: '500',
+    // textAlign: 'center',
+    // backgroundColor:'red',
+    width:sizes.screenWidth * 0.3
+  },
   tablePriceHeading: {
     fontSize: fontSize.medium,
     color: colors.tableHeadingColor,
@@ -91,6 +99,14 @@ export const styles = StyleSheet.create({
     // textAlign: 'center',
     // marginRight: sizes.screenWidth * 0.1,
     width:sizes.screenWidth * 0.28
+  },
+  tablePriceHeadingIOS: {
+    fontSize: fontSize.medium,
+    color: colors.tableHeadingColor,
+    fontWeight: '500',
+    // textAlign: 'center',
+    // marginRight: sizes.screenWidth * 0.1,
+    width:sizes.screenWidth * 0.3
   },
   tablePriceHeadingSecond: {
     fontSize: fontSize.medium,
@@ -103,7 +119,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: sizes.screenHeight * 0.008,
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
   },
   serviceInputContainer: {
     fontSize: fontSize.medium,
@@ -130,7 +146,7 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '500',
     backgroundColor: colors.white,
-    width: sizes.screenWidth * 0.5,
+    width: sizes.screenWidth * 0.27,
     borderRadius: sizes.screenWidth * 0.02,
     marginStart: sizes.screenWidth * 0.02,
     height: sizes.screenHeight * 0.052,
@@ -141,7 +157,7 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '500',
     backgroundColor: colors.white,
-    width: sizes.screenWidth * 0.27,
+    width: sizes.screenWidth * 0.19,
     borderRadius: sizes.screenWidth * 0.02,
     marginStart: sizes.screenWidth * 0.04,
     height: sizes.screenHeight * 0.052,
@@ -151,7 +167,7 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '500',
     backgroundColor: colors.white,
-    width: sizes.screenWidth * 0.27,
+    width: sizes.screenWidth * 0.19,
     borderRadius: sizes.screenWidth * 0.02,
     marginStart: sizes.screenWidth * 0.04,
     height: sizes.screenHeight * 0.052,

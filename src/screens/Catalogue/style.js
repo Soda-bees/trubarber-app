@@ -109,7 +109,7 @@ export const styles = StyleSheet.create({
   },
 
   textWhite: {
-    color: colors.white,
+    color: colors.black,
     fontSize: fontSize.small,
   },
 

@@ -41,6 +41,7 @@ export const styles = StyleSheet.create({
     locationDetailColumn: {
         marginStart: sizes.screenWidth * 0.02,
         marginEnd: sizes.screenWidth * 0.04,
+        overflow:'hidden'
     },
     nearbyTxt: {
         color: colors.gray,
@@ -51,5 +52,11 @@ export const styles = StyleSheet.create({
         color: colors.black,
         fontSize: fontSize.small,
         fontWeight: 'bold',
+    },
+    currentLocationTxtIOS: {
+        color: colors.black,
+        fontSize: fontSize.small,
+        fontWeight: 'bold',
+        width:sizes.screenWidth * 0.3,
     },
 })

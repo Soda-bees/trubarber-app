@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Image, Platform, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./style";
 import images from "../../services/utilities/images";
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -61,7 +61,7 @@ export default function BarberLocation({ user }) {
                 <Text style={styles.nearbyTxt}>
                     {user ? "Find barber near" : "Barber’s Location"}
                 </Text>
-                <Text style={styles.currentLocationTxt} numberOfLines={1} ellipsizeMode="tail">
+                <Text style={Platform.OS == 'android' ? styles.currentLocationTxt : styles.currentLocationTxtIOS} numberOfLines={1} ellipsizeMode="tail"> 
                     {address}
                 </Text>
             </View>

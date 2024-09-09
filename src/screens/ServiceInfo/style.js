@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { colors, fontSize, sizes } from '../../services';
+import {StyleSheet} from 'react-native';
+import {colors, fontSize, sizes} from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
@@ -74,7 +74,7 @@ export const styles = StyleSheet.create({
     paddingVertical: sizes.screenHeight * 0.01,
     borderRadius: sizes.screenHeight * 0.01,
     // justifyContent: 'space-between',
-    paddingLeft:sizes.screenWidth * 0.09,
+    paddingLeft: sizes.screenWidth * 0.09,
   },
   tableServiceHeading: {
     fontSize: fontSize.medium,
@@ -82,7 +82,15 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
     // textAlign: 'center',
     // backgroundColor:'red',
-    width:sizes.screenWidth * 0.33
+    width: sizes.screenWidth * 0.33,
+  },
+  tableServiceHeadingIOS: {
+    fontSize: fontSize.medium,
+    color: colors.tableHeadingColor,
+    fontWeight: '500',
+    // textAlign: 'center',
+    // backgroundColor:'red',
+    width: sizes.screenWidth * 0.3,
   },
   tablePriceHeading: {
     fontSize: fontSize.medium,
@@ -90,8 +98,18 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
     // textAlign: 'center',
     // marginRight: sizes.screenWidth * 0.1,
-    width:sizes.screenWidth * 0.28
+    width: sizes.screenWidth * 0.28,
   },
+
+  tablePriceHeadingIOS: {
+    fontSize: fontSize.medium,
+    color: colors.tableHeadingColor,
+    fontWeight: '500',
+    // textAlign: 'center',
+    // marginRight: sizes.screenWidth * 0.1,
+    width: sizes.screenWidth * 0.3,
+  },
+
   tablePriceHeadingSecond: {
     fontSize: fontSize.medium,
     color: colors.tableHeadingColor,
@@ -103,7 +121,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: sizes.screenHeight * 0.008,
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
   },
   serviceInputContainer: {
     fontSize: fontSize.medium,
@@ -120,7 +138,7 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '500',
     backgroundColor: colors.white,
-    width: sizes.screenWidth * 0.25 ,
+    width: sizes.screenWidth * 0.25,
     borderRadius: sizes.screenWidth * 0.02,
     marginStart: sizes.screenWidth * 0.02,
     height: sizes.screenHeight * 0.052,
@@ -130,7 +148,7 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '500',
     backgroundColor: colors.white,
-    width: sizes.screenWidth * 0.5,
+    width: sizes.screenWidth * 0.27,
     borderRadius: sizes.screenWidth * 0.02,
     marginStart: sizes.screenWidth * 0.02,
     height: sizes.screenHeight * 0.052,
@@ -141,7 +159,7 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '500',
     backgroundColor: colors.white,
-    width: sizes.screenWidth * 0.27,
+    width: sizes.screenWidth * 0.19,
     borderRadius: sizes.screenWidth * 0.02,
     marginStart: sizes.screenWidth * 0.04,
     height: sizes.screenHeight * 0.052,
@@ -151,7 +169,7 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '500',
     backgroundColor: colors.white,
-    width: sizes.screenWidth * 0.27,
+    width: sizes.screenWidth * 0.19,
     borderRadius: sizes.screenWidth * 0.02,
     marginStart: sizes.screenWidth * 0.04,
     height: sizes.screenHeight * 0.052,
@@ -190,7 +208,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: sizes.screenWidth * 0.02,
     borderWidth: sizes.screenWidth * 0.003,
     borderColor: colors.borderColor,
-    textAlignVertical:"top",
+    textAlignVertical: 'top',
   },
   descriptionTextContainerIOS: {
     marginTop: sizes.screenHeight * 0.005,
@@ -201,14 +219,14 @@ export const styles = StyleSheet.create({
     paddingHorizontal: sizes.screenWidth * 0.02,
     borderWidth: sizes.screenWidth * 0.003,
     borderColor: colors.borderColor,
-    textAlignVertical:"top",
-    height:sizes.screenHeight * 0.1
+    textAlignVertical: 'top',
+    height: sizes.screenHeight * 0.1,
   },
   saveChangeBtn: {
     // position: 'absolute',
     // bottom: sizes.screenHeight*0.07,
     alignSelf: 'center',
-    marginVertical: sizes.screenHeight*0.02
+    marginVertical: sizes.screenHeight * 0.02,
   },
 
   saveChangeBtnIOS: {
@@ -237,7 +255,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.2,
     borderRadius: sizes.screenWidth * 0.02,
     backgroundColor: colors.selectorcolor,
-    marginLeft: 10
+    marginLeft: 10,
   },
   addimage: {
     height: sizes.screenHeight * 0.05,
@@ -254,7 +272,7 @@ export const styles = StyleSheet.create({
   },
   subContainer: {
     // backgroundColor: 'red',
-    height: sizes.screenHeight ,
-    justifyContent:'space-between'
-  }
+    height: sizes.screenHeight,
+    justifyContent: 'space-between',
+  },
 });
