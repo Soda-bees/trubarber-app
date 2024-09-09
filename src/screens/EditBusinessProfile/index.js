@@ -9,12 +9,12 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {PermissionsAndroid} from 'react-native';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { PermissionsAndroid } from 'react-native';
 import TimePickerComponent from '../../components/TimePicketComponent';
 import Loader from '../../components/Loader';
 import {
@@ -22,22 +22,22 @@ import {
   updateProfile,
   uploadProfile,
 } from '../../services/config/API';
-import {ErrorShow} from '../../components/Error';
+import { ErrorShow } from '../../components/Error';
 import Toast from 'react-native-toast-message';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {colors, sizes} from '../../services';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectUserData, setUserData} from '../../store/userData';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { colors, sizes } from '../../services';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserData, setUserData } from '../../store/userData';
 import formatToJSON from '../../services/config/FormatToJson';
-import {selectAuthToken} from '../../store/authToken';
-import {styles} from './style';
+import { selectAuthToken } from '../../store/authToken';
+import { styles } from './style';
 import Header from '../../components/Header';
-import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import {setLocation} from '../../store/location';
+import { setLocation } from '../../store/location';
 
-export default function EditBusinessProfile({navigation, route}) {
+export default function EditBusinessProfile({ navigation, route }) {
   // const { userData } = route.params;
   const userData = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken);
@@ -50,10 +50,11 @@ export default function EditBusinessProfile({navigation, route}) {
       setTime(userData?.time);
       setLocation(userData?.location);
       setInstagram(userData?.instagram);
+      setOffDays(userData?.offDays)
     }
   }, [userData]);
 
-  const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
+  const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
   const [outletName, setOutletName] = useState('RedBox Barber');
   const [description, setDescription] = useState('');
@@ -61,12 +62,14 @@ export default function EditBusinessProfile({navigation, route}) {
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [loader, setLoader] = useState(false);
-  const [dimensions, setDimensions] = useState({width: 0, height: 0});
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [time, setTime] = useState('');
   const [address, setAddress] = useState(null);
   const [locationLoader, setLocationLoader] = useState(false);
   const [location, setLocalLocation] = useState();
   const [instagram, setInstagram] = useState('');
+  const [days, setDays] = useState(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
+  const [offDays, setOffDays] = useState([])
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
@@ -186,6 +189,7 @@ export default function EditBusinessProfile({navigation, route}) {
         description,
         location,
         instagram,
+        offDays
       };
       const response = await updateProfile(body, authToken);
       if (response.status == 200) {
@@ -241,7 +245,7 @@ export default function EditBusinessProfile({navigation, route}) {
             calculatedWidth = calculatedHeight * aspectRatio;
           }
 
-          resolve({width: calculatedWidth, height: calculatedHeight});
+          resolve({ width: calculatedWidth, height: calculatedHeight });
         },
         error => {
           reject(error);
@@ -256,8 +260,8 @@ export default function EditBusinessProfile({navigation, route}) {
         if (!imgUri) {
           return;
         }
-        const {width, height} = await checkDimensions(imgUri);
-        setDimensions({width, height});
+        const { width, height } = await checkDimensions(imgUri);
+        setDimensions({ width, height });
       } catch (error) {
         console.error('Error calculating image dimensions:', error);
       }
@@ -345,7 +349,7 @@ export default function EditBusinessProfile({navigation, route}) {
   const getCurrentLocation = () => {
     Geolocation.getCurrentPosition(
       position => {
-        const {latitude, longitude} = position.coords;
+        const { latitude, longitude } = position.coords;
         // console.log(
         //   position.coords,
         //   '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
@@ -376,6 +380,16 @@ export default function EditBusinessProfile({navigation, route}) {
       // {enableHighAccuracy: true, timeout: 20000, maximumAge: 20000},
     );
   };
+
+  const handleSelectDays = async (item) => {
+    setOffDays(prevOffDays => {
+      if (prevOffDays.includes(item)) {
+        return prevOffDays.filter(day => day !== item);
+      } else {
+        return [...prevOffDays, item];
+      }
+    });
+  }
 
   return (
     <SafeAreaView>
@@ -420,7 +434,7 @@ export default function EditBusinessProfile({navigation, route}) {
                             }>
                             <Text style={styles.uploadCover}>Change Photo</Text>
                         </View> */}
-            <View style={{marginTop: sizes.screenHeight * 0.04}}></View>
+            <View style={{ marginTop: sizes.screenHeight * 0.04 }}></View>
             <View style={styles.timeContainer}>
               <Text
                 style={
@@ -493,7 +507,7 @@ export default function EditBusinessProfile({navigation, route}) {
                 </Text>
                 <View style={styles.time}>
                   {locationLoader ? (
-                    <View style={{position: 'absolute', right: 10}}>
+                    <View style={{ position: 'absolute', right: 10 }}>
                       <ActivityIndicator color={colors.black} size={20} />
                     </View>
                   ) : (
@@ -522,6 +536,29 @@ export default function EditBusinessProfile({navigation, route}) {
                     />
                   </View>
                 </View> */}
+            </View>
+            <View style={styles.daysMainConatner}>
+              <Text
+                style={
+                  Platform.OS == 'android' ? styles.title : styles.titleIOS
+                }>
+                Choose your day off from work
+              </Text>
+              <View
+                style={Platform.OS == 'android' ? styles.daysContainer : styles.daysContainerIOS}>
+                {
+                  days?.map((item, index) => {
+                    const isSelected = offDays?.includes(item);
+                    return (
+                      <TouchableOpacity key={index} style={isSelected ? styles.daysTouchableSelected : styles.daysTouchable}
+                        onPress={() => handleSelectDays(item)}
+                      >
+                        <Text style={isSelected ? styles.daysTextSelected : styles.daysText}>{item}</Text>
+                      </TouchableOpacity>
+                    )
+                  })
+                }
+              </View>
             </View>
           </KeyboardAwareScrollView>
         </View>

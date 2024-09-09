@@ -91,7 +91,7 @@ export const styles = StyleSheet.create({
     color: colors.durationColor,
     fontSize: fontSize.small,
     marginStart: sizes.screenWidth * 0.01,
-    paddingBottom: sizes.screenWidth * 0.01
+    paddingBottom: sizes.screenWidth * 0.01,
   },
 
   titleIOS: {
@@ -202,4 +202,51 @@ export const styles = StyleSheet.create({
     top: sizes.screenWidth * 0.026,
     tintColor:colors.black
   },
+  daysContainer: {
+    width: sizes.screenWidth * 0.9,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  daysTouchable: {
+    height: sizes.screenWidth * 0.11,
+    width: sizes.screenWidth * 0.118,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: colors.grayBorder,
+    borderRadius: sizes.screenWidth * 0.03,
+  },
+  daysTouchableSelected: {
+    backgroundColor: colors.black,
+    height: sizes.screenWidth * 0.11,
+    width: sizes.screenWidth * 0.118,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: colors.grayBorder,
+    borderRadius: sizes.screenWidth * 0.03,
+  },
+  daysText: {
+    fontSize: fontSize.smallM,
+    color: colors.black,
+    fontWeight: '500'
+  },
+  daysTextSelected: {
+    fontSize: fontSize.smallM,
+    color: colors.white,
+    fontWeight: '500'
+  },
+  daysContainerIOS: {
+    width: sizes.screenWidth * 0.9,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  daysMainConatner:{
+    alignSelf:'center',
+    marginTop:sizes.screenWidth * 0.05
+  }
 });

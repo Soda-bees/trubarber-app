@@ -181,6 +181,13 @@ export default function BookAppointment({ navigation, route }) {
     findChat();
   }, [barbar]);
 
+  const getDayOfWeek = () => {
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const currentDay = new Date().getDay();
+    return daysOfWeek[currentDay];
+  };
+
+
   const findChat = async () => {
     try {
       const isChat = await findChatInRedux();

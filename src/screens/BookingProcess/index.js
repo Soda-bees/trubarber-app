@@ -88,7 +88,6 @@ export default function BookingProcess({ navigation, route }) {
     cart?.services.forEach(service => {
       totalPrice += parseFloat(service.price);
     });
-    console.log('price', totalPrice);
     setTotalAmount(totalPrice);
   };
 
@@ -268,6 +267,8 @@ export default function BookingProcess({ navigation, route }) {
       const response = await hanleGetBookedAppoinment(authToken, id);
       if (response.status == 200) {
         setBookedTime(response?.data?.appointments);
+        console.log("get book appointment" , response?.data?.appointments);
+        
       }
     } catch (error) {
       console.log(error);

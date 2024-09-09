@@ -35,7 +35,9 @@ export default function SetUpOutlet({ navigation, route }) {
   const [endTime, setEndTime] = useState(new Date());
   const [loader, setLoader] = useState(false);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const [instagram , setInstagram] = useState('')
+  const [instagram, setInstagram] = useState('')
+  const [days, setDays] = useState(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
+  const [offDays, setOffDays] = useState([])
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
@@ -139,7 +141,7 @@ export default function SetUpOutlet({ navigation, route }) {
 
   const isValidInstagramLink = (url) => {
     const instagramRegex = /^(https?:\/\/)?(www\.)?instagram\.com\/([a-zA-Z0-9._]+)/;
-  
+
     // Test the URL against the regex pattern
     return instagramRegex.test(url);
   };
@@ -156,7 +158,7 @@ export default function SetUpOutlet({ navigation, route }) {
     }
     // const time = `${formatTime(startTime)} - ${formatTime(endTime)}`;
     const time = `6:00 AM - 10:00 PM`;
-    Object.assign(userData, { businessProfile: imgUri, description, time , instagram});
+    Object.assign(userData, { businessProfile: imgUri, description, time, instagram, offDays });
     console.log(userData);
 
     navigation.navigate('AuthSetUpServices', { userData });
@@ -218,6 +220,17 @@ export default function SetUpOutlet({ navigation, route }) {
     calculateDimensions();
   }, [imgUri]);
 
+  const handleSelectDays = async (item) => {
+    setOffDays(prevOffDays => {
+      if (prevOffDays.includes(item)) {
+        return prevOffDays.filter(day => day !== item);
+      } else {
+        return [...prevOffDays, item];
+      }
+    });
+
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -272,12 +285,12 @@ export default function SetUpOutlet({ navigation, route }) {
                   style={styles.instagramIcon}
                   resizeMode="contain"
                 />
-                <TextInput 
-                placeholder='Add Link' 
-                style={styles.instagramInput} 
-                placeholderTextColor={colors.black}
-                onChangeText={setInstagram}
-                value={instagram}
+                <TextInput
+                  placeholder='Add Link'
+                  style={styles.instagramInput}
+                  placeholderTextColor={colors.black}
+                  onChangeText={setInstagram}
+                  value={instagram}
                 />
               </View>
             </View>
@@ -313,7 +326,29 @@ export default function SetUpOutlet({ navigation, route }) {
                   />
                 </View>
               </View>
-
+              <View style={styles.textContainer}>
+                <Text
+                  style={
+                    Platform.OS == 'android' ? styles.title : styles.titleIOS
+                  }>
+                  Choose your day off from work
+                </Text>
+                <View
+                  style={Platform.OS == 'android' ? styles.daysContainer : styles.daysContainerIOS}>
+                  {
+                    days?.map((item, index) => {
+                      const isSelected = offDays?.includes(item);
+                      return (
+                        <TouchableOpacity key={index} style={isSelected ? styles.daysTouchableSelected : styles.daysTouchable}
+                          onPress={() => handleSelectDays(item)}
+                        >
+                          <Text style={isSelected ? styles.daysTextSelected : styles.daysText}>{item}</Text>
+                        </TouchableOpacity>
+                      )
+                    })
+                  }
+                </View>
+              </View>
               {/* <View style={styles.timeContainer}>
                 <View style={styles.description}>
                   <TimePickerComponent
