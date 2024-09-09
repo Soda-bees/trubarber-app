@@ -52,11 +52,13 @@ export default function BookingProcess({ navigation, route }) {
 
   const [selected, setSelected] = useState(null);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [totalDuration, setTotalDuration] = useState('');
   const [barber, setBarber] = useState();
   const [dateData, setDatedata] = useState();
   const [selectedDate, setSelectedDate] = useState(null);
   const [loader, setLoader] = useState(false);
   const [bookedTime, setBookedTime] = useState([]);
+
 
   const userData = useSelector(selectUserData);
 
@@ -91,6 +93,19 @@ export default function BookingProcess({ navigation, route }) {
     setTotalAmount(totalPrice);
   };
 
+  const handleSetTotalDuration = () => {
+    let calculatedDuration = 0;
+
+    cart?.services.forEach(service => {
+      const serviceDuration = parseInt(service.time, 10);
+      if (!isNaN(serviceDuration)) {
+        calculatedDuration += serviceDuration;
+      }
+    });
+    console.log("type of duration==============>" ,typeof calculatedDuration);
+    
+    setTotalDuration(calculatedDuration)
+  };
   const handleCreateTimeSlot = async barber => {
     const time = barber?.time;
 
@@ -109,6 +124,7 @@ export default function BookingProcess({ navigation, route }) {
     endTime,
     timeToRemove,
     formattedDate,
+    duration
   ) => {
     const timeSlots = [];
 
@@ -150,8 +166,8 @@ export default function BookingProcess({ navigation, route }) {
         .padStart(2, '0')} ${ampm}`;
       timeSlots.push(formattedTime);
 
-      startHour = (startHour + Math.floor((startMinutes + 60) / 60)) % 24;
-      startMinutes = (startMinutes + 60) % 60;
+      startHour = (startHour + Math.floor((startMinutes + duration) / 60)) % 24;
+      startMinutes = (startMinutes + duration) % 60;
 
       if (startHour === endHour && startMinutes === endMinutes) {
         break;
@@ -171,6 +187,9 @@ export default function BookingProcess({ navigation, route }) {
   useEffect(() => {
     findBarber();
     setTotalPrice();
+    console.log(formatToJSON(cart));
+
+    handleSetTotalDuration()
   }, [cart]);
 
   const deleteOptions = item => {
@@ -190,58 +209,75 @@ export default function BookingProcess({ navigation, route }) {
     }
   };
 
+  const getDayOfWeek = () => {
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const currentDay = new Date().getDay();
+    return daysOfWeek[currentDay];
+  };
+
   const handleDateSelected = date => {
     const formattedDate = date?.format('MM-DD-YYYY');
-    setSelectedDate(formattedDate);
+    console.log(formattedDate);
 
-    const bookedTimesForSelectedDate = bookedTime
-      .filter(booking => booking.date === formattedDate)
-      .map(booking => booking.time);
+    const day = date?.format('ddd'); // Get the abbreviated day of the week (e.g., "Mon")
 
-    console.log(bookedTimesForSelectedDate);
+    const isOff = barber?.offDays?.includes(day)
 
-    const [startTime1, endTime] = barber.time.split(' - ');
-    const startTime = checkAndReturnTime(startTime1, formattedDate);
+    if (isOff) {
+      ErrorShow('error', 'Oops!', 'closed');
+      setDatedata(null)
+    } else {
+      console.log("1nd==========>");
 
-    // Parse start and end times
-    let [startHour, startMinute, startPeriod] = parseTime(startTime);
-    let [endHour, endMinute, endPeriod] = parseTime(endTime);
+      const formattedDate = date?.format('MM-DD-YYYY');
+      setSelectedDate(formattedDate);
 
-    // Round start time up to the nearest hour
-    if (startMinute > 0) {
-      startHour += 1;
-      if (startHour === 12 && startPeriod === 'AM') {
-        startPeriod = 'PM'; // Handle AM to PM transition at 12:00
+      const bookedTimesForSelectedDate = bookedTime
+        .filter(booking => booking.date === formattedDate)
+        .map(booking => booking.time);
+
+      console.log("2nd==========>", bookedTimesForSelectedDate);
+
+      const [startTime1, endTime] = barber.time.split(' - ');
+      const startTime = checkAndReturnTime(startTime1, formattedDate);
+
+      let [startHour, startMinute, startPeriod] = parseTime(startTime);
+      let [endHour, endMinute, endPeriod] = parseTime(endTime);
+
+      if (startMinute > 0) {
+        startHour += 1;
+        if (startHour === 12 && startPeriod === 'AM') {
+          startPeriod = 'PM';
+        }
       }
+
+      if (endMinute > 0) {
+        endHour += 1;
+        if (endHour === 12 && endPeriod === 'AM') {
+          endPeriod = 'PM';
+        }
+      }
+
+      startHour = startHour > 12 ? startHour - 12 : startHour;
+      endHour = endHour > 12 ? endHour - 12 : endHour;
+
+      const roundedStartTime = formatTime(startHour, startMinute, startPeriod);
+      const roundedEndTime = formatTime(endHour, endMinute, endPeriod);
+
+      console.log(roundedStartTime, roundedEndTime);
+
+
+      const availableTimeSlot = handleCreateTimeSlotSecond(
+        roundedStartTime,
+        roundedEndTime,
+        bookedTimesForSelectedDate,
+        formattedDate,
+        totalDuration
+      );
+      setDatedata(availableTimeSlot);
     }
 
-    // Round end time up to the nearest hour
-    if (endMinute > 0) {
-      endHour += 1;
-      if (endHour === 12 && endPeriod === 'AM') {
-        endPeriod = 'PM'; // Handle AM to PM transition at 12:00
-      }
-    }
 
-    // Convert rounded hours back to 12-hour format
-    startHour = startHour > 12 ? startHour - 12 : startHour;
-    endHour = endHour > 12 ? endHour - 12 : endHour;
-
-    // Format rounded times back to 'hh:mm AM/PM' format
-    const roundedStartTime = formatTime(startHour, startMinute, startPeriod);
-    const roundedEndTime = formatTime(endHour, endMinute, endPeriod);
-
-    console.log(roundedStartTime, roundedEndTime);
-
-    // Continue with your logic here
-
-    const availableTimeSlot = handleCreateTimeSlotSecond(
-      roundedStartTime,
-      roundedEndTime,
-      bookedTimesForSelectedDate,
-      formattedDate,
-    );
-    setDatedata(availableTimeSlot);
   };
 
   const parseTime = timeString => {
@@ -267,8 +303,8 @@ export default function BookingProcess({ navigation, route }) {
       const response = await hanleGetBookedAppoinment(authToken, id);
       if (response.status == 200) {
         setBookedTime(response?.data?.appointments);
-        console.log("get book appointment" , response?.data?.appointments);
-        
+        console.log("get book appointment", response?.data?.appointments);
+
       }
     } catch (error) {
       console.log(error);
@@ -522,6 +558,9 @@ export default function BookingProcess({ navigation, route }) {
                             style={
                               styles.disabledText1
                             }>{` (${item?.serviceName})`}</Text>
+                          <Text style={
+                            styles.disabledText1
+                          }>{`  (${item?.time} min)`}</Text>
                         </View>
                         <Text
                           style={
