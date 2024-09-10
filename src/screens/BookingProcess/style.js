@@ -1,6 +1,6 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
-import {black} from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
+import { black } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 export const styles = StyleSheet.create({
   container: {
@@ -12,11 +12,48 @@ export const styles = StyleSheet.create({
     // marginBottom: sizes.screenHeight * 0.12,
     // height: sizes.screenHeight * 0.2
     // backgroundColor:'red'
+    // flexDirection:'row'
+
   },
   calender: {
     height: sizes.screenHeight * 0.2,
     // backgroundColor: 'red',
     gap: sizes.screenWidth * 0.1,
+  },
+  datesTouchable: {
+    // backgroundColor:'red',
+    width: sizes.screenWidth * 0.12,
+    height: sizes.screenWidth * 0.12,
+    // padding:sizes.screenWidth * 0.01,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: colors.black,
+    borderWidth: 1,
+    borderRadius: sizes.screenWidth * 0.2
+  },
+
+  datesTouchableSelected: {
+    backgroundColor:colors.grayBorder,
+    width: sizes.screenWidth * 0.12,
+    height: sizes.screenWidth * 0.12,
+    // padding:sizes.screenWidth * 0.01,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: colors.black,
+    borderWidth: 1,
+    borderRadius: sizes.screenWidth * 0.2
+  },
+  datesDate: {
+    fontSize: fontSize.smallM,
+    fontWeight: '800',
+    color:colors.black
+  },
+  datesDay: {
+    fontSize: fontSize.small,
+    fontWeight: '500',
+    color:colors.black
   },
 
   header: {
@@ -55,7 +92,7 @@ export const styles = StyleSheet.create({
   },
 
   rowcontainer: {
-    marginRight: sizes.screenWidth * 0.052,
+    // marginRight: sizes.screenWidth * 0.052,
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
@@ -109,7 +146,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: sizes.screenWidth * 0.04,
     alignItems: 'center',
-    paddingHorizontal: sizes.screenWidth*0.03
+    paddingHorizontal: sizes.screenWidth * 0.03
   },
   bookContainer: {
     marginTop: sizes.screenHeight * 0.04,
@@ -145,12 +182,12 @@ export const styles = StyleSheet.create({
   flexRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems:'center',
+    alignItems: 'center',
   },
   flexRow1: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems:'center',
+    alignItems: 'center',
   },
   textBlack: {
     color: colors.black,
@@ -187,14 +224,14 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: fontSize.medium,
   },
-  
+
   barberName2: {
     color: colors.black,
     fontWeight: '600',
     fontSize: fontSize.medium,
     marginVertical: 4
   },
-  
+
   time: {
     color: colors.durationColor,
   },
@@ -314,9 +351,9 @@ export const styles = StyleSheet.create({
     marginBottom: sizes.screenHeight * 0.03,
   },
   btnMarginIOS: {
-    position:'absolute',
-    alignSelf:'center',
-    bottom:sizes.screenHeight * 0.09
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: sizes.screenHeight * 0.09
   },
   textContainer: {
     // backgroundColor: 'orange',
