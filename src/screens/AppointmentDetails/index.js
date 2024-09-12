@@ -6,24 +6,24 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style.js';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
-import {Calendar, LocaleConfig} from 'react-native-calendars';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import BackArrow from '../../components/BackArrow';
 // import {colors, sizes} from '../../services/index.js';
 import Button from '../../components/Button';
 import CalendarStrip from 'react-native-calendar-strip';
 import 'moment';
 import moment from 'moment';
-import {colors} from '../../services/utilities/colors';
-import {sizes} from '../../services/index.js';
+import { colors } from '../../services/utilities/colors';
+import { sizes } from '../../services/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import Header from '../../components/Header/index.js';
 
-export default function AppointmentDetails({navigation, route}) {
+export default function AppointmentDetails({ navigation, route }) {
   const today = moment();
-  const {item, showButtons} = route?.params;
+  const { item, showButtons } = route?.params;
   const [selected, setSelected] = useState(null);
 
   const currentDate = moment();
@@ -200,12 +200,12 @@ export default function AppointmentDetails({navigation, route}) {
               <View style={styles.imageContainer}>
                 {showButtons ? (
                   <Image
-                  source={item?.user?.profile ? {uri: item?.user?.profile} : item?.user?.gender === "male" ? images.male : images.female}
+                    source={item?.user?.profile ? { uri: item?.user?.profile } : item?.user?.gender === "male" ? images.male : images.female}
                     style={styles.imageContainer}
                   />
                 ) : (
                   <Image
-                  source={item?.barber?.profile ? {uri: item?.barber?.profile} : item?.barber?.gender === "male" ? images.male : images.female}
+                    source={item?.barber?.profile ? { uri: item?.barber?.profile } : item?.barber?.gender === "male" ? images.male : images.female}
                     style={styles.imageContainer}
                   />
                 )}
@@ -217,7 +217,7 @@ export default function AppointmentDetails({navigation, route}) {
                   <Text style={styles.barberName}>{item?.barber?.name}</Text>
                 )}
                 <Text style={styles.time}>
-                  {`${item?.time} - ${getOneHourLater(item?.time)}`}
+                  {`${item?.time}`}
                 </Text>
               </View>
             </View>

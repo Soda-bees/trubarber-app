@@ -1,19 +1,21 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
-import {ScrollView} from 'react-native-gesture-handler';
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.lightgray,
-    height: sizes.screenHeight,
+    marginBottom:sizes.screenHeight * 0.09
+    // height: sizes.screenHeight,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: sizes.screenWidth * 0.9,
+    width: sizes.screenWidth * 0.85,
     justifyContent: 'space-between',
     alignSelf: 'center',
-    marginTop: sizes.screenHeight * 0.04,
+    zIndex: 1
+    // marginTop: sizes.screenHeight * 0.04,
   },
   arrowTop: {
     marginLeft: sizes.screenWidth * 0.04,
@@ -29,7 +31,7 @@ export const styles = StyleSheet.create({
   },
   containerBody: {
     marginTop: sizes.screenHeight * 0.02,
-    paddingHorizontal: sizes.screenWidth * 0.06,
+    paddingHorizontal: sizes.screenWidth * 0.02,
   },
   aboutContainer: {
     marginTop: sizes.screenHeight * 0.02,
@@ -46,11 +48,12 @@ export const styles = StyleSheet.create({
   },
   serviceDetailContainer: {
     marginTop: sizes.screenHeight * 0.03,
+    // backgroundColor:'red'
   },
   tableHeadingRow: {
     flexDirection: 'row',
     backgroundColor: colors.tableHeadingBg,
-    paddingHorizontal: sizes.screenWidth * 0.04,
+    // paddingHorizontal: sizes.screenWidth * 0.04,
     paddingVertical: sizes.screenHeight * 0.01,
     borderRadius: sizes.screenHeight * 0.01,
     justifyContent: 'space-between',
@@ -66,11 +69,11 @@ export const styles = StyleSheet.create({
     color: colors.tableHeadingColor,
     fontWeight: '500',
     textAlign: 'center',
-    marginRight: sizes.screenWidth * 0.1,
+    marginRight: sizes.screenWidth * 0.06,
   },
   serviceContentRow: {
     flexDirection: 'row',
-    paddingHorizontal: sizes.screenWidth * 0.02,
+    // paddingHorizontal: sizes.screenWidth * 0.02,
     paddingVertical: sizes.screenHeight * 0.016,
     justifyContent: 'space-between',
     borderBottomColor: colors.borderColor,
@@ -87,12 +90,12 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '500',
     textAlign: 'center',
-    marginRight: sizes.screenWidth * 0.13,
+    marginRight: sizes.screenWidth * 0.06,
   },
 
   imageView: {
     marginTop: sizes.screenHeight * 0.03,
-    paddingBottom: sizes.screenHeight * 0.02,
+    // paddingBottom: sizes.screenHeight * 0.02,
   },
   imageViewIOS: {
     marginTop: sizes.screenHeight * 0.01,
@@ -102,7 +105,7 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.medium,
     color: colors.black,
     fontWeight: '500',
-    marginLeft: sizes.screenWidth * 0.04,
+    // marginLeft: sizes.screenWidth * 0.04,
   },
   imageContainer: {
     height: sizes.screenHeight * 0.25,
@@ -120,14 +123,14 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.3,
     // marginTop:sizes.screenHeight* 0.09,
     alignSelf: 'flex-end',
-    marginRight: sizes.screenHeight * 0.02,
+    // marginRight: sizes.screenHeight * 0.03,
     paddingHorizontal: sizes.screenHeight * 0.02,
     paddingVertical: sizes.screenHeight * 0.01,
     borderRadius: sizes.screenWidth * 0.02,
     borderWidth: sizes.screenWidth * 0.002,
     borderColor: colors.borderColor,
-    position: 'absolute',
-    top: sizes.screenHeight * 0.07,
+    // position: 'absolute',
+    // top: sizes.screenHeight * 0.1,
   },
   modalRow: {
     flexDirection: 'row',

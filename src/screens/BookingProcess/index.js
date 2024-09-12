@@ -260,16 +260,16 @@ export default function BookingProcess({ navigation, route }) {
   //   duration
   // ) => {
   //   console.log("create time slot =============>", timeToRemove);
-  
+
   //   const timeSlots = [];
-  
+
   //   const convertTo24HourFormat = time => {
   //     let [hour, minutes] = time.split(':');
   //     minutes = minutes.slice(0, 2);
   //     const modifier = time.slice(-2);
   //     hour = parseInt(hour);
   //     minutes = parseInt(minutes);
-  
+
   //     if (modifier === 'PM' && hour !== 12) {
   //       hour += 12;
   //     }
@@ -278,41 +278,41 @@ export default function BookingProcess({ navigation, route }) {
   //     }
   //     return { hour, minutes };
   //   };
-  
+
   //   const convertToMinutes = (hour, minutes) => hour * 60 + minutes;
-  
+
   //   let { hour: startHour, minutes: startMinutes } = convertTo24HourFormat(startTime);
   //   let { hour: endHour, minutes: endMinutes } = convertTo24HourFormat(endTime);
-  
+
   //   // Adjust the endHour to include the last slot
   //   if (endMinutes > 0) {
   //     endHour += 1;
   //   }
-  
+
   //   let startTotalMinutes = convertToMinutes(startHour, startMinutes);
   //   let endTotalMinutes = convertToMinutes(endHour, endMinutes);
   //   endTotalMinutes -= 10; // Subtract to avoid going past the end time
-  
+
   //   while (startTotalMinutes < endTotalMinutes) {
   //     const hours = Math.floor(startTotalMinutes / 60) % 24;
   //     const ampm = hours >= 12 ? 'PM' : 'AM';
   //     const formattedHour = hours % 12 === 0 ? 12 : hours % 12;
   //     const formattedMinutes = startTotalMinutes % 60;
   //     const formattedTime = `${formattedHour}:${formattedMinutes.toString().padStart(2, '0')} ${ampm}`;
-  
+
   //     timeSlots.push(formattedTime);
-  
+
   //     console.log("loop");
-  
+
   //     // Update start time for the next slot
   //     startTotalMinutes += 10;
-  
+
   //     // Check if we go past the end time
   //     if (startTotalMinutes >= endTotalMinutes) {
   //       break;
   //     }
   //   }
-  
+
   //   // Filter out time slots that fall within the removal intervals
   //   let filteredTimeSlots = [];
   //   if (timeToRemove) {
@@ -328,9 +328,9 @@ export default function BookingProcess({ navigation, route }) {
   //   } else {
   //     filteredTimeSlots = timeSlots;
   //   }
-  
+
   //   console.log("handleCreateTimeSlotSecond 4rd", "handleCreateTimeSlotSecond 4rd", filteredTimeSlots);
-  
+
   //   return filteredTimeSlots;
   // };
 
@@ -341,16 +341,16 @@ export default function BookingProcess({ navigation, route }) {
     duration
   ) => {
     console.log("create time slot =============>", timeToRemove);
-  
+
     const timeSlots = [];
-  
+
     const convertTo24HourFormat = time => {
       let [hour, minutes] = time.split(':');
       minutes = minutes.slice(0, 2);
       const modifier = time.slice(-2);
       hour = parseInt(hour);
       minutes = parseInt(minutes);
-  
+
       if (modifier === 'PM' && hour !== 12) {
         hour += 12;
       }
@@ -359,41 +359,41 @@ export default function BookingProcess({ navigation, route }) {
       }
       return { hour, minutes };
     };
-  
+
     const convertToMinutes = (hour, minutes) => hour * 60 + minutes;
-  
+
     let { hour: startHour, minutes: startMinutes } = convertTo24HourFormat(startTime);
     let { hour: endHour, minutes: endMinutes } = convertTo24HourFormat(endTime);
-  
+
     // Adjust the endHour to include the last slot
     if (endMinutes > 0) {
       endHour += 1;
     }
-  
+
     let startTotalMinutes = convertToMinutes(startHour, startMinutes);
     let endTotalMinutes = convertToMinutes(endHour, endMinutes);
     endTotalMinutes -= duration; // Subtract to avoid going past the end time
-  
+
     while (startTotalMinutes < endTotalMinutes) {
       const hours = Math.floor(startTotalMinutes / 60) % 24;
       const ampm = hours >= 12 ? 'PM' : 'AM';
       const formattedHour = hours % 12 === 0 ? 12 : hours % 12;
       const formattedMinutes = startTotalMinutes % 60;
       const formattedTime = `${formattedHour}:${formattedMinutes.toString().padStart(2, '0')} ${ampm}`;
-  
+
       timeSlots.push(formattedTime);
-  
+
       console.log("loop");
-  
+
       // Update start time for the next slot
       startTotalMinutes += 10;
-  
+
       // Check if we go past the end time
       if (startTotalMinutes >= endTotalMinutes) {
         break;
       }
     }
-  
+
     // Filter out time slots that fall within the removal intervals or cannot accommodate the service duration
     let filteredTimeSlots = [];
     if (timeToRemove) {
@@ -419,9 +419,9 @@ export default function BookingProcess({ navigation, route }) {
         return slotEndTime.isBefore(moment(endTime, 'h:mm A').add(1, 'minute'));
       });
     }
-  
+
     console.log("handleCreateTimeSlotSecond 4rd", "handleCreateTimeSlotSecond 4rd", filteredTimeSlots);
-  
+
     return filteredTimeSlots;
   };
 
@@ -457,26 +457,26 @@ export default function BookingProcess({ navigation, route }) {
       'MM-DD-YYYY h:mm A'
     );
     const currentDateTime = moment();
-  
+
     // Function to round minutes to the nearest 5-minute interval
     const roundToNearest5 = minutes => {
       return Math.ceil(minutes / 5) * 5;
     };
-  
+
     const adjustedDateTime = dateTime.isAfter(currentDateTime)
       ? dateTime
       : currentDateTime;
-  
+
     const minutes = adjustedDateTime.minutes();
     const roundedMinutes = roundToNearest5(minutes);
-  
+
     // Update the adjustedDateTime with rounded minutes
     adjustedDateTime.minutes(roundedMinutes);
     if (roundedMinutes === 60) {
       adjustedDateTime.hours(adjustedDateTime.hours() + 1);
       adjustedDateTime.minutes(0);
     }
-  
+
     return adjustedDateTime.format('hh:mm A');
   };
 
@@ -578,55 +578,52 @@ export default function BookingProcess({ navigation, route }) {
 
 
   const handleDateSelected = (formattedDate, day) => {
-
+    const isOff = barber?.offDays?.includes(day)
+    if (isOff) {
+      setDatedata(null)
+      setSelected(null)
+      setSelectedDate(null)
+      return ErrorShow('error', 'Oops!', 'Barber is not available today kindly choose another day');
+    } else {
       setSelectedDate(formattedDate);
-
       const bookedTimesForSelectedDate = bookedTime
-        .filter(booking => booking.date === formattedDate)
-        .map(booking => booking.time);
-
-
+        .filter(booking => booking.date === formattedDate).map(booking => booking.time);
       const [startTime1, endTime] = barber.time.split(' - ');
-
       const startTime = checkAndReturnTime(startTime1, formattedDate);
-      
-      console.log("timeeeeeeeeeeeeeeeeeeee", startTime , endTime);
-
-      // let [startHour, startMinute, startPeriod] = parseTime(startTime);
-      // let [endHour, endMinute, endPeriod] = parseTime(endTime);
-
-      // if (startMinute > 0) {
-      //   startHour += 1;
-      //   if (startHour === 12 && startPeriod === 'AM') {
-      //     startPeriod = 'PM';
-      //   }
-      // }
-
-      // if (endMinute > 0) {
-      //   endHour += 1;
-      //   if (endHour === 12 && endPeriod === 'AM') {
-      //     endPeriod = 'PM';
-      //   }
-      // }
-
-      // startHour = startHour > 12 ? startHour - 12 : startHour;
-      // endHour = endHour > 12 ? endHour - 12 : endHour;
-
-      // const roundedStartTime = formatTime(startHour, startMinute, startPeriod);
-      // const roundedEndTime = formatTime(endHour, endMinute, endPeriod);
-
-      // console.log("====>", roundedStartTime, roundedEndTime);
+      const availableTimeSlot = handleCreateTimeSlotSecond(
+        startTime,
+        endTime,
+        bookedTimesForSelectedDate,
+        totalDuration
+      );
+      setDatedata(availableTimeSlot);
+    }
 
 
-      // const availableTimeSlot = handleCreateTimeSlotSecond(
-      //   startTime,
-      //   endTime,
-      //   bookedTimesForSelectedDate,
-      //   totalDuration
-      // );
-      // setDatedata(availableTimeSlot);
+    // let [startHour, startMinute, startPeriod] = parseTime(startTime);
+    // let [endHour, endMinute, endPeriod] = parseTime(endTime);
 
+    // if (startMinute > 0) {
+    //   startHour += 1;
+    //   if (startHour === 12 && startPeriod === 'AM') {
+    //     startPeriod = 'PM';
+    //   }
+    // }
 
+    // if (endMinute > 0) {
+    //   endHour += 1;
+    //   if (endHour === 12 && endPeriod === 'AM') {
+    //     endPeriod = 'PM';
+    //   }
+    // }
+
+    // startHour = startHour > 12 ? startHour - 12 : startHour;
+    // endHour = endHour > 12 ? endHour - 12 : endHour;
+
+    // const roundedStartTime = formatTime(startHour, startMinute, startPeriod);
+    // const roundedEndTime = formatTime(endHour, endMinute, endPeriod);
+
+    // console.log("====>", roundedStartTime, roundedEndTime);
   };
 
 
@@ -645,7 +642,9 @@ export default function BookingProcess({ navigation, route }) {
   };
 
   const getOneHourLater = selected => {
-    return moment(selected, 'h:mm A').add(1, 'hour').format('h:mm A');
+    let selectedTime = moment(selected, 'hh:mm A');
+    selectedTime = selectedTime.add(totalDuration, 'minutes');
+    return selectedTime.format('hh:mm A');
   };
 
   const getBookedAppoinment = async id => {
@@ -761,35 +760,33 @@ export default function BookingProcess({ navigation, route }) {
       return ErrorShow('error', 'Oops!', 'Please enter card info');
     }
     const endTime = addMinutesToTime(selected, totalDuration);
-    console.log(endTime);
+    console.log("endTime=====>", endTime);
 
     const obj = {
       ...cart,
       date: selectedDate,
       time: `${selected} - ${endTime}`,
     };
-    console.log(formatToJSON(obj));
-
-      // try {
-      //   setLoader(true);
-      //   const response = await bookAppoinment(obj, authToken);
-      //   console.log(response.status);
-      //   if (response.status == 200) {
-      //     setLoader(false);
-      //     ErrorShow(
-      //       'success',
-      //       'Congratulation!',
-      //       response?.data?.message,
-      //       onHide,
-      //     );
-      //   } else {
-      //     setLoader(false);
-      //     ErrorShow('error', 'Oops!', response?.data?.message);
-      //   }
-      // } catch (error) {
-      //   setLoader(false);
-      //   console.log(error);
-      // }
+    try {
+      setLoader(true);
+      const response = await bookAppoinment(obj, authToken);
+      console.log(response.status);
+      if (response.status == 200) {
+        setLoader(false);
+        ErrorShow(
+          'success',
+          'Congratulation!',
+          response?.data?.message,
+          onHide,
+        );
+      } else {
+        setLoader(false);
+        ErrorShow('error', 'Oops!', response?.data?.message);
+      }
+    } catch (error) {
+      setLoader(false);
+      console.log(error);
+    }
   };
 
   const onHide = () => {
@@ -863,9 +860,9 @@ export default function BookingProcess({ navigation, route }) {
                   onDateSelected={handleDateSelected}
                   minDate={today}
                 /> */}
-                {dates && dates?.map((item, index) => {
+                {dates && dates?.map((item, index) => {                  
                   return (
-                    <TouchableOpacity key={index} style={styles.datesTouchable} onPress={() => handleDateSelected(item?.date, item?.day)}>
+                    <TouchableOpacity key={index} style={item?.date === selectedDate ? styles.datesTouchableSelected : styles.datesTouchable} onPress={() => handleDateSelected(item?.date, item?.day)}>
                       <Text style={styles.datesDay}>{item?.day}</Text>
                       <Text style={styles.datesDate}>{getDayFromDate(item?.date)}</Text>
                     </TouchableOpacity>

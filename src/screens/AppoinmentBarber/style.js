@@ -202,8 +202,8 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.medium,
   },
   scrollContianer: {
-    // marginTop: sizes.screenHeight * 0.022,
-    paddingTop: sizes.screenWidth * 0.08,
+    marginTop: sizes.screenHeight * 0.03,
+    // paddingTop: sizes.screenWidth * 0.08,
     marginBottom: sizes.screenHeight * 0.08,
     // paddingBottom: sizes.screenHeight*0.02
   },

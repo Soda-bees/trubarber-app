@@ -118,7 +118,7 @@ export default function AppoinmentBarber({ navigation }) {
               .join(' & ') || '',
           startDate: startDate || new Date(),
           endDate: endDate || new Date(),
-          duration: getOneHourLater(appointment?.time) || '',
+          duration:appointment?.time || '',
           status: appointment?.status || '',
           date: appointment?.date || '',
           id: appointment?._id || '',
@@ -147,8 +147,11 @@ export default function AppoinmentBarber({ navigation }) {
           setModalVisible(true);
         }}>
         <Text style={styles.textBlack}>{item.clientName}</Text>
-        <Text style={styles.textGray}>{item.service}</Text>
-        <Text style={styles.textGray}>{item.duration}</Text>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+
+        <Text style={styles.textGray}>{item.service}: </Text>
+        <Text style={styles.textGray}> {item.duration}</Text>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -375,7 +378,7 @@ export default function AppoinmentBarber({ navigation }) {
           <View>
             <Text>Total Amount</Text>
             <Text>{`${convertDateFormat(item?.date)} / ${item?.time
-              } (60min)`}</Text>
+              } `}</Text>
           </View>
           <View style={styles.price}>
             <Text>{`$ ${calculateTotalAmount(item?.services)}`}</Text>
@@ -387,12 +390,12 @@ export default function AppoinmentBarber({ navigation }) {
           ) : ( */}
           <TouchableOpacity
             style={styles.acceptBtn}
-            // onPress={() =>
-            //   handleUpdateAppointmentStatus('Scheduled', item?._id)
-            // }
             onPress={() =>
-              handleAcceptAppointment('Scheduled', item)
+              handleUpdateAppointmentStatus('Scheduled', item?._id)
             }
+            // onPress={() =>
+            //   handleAcceptAppointment('Scheduled', item)
+            // }
           >
             <Text style={styles.btnText}>Accept</Text>
           </TouchableOpacity>
@@ -415,6 +418,17 @@ export default function AppoinmentBarber({ navigation }) {
 
   const handleAcceptAppointment = async (status, appointment) => {
     // try {
+
+    const sameDateAndTimeAppointments = requestAppointment.filter(req =>
+      req.date === appointment.date &&
+      req.time === appointment.time &&
+      req._id !== appointment._id
+    );
+
+    const sameAppointmentIds = sameDateAndTimeAppointments?.map(req => req._id);
+
+    console.log(sameAppointmentIds);
+    
 
     //   console.log(formatToJSON(appointment?._id));
     //   const sameDateAndTimeAppointments = requestAppointment.filter(req =>
@@ -439,41 +453,56 @@ export default function AppoinmentBarber({ navigation }) {
     // } catch (error) {
     //   console.log(error);
     // }
-    try {
+    // try {
 
-      await handleUpdateAppointmentStatus(status, appointment?._id)
-      console.log("id=====>", appointment?._id);
-      const sameDateAndTimeAppointments = requestAppointment.filter(req =>
-        req.date === appointment.date &&
-        req.time === appointment.time &&
-        req._id !== appointment._id
-      );
-      const sameAppointmentIds = sameDateAndTimeAppointments?.map(req => req._id);
-      console.log("ids=====>", sameAppointmentIds);
+    //   await handleUpdateAppointmentStatus(status, appointment?._id)
+    //   console.log("id=====>", appointment?._id);
+    //   const sameDateAndTimeAppointments = requestAppointment.filter(req =>
+    //     req.date === appointment.date &&
+    //     req.time === appointment.time &&
+    //     req._id !== appointment._id
+    //   );
+    //   const sameAppointmentIds = sameDateAndTimeAppointments?.map(req => req._id);
+    //   console.log("ids=====>", sameAppointmentIds);
 
-      if (sameAppointmentIds?.length > 0) {
-        for (const id of sameAppointmentIds) {
-          await handleUpdateAppointmentStatus('Rejected', id);
-        }
-      }
+    //   if (sameAppointmentIds?.length > 0) {
+    //     for (const id of sameAppointmentIds) {
+    //       await handleUpdateAppointmentStatus('Rejected', id);
+    //     }
+    //   }
 
-      // const body = {
-      //   status: status,
-      //   acceptAppointment: appointment?._id,
-      //   rejectedAppointment: sameAppointmentIds,
-      //   rejectedStatus: 'Rejected'
-      // }
-      // const response = await acceptAppointment(authToken, body)
-      // console.log(response?.data);
-      // if (response?.success) {
-      //   ErrorShow('success', 'Congratulation!', response?.data?.message);
-      // } else {
-      //   console.log(response?.data);
-      // }
-    } catch (error) {
-      console.log(error);
-    }
+    // const body = {
+    //   status: status,
+    //   acceptAppointment: appointment?._id,
+    //   rejectedAppointment: sameAppointmentIds,
+    //   rejectedStatus: 'Rejected'
+    // }
+    // const response = await acceptAppointment(authToken, body)
+    // console.log(response?.data);
+    // if (response?.success) {
+    //   ErrorShow('success', 'Congratulation!', response?.data?.message);
+    // } else {
+    //   console.log(response?.data);
+    // }
+
+    // } catch (error) {
+    //   console.log(error);
+    // }
   }
+
+  const renderHour = (timeInMinutes) => {
+    const hours = Math.floor(timeInMinutes / 60);
+    const minutes = timeInMinutes % 60;
+  
+    // Format the time to a readable format (e.g., 12:15 AM/PM)
+    const formattedTime = `${hours % 12 || 12}:${minutes < 10 ? `0${minutes}` : minutes} ${hours >= 12 ? 'PM' : 'AM'}`;
+  
+    return (
+      <View style={styles.hourContainer}>
+        <Text style={styles.hourText}>{formattedTime}</Text>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView>
@@ -639,7 +668,7 @@ export default function AppoinmentBarber({ navigation }) {
                   fromHour={0}
                   toHour={24}
                   is12Hour
-                  hourHeight={70}
+                  hourHeight={sizes.screenHeight*0.1}
                   style={{
                     time: { color: colors.disabledBg2 },
                     timeContainer: { backgroundColor: 'transparent' },

@@ -23,11 +23,13 @@ import { selectAuthToken } from '../../store/authToken/index.js';
 import Toast from 'react-native-toast-message';
 import { ErrorShow } from '../../components/Error/index.js';
 import { deleteServiceRedux } from '../../store/userData/index.js';
+import { useNavigation } from '@react-navigation/native';
 
-export default function BarberServiceDetails({ route, navigation }) {
+export default function BarberServiceDetails({ item, showToast, setShowToast }) {
   // const [serviceNameHeading, setserviceNameHeading] = useState('Hair Cuts');
   // const {serviceNameHeading, serviceName} = route.params;
-  const { item } = route?.params;
+  // const { item } = route?.params;
+  const navigation = useNavigation()
   const dispatch = useDispatch();
   const authToken = useSelector(selectAuthToken);
 
@@ -67,29 +69,37 @@ export default function BarberServiceDetails({ route, navigation }) {
 
   const handleDeleteService = async () => {
     try {
-      setDeletePermission(false);
       setLoader(true);
       const response = await deleteService(authToken, item?._id);
       if (response?.status == 200) {
         dispatch(deleteServiceRedux(item._id));
         setModalVisible(false);
+        setDeletePermission(false)
         setLoader(false);
-        ErrorShow(
-          'success',
-          'Congratulation!',
-          response?.data?.message,
-          onHide,
-        );
+        setShowToast({
+          type:'success',
+          message:response?.data?.message,
+          text:'Congratulation!'
+        })
       } else {
         setModalVisible(false);
+        setDeletePermission(false)
         setLoader(false);
-        ErrorShow('error', 'Oops', response?.data?.message);
+        setShowToast({
+          type:'error',
+          message:response?.data?.message,
+          text:'Oops'
+        })
       }
     } catch (error) {
       setModalVisible(false);
+      setDeletePermission(false)
       setLoader(false);
-      console.log(error?.message);
-      ErrorShow('error', 'Oops', error?.message);
+      setShowToast({
+        type:'error',
+        message:error?.message,
+        text:'Oops'
+      })
     }
   };
 
@@ -98,10 +108,10 @@ export default function BarberServiceDetails({ route, navigation }) {
   };
 
   return (
-    <SafeAreaView>
+    <View>
       <View style={styles.container}>
         <View style={styles.row}>
-          <BackArrow onPress={() => navigation.goBack()} />
+          {/* <BackArrow onPress={() => navigation.goBack()} /> */}
 
           <Text style={styles.headerText}>{item?.name}</Text>
           <TouchableOpacity
@@ -111,36 +121,90 @@ export default function BarberServiceDetails({ route, navigation }) {
             }}>
             <Image source={images.threeDots} />
           </TouchableOpacity>
-        </View>
-        <ScrollView
-          // style={styles.ScrollViewContainer}
-          contentContainerStyle={styles.ScrollViewContainer}>
-          <View style={styles.containerBody}>
-            <View style={styles.aboutContainer}>
-              <Text style={styles.aboutHeading}>About</Text>
-              <Text style={styles.aboutDescription}>{item?.description}</Text>
-            </View>
-            <View style={styles.serviceDetailContainer}>
-              <View style={styles.tableHeadingRow}>
-                <Text style={styles.tableServiceHeading}>{item?.name}</Text>
-                <Text style={styles.tablePriceHeading}>Price</Text>
+          {
+            modalVisible &&
+            <View
+              style={{ position: 'absolute', right: sizes.screenWidth * 0.02, top: sizes.screenHeight * 0.03 }}
+            // animationIn={'slideInRight'}
+            // isVisible={modalVisible}
+            // onBackdropPress={() => !loader && setModalVisible(!modalVisible)}
+            >
+              {/* {loader ? (
+                <ActivityIndicator size={50} color={'white'} />
+              ) : ( */}
+              <View style={styles.modalView}>
+                <TouchableOpacity
+                  style={styles.modalRow}
+                  onPress={() => {
+                    setModalVisible(false);
+                    navigation.navigate('ServiceInfo', {
+                      services: [item],
+                      isAdd: false,
+                      isEdit: true,
+                    });
+                  }}
+                // onPress={() => {
+                //   navigation.navigate('EditService', {
+                //     serviceNameHeading,
+                //     serviceName,
+                //   });
+                // }}
+                >
+                  <Image source={images.editIcon} />
+                  <Text style={styles.modalText}>Edit</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalRow}
+                  onPress={() => {
+                    Platform.OS === 'android'
+                      ? setDeletePermission(true)
+                      : setModalVisible(false);
+                    setTimeout(() => {
+                      setDeletePermission(true);
+                    }, 500);
+                  }}
+                >
+                  <Image source={images.deleteIcon} />
+                  <Text style={styles.modalText}>Delete</Text>
+                </TouchableOpacity>
               </View>
-              {item?.options?.map((item, index) => (
-                <View style={styles.serviceContentRow} key={index}>
-                  <Text style={styles.serviceNameText}>{item.name}</Text>
-                  <Text style={styles.priceText}>$ {item.price}</Text>
-                </View>
-              ))}
+              {/* )} */}
             </View>
+          }
+
+          {/* <View style={{ position: 'absolute', right: 9, top: 17 }}>
+            <Text>dasddsasa</Text>
+          </View> */}
+        </View>
+        {/* <ScrollView
+          // style={styles.ScrollViewContainer}
+          contentContainerStyle={styles.ScrollViewContainer}> */}
+        <View style={styles.containerBody}>
+          <View style={styles.aboutContainer}>
+            <Text style={styles.aboutHeading}>About</Text>
+            <Text style={styles.aboutDescription}>{item?.description}</Text>
           </View>
-        </ScrollView>
+          <View style={styles.serviceDetailContainer}>
+            <View style={styles.tableHeadingRow}>
+              <Text style={styles.tableServiceHeading}>{item?.name}</Text>
+              <Text style={styles.tablePriceHeading}>Price</Text>
+            </View>
+            {item?.options?.map((item, index) => (
+              <View style={styles.serviceContentRow} key={index}>
+                <Text style={styles.serviceNameText}>{`${item.name} (${item.time} min)`}</Text>
+                <Text style={styles.priceText}>$ {item.price}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+        {/* </ScrollView> */}
         <View
           style={
             Platform.OS == 'android' ? styles.imageView : styles.imageViewIOS
           }>
           <Text style={styles.imageHeading}>Images</Text>
           <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-            <View style={{ width: sizes.screenWidth * 0.04 }}></View>
+            <View ></View>
             {item?.pictures?.map((item, index) => (
               <View key={index}>
                 <Image style={styles.imageContainer} source={{ uri: item }} />
@@ -148,7 +212,7 @@ export default function BarberServiceDetails({ route, navigation }) {
             ))}
           </ScrollView>
         </View>
-        <Modal
+        {/* <Modal
           animationIn={'slideInRight'}
           isVisible={modalVisible}
           onBackdropPress={() => !loader && setModalVisible(!modalVisible)}>
@@ -191,7 +255,7 @@ export default function BarberServiceDetails({ route, navigation }) {
               </TouchableOpacity>
             </View>
           )}
-        </Modal>
+        </Modal> */}
         <Modal
           isVisible={deletePermission}
           onBackdropPress={() => setDeletePermission(false)}>
@@ -200,14 +264,23 @@ export default function BarberServiceDetails({ route, navigation }) {
               Are you sure want to delete this service ?
             </Text>
             <View style={styles.btnMainView}>
-              <TouchableOpacity
-                style={styles.btnView1}
-                onPress={handleDeleteService}>
-                <Text style={styles.btnText1}>Confirm</Text>
-              </TouchableOpacity>
+              {
+                loader ?
+                  <View
+                    style={styles.btnView1}
+                  >
+                    <ActivityIndicator color={colors.white} size={28} />
+                  </View>
+                  :
+                  <TouchableOpacity
+                    style={styles.btnView1}
+                    onPress={handleDeleteService}>
+                    <Text style={styles.btnText1}>Confirm</Text>
+                  </TouchableOpacity>
+              }
               <TouchableOpacity
                 style={styles.btnView}
-                onPress={() => setDeletePermission(false)}>
+                onPress={() => !loader && setDeletePermission(false)}>
                 <Text style={styles.btnText}>Cancel</Text>
               </TouchableOpacity>
             </View>
@@ -215,6 +288,6 @@ export default function BarberServiceDetails({ route, navigation }) {
         </Modal>
       </View>
       <Toast />
-    </SafeAreaView>
+    </View>
   );
 }

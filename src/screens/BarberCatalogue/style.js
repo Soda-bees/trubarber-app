@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {colors, fontSize, sizes} from '../../services';
+import { StyleSheet } from 'react-native';
+import { colors, fontSize, sizes } from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
@@ -94,7 +94,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.03,
     width: sizes.screenWidth * 0.042,
     resizeMode: 'contain',
-    tintColor:colors.black
+    tintColor: colors.black
   },
   otherIconRow: {
     flexDirection: 'row',
@@ -123,8 +123,8 @@ export const styles = StyleSheet.create({
     fontWeight: '400',
   },
   addService: {
-    height: 50 ,
-    width:  50,
+    height: 50,
+    width: 50,
     resizeMode: 'contain',
   },
   serviceContainer: {
@@ -142,6 +142,17 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.05,
     borderWidth: sizes.screenWidth * 0.003,
     borderColor: colors.selectorcolor,
+    marginBottom: sizes.screenHeight * 0.01,
+  },
+  serviceBoxSelected: {
+    backgroundColor: colors.white,
+    width: sizes.screenWidth * 0.43,
+    height: sizes.screenHeight * 0.2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: sizes.screenWidth * 0.05,
+    borderWidth: sizes.screenWidth * 0.003,
+    borderColor: colors.black,
     marginBottom: sizes.screenHeight * 0.01,
   },
   serviceImage: {
@@ -169,9 +180,12 @@ export const styles = StyleSheet.create({
   paddingBtm: {
     paddingBottom: sizes.screenHeight * 0.1,
   },
-  plusBtn:{
+  plusBtn: {
     position: 'absolute',
-    bottom: sizes.screenHeight*0.12,
-    right: sizes.screenWidth*0.06,
+    // bottom: sizes.screenHeight*0.12,
+    right: 0,
+  },
+  textContainer: {
+    position: 'relative'
   }
 });
