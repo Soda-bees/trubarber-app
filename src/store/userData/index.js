@@ -220,8 +220,13 @@ const userDataSlice = createSlice({
       } else {
         state.userData.favourites.push(barber);
       }
-
-
+    },
+    updateWalletRedux: (state , action) => {
+      const balance = action.payload
+      if (state.userData) {
+        state.userData.wallet = balance;
+      }
+      
     }
   }
 })
@@ -243,7 +248,8 @@ export const {
   addNewNotificationRedux,
   setNotificationSeenTrueRedux,
   addFavouritesRedux,
-  acceptAppointment
+  acceptAppointment,
+  updateWalletRedux
 } = userDataSlice.actions
 export const selectUserData = state => state.user.userData
 export default userDataSlice.reducer

@@ -137,8 +137,10 @@ import noSearch from '../../../assets/noSearch.png';
 import logoBlack from '../../../assets/logoBlack.png';
 import congratulationUpdated from '../../../assets/congratulationUpdated.png';
 import instagram from '../../../assets/instagram.png';
+import wallet from '../../../assets/wallet.png';
 
 const images = {
+  wallet,
   instagram,
   congratulationUpdated,
   logoBlack,

@@ -138,6 +138,16 @@ export default function Profile({ navigation }) {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.naviRow}
+              onPress={() => navigation.navigate('Wallet')}>
+              <Text style={styles.navText}>Wallet</Text>
+              <Image
+                source={images.arrowRight}
+                style={styles.arrowRight}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.naviRow}
               onPress={() => navigation.navigate('ProfileSecurity')}>
               <Text style={styles.navText}>Security</Text>
               <Image

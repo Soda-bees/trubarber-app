@@ -63,6 +63,7 @@ import BarberDirection from '../../screens/BarberDirection';
 import UploadProfileBarber from '../../screens/UploadProfileBarber';
 import EditBusinessProfile from '../../screens/EditBusinessProfile';
 import UserFavourites from '../../screens/UserFavourites';
+import Wallet from '../../screens/Wallet';
 
 
 
@@ -241,6 +242,7 @@ export default function MainNavigator() {
           <Stack.Screen name="Review" component={Review} />
           <Stack.Screen name="BarberDirection" component={BarberDirection} />
           <Stack.Screen name="UserFavourites" component={UserFavourites} />
+          <Stack.Screen name="Wallet" component={Wallet} />
         </Stack.Navigator>
       ) : (
         <Stack.Navigator screenOptions={{ headerShown: false }}>

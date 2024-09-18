@@ -294,8 +294,8 @@ export const hanleGetBookedAppoinment = async (token, id) => {
 
 export const updateAppointmentStatus = async (token, id, status) => {
   try {
-    console.log("API" , id);
-    
+    console.log("API", id);
+
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -485,5 +485,31 @@ export const acceptAppointment = async (token, body) => {
     return response
   } catch (error) {
     return error
+  }
+}
+
+export const getWalletBalance = async (_id, token) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.get(`user/getwalletBalance/${_id}`, { headers });
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const handleIncreaseWallet = async (_id, token, body) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post(`user/increaseWallet/${_id}`, body, { headers });
+    return response;
+  } catch (error) {
+    return error;
   }
 }
