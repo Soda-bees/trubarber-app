@@ -23,6 +23,7 @@ import { ErrorShow } from '../../components/Error';
 import Loader from '../../components/Loader';
 import { setAuthToken } from '../../store/authToken';
 import messaging from '@react-native-firebase/messaging';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default function Signup({ navigation }) {
   const role = useSelector(selectRole);
@@ -184,6 +185,7 @@ export default function Signup({ navigation }) {
             </TouchableOpacity>
           </View>
           <Text style={styles.loginText}>Sign Up</Text>
+          <KeyboardAwareScrollView>
           <View style={styles.inputfields}>
             <View style={styles.inputContainer}>
               <Image
@@ -323,6 +325,7 @@ export default function Signup({ navigation }) {
               <Button title={'Sign In'} light={true} onPress={handleSignIn} />
             </View>
           </View>
+          </KeyboardAwareScrollView>
           <View style={styles.toasterStyle}>
             <Toast />
           </View>

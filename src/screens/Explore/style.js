@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.pinkishwhite,
   },
   transparentBg: {
-    height: sizes.screenHeight * 0.17,
+    height: sizes.screenHeight * 0.14,
     width: sizes.screenWidth,
   },
   inputContainer: {
@@ -29,7 +29,6 @@ export const styles = StyleSheet.create({
     marginHorizontal: sizes.screenWidth * 0.05,
     backgroundColor: colors.lightgray,
     height: sizes.screenHeight * 0.062,
-    marginTop: sizes.screenHeight * 0.023,
     justifyContent: 'center',
   },
   search: {
@@ -53,7 +52,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: sizes.screenWidth * 0.05,
     height: sizes.screenHeight * 0.064,
-    marginTop: sizes.screenHeight * 0.05,
+    marginVertical: sizes.screenHeight * 0.02,
     alignItems: 'center',
     justifyContent: 'space-between',
   },

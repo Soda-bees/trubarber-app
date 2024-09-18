@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { persistor, store } from './src/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import MainNavigator from './src/services/config/navigation';
-import { LogBox } from 'react-native';
+import { LogBox, Text } from 'react-native';
 import SplashScreen from 'react-native-splash-screen'
 import socket from "./src/services/Socket"
 
@@ -13,6 +13,9 @@ export default function App() {
     SplashScreen.hide();
     LogBox.ignoreAllLogs()
   },[])
+
+  Text.defaultProps = Text.defaultProps || {};
+  Text.defaultProps.allowFontScaling = false;
 
   return (
     <Provider store={store}>

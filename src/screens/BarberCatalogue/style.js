@@ -10,7 +10,8 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.pinkishwhite,
   },
   transparentBg: {
-    height: sizes.screenHeight * 0.17,
+    // height: sizes.screenHeight * 0.17,
+    paddingVertical: sizes.screenHeight*0.03,
     width: sizes.screenWidth,
   },
   inputContainer: {
@@ -45,8 +46,8 @@ export const styles = StyleSheet.create({
   topIconRow: {
     flexDirection: 'row',
     marginHorizontal: sizes.screenWidth * 0.05,
-    height: sizes.screenHeight * 0.064,
-    marginTop: sizes.screenHeight * 0.05,
+    // height: sizes.screenHeight * 0.064,
+    // marginTop: sizes.screenHeight * 0.05,
     alignItems: 'center',
     justifyContent: 'space-between',
   },

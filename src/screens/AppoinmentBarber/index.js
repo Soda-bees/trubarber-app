@@ -11,27 +11,30 @@ import {
   Platform,
   FlatList,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { styles } from './style';
+import React, {useEffect, useState} from 'react';
+import {styles} from './style';
 import images from '../../services/utilities/images';
-import { colors, sizes } from '../../services';
+import {colors, sizes} from '../../services';
 import Timetable from 'react-native-calendar-timetable';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
-import { selectUserData } from '../../store/userData';
+import {useSelector} from 'react-redux';
+import {selectUserData} from '../../store/userData';
 import DatePicker from 'react-native-date-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Modal from 'react-native-modal';
 import Loader from '../../components/Loader';
-import { ErrorShow } from '../../components/Error';
-import { selectAuthToken } from '../../store/authToken';
-import { acceptAppointment, updateAppointmentStatus } from '../../services/config/API';
+import {ErrorShow} from '../../components/Error';
+import {selectAuthToken} from '../../store/authToken';
+import {
+  acceptAppointment,
+  updateAppointmentStatus,
+} from '../../services/config/API';
 import formatToJSON from '../../services/config/FormatToJson';
 import Toast from 'react-native-toast-message';
 import ChatConponent from '../../components/ChatComponent';
 import NotificationComponent from '../../components/NotificationComponent';
 import BarberLocation from '../../components/BarberLocationBox';
-export default function AppoinmentBarber({ navigation }) {
+export default function AppoinmentBarber({navigation}) {
   const barber = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken);
 
@@ -86,7 +89,7 @@ export default function AppoinmentBarber({ navigation }) {
     if (!date) return '';
 
     const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'long' });
+    const month = date.toLocaleString('default', {month: 'long'});
     return `${day} ${month}`;
   };
 
@@ -118,7 +121,7 @@ export default function AppoinmentBarber({ navigation }) {
               .join(' & ') || '',
           startDate: startDate || new Date(),
           endDate: endDate || new Date(),
-          duration:appointment?.time || '',
+          duration: appointment?.time || '',
           status: appointment?.status || '',
           date: appointment?.date || '',
           id: appointment?._id || '',
@@ -130,7 +133,7 @@ export default function AppoinmentBarber({ navigation }) {
     setAppointmentTimeline2(transformedData);
   };
 
-  const RenderItem = ({ style, item }) => {
+  const RenderItem = ({style, item}) => {
     if (!item) return null;
 
     return (
@@ -148,9 +151,8 @@ export default function AppoinmentBarber({ navigation }) {
         }}>
         <Text style={styles.textBlack}>{item.clientName}</Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-
-        <Text style={styles.textGray}>{item.service}: </Text>
-        <Text style={styles.textGray}> {item.duration}</Text>
+          <Text style={styles.textGray}>{item.service}: </Text>
+          <Text style={styles.textGray}> {item.duration}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -168,7 +170,7 @@ export default function AppoinmentBarber({ navigation }) {
 
     const dateObj = new Date(year, month, day);
 
-    const options = { weekday: 'short', month: 'short', day: 'numeric' };
+    const options = {weekday: 'short', month: 'short', day: 'numeric'};
 
     return dateObj.toLocaleDateString('en-US', options);
   };
@@ -179,8 +181,8 @@ export default function AppoinmentBarber({ navigation }) {
     let allAppointments = barber?.appoinment ? [...barber.appoinment] : [];
 
     let appointments = allAppointments.filter(
-      item => item.status !== "Pending" && item.status !== "Rejected"
-    )
+      item => item.status !== 'Pending' && item.status !== 'Rejected',
+    );
 
     const sortedAppointments = appointments.sort((a, b) => {
       const aDateTime = moment(
@@ -266,7 +268,7 @@ export default function AppoinmentBarber({ navigation }) {
         // } else if (status === 'Rejected') {
         //   setRejectLoader(true);
       }
-      console.log("function==>", _id);
+      console.log('function==>', _id);
 
       const response = await updateAppointmentStatus(authToken, _id, status);
       if (response?.status == 200) {
@@ -331,17 +333,26 @@ export default function AppoinmentBarber({ navigation }) {
     // Format the date in "DD/MM" format
     return `${day}-${monthName}`;
   };
-  const renderRequest = ({ item }) => (
+  const renderRequest = ({item}) => (
     <View style={styles.requestContainer}>
       <View style={styles.requestContainerFirst}>
         <View style={styles.userView}>
-          <Image style={styles.userImg} source={item?.user?.profile ? { uri: item?.user?.profile } : item?.user?.gender === "male" ? images.male : images.female} />
+          <Image
+            style={styles.userImg}
+            source={
+              item?.user?.profile
+                ? {uri: item?.user?.profile}
+                : item?.user?.gender === 'male'
+                ? images.male
+                : images.female
+            }
+          />
           <Text style={styles.userName}>{item?.user?.name}</Text>
         </View>
         <TouchableOpacity
           style={styles.seeDetailsView}
           onPress={() =>
-            navigation.navigate('AppointmentDetails', { item, showButtons: true })
+            navigation.navigate('AppointmentDetails', {item, showButtons: true})
           }>
           <Text style={styles.seeDetailsText}>See Details</Text>
           <Image style={styles.rightRedArrow} source={images.rightRedArrow} />
@@ -352,7 +363,7 @@ export default function AppoinmentBarber({ navigation }) {
           <View style={styles.serviceContainerFirst}>
             <View style={styles.serviceImagecontainer}>
               <Image
-                source={{ uri: item?.services[0].serviceIcon }}
+                source={{uri: item?.services[0].serviceIcon}}
                 style={styles.serviceIcon}
               />
             </View>
@@ -373,12 +384,11 @@ export default function AppoinmentBarber({ navigation }) {
         <View
           style={[
             styles.serviceContainerFirst,
-            { marginTop: sizes.screenWidth * 0.035 },
+            {marginTop: sizes.screenWidth * 0.035},
           ]}>
           <View>
             <Text>Total Amount</Text>
-            <Text>{`${convertDateFormat(item?.date)} / ${item?.time
-              } `}</Text>
+            <Text>{`${convertDateFormat(item?.date)} / ${item?.time} `}</Text>
           </View>
           <View style={styles.price}>
             <Text>{`$ ${calculateTotalAmount(item?.services)}`}</Text>
@@ -406,7 +416,7 @@ export default function AppoinmentBarber({ navigation }) {
           <TouchableOpacity
             style={styles.declineBtn}
             onPress={() => handleUpdateAppointmentStatus('Rejected', item?._id)}
-          // onPress={() => setRejectLoader(!rejectLoader)}
+            // onPress={() => setRejectLoader(!rejectLoader)}
           >
             <Text style={styles.btnText}>Reject</Text>
           </TouchableOpacity>
@@ -419,16 +429,16 @@ export default function AppoinmentBarber({ navigation }) {
   const handleAcceptAppointment = async (status, appointment) => {
     // try {
 
-    const sameDateAndTimeAppointments = requestAppointment.filter(req =>
-      req.date === appointment.date &&
-      req.time === appointment.time &&
-      req._id !== appointment._id
+    const sameDateAndTimeAppointments = requestAppointment.filter(
+      req =>
+        req.date === appointment.date &&
+        req.time === appointment.time &&
+        req._id !== appointment._id,
     );
 
     const sameAppointmentIds = sameDateAndTimeAppointments?.map(req => req._id);
 
     console.log(sameAppointmentIds);
-    
 
     //   console.log(formatToJSON(appointment?._id));
     //   const sameDateAndTimeAppointments = requestAppointment.filter(req =>
@@ -488,15 +498,17 @@ export default function AppoinmentBarber({ navigation }) {
     // } catch (error) {
     //   console.log(error);
     // }
-  }
+  };
 
-  const renderHour = (timeInMinutes) => {
+  const renderHour = timeInMinutes => {
     const hours = Math.floor(timeInMinutes / 60);
     const minutes = timeInMinutes % 60;
-  
+
     // Format the time to a readable format (e.g., 12:15 AM/PM)
-    const formattedTime = `${hours % 12 || 12}:${minutes < 10 ? `0${minutes}` : minutes} ${hours >= 12 ? 'PM' : 'AM'}`;
-  
+    const formattedTime = `${hours % 12 || 12}:${
+      minutes < 10 ? `0${minutes}` : minutes
+    } ${hours >= 12 ? 'PM' : 'AM'}`;
+
     return (
       <View style={styles.hourContainer}>
         <Text style={styles.hourText}>{formattedTime}</Text>
@@ -519,7 +531,10 @@ export default function AppoinmentBarber({ navigation }) {
                 <ChatConponent />
               </View>
             </View>
-            <View style={styles.tabContainer}>
+
+          </ImageBackground>
+        </View>
+        <View style={styles.tabContainer}>
               <TouchableOpacity
                 style={
                   tab === 'schedule' ? styles.selectedTab : styles.unSelectedTab
@@ -549,8 +564,6 @@ export default function AppoinmentBarber({ navigation }) {
                 </Text>
               </TouchableOpacity>
             </View>
-          </ImageBackground>
-        </View>
         {Platform.OS === 'ios' && (
           <Modal
             isVisible={open}
@@ -563,8 +576,8 @@ export default function AppoinmentBarber({ navigation }) {
               is24Hour={false}
               display="spinner"
               // textColor="red"
-              positiveButton={{ label: 'Done' }}
-              negativeButton={{ label: 'Cancel' }}
+              positiveButton={{label: 'Done'}}
+              negativeButton={{label: 'Cancel'}}
               onChange={
                 Platform.OS === 'android' ? handleSetDate : handleSetDateIOS
               }
@@ -668,11 +681,11 @@ export default function AppoinmentBarber({ navigation }) {
                   fromHour={0}
                   toHour={24}
                   is12Hour
-                  hourHeight={sizes.screenHeight*0.1}
+                  hourHeight={sizes.screenHeight * 0.1}
                   style={{
-                    time: { color: colors.disabledBg2 },
-                    timeContainer: { backgroundColor: 'transparent' },
-                    contentContainer: { width: sizes.screenWidth * 0.88 },
+                    time: {color: colors.disabledBg2},
+                    timeContainer: {backgroundColor: 'transparent'},
+                    contentContainer: {width: sizes.screenWidth * 0.88},
                     lines: {
                       width:
                         Platform.OS == 'android'
@@ -681,8 +694,8 @@ export default function AppoinmentBarber({ navigation }) {
                       marginLeft: sizes.screenWidth * 0.14,
                     },
                     nowLine: {
-                      dot: { backgroundColor: colors.red },
-                      line: { backgroundColor: colors.red },
+                      dot: {backgroundColor: colors.red},
+                      line: {backgroundColor: colors.red},
                     },
                   }}
                 />
@@ -692,7 +705,13 @@ export default function AppoinmentBarber({ navigation }) {
           </ScrollView>
         )}
         {tab === 'request' && (
-          <View style={{ marginTop: sizes.screenWidth * 0.06, maxHeight: sizes.screenHeight * 0.75 }}>
+          <View
+            style={[
+              {marginTop: sizes.screenWidth * 0.06},
+              Platform.OS == 'android' && {
+                maxHeight: sizes.screenHeight * 0.75,
+              },
+            ]}>
             {barber?.appoinment?.filter(item => item.status === 'Pending')
               ?.length > 0 ? (
               <FlatList
@@ -700,7 +719,7 @@ export default function AppoinmentBarber({ navigation }) {
                 renderItem={renderRequest}
                 keyExtractor={item => item._id}
                 style={Platform.OS == 'ios' && styles.marginBottom}
-              // inverted
+                // inverted
               />
             ) : (
               <View style={styles.noAppointment}>
@@ -725,8 +744,8 @@ export default function AppoinmentBarber({ navigation }) {
             display="spinner"
             // themeVariant="dark"
             // textColor="red"
-            positiveButton={{ label: 'Done' }}
-            negativeButton={{ label: 'Cancel' }}
+            positiveButton={{label: 'Done'}}
+            negativeButton={{label: 'Cancel'}}
             onChange={handleSetDate}
           />
         )}
@@ -759,8 +778,9 @@ export default function AppoinmentBarber({ navigation }) {
               <Image source={images.clockIconFill} />
               <Text style={styles.modalServiceTxtFour}>
                 {modalItem?.date
-                  ? `${formatDateShort(modalItem?.date)} - ${modalItem?.duration
-                  }`
+                  ? `${formatDateShort(modalItem?.date)} - ${
+                      modalItem?.duration
+                    }`
                   : null}
               </Text>
             </View>
@@ -783,7 +803,7 @@ export default function AppoinmentBarber({ navigation }) {
                 }
                 style={
                   isFutureTime(modalItem?.time, modalItem?.date) ||
-                    modalItem?.status === 'Completed'
+                  modalItem?.status === 'Completed'
                     ? styles.modalBtnViewDisable
                     : styles.modalBtnView
                 }
@@ -793,7 +813,7 @@ export default function AppoinmentBarber({ navigation }) {
                 <Text
                   style={
                     isFutureTime(modalItem?.time, modalItem?.date) ||
-                      modalItem?.status === 'Completed'
+                    modalItem?.status === 'Completed'
                       ? styles.modalBtnTextDissable
                       : styles.modalBtnText
                   }>
@@ -803,7 +823,7 @@ export default function AppoinmentBarber({ navigation }) {
                   source={images.arrowIcon}
                   style={
                     isFutureTime(modalItem?.time, modalItem?.date) ||
-                      modalItem?.status === 'Completed'
+                    modalItem?.status === 'Completed'
                       ? styles.modalArrowIconDsiable
                       : styles.modalArrowIcon
                   }

@@ -13,31 +13,35 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.12,
     width: sizes.screenWidth,
   },
+  transparentBgIOS: {
+    height: sizes.screenHeight * 0.14,
+    width: sizes.screenWidth,
+  },
   inputContainer: {
     alignItems: 'center',
     flexDirection: 'row',
     borderRadius: sizes.screenWidth * 0.04,
-    borderWidth: sizes.screenWidth * 0.004,
-    borderColor: colors.darkerBordercolor,
-    marginRight: sizes.screenWidth * 0.1,
-    marginLeft: sizes.screenWidth * 0.1,
+    borderWidth: sizes.screenWidth * 0.003,
+    borderColor: colors.emptyStar,
+    marginHorizontal: sizes.screenWidth * 0.05,
     backgroundColor: colors.lightgray,
     height: sizes.screenHeight * 0.062,
-    marginTop: sizes.screenHeight * 0.092,
+    justifyContent: 'center',
+    marginTop: sizes.screenHeight*0.103
+  },
+  search: {
+    height: sizes.screenHeight * 0.024,
   },
   input: {
     color: colors.black,
-    width: sizes.screenWidth * 0.67,
-  },
-  search: {
-    height: sizes.screenHeight * 0.0243,
+    width: sizes.screenWidth * 0.78,
   },
 
   toggleContainer: {
     borderWidth: sizes.screenWidth * 0.004,
     borderColor: colors.darkerBordercolor,
     height: sizes.screenHeight * 0.06,
-    marginTop: sizes.screenHeight * 0.06,
+    marginTop: sizes.screenHeight * 0.05,
     borderRadius: sizes.screenWidth * 0.04,
     width: sizes.screenWidth * 0.7,
     alignSelf: 'center',

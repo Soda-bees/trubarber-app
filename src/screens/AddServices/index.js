@@ -8,11 +8,11 @@ import {styles} from './style';
 export default function AddServices({navigation}) {
   const [servicesData, setserviceData] = useState([
     {
-      icon: "https://res.cloudinary.com/doohobw9k/image/upload/v1719221917/TruBarber/Profile/xph66mkuv5k2iluyveyj.png",
+      icon: "https://res.cloudinary.com/doohobw9k/image/upload/v1726222601/TruBarber/Services/ojjwvvfvc2ovrtrkjumo.png",
       name: 'Haircut',
     },
     {
-      icon: "https://res.cloudinary.com/doohobw9k/image/upload/v1719221945/TruBarber/Profile/nd7aapjxiwy92htjnctg.png",
+      icon: "https://res.cloudinary.com/doohobw9k/image/upload/v1726222538/TruBarber/Services/yvg6ctijk3ann6a0ty5i.png",
       name: 'Beard',
     },
   ]);

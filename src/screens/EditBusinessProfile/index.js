@@ -332,7 +332,8 @@ export default function EditBusinessProfile({ navigation, route }) {
         console.warn(err);
         return false;
       }
-    } else {
+    } else if (Platform.OS === 'ios') {
+      Geolocation.requestAuthorization();
       return true;
     }
   };

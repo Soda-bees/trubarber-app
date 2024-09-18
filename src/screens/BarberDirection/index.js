@@ -22,6 +22,7 @@ import LocationServicesDialogBox from 'react-native-android-location-services-di
 import {fontSize} from '../../services';
 import {selectUserData} from '../../store/userData';
 import BackArrow from '../../components/BackArrow';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const {width, height} = Dimensions.get('window');
 
@@ -186,7 +187,9 @@ export default function BarberDirection({navigation, route}) {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <View style={[styles.mapContainer, {zIndex: 0}]}>
+
+
+        <View style={[styles.mapContainer]}>
           <MapView
             style={styles.mapStyle}
             region={{
@@ -202,6 +205,7 @@ export default function BarberDirection({navigation, route}) {
             ref={mapViewRef}
 
             >
+
             {/* <UrlTile
             urlTemplate="https://a.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png"
             maximumZ={100}
@@ -249,6 +253,10 @@ export default function BarberDirection({navigation, route}) {
                 }}
               />
             )}
+  <BackArrow onPress={()=>{
+    navigation.goBack()
+  }}/>
+
           </MapView>
           {/* <View style={styles.distanceDuration}>
             <Text style={styles.distanceText}>
@@ -265,6 +273,13 @@ export default function BarberDirection({navigation, route}) {
             </Text>
           </View> */}
         </View>
+        {/* <TouchableOpacity style={styles.arrowblackleftContainer} onPress={
+        ()=>{
+          console.log('hey');
+        }
+        }>
+                <Image source={images.arrowblackleft} style={styles.arrowblackleft}/>
+              </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );

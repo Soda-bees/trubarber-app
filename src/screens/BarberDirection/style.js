@@ -5,6 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.lightgray,
     height: sizes.screenHeight,
+    width: sizes.screenWidth
   },
   backgroundColor: {
     backgroundColor: colors.pinkishwhite,
@@ -270,5 +271,34 @@ export const styles = StyleSheet.create({
     color:'black',
     // backgroundColor:'red',
     fontSize:fontSize.medium,
+  },
+
+  arrowblackleftContainer:{
+    backgroundColor: '#00000044',
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: sizes.screenWidth*0.05,
+    marginTop: sizes.screenHeight*0.04,
+    height: sizes.screenWidth*0.09,
+    width: sizes.screenWidth*0.09,
+    zIndex: 10,
+
+  },
+
+  backArrowContainer:{
+    backgroundColor: '#00000044',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: sizes.screenWidth*0.09,
+    width: sizes.screenWidth*0.09,
+  },
+
+  arrowblackleft:{
+    height: 28,
+    resizeMode: 'contain',
   }
+,
+
+
 });

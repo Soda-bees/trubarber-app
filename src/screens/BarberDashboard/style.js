@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.pinkishwhite,
   },
   transparentBg: {
-    paddingVertical: sizes.screenWidth * 0.06,
+    paddingVertical: sizes.screenHeight * 0.03,
     // height: sizes.screenHeight * 0.1,
     width: sizes.screenWidth,
   },
@@ -46,8 +46,6 @@ export const styles = StyleSheet.create({
   topIconRow: {
     flexDirection: 'row',
     marginHorizontal: sizes.screenWidth * 0.05,
-    // height: sizes.screenHeight * 0.064,
-    // marginTop: sizes.screenHeight * 0.05,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
@@ -107,7 +105,7 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.29,
   },
   containerBody: {
-    marginTop: sizes.screenHeight * 0.01,
+    marginTop: sizes.screenHeight * 0.02,
     paddingHorizontal: sizes.screenWidth * 0.06,
   },
   detailRow: {
@@ -115,6 +113,7 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.88,
     alignSelf: 'center',
     justifyContent: 'space-between',
+    // backgroundColor: colors.red
   },
   detailContainer: {
     backgroundColor: colors.grayBg,
