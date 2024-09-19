@@ -9,33 +9,45 @@ import {
   SafeAreaView,
   Platform,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { styles } from './style.js';
+import React, {useEffect, useState} from 'react';
+import {styles} from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
-import { colors, sizes } from '../../services';
+import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
+import {colors, sizes} from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
-import { useDispatch, useSelector } from 'react-redux';
-import { removeAuthToken, selectAuthToken } from '../../store/authToken/index.js';
-import { removeRole } from '../../store/role/index.js';
-import { removeUserData, selectUserData } from '../../store/userData/index.js';
+import {useDispatch, useSelector} from 'react-redux';
+import {removeAuthToken, selectAuthToken} from '../../store/authToken/index.js';
+import {removeRole} from '../../store/role/index.js';
+import {removeUserData, selectUserData} from '../../store/userData/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
-import { removePaymentCard } from '../../store/paymentCard/index.js';
-import { removeCart } from '../../store/cart/index.js';
-import { deleteDeviceToken, getAddressFromCoordinates } from '../../services/config/API/index.js';
+import {removePaymentCard} from '../../store/paymentCard/index.js';
+import {removeCart} from '../../store/cart/index.js';
+import {
+  deleteDeviceToken,
+  getAddressFromCoordinates,
+} from '../../services/config/API/index.js';
 import Header from '../../components/Header/index.js';
-import { selectlocation } from '../../store/location/index.js';
+import {selectlocation} from '../../store/location/index.js';
+import {CardField, useConfirmPayment} from '@stripe/stripe-react-native';
+import {useStripe} from '@stripe/stripe-react-native';
+import axios from 'axios';
 
-export default function Profile({ navigation }) {
+export default function Profile({navigation}) {
+  const stripe = useStripe();
+
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const authToken = useSelector(selectAuthToken);
-  const location = useSelector(selectlocation) || userData?.location
+  const location = useSelector(selectlocation) || userData?.location;
 
-  const [address, setAddress] = useState('')
+  const [address, setAddress] = useState('');
   const [locationLoader, setLocationLoader] = useState(false);
+  const [cardDetails, setCardDetails] = useState({});
+  // const { confirmPayment } = useConfirmPayment();
+  const {confirmPayment} = useStripe();
 
   const handleDeleteDeviceToken = async () => {
     try {
@@ -71,7 +83,54 @@ export default function Profile({ navigation }) {
 
   useEffect(() => {
     getAddress(location?.latitude, location?.longitude);
-  }, [])
+  }, []);
+
+  const handlePayment = async () => {
+    // setLoading(true);
+    try {
+      const response = await axios.post(
+        'http://192.168.100.110:6000/create-payment-intent',
+        {amount: 10},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const {clientSecret} = await response.data;
+      console.log('keysssss', formatToJSON(clientSecret));
+
+      if (!clientSecret) {
+        throw new Error('Failed to get clientSecret');
+      }
+
+      const {error, paymentIntent} = await confirmPayment(clientSecret, {
+        paymentMethodType: 'Card',
+        billingDetails: {
+          email: 'customer@example.com', // Replace with actual user email
+        },
+      });
+
+      if (error) {
+        // Handle payment error
+        console.log('Payment failed: ', error.message);
+        Alert.alert('Payment Error', error.message);
+      } else if (paymentIntent) {
+        // Payment successful
+        console.log('Payment successful: ', formatToJSON(paymentIntent));
+        Alert.alert(
+          'Payment Successful',
+          `Payment for ${paymentIntent.amount / 100} USD succeeded!`,
+        );
+      }
+    } catch (error) {
+      console.error('Error processing payment: ', error);
+      Alert.alert('Payment Error', error.message);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -80,7 +139,13 @@ export default function Profile({ navigation }) {
           <View style={styles.contentContainer}>
             <View style={styles.contentAlligment}>
               <Image
-                source={userData?.profile ? { uri: userData?.profile } : userData?.gender === 'male' ? images.male : images.female}
+                source={
+                  userData?.profile
+                    ? {uri: userData?.profile}
+                    : userData?.gender === 'male'
+                    ? images.male
+                    : images.female
+                }
                 style={styles.youngMan}
               />
               <View style={styles.nameContainer}>
@@ -183,10 +248,34 @@ export default function Profile({ navigation }) {
               />
             </TouchableOpacity>
           </View>
+          <CardField
+            postalCodeEnabled={false}
+            placeholders={{
+              number: '4242 4242 4242 4242',
+            }}
+            cardStyle={{
+              backgroundColor: '#FFFFFF',
+              textColor: '#000000',
+            }}
+            style={{
+              width: '100%',
+              height: 50,
+              marginVertical: 30,
+            }}
+            onCardChange={cardDetails => {
+              // console.log('Card details:', cardDetails);
+            }}
+            onFocus={focusedField => {
+              // console.log('focusField', focusedField);
+            }}
+          />
         </View>
 
-        <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
+        {/* <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
           <Button title={'Logout'} onPress={() => handleLogout()} />
+        </View> */}
+        <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
+          <Button title={'Buy'} onPress={handlePayment} />
         </View>
       </View>
     </SafeAreaView>
