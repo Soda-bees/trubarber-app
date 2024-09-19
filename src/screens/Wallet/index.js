@@ -78,6 +78,7 @@ export default function Wallet({ navigation }) {
             console.log(response?.data);
             if (response?.data?.success) {
                 setWallet(response?.data?.balance)
+                dispatch(updateWalletRedux(response?.data?.balance))
                 setBtnLoader(false)
                 ErrorShow('success', 'Congratulation!', response?.data?.message);
             } else {

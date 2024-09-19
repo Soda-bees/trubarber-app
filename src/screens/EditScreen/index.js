@@ -43,6 +43,7 @@ export default function EditScreen({ navigation }) {
   const userData = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken);
   const role = useSelector(selectRole);
+  console.log("userdata wallet profile ==========>>" , userData?.wallet);
 
   const dispatch = useDispatch();
 

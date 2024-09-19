@@ -1,6 +1,6 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import {styles} from './style';
+import { styles } from './style';
 import images from '../../services/utilities/images';
 
 export default function Button({
@@ -9,11 +9,12 @@ export default function Button({
   setmodalTrue,
   onPress,
   hideImage,
+  textCenter
 }) {
   return (
     <View>
       {light ? (
-        <TouchableOpacity style={styles.btnViewLight} onPress={onPress}>
+        <TouchableOpacity style={textCenter ? styles.btnViewLightCenter : styles.btnViewLight} onPress={onPress}>
           <Text style={styles.btnTextLight}>{title}</Text>
           {!hideImage && (
             <Image

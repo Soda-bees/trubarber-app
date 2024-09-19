@@ -41,6 +41,7 @@ import {
 import { addAppoinment, selectUserData } from '../../store/userData/index.js';
 import { socket, socketService } from '../../services/Socket';
 import Header from '../../components/Header/index.js';
+import Modal from 'react-native-modal';
 
 export default function BookingProcess({ navigation, route }) {
   const dispatch = useDispatch();
@@ -59,6 +60,8 @@ export default function BookingProcess({ navigation, route }) {
   const [loader, setLoader] = useState(false);
   const [bookedTime, setBookedTime] = useState([]);
   const [dates, setDates] = useState(null)
+  const [showRechargeModal, setShowRechargeModal] = useState(false)
+  const [havePreviousBalance, setHavePreviousBalance] = useState(true)
 
   const userData = useSelector(selectUserData);
 
@@ -199,6 +202,7 @@ export default function BookingProcess({ navigation, route }) {
   }, [cart]);
 
   const deleteOptions = item => {
+    setDatedata(null)
     dispatch(deleteCartItem(item));
   };
 
@@ -268,6 +272,7 @@ export default function BookingProcess({ navigation, route }) {
 
 
   const handleDateSelected = (formattedDate, day) => {
+    setSelected(null)
     const isOff = barber?.offDays?.includes(day)
     if (isOff) {
       setDatedata(null)
@@ -344,57 +349,82 @@ export default function BookingProcess({ navigation, route }) {
     return timeMoment.format('h:mm A');
   };
 
+  const onHideShowModal = () => {
+    setShowRechargeModal(true)
+  }
+
+  const calculateTotalPriceForPendingAppointments = (appointments) => {
+    return appointments
+      ?.filter(appointment => appointment?.status === "Pending") // Filter by Pending status
+      ?.reduce((totalPrice, appointment) => {
+        // For each appointment, calculate the sum of prices in the services array
+        const servicesTotal = appointment?.services?.reduce((sum, service) => {
+          return sum + Number(service?.price); // Convert price to a number and add to sum
+        }, 0);
+
+        return totalPrice + servicesTotal; // Add the services total to the overall total price
+      }, 0);
+  };
+
   const handleConfirm = async () => {
-    console.log("helllo" , userData?.wallet);
-    
-    console.log("loggggggggg===========>",totalAmount);
+    const previousPrice = calculateTotalPriceForPendingAppointments(userData?.appoinment);
+    const newAndTotalPrice = previousPrice + totalAmount
+    if (previousPrice > 0) {
+      if (newAndTotalPrice > userData?.wallet) {
+        setHavePreviousBalance(true)
+        setShowRechargeModal(true)
+        return
+      }
+    }
+    if (totalAmount > userData?.wallet) {
+      return ErrorShow('error', 'Oops!', 'Insufficient fund! please recharge your wallet', onHideShowModal);
+    }
+    console.log(
+      canBook(userData.appoinment, barber._id, selectedDate, selected),
+    );
+    if (canBook(userData.appoinment, barber._id, selectedDate, selected)) {
+      return ErrorShow('error', 'Oops!', 'You have already scheduled an appointment for this time slot.',);
+    }
+    if (!selectedDate) {
+      return ErrorShow('error', 'Oops!', 'Please select date');
+    }
+    if (!selected) {
+      return ErrorShow('error', 'Oops!', 'Please select time');
+    }
+    if (cart?.services?.length === 0) {
+      return ErrorShow('error', 'Oops!', 'Please select service');
+    }
+    if (!paymentCard) {
+      return ErrorShow('error', 'Oops!', 'Please enter card info');
+    }
+    const endTime = addMinutesToTime(selected, totalDuration);
+    console.log("endTime=====>", endTime);
 
-    // console.log(
-    //   canBook(userData.appoinment, barber._id, selectedDate, selected),
-    // );
-    // if (canBook(userData.appoinment, barber._id, selectedDate, selected)) {
-    //   return ErrorShow('error', 'Oops!', 'You have already scheduled an appointment for this time slot.',);
-    // }
-    // if (!selectedDate) {
-    //   return ErrorShow('error', 'Oops!', 'Please select date');
-    // }
-    // if (!selected) {
-    //   return ErrorShow('error', 'Oops!', 'Please select time');
-    // }
-    // if (cart?.services?.length === 0) {
-    //   return ErrorShow('error', 'Oops!', 'Please select service');
-    // }
-    // if (!paymentCard) {
-    //   return ErrorShow('error', 'Oops!', 'Please enter card info');
-    // }
-    // const endTime = addMinutesToTime(selected, totalDuration);
-    // console.log("endTime=====>", endTime);
-
-    // const obj = {
-    //   ...cart,
-    //   date: selectedDate,
-    //   time: `${selected} - ${endTime}`,
-    // };
-    // try {
-    //   setLoader(true);
-    //   const response = await bookAppoinment(obj, authToken);
-    //   console.log(response.status);
-    //   if (response.status == 200) {
-    //     setLoader(false);
-    //     ErrorShow(
-    //       'success',
-    //       'Congratulation!',
-    //       response?.data?.message,
-    //       onHide,
-    //     );
-    //   } else {
-    //     setLoader(false);
-    //     ErrorShow('error', 'Oops!', response?.data?.message);
-    //   }
-    // } catch (error) {
-    //   setLoader(false);
-    //   console.log(error);
-    // }
+    const obj = {
+      ...cart,
+      date: selectedDate,
+      time: `${selected} - ${endTime}`,
+    };
+    try {
+      setLoader(true);
+      const response = await bookAppoinment(obj, authToken);
+      console.log(response.status);
+      if (response.status == 200) {
+        setLoader(false);
+        ErrorShow(
+          'success',
+          'Congratulation!',
+          response?.data?.message,
+          onHide,
+        );
+      } else {
+        setLoader(false);
+        ErrorShow('error', 'Oops!', response?.data?.message);
+      }
+    } catch (error) {
+      setLoader(false);
+      console.log(error);
+    }
   };
 
   const onHide = () => {
@@ -622,6 +652,53 @@ export default function BookingProcess({ navigation, route }) {
             <Button title={'Book'} onPress={handleConfirm} />
           )}
         </View>
+        <Modal
+          isVisible={showRechargeModal}
+        >
+          <View
+            style={styles.modalContainer}>
+            <View style={styles.modalView}>
+              {
+                havePreviousBalance &&
+                <TouchableOpacity
+                  onPress={() => {
+                    setHavePreviousBalance(false)
+                    setShowRechargeModal(false)
+                  }}
+                  style={{ position: 'absolute', bottom: sizes.screenHeight * 0.34, right: 5 }}>
+                  <Image source={images.crossIcon} style={{ width: sizes.screenWidth * 0.05, height: sizes.screenWidth * 0.05 }} />
+                </TouchableOpacity>
+              }
+              {
+                havePreviousBalance ?
+                  <Text style={styles.modalText}>
+                    It looks like you don't have enough balance in your wallet to book this appointment. You've already booked several other appointments, which is why your current balance is insufficient.
+                    To proceed, please recharge your wallet or cancel one of your existing appointments.
+                  </Text> :
+                  <Text style={styles.modalText}>you don’t have enough balance in your wallet to book an appointment.Recharge your account?</Text>
+              }
+              {
+                havePreviousBalance &&
+                <View style={{ marginBottom: sizes.screenWidth * 0.03 }}>
+                  <Button title={'View Appointments'} onPress={() => {
+                    setHavePreviousBalance(false)
+                    setShowRechargeModal(false)
+                    navigation.navigate('Appointments')
+                  }} />
+                </View>
+              }
+              <Button title={'View Wallet'} onPress={() => {
+                setShowRechargeModal(false)
+                navigation.navigate('Wallet')
+              }} />
+              <View style={{ marginTop: sizes.screenWidth * 0.03 }}></View>
+              {
+                !havePreviousBalance &&
+                <Button title={"Cancel"} light hideImage textCenter onPress={() => setShowRechargeModal(false)} />
+              }
+            </View>
+          </View>
+        </Modal>
       </View>
       <Toast />
     </SafeAreaView>

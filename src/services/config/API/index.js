@@ -294,8 +294,6 @@ export const hanleGetBookedAppoinment = async (token, id) => {
 
 export const updateAppointmentStatus = async (token, id, status) => {
   try {
-    console.log("API", id);
-
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,

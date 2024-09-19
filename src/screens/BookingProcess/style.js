@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.lightgray,
     height: sizes.screenHeight,
+    // opacity: 0.7,
   },
   containerCheck: {
     // flex: 1,
@@ -34,7 +35,7 @@ export const styles = StyleSheet.create({
   },
 
   datesTouchableSelected: {
-    backgroundColor:colors.grayBorder,
+    backgroundColor: colors.grayBorder,
     width: sizes.screenWidth * 0.12,
     height: sizes.screenWidth * 0.12,
     // padding:sizes.screenWidth * 0.01,
@@ -48,12 +49,12 @@ export const styles = StyleSheet.create({
   datesDate: {
     fontSize: fontSize.smallM,
     fontWeight: '800',
-    color:colors.black
+    color: colors.black
   },
   datesDay: {
     fontSize: fontSize.small,
     fontWeight: '500',
-    color:colors.black
+    color: colors.black
   },
 
   header: {
@@ -375,4 +376,30 @@ export const styles = StyleSheet.create({
     marginRight: 6,
     marginVertical: 3
   },
+  modalContainer: {
+    width: sizes.screenWidth,
+    height: sizes.screenHeight,
+    alignSelf: 'center',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-end'
+  },
+  modalView: {
+    width: sizes.screenWidth,
+    // height: sizes.screenHeight * 0.2,
+    backgroundColor: 'white',
+    borderTopLeftRadius: sizes.screenWidth * 0.05,
+    borderTopRightRadius: sizes.screenWidth * 0.05,
+    paddingVertical:sizes.screenWidth * 0.03,
+    position:'relative'
+  },
+  modalText:{
+    color:colors.black,
+    width:sizes.screenWidth * 0.9, 
+    alignSelf:'center',
+    textAlign:'center',
+    fontWeight:'500',
+    fontSize:fontSize.medium,
+    marginBottom:sizes.screenWidth * 0.03
+  }
 });

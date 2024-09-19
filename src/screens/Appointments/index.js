@@ -21,10 +21,15 @@ import { selectUserData } from '../../store/userData/index.js';
 import { removeCart, selectCart } from '../../store/cart/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import Header from '../../components/Header/index.js';
+import moment from 'moment';
+import { updateAppointmentStatus } from '../../services/config/API/index.js';
+import { selectAuthToken } from '../../store/authToken/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
 export default function Appointments({ navigation }) {
   const dispatch = useDispatch();
+
+  const authToken = useSelector(selectAuthToken)
   const userData = useSelector(selectUserData);
 
   const calculateTotalAmount = services => {
@@ -67,6 +72,29 @@ export default function Appointments({ navigation }) {
     }
     return name;
   };
+
+  const calculateDuration = (time) => {
+    const [startTime, endTime] = time.split(' - ');
+
+    // Parse the times using Moment.js
+    const start = moment(startTime, 'h:mm A');
+    const end = moment(endTime, 'h:mm A');
+
+    // Calculate the difference in minutes
+    const durationInMinutes = end.diff(start, 'minutes');
+
+    return durationInMinutes;
+
+  }
+
+  const handleUpdateAppointmentStatus = async (_id) => {
+    try {
+      const response = await updateAppointmentStatus(authToken, _id, 'Cancelled')
+      console.log(formatToJSON(response?.data));
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -82,7 +110,7 @@ export default function Appointments({ navigation }) {
                       source={item?.profile ? { uri: item?.profile } : item?.gender === "male" ? images.male : images.female}
                       imageStyle={styles.barberHat}
                       resizeMode='contain'
-                      >
+                    >
                       <View style={styles.innerContainer}>
                         <View style={styles.nameView}>
                           <Text style={styles.contextText}>
@@ -143,7 +171,7 @@ export default function Appointments({ navigation }) {
                           <Text
                             style={styles.dateAndtime}>{`${convertDateFormat(
                               item?.date,
-                            )}/${item?.time} (60min)`}</Text>
+                            )}/${item?.time} (${calculateDuration(item?.time)} min)`}</Text>
                         </View>
                       </View>
                       <TouchableOpacity
@@ -158,6 +186,23 @@ export default function Appointments({ navigation }) {
                           style={styles.arrowStyle}
                         />
                       </TouchableOpacity>
+                      {
+                        item?.status === "Pending" &&
+                        <TouchableOpacity
+                          style={styles.bookBtn}
+                          // onPress={() =>
+                          //   navigation.navigate('AppointmentDetails', { item })
+                          // }
+                          onPress={() => handleUpdateAppointmentStatus(item?._id)}
+                        >
+                          <Text style={styles.btnText}>Cancel Appointment</Text>
+                          <Image
+                            source={images.crossbtn}
+                            resizeMode="contain"
+                            style={styles.crossStyle}
+                          />
+                        </TouchableOpacity>
+                      }
                     </View>
                   </View>
                 );

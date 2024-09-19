@@ -57,7 +57,7 @@ export const styles = StyleSheet.create({
   },
 
   contextText: {
-    color: colors.white,
+    color: colors.black,
     fontWeight: '800',
     fontSize: fontSize.large,
   },
@@ -174,9 +174,13 @@ export const styles = StyleSheet.create({
     marginLeft: sizes.screenWidth * 0.082,
   },
   arrowStyle: {
-    height: sizes.screenHeight * 0.018,
+    height: sizes.screenWidth * 0.04,
     marginRight: sizes.screenWidth * 0.042,
   },
+  crossStyle:{
+    height: sizes.screenWidth * 0.06,
+    marginRight: sizes.screenWidth * 0.02,
+  },  
   scrollContainer: {
     // marginTop: sizes.screenHeight * 0.02,
     marginBottom: sizes.screenHeight * 0.07,

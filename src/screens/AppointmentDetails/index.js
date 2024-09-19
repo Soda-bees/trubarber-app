@@ -240,7 +240,7 @@ export default function AppointmentDetails({ navigation, route }) {
                         showButtons
                           ? styles.disabledTextShowButton
                           : styles.disabledText1
-                      }>{` (${item?.serviceName})`}</Text>
+                      }>{` (${item?.serviceName}) (${item?.time} min)`}</Text>
                   </View>
                   <Text
                     style={
