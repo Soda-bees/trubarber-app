@@ -69,27 +69,28 @@ export default function Wallet({ navigation }) {
         }
     }
     const handleAddPayment = async () => {
-        try {
-            setBtnLoader(true)
-            const body = {
-                amount: 5
-            }
-            const response = await handleIncreaseWallet(userData?._id, authToken, body)
-            console.log(response?.data);
-            if (response?.data?.success) {
-                setWallet(response?.data?.balance)
-                dispatch(updateWalletRedux(response?.data?.balance))
-                setBtnLoader(false)
-                ErrorShow('success', 'Congratulation!', response?.data?.message);
-            } else {
-                setBtnLoader(false)
-                ErrorShow('error', 'Oops!', response?.data?.message);
-            }
-        } catch (error) {
-            console.log(error);
-            setBtnLoader(false)
-            ErrorShow('error', 'Oops!', error?.message);
-        }
+        navigation.navigate('AddCard')
+        // try {
+        //     setBtnLoader(true)
+        //     const body = {
+        //         amount: 5
+        //     }
+        //     const response = await handleIncreaseWallet(userData?._id, authToken, body)
+        //     console.log(response?.data);
+        //     if (response?.data?.success) {
+        //         setWallet(response?.data?.balance)
+        //         dispatch(updateWalletRedux(response?.data?.balance))
+        //         setBtnLoader(false)
+        //         ErrorShow('success', 'Congratulation!', response?.data?.message);
+        //     } else {
+        //         setBtnLoader(false)
+        //         ErrorShow('error', 'Oops!', response?.data?.message);
+        //     }
+        // } catch (error) {
+        //     console.log(error);
+        //     setBtnLoader(false)
+        //     ErrorShow('error', 'Oops!', error?.message);
+        // }
     }
     const handleNavigateToBack = () => {
         if (btnLoader) {

@@ -263,7 +263,7 @@ export default function Profile({navigation}) {
               marginVertical: 30,
             }}
             onCardChange={cardDetails => {
-              console.log('Card details:', cardDetails);
+              // console.log('Card details:', cardDetails);
             }}
             onFocus={focusedField => {
               // console.log('focusField', focusedField);
