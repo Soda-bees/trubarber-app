@@ -91,12 +91,24 @@ export default function Wallet({ navigation }) {
             ErrorShow('error', 'Oops!', error?.message);
         }
     }
+    const handleNavigateToBack = () => {
+        if (btnLoader) {
+            ToastAndroid.show('Some error, Try again later...', ToastAndroid.SHORT);
+          } else if (navigation.canGoBack()) {
+            navigation.goBack();
+          } else {
+            navigation.navigate('MyTabs');  // Replace 'SpecificScreen' with your desired screen
+          }
+    }
     return (
         <SafeAreaView>
             <View style={styles.container}>
                 {/* <Header title={"Wallet"} /> */}
                 <View style={styles.header}>
-                    <BackArrow onPress={() => btnLoader ? ToastAndroid.show('Some error, Try again later...', ToastAndroid.SHORT) : navigation.goBack()} />
+                    <BackArrow 
+                    // onPress={() => btnLoader ? ToastAndroid.show('Some error, Try again later...', ToastAndroid.SHORT) : navigation.goBack()}
+                    onPress={handleNavigateToBack}
+                    />
                     <Text style={styles.headerText}>Wallet</Text>
                     <View style={styles.emptyStyle}></View>
                 </View>

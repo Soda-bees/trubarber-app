@@ -271,12 +271,12 @@ export default function Profile({navigation}) {
           />
         </View>
 
-        {/* <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
-          <Button title={'Logout'} onPress={() => handleLogout()} />
-        </View> */}
         <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
-          <Button title={'Buy'} onPress={handlePayment} />
+          <Button title={'Logout'} onPress={() => handleLogout()} />
         </View>
+        {/* <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
+          <Button title={'Buy'} onPress={handlePayment} />
+        </View> */}
       </View>
     </SafeAreaView>
   );

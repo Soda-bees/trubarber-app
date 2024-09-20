@@ -88,6 +88,7 @@ export default function MainNavigator() {
     'Appointments',
     'AppoinmentBarber',
     'ChatDetails',
+    'Wallet'
   ];
 
   const getDetails = async () => {
@@ -120,6 +121,9 @@ export default function MainNavigator() {
     if (navigationId === 'Appointments') {
       return 'myapp://Appointments';
     }
+    if (navigationId === 'Wallet') {
+      return 'myapp://Wallet';
+    }
     if (navigationId === 'ChatDetails') {
       const { chatRoomId } = data;
       return `myapp://ChatDetails/${chatRoomId}`;
@@ -131,6 +135,7 @@ export default function MainNavigator() {
     prefixes: ['myapp://'],
     config: {
       screens: {
+        Wallet: 'Wallet',
         Notifications: 'Notifications',
         ChatDetails: 'ChatDetails/:chatRoomId',
         BarberTabs: {
