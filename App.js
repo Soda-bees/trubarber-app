@@ -7,7 +7,7 @@ import {LogBox, Text} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import socket from './src/services/Socket';
 import { StripeProvider } from '@stripe/stripe-react-native';
-
+import { PUBLISH_KEY } from '@env';
 
 export default function App() {
   useEffect(() => {
@@ -17,13 +17,14 @@ export default function App() {
 
   Text.defaultProps = Text.defaultProps || {};
   Text.defaultProps.allowFontScaling = false;
+  console.log('hiiiii',PUBLISH_KEY);
 
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <StripeProvider 
         // publishableKey="pk_live_eolzvsZWGgGEdxhhUSZcISQT00f7ponOKE" // client key
-        publishableKey="pk_test_51Q0i3SFWqbkEzf6rhMiTwrzirJFjPqfNVrorak6wVpD9GazCAsvC2GHrE2KSpTIdN06l3428lIyS1KmGxzcMvhvu00by6KVvm9"
+        publishableKey={PUBLISH_KEY}
         >
           <MainNavigator />
         </StripeProvider>
