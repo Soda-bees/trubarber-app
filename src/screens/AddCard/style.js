@@ -81,7 +81,10 @@ export const styles = StyleSheet.create({
   },
 
   button: {
-    marginTop: sizes.screenHeight * 0.342,
+    // marginTop: sizes.screenHeight * 0.342,
+    position:'absolute',
+    bottom:sizes.screenHeight * 0.1,
+    alignSelf:'center',
   },
 
 

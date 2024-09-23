@@ -705,12 +705,13 @@ export default function AppoinmentBarber({ navigation }) {
         )}
         {tab === 'request' && (
           <View
-            style={[
-              { marginTop: sizes.screenWidth * 0.06 },
-              Platform.OS == 'android' && {
-                maxHeight: sizes.screenHeight * 0.75,
-              },
-            ]}>
+            // style={[
+            //   { marginTop: sizes.screenWidth * 0.06 },
+            //   Platform.OS == 'android' && {
+            //     maxHeight: sizes.screenHeight * 0.75,
+            //   },
+            // ]}>
+            style={Platform.OS == 'android' ? styles.requestView : styles.requestViewIOS}> 
             {barber?.appoinment?.filter(item => item.status === 'Pending')
               ?.length > 0 ? (
               <FlatList

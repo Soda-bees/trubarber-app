@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
   },
   transparentBg: {
     // height: sizes.screenHeight * 0.14,
-    paddingVertical: sizes.screenHeight*0.03,
+    paddingVertical: sizes.screenHeight * 0.03,
     width: sizes.screenWidth,
   },
   inputContainer: {
@@ -95,7 +95,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.03,
     width: sizes.screenWidth * 0.042,
     resizeMode: 'contain',
-    tintColor:colors.black
+    tintColor: colors.black,
   },
   otherIconRow: {
     flexDirection: 'row',
@@ -412,7 +412,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenWidth * 0.035,
     resizeMode: 'contain',
     marginLeft: sizes.screenWidth * 0.025,
-    tintColor:colors.black
+    tintColor: colors.black,
   },
   seeDetailsText: {
     color: colors.black,
@@ -499,23 +499,32 @@ export const styles = StyleSheet.create({
     color: colors.white,
   },
 
-  noAppointment:{
-    justifyContent:'center',
-    alignItems:'center',
-    alignSelf:'center',
-    height:sizes.screenHeight * 0.6,
+  noAppointment: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    height: sizes.screenHeight * 0.6,
   },
 
-  noAppointmentImg:{
-    resizeMode:'contain',
-    width:sizes.screenWidth * 0.1,
-    height:sizes.screenWidth * 0.1,
+  noAppointmentImg: {
+    resizeMode: 'contain',
+    width: sizes.screenWidth * 0.1,
+    height: sizes.screenWidth * 0.1,
   },
 
-  noAppointmentText:{
-    color:colors.black,
-    fontSize:fontSize.smallM,
-    marginTop:10,
+  noAppointmentText: {
+    color: colors.black,
+    fontSize: fontSize.smallM,
+    marginTop: 10,
     // backgroundColor:'red'
+  },
+
+  requestView: {
+    maxHeight: sizes.screenHeight * 0.75,
+    marginTop: sizes.screenWidth * 0.06,
+  },
+  requestViewIOS: {
+    marginTop: sizes.screenWidth * 0.06,
+    marginBottom: sizes.screenWidth * 0.08,
   },
 });

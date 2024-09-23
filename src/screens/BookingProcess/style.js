@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native';
-import { colors, fontSize, sizes } from '../../services';
-import { black } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
+import {StyleSheet} from 'react-native';
+import {colors, fontSize, sizes} from '../../services';
+import {black} from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 export const styles = StyleSheet.create({
   container: {
@@ -14,7 +14,6 @@ export const styles = StyleSheet.create({
     // height: sizes.screenHeight * 0.2
     // backgroundColor:'red'
     // flexDirection:'row'
-
   },
   calender: {
     height: sizes.screenHeight * 0.2,
@@ -31,7 +30,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     borderColor: colors.black,
     borderWidth: 1,
-    borderRadius: sizes.screenWidth * 0.2
+    borderRadius: sizes.screenWidth * 0.2,
   },
 
   datesTouchableSelected: {
@@ -44,17 +43,17 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     borderColor: colors.black,
     borderWidth: 1,
-    borderRadius: sizes.screenWidth * 0.2
+    borderRadius: sizes.screenWidth * 0.2,
   },
   datesDate: {
     fontSize: fontSize.smallM,
     fontWeight: '800',
-    color: colors.black
+    color: colors.black,
   },
   datesDay: {
     fontSize: fontSize.small,
     fontWeight: '500',
-    color: colors.black
+    color: colors.black,
   },
 
   header: {
@@ -147,7 +146,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: sizes.screenWidth * 0.04,
     alignItems: 'center',
-    paddingHorizontal: sizes.screenWidth * 0.03
+    paddingHorizontal: sizes.screenWidth * 0.03,
   },
   bookContainer: {
     marginTop: sizes.screenHeight * 0.04,
@@ -230,7 +229,7 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '600',
     fontSize: fontSize.medium,
-    marginVertical: 4
+    marginVertical: 4,
   },
 
   time: {
@@ -266,8 +265,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: sizes.screenWidth * 0.03,
     marginTop: sizes.screenHeight * 0.02,
-    borderBottomWidth: sizes.screenWidth * 0.002,
-    borderColor: colors.lightBordercolor,
+    // borderBottomWidth: sizes.screenWidth * 0.002,
+    // borderColor: colors.lightBordercolor,
   },
 
   totalText: {
@@ -290,9 +289,11 @@ export const styles = StyleSheet.create({
   },
   paymentBorder: {
     marginTop: sizes.screenHeight * 0.03,
-    borderTopWidth: sizes.screenWidth * 0.002,
-    borderColor: colors.lightBordercolor,
+    // borderTopWidth: sizes.screenWidth * 0.002,
+    // borderColor: colors.lightBordercolor,
     gap: sizes.screenHeight * 0.02,
+    // width:sizes.screenWidth * 0.9,
+    alignSelf: 'center',
   },
   paymentTitle: {
     // backgroundColor: 'orange',
@@ -354,12 +355,19 @@ export const styles = StyleSheet.create({
   btnMarginIOS: {
     position: 'absolute',
     alignSelf: 'center',
-    bottom: sizes.screenHeight * 0.09
+    bottom: sizes.screenHeight * 0.09,
   },
   textContainer: {
     // backgroundColor: 'orange',
-    marginTop: sizes.screenHeight * 0.01,
-    width: sizes.screenWidth * 0.47,
+    // marginTop: sizes.screenHeight * 0.01,
+    width: sizes.screenWidth * 0.9,
+    paddingVertical: sizes.screenHeight * 0.018,
+  },
+
+  textContainerBorder: {
+    borderBottomWidth: sizes.screenWidth * 0.002,
+    borderTopWidth: sizes.screenWidth * 0.002,
+    borderColor: colors.lightBordercolor,
   },
 
   disabledText: {
@@ -374,7 +382,7 @@ export const styles = StyleSheet.create({
     height: 20,
     width: 20,
     marginRight: 6,
-    marginVertical: 3
+    marginVertical: 3,
   },
   modalContainer: {
     width: sizes.screenWidth,
@@ -382,7 +390,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   modalView: {
     width: sizes.screenWidth,
@@ -390,16 +398,16 @@ export const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopLeftRadius: sizes.screenWidth * 0.05,
     borderTopRightRadius: sizes.screenWidth * 0.05,
-    paddingVertical:sizes.screenWidth * 0.03,
-    position:'relative'
+    paddingVertical: sizes.screenWidth * 0.03,
+    position: 'relative',
   },
-  modalText:{
-    color:colors.black,
-    width:sizes.screenWidth * 0.9, 
-    alignSelf:'center',
-    textAlign:'center',
-    fontWeight:'500',
-    fontSize:fontSize.medium,
-    marginBottom:sizes.screenWidth * 0.03
-  }
+  modalText: {
+    color: colors.black,
+    width: sizes.screenWidth * 0.9,
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontWeight: '500',
+    fontSize: fontSize.medium,
+    marginBottom: sizes.screenWidth * 0.03,
+  },
 });

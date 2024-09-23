@@ -8,7 +8,8 @@ import {
   SafeAreaView,
   Platform,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  Alert,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import React, {useState} from 'react';
@@ -105,6 +106,7 @@ export default function AddCard({navigation}) {
   const onHide = () => {
     navigation.goBack();
   };
+
   return (
     <SafeAreaView>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -118,7 +120,28 @@ export default function AddCard({navigation}) {
             </View>
           </View>
           <View style={styles.addCardcontainer}>
-            <Text style={styles.title}>Name on Card</Text>
+            {/* <CardField
+              postalCodeEnabled={false}
+              placeholders={{
+                number: '4242 4242 4242 4242',
+              }}
+              cardStyle={{
+                backgroundColor: '#FFFFFF',
+                textColor: '#000000',
+              }}
+              style={{
+                width: '100%',
+                height: 50,
+                marginVertical: 30,
+              }}
+              onCardChange={cardDetails => {
+                // console.log('Card details:', cardDetails);
+              }}
+              onFocus={focusedField => {
+                // console.log('focusField', focusedField);
+              }}
+            /> */}
+            {/* <Text style={styles.title}>Name on Card</Text>
             <TextInput
               placeholderTextColor={colors.placeholdertextgray}
               style={
@@ -129,8 +152,8 @@ export default function AddCard({navigation}) {
               placeholder="Name on Card"
               value={cardName}
               onChangeText={text => setCardname(text)}
-            />
-            <View style={styles.marginTop}>
+            /> */}
+            {/* <View style={styles.marginTop}>
               <Text style={styles.title}>Card Number</Text>
               <TextInput
                 placeholderTextColor={colors.placeholdertextgray}
@@ -183,13 +206,13 @@ export default function AddCard({navigation}) {
                   />
                 </View>
               </View>
-            </View>
+            </View> */}
           </View>
           <View style={styles.button}>
             {loader ? (
               <Loader title={'Save'} />
             ) : (
-              <Button onPress={handleConfirm} title={'Save'} />
+              <Button onPress={handlePayment} title={'Save'} />
             )}
           </View>
           {/* <Modal
@@ -209,8 +232,7 @@ export default function AddCard({navigation}) {
             </View>
           </View>
         </Modal> */}
-        <Toast />
-
+          <Toast />
         </View>
       </TouchableWithoutFeedback>
     </SafeAreaView>
