@@ -30,7 +30,7 @@ import formatToJSON from '../../services/config/FormatToJson';
 import {useFocusEffect} from '@react-navigation/native';
 import images from '../../services/utilities/images';
 import BackArrow from '../../components/BackArrow';
-import {ErrorShow} from '../../components/Error';
+// import {ErrorShow} from '../../components/Error';
 import Toast from 'react-native-toast-message';
 import {CardField, useConfirmPayment} from '@stripe/stripe-react-native';
 import {useStripe} from '@stripe/stripe-react-native';
@@ -139,15 +139,25 @@ export default function Wallet({navigation}) {
   };
 
   const handlePayment = async () => {
-    if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
-      ErrorShow('error', 'Invalid Amount', 'Please enter a valid amount.');
-      setAmount('');
-      return;
-    }
+    //
+    // if (!numberValue || numberValue <= 0) {
+    //   ErrorShow('error', 'Invalid Amount', 'Please enter a valid amojklhunt.');
+    //   setAmount('');
+    //   return;
+    // }
+
     try {
+      const numberValue = amount;
+
+      if (!numberValue || numberValue <= 0) {
+        Alert.alert('Invalid Amount', 'Please enter valid amount');
+        setAmount('');
+        return;
+      }
+      setBtnLoader(true);
       const response = await axios.post(
         `${BASE_URL}user/createPaymentIntent`,
-        {amount: amount},
+        {amount: numberValue},
         {
           headers: {
             'Content-Type': 'application/json',
@@ -155,50 +165,96 @@ export default function Wallet({navigation}) {
           },
         },
       );
-      const {clientSecret} = await response.data;
-
+      const {clientSecret} = response.data;
       if (!clientSecret) {
-        throw new Error('Failed to get clientSecret');
+        setBtnLoader(false);
+        setAmount('');
+        return Alert.alert('Request failed ', 'Failed to intialize Payment');
       }
+      // if (!clientSecret) {
+      //   throw new Error('Failed to get clientSecret');
+      // }
+      // console.log('hareeees', clientSecret);
 
       const {error: initError} = await initPaymentSheet({
         paymentIntentClientSecret: clientSecret,
         paymentMethodType: 'Card',
-        // merchantDisplayName: 'My Store',
+        merchantDisplayName: 'TruBarber',
         billingDetails: {
           email: userData?.email || '',
         },
       });
 
       if (initError) {
-        throw new Error(initError.message);
+        setBtnLoader(false);
+        setAmount('');
+        return Alert.alert(initError.message || 'Request failed', 'Please try again');
+        // return Alert.alert(
+        //   'error',
+        //   'Oops one!',
+        //   initError.message || 'have some error',
+        // );
       }
 
       const {error: presentError} = await presentPaymentSheet();
 
       if (presentError) {
-        throw new Error(presentError.message);
+        setBtnLoader(false);
+        setAmount('');
+        Alert.alert(initError.message || 'Request failed', 'Please try again');
+        // return ErrorShow(
+        //   'error',
+        //   'Oops! two',
+        //   presentError.message || 'have some error',
+        // );
       }
-
-      await handleAddPayment();
-
-      Alert.alert(
-        'Payment Successful',
-        'Your payment has been processed successfully!',
+      const numberAmount = Number(amount);
+      const body = {
+        amount: numberAmount,
+      };
+      const responseSecond = await handleIncreaseWallet(
+        userData?._id,
+        authToken,
+        body,
       );
-      setAmount('');
+      if (responseSecond?.data?.success) {
+        setAmount('');
+        setWallet(responseSecond?.data?.balance);
+        dispatch(updateWalletRedux(responseSecond?.data?.balance));
+        setBtnLoader(false);
+        Alert.alert(
+          'Payment Successful',
+          'Your payment has been processed successfully!',
+        );
+        setAmount('');
+      } else {
+        setBtnLoader(false);
+        setAmount('');
+        Alert.alert(
+          responseSecond?.data?.message || 'have some error'
+        );
+      }
+      // Alert.alert(
+      //   'Payment Successful',
+      //   'Your payment has been processed successfully!',
+      // );
+      // setAmount('');
     } catch (error) {
       console.error('Error processing payment: ', error);
-      Alert.alert('Payment Error', error.message);
+      Alert.alert('Payment Error', 'The payment has been cancelled');
       setAmount('');
     }
   };
 
   const handleButtonPress = () => {
     if (enterPaymentAmount) {
+      console.log('if');
+
       setEnterPaymentAmount(false);
       handlePayment();
     } else {
+      console.log('else');
+
       togglePaymentAmount();
     }
   };
@@ -233,7 +289,16 @@ export default function Wallet({navigation}) {
             }`}</Text>
           </View>
         </ScrollView>
-        <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={60} style={styles.keyboardView}>
+        <KeyboardAvoidingView
+          behavior="padding"
+          keyboardVerticalOffset={
+            Platform.OS == 'android' ? sizes.screenHeight * 0 : 60
+          }
+          style={
+            Platform.OS == 'android'
+              ? styles.keyboardViewAndroid
+              : styles.keyboardView
+          }>
           {enterPaymentAmount && (
             <View style={styles.paymentAmount}>
               <Text style={styles.amountText}>Enter Amount</Text>
@@ -260,7 +325,6 @@ export default function Wallet({navigation}) {
             </TouchableOpacity>
           )}
         </KeyboardAvoidingView>
-        <Toast />
       </View>
     </SafeAreaView>
   );

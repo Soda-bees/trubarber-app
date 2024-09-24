@@ -168,7 +168,7 @@ export default function Catalogue({navigation}) {
         </View>
 
         {btnActive === 'barber' ? (
-          <ScrollView style={styles.scrollContainer}>
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View
               style={
                 Platform.OS == 'android'
@@ -252,8 +252,7 @@ export default function Catalogue({navigation}) {
             </View>
             <View
               style={{
-                paddingBottom:
-                  Platform.OS == 'ios' && sizes.screenHeight * 0.18,
+                paddingBottom: Platform.OS == 'android' ? sizes.screenHeight * 0.09 : sizes.screenHeight * 0.18,
               }}
             />
           </ScrollView>
@@ -289,20 +288,4 @@ export default function Catalogue({navigation}) {
       </View>
     </SafeAreaView>
   );
-}
-
-{
-  /* <View style={styles.navMargin}>
-  <View style={styles.navSelect}>
-    <Image
-      source={images.Discovery}
-      style={styles.bottonNavimg}
-      resizeMode="contain"
-    />
-    <Text>Explore</Text>
-  </View>
-  <Image source={images.Discovery} />
-  <Image source={images.Discovery} />
-  <Image source={images.Discovery} />
-</View> */
 }

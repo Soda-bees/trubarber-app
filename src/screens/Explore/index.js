@@ -446,7 +446,7 @@ export default function Explore({ navigation }) {
                 </View>
                 <View style={styles.marginTop}>
                   {categories?.length > 0 && (
-                    <Text style={styles.heading}>Categories</Text>
+                    <Text style={Platform.OS == 'android' ? styles.headingAndroid : styles.heading}>Categories</Text>
                   )}
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     <View style={styles.categoryRow}>
@@ -476,7 +476,7 @@ export default function Explore({ navigation }) {
                   </ScrollView>
                 </View>
                 <View style={styles.marginTop}>
-                  <Text style={styles.heading}>Recommended</Text>
+                  <Text style={Platform.OS == 'android' ? styles.headingAndroid : styles.heading}>Recommended</Text>
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     <View
                       style={

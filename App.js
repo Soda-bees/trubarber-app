@@ -17,7 +17,7 @@ export default function App() {
 
   Text.defaultProps = Text.defaultProps || {};
   Text.defaultProps.allowFontScaling = false;
-  console.log('hiiiii',PUBLISH_KEY);
+  // console.log('hiiiii',PUBLISH_KEY);
 
   return (
     <Provider store={store}>

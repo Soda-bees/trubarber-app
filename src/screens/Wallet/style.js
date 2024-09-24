@@ -106,6 +106,7 @@ export const styles = StyleSheet.create({
     borderColor: colors.black,
     borderWidth: 1,
     alignSelf: 'center',
+    backgroundColor:colors.bluishWhite
   },
 
   amountText: {
@@ -127,6 +128,10 @@ export const styles = StyleSheet.create({
 
   keyboardView:{
     bottom:100,
+    alignSelf:'center'
+  },
+  keyboardViewAndroid:{
+    bottom:10,
     alignSelf:'center'
   },
 });

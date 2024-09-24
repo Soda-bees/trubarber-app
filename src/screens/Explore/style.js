@@ -130,6 +130,14 @@ export const styles = StyleSheet.create({
     marginHorizontal: sizes.screenWidth * 0.05,
     marginBottom: 4,
   },
+  headingAndroid: {
+    color: colors.black,
+    fontSize: fontSize.extraLarge,
+    fontWeight: '700',
+    marginHorizontal: sizes.screenWidth * 0.05,
+    marginBottom: sizes.screenHeight * 0.008,
+    marginTop: sizes.screenHeight * 0.015,
+  },
   categoryRow: {
     marginStart: sizes.screenWidth * 0.05,
     marginTop: sizes.screenHeight * 0.01,
