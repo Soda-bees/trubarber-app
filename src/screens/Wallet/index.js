@@ -139,13 +139,6 @@ export default function Wallet({navigation}) {
   };
 
   const handlePayment = async () => {
-    //
-    // if (!numberValue || numberValue <= 0) {
-    //   ErrorShow('error', 'Invalid Amount', 'Please enter a valid amojklhunt.');
-    //   setAmount('');
-    //   return;
-    // }
-
     try {
       const numberValue = amount;
 
@@ -166,6 +159,7 @@ export default function Wallet({navigation}) {
         },
       );
       const {clientSecret} = response.data;
+      console.log('hiiiii', clientSecret);
       if (!clientSecret) {
         setBtnLoader(false);
         setAmount('');
@@ -176,19 +170,25 @@ export default function Wallet({navigation}) {
       // }
       // console.log('hareeees', clientSecret);
 
+      console.log('Payment Sheet Initialization'); // Logging initialization
+
       const {error: initError} = await initPaymentSheet({
         paymentIntentClientSecret: clientSecret,
         paymentMethodType: 'Card',
         merchantDisplayName: 'TruBarber',
         billingDetails: {
           email: userData?.email || '',
+          name: userData?.name || '',
         },
       });
 
       if (initError) {
         setBtnLoader(false);
         setAmount('');
-        return Alert.alert(initError.message || 'Request failed', 'Please try again');
+        return Alert.alert(
+          initError.message || 'Request failed',
+          'Please try again',
+        );
         // return Alert.alert(
         //   'error',
         //   'Oops one!',
@@ -197,7 +197,7 @@ export default function Wallet({navigation}) {
       }
 
       const {error: presentError} = await presentPaymentSheet();
-
+      console.log(presentError, 'whyy');
       if (presentError) {
         setBtnLoader(false);
         setAmount('');
@@ -208,6 +208,7 @@ export default function Wallet({navigation}) {
         //   presentError.message || 'have some error',
         // );
       }
+      console.log('yoooooooo');
       const numberAmount = Number(amount);
       const body = {
         amount: numberAmount,
@@ -230,9 +231,7 @@ export default function Wallet({navigation}) {
       } else {
         setBtnLoader(false);
         setAmount('');
-        Alert.alert(
-          responseSecond?.data?.message || 'have some error'
-        );
+        Alert.alert(responseSecond?.data?.message || 'have some error');
       }
       // Alert.alert(
       //   'Payment Successful',
@@ -240,7 +239,11 @@ export default function Wallet({navigation}) {
       // );
       // setAmount('');
     } catch (error) {
-      console.error('Error processing payment: ', error);
+      // console.error('Error processing payment: ', error);
+      // // Alert.alert('Payment Error', 'The payment has been cancelled');
+      // Alert.alert('Payment Error', 'The payment has been cancelled');
+      // setAmount('');
+      console.error('Error processing payment:', error);
       Alert.alert('Payment Error', 'The payment has been cancelled');
       setAmount('');
     }

@@ -6,8 +6,8 @@ import MainNavigator from './src/services/config/navigation';
 import {LogBox, Text} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import socket from './src/services/Socket';
-import { StripeProvider } from '@stripe/stripe-react-native';
-import { PUBLISH_KEY } from '@env';
+import {StripeProvider} from '@stripe/stripe-react-native';
+import {PUBLISH_KEY_CLIENT, PUBLISH_KEY} from '@env';
 
 export default function App() {
   useEffect(() => {
@@ -17,14 +17,12 @@ export default function App() {
 
   Text.defaultProps = Text.defaultProps || {};
   Text.defaultProps.allowFontScaling = false;
-  // console.log('hiiiii',PUBLISH_KEY);
 
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <StripeProvider 
-        // publishableKey="pk_live_eolzvsZWGgGEdxhhUSZcISQT00f7ponOKE" // client key
-        publishableKey={PUBLISH_KEY}
+        <StripeProvider
+          publishableKey={PUBLISH_KEY_CLIENT} // Client Stripe Key
         >
           <MainNavigator />
         </StripeProvider>

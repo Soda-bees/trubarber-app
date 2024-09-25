@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { colors, fontSize, sizes } from '../../services';
+import {StyleSheet} from 'react-native';
+import {colors, fontSize, sizes} from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
     borderWidth: sizes.screenWidth * 0.002,
     borderColor: colors.selectorcolor,
     borderRadius: sizes.screenWidth * 0.042,
-    paddingVertical: sizes.screenWidth * 0.025
+    paddingVertical: sizes.screenWidth * 0.025,
   },
   contentAlligment: {
     marginTop: sizes.screenHeight * 0.012,
@@ -55,7 +55,7 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.22,
   },
   nameContainer: {
-    marginLeft: sizes.screenWidth * 0.02
+    marginLeft: sizes.screenWidth * 0.02,
   },
   firstName: {
     fontSize: fontSize.h6,
@@ -79,14 +79,14 @@ export const styles = StyleSheet.create({
   redLocation: {
     width: sizes.screenHeight * 0.022,
     height: sizes.screenHeight * 0.015,
-    tintColor:colors.black,
-    marginTop:3
+    tintColor: colors.black,
+    marginTop: 3,
   },
   locationText: {
     fontSize: fontSize.small,
     color: colors.black,
     fontWeight: '500',
-    width:sizes.screenWidth * 0.72
+    width: sizes.screenWidth * 0.72,
   },
   navigation: {
     marginLeft: sizes.screenWidth * 0.07,
@@ -108,7 +108,9 @@ export const styles = StyleSheet.create({
   },
 
   btn: {
-    top: sizes.screenHeight * 0.28,
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: sizes.screenHeight * 0.1,
   },
   btnIOS: {
     position: 'absolute',
