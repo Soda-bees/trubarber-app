@@ -150,7 +150,10 @@ export default function Wallet({navigation}) {
       setBtnLoader(true);
       const response = await axios.post(
         `${BASE_URL}user/createPaymentIntent`,
-        {amount: numberValue},
+        {
+          amount: numberValue,
+          _id: userData._id,
+        },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -177,8 +180,12 @@ export default function Wallet({navigation}) {
         paymentMethodType: 'Card',
         merchantDisplayName: 'TruBarber',
         billingDetails: {
-          email: userData?.email || '',
-          name: userData?.name || '',
+          // email: userData?.email || '',
+          // name: userData?.name || '',
+          username: userData?.name,
+          email: userData?.email,
+          user_id:userData._id
+          // createdAt: userData?.createdAt,
         },
       });
 
@@ -243,8 +250,9 @@ export default function Wallet({navigation}) {
       // // Alert.alert('Payment Error', 'The payment has been cancelled');
       // Alert.alert('Payment Error', 'The payment has been cancelled');
       // setAmount('');
-      console.error('Error processing payment:', error);
+      console.error('Error processing payment:', error.message);
       Alert.alert('Payment Error', 'The payment has been cancelled');
+      setBtnLoader(false);
       setAmount('');
     }
   };
