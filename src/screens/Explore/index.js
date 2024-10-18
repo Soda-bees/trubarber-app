@@ -12,32 +12,35 @@ import {
   Alert,
   TouchableWithoutFeedback,
   Keyboard,
+  Linking,
+  AppState,
 } from 'react-native';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import images from '../../services/utilities/images';
-import { styles } from './style';
-import { colors, sizes } from '../../services';
-import MapView, { Marker } from 'react-native-maps';
+import {styles} from './style';
+import {colors, sizes} from '../../services';
+import MapView, {Marker} from 'react-native-maps';
 import StarRating from 'react-native-star-rating-widget';
 import LottieView from 'lottie-react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectAuthToken } from '../../store/authToken';
-import { getAllBarber, handleGetUserDetails } from '../../services/config/API';
-import { ErrorShow } from '../../components/Error';
-import { selectlocation, setLocation } from '../../store/location';
-import { setBarber } from '../../store/barber';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectAuthToken} from '../../store/authToken';
+import {getAllBarber, handleGetUserDetails} from '../../services/config/API';
+import {ErrorShow} from '../../components/Error';
+import {selectlocation, setLocation} from '../../store/location';
+import {setBarber} from '../../store/barber';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import formatToJSON from '../../services/config/FormatToJson';
-import { socket, socketService } from '../../services/Socket';
-import { selectUserData, setUserData } from '../../store/userData';
+import {socket, socketService} from '../../services/Socket';
+import {selectUserData, setUserData} from '../../store/userData';
 import ChatConponent from '../../components/ChatComponent';
 import NotificationComponent from '../../components/NotificationComponent';
 import Favourites from '../../components/FavouriteComponent';
 import BarberLocation from '../../components/BarberLocationBox';
+import { openSettings } from 'react-native-permissions';
 
-export default function Explore({ navigation }) {
+export default function Explore({navigation}) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const location = useSelector(selectlocation) || userData?.location;
@@ -139,34 +142,70 @@ export default function Explore({ navigation }) {
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c;
     return distance;
   };
 
   useEffect(() => {
-    const initializeLocation = async () => {
-      const hasPermission = await requestLocationPermission();
-      if (hasPermission) {
-        checkLocationServices()
-          .then(() => {
-            getCurrentLocation(setRegion, dispatch);
-          })
-          .catch(error => {
-            console.log('Location services not enabled', error.message);
-            Alert.alert(
-              'Location Services Disabled',
-              'Please enable location services to use this feature.',
-            );
-          });
+    const handleAppStateChange = nextAppState => {
+      if (nextAppState === 'active') {
+        initializeLocation(); // Re-run location initialization when app returns to the foreground
       }
     };
-
-    initializeLocation();
+  
+    // Subscribe to app state changes
+    const appStateSubscription = AppState.addEventListener('change', handleAppStateChange);
+  
+    // Initial permission request
+    if (Platform.OS === 'android') {
+      PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+      )
+        .then(res => {
+          if (res === PermissionsAndroid.RESULTS.GRANTED) {
+            requestUserPermission(); // Assuming you have a requestUserPermission function
+            initializeLocation();
+          } else {
+            initializeLocation();
+          }
+        })
+        .catch(error => {
+          console.log('Error requesting notification permission:', error);
+          initializeLocation();
+        });
+    } else {
+      initializeLocation();
+    }
+  
+    // Clean up the subscription when the component unmounts
+    return () => {
+      appStateSubscription.remove();
+    };
   }, []);
+
+  const initializeLocation = async () => {
+    const hasPermission = await requestLocationPermission();
+    console.log('has permission', hasPermission);
+    if (hasPermission) {
+      checkLocationServices()
+        .then(() => {
+          console.log('then');
+          getCurrentLocation(setRegion, dispatch);
+        })
+        .catch(error => {
+          console.log('catch');
+          console.log('Location services not enabled', error.message);
+          Alert.alert(
+            'Location Services Disabled',
+            'Please enable location services to use this feature.',
+          );
+        });
+    }
+  };
 
   const requestLocationPermission = async () => {
     if (Platform.OS === 'android') {
@@ -192,28 +231,45 @@ export default function Explore({ navigation }) {
         console.warn(err);
         return false;
       }
-    } else {
+    } else if (Platform.OS === 'ios') {
+      Geolocation.requestAuthorization();
       return true;
     }
   };
 
-  const checkLocationServices = () => {
-    return LocationServicesDialogBox.checkLocationServicesIsEnabled({
-      message:
-        '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
-      ok: 'YES',
-      cancel: 'NO',
-    });
+  const checkLocationServices = async () => {
+    // console.log("work checkLocationServices");
+    // return LocationServicesDialogBox.checkLocationServicesIsEnabled({
+    //   message:
+    //     '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
+    //   ok: 'YES',
+    //   cancel: 'NO',
+    // });
+
+    if (LocationServicesDialogBox) {
+      LocationServicesDialogBox.checkLocationServicesIsEnabled({
+        message:
+          '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
+        ok: 'YES',
+        cancel: 'NO',
+      })
+        .then(() => {
+          console.log('Location services enabled');
+        })
+        .catch(error => {
+          console.error('Location services not enabled', error.message);
+          throw error; // Re-throw the error to handle it in the calling function
+        });
+    } else {
+      console.error('LocationServicesDialogBox is not initialized');
+    }
   };
 
   const getCurrentLocation = (setRegion, dispatch) => {
+    console.log('work getCurrentLocation');
     Geolocation.getCurrentPosition(
       position => {
-        const { latitude, longitude } = position.coords;
-        // console.log(
-        //   position.coords,
-        //   '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
-        // );
+        const {latitude, longitude} = position.coords;
         const locationObj = {
           latitude,
           longitude,
@@ -229,11 +285,27 @@ export default function Explore({ navigation }) {
       error => {
         console.log('Error getting location: ', error.message);
         Alert.alert(
-          'Error',
-          'Unable to retrieve your location. Please try again.',
+          'Location Permission Required',
+          'Location access is essential for using all features of this app. Please enable location services in your settings.',
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+            {
+              text: 'Open Settings',
+              onPress: () => {
+                if (Platform.OS === 'ios') {
+                  openSettings();
+                } else {
+                  Linking.openSettings(); // Opens app settings on Android
+                }
+              },
+            },
+          ],
         );
       },
-      // {enableHighAccuracy: true, timeout: 20000, maximumAge: 20000},
+      {enableHighAccuracy: false, timeout: 20000, maximumAge: 20000},
     );
   };
 
@@ -258,12 +330,12 @@ export default function Explore({ navigation }) {
 
   const filteredBarbers = search
     ? (() => {
-      const searchLower = search.toLowerCase();
-      const filtered = barberData.filter(item =>
-        item.name.toLowerCase().includes(searchLower),
-      );
-      return filtered.length > 0 ? filtered : null;
-    })()
+        const searchLower = search.toLowerCase();
+        const filtered = barberData.filter(item =>
+          item.name.toLowerCase().includes(searchLower),
+        );
+        return filtered.length > 0 ? filtered : null;
+      })()
     : null;
 
   const calculateAverageRating = reviews => {
@@ -300,7 +372,7 @@ export default function Explore({ navigation }) {
                   resizeMode="contain"
                   style={styles.transparentBg}>
                   <View style={styles.topIconRow}>
-                    <BarberLocation user={true} />
+                    {/* <BarberLocation user={true} /> */}
                     <View style={styles.otherIconRow}>
                       <Favourites />
                       <NotificationComponent />
@@ -345,7 +417,13 @@ export default function Explore({ navigation }) {
                               })
                             }>
                             <ImageBackground
-                              source={item?.profile ? { uri: item?.profile } : item?.gender === "male" ? images.male : images.female}
+                              source={
+                                item?.profile
+                                  ? {uri: item?.profile}
+                                  : item?.gender === 'male'
+                                  ? images.male
+                                  : images.female
+                              }
                               imageStyle={styles.containerImage}
                               style={styles.containerImage}>
                               <View style={styles.row}>
@@ -435,7 +513,13 @@ export default function Explore({ navigation }) {
                             style={styles.locationImgIcon}
                             resizeMode="contain">
                             <Image
-                              source={item?.profile ? { uri: item?.profile } : item?.gender === "male" ? images.male : images.female}
+                              source={
+                                item?.profile
+                                  ? {uri: item?.profile}
+                                  : item?.gender === 'male'
+                                  ? images.male
+                                  : images.female
+                              }
                               style={styles.markerIngStyle}
                             />
                           </ImageBackground>
@@ -446,7 +530,14 @@ export default function Explore({ navigation }) {
                 </View>
                 <View style={styles.marginTop}>
                   {categories?.length > 0 && (
-                    <Text style={Platform.OS == 'android' ? styles.headingAndroid : styles.heading}>Categories</Text>
+                    <Text
+                      style={
+                        Platform.OS == 'android'
+                          ? styles.headingAndroid
+                          : styles.heading
+                      }>
+                      Categories
+                    </Text>
                   )}
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     <View style={styles.categoryRow}>
@@ -462,7 +553,7 @@ export default function Explore({ navigation }) {
                                 })
                               }>
                               <Image
-                                source={{ uri: item?.icon }}
+                                source={{uri: item?.icon}}
                                 style={styles.imageResize}
                                 resizeMode="contain"
                               />
@@ -476,7 +567,14 @@ export default function Explore({ navigation }) {
                   </ScrollView>
                 </View>
                 <View style={styles.marginTop}>
-                  <Text style={Platform.OS == 'android' ? styles.headingAndroid : styles.heading}>Recommended</Text>
+                  <Text
+                    style={
+                      Platform.OS == 'android'
+                        ? styles.headingAndroid
+                        : styles.heading
+                    }>
+                    Recommended
+                  </Text>
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     <View
                       style={
@@ -501,7 +599,13 @@ export default function Explore({ navigation }) {
                               })
                             }>
                             <ImageBackground
-                              source={item?.profile ? { uri: item?.profile } : item?.gender === "male" ? images.male : images.female}
+                              source={
+                                item?.profile
+                                  ? {uri: item?.profile}
+                                  : item?.gender === 'male'
+                                  ? images.male
+                                  : images.female
+                              }
                               imageStyle={styles.containerImage}
                               style={styles.containerImage}>
                               <View style={styles.row}>

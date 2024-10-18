@@ -168,7 +168,9 @@ export default function Profile({navigation}) {
                 resizeMode="contain"
               />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.naviRow}>
+            <TouchableOpacity
+              style={styles.naviRow}
+              onPress={() => navigation.navigate('About')}>
               <Text style={styles.navText}>About</Text>
               <Image
                 source={images.arrowRight}

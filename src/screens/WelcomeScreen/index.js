@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,23 +10,26 @@ import {
   Platform,
   PermissionsAndroid,
   Alert,
+  Linking,
+  AppState,
 } from 'react-native';
-import { styles } from './style.js';
+import {styles} from './style.js';
 import images from '../../services/utilities/images';
-import { colors, sizes } from '../../services';
+import {colors, sizes} from '../../services';
 import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectlocation, setLocation } from '../../store/location/index.js';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectlocation, setLocation} from '../../store/location/index.js';
 import messaging from '@react-native-firebase/messaging';
-import { selectUserData } from '../../store/userData/index.js';
+import {selectUserData} from '../../store/userData/index.js';
+import {openSettings} from 'react-native-permissions'; // For iOS, you'll need this module.
 
-export default function WelcomeScreen({ navigation }) {
+export default function WelcomeScreen({navigation}) {
   const dispatch = useDispatch();
-  const userData = useSelector(selectUserData)
-  const location = useSelector(selectlocation) || userData?.location
+  const userData = useSelector(selectUserData);
+  const location = useSelector(selectlocation) || userData?.location;
   console.log('location', location);
 
   const [imgActive, setImgActive] = useState(0);
@@ -63,27 +66,63 @@ export default function WelcomeScreen({ navigation }) {
     }
   }
 
+  // useEffect(() => {
+    // if (Platform.OS === 'android') {
+    //   PermissionsAndroid.request(
+    //     PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+    //   )
+    //     .then(res => {
+    //       console.log('res===>', res);
+    //       if (!!res && res === 'granted') {
+    //         requestUserPermission();
+    //         initializeLocation();
+    //       }
+    //       initializeLocation();
+    //     })
+    //     .catch(error => {
+    //       initializeLocation();
+    //       console.log('error in get permission in app.js');
+    //     });
+    // } else {
+    //   // requestUserPermission();
+    //   initializeLocation();
+    // }
+  // }, []);
+
   useEffect(() => {
+    const handleAppStateChange = nextAppState => {
+      if (nextAppState === 'active') {
+        initializeLocation(); // Re-run location initialization when app returns to the foreground
+      }
+    };
+
+    AppState.addEventListener('change', handleAppStateChange);
+
+    // Initial permission request
     if (Platform.OS === 'android') {
       PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
       )
         .then(res => {
           console.log('res===>', res);
-          if (!!res && res === 'granted') {
+          if (res === 'granted') {
             requestUserPermission();
             initializeLocation();
+          } else {
+            initializeLocation();
           }
-          initializeLocation();
         })
         .catch(error => {
-          initializeLocation();
           console.log('error in get permission in app.js');
+          initializeLocation();
         });
     } else {
-      // requestUserPermission();
       initializeLocation();
     }
+
+    return () => {
+      AppState.removeEventListener('change', handleAppStateChange);
+    };
   }, []);
 
   const initializeLocation = async () => {
@@ -130,8 +169,7 @@ export default function WelcomeScreen({ navigation }) {
         console.warn(err);
         return false;
       }
-    }
-    else if (Platform.OS === 'ios') {
+    } else if (Platform.OS === 'ios') {
       Geolocation.requestAuthorization();
       return true;
     }
@@ -169,7 +207,7 @@ export default function WelcomeScreen({ navigation }) {
     console.log('work getCurrentLocation');
     Geolocation.getCurrentPosition(
       position => {
-        const { latitude, longitude } = position.coords;
+        const {latitude, longitude} = position.coords;
         const locationObj = {
           latitude,
           longitude,
@@ -185,11 +223,27 @@ export default function WelcomeScreen({ navigation }) {
       error => {
         console.log('Error getting location: ', error.message);
         Alert.alert(
-          'Error',
-          'Unable to retrieve your location. Please try again.',
+          'Location Permission Required',
+          'Location access is essential for using all features of this app. Please enable location services in your settings.',
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+            {
+              text: 'Open Settings',
+              onPress: () => {
+                if (Platform.OS === 'ios') {
+                  openSettings();
+                } else {
+                  Linking.openSettings(); // Opens app settings on Android
+                }
+              },
+            },
+          ],
         );
       },
-      { enableHighAccuracy: false, timeout: 20000, maximumAge: 20000 },
+      {enableHighAccuracy: false, timeout: 20000, maximumAge: 20000},
     );
   };
 
@@ -197,12 +251,12 @@ export default function WelcomeScreen({ navigation }) {
     <SafeAreaView>
       <View style={styles.container}>
         <ScrollView
-          style={{ flex: 1 }}
+          style={{flex: 1}}
           horizontal={true}
           scrollEventThrottle={16}
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
-          onScroll={({ nativeEvent }) => onchange(nativeEvent)}>
+          onScroll={({nativeEvent}) => onchange(nativeEvent)}>
           <View style={Platform.OS == 'android' ? styles.body : styles.bodyIOS}>
             <ImageBackground
               style={styles.letsGetStartedImg1}

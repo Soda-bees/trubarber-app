@@ -8,6 +8,7 @@ import {
   TextInput,
   SafeAreaView,
   StyleSheet,
+  Linking,
 } from 'react-native';
 import React, {useState} from 'react';
 import {styles} from './style.js';
@@ -21,67 +22,100 @@ import Header from '../../components/Header/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
 export default function PrivacyPolicy({navigation}) {
+
+  const handleEmailPress = () => {
+    Linking.openURL('mailto:brian@simationstudios.com');
+  };
+
   return (
     <SafeAreaView>
-      <View style={styles.container}>
-        <View style={styles.borderBottom}>
-          <Header title={'Privacy Policy'} />
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Header title={'Privacy Policy'} />
+      </View>
+
+      <ScrollView style={styles.inputContainer} showsVerticalScrollIndicator={false}>
+        <View style={styles.gapText}>
+          <Text style={styles.titleMain}>Privacy Policy</Text>
+          <Text style={styles.textBlack}>
+            Your privacy matters to us. We are dedicated to safeguarding your personal information and ensuring transparency in our data practices.
+          </Text>
         </View>
 
-        <View style={styles.inputContainer}>
-          <View style={styles.gapText}>
-            <Text style={styles.title}>1. Types data we collect</Text>
-            <Text style={styles.textBlack}>
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-              accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-              quae ab illo inventore veritatis et qua si architecto beatae
-              vitae.
-            </Text>
-            <Text style={styles.textBlack}>
-              Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit
-              aut fugit.
-            </Text>
-          </View>
-          <View style={styles.gapText}>
-            <Text style={styles.title}>2. Use of your personal data</Text>
-            <Text style={styles.textBlack}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </Text>
-            <Text style={styles.textBlack}>
-              Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-              cupidatat non proident.
-            </Text>
-          </View>
-          <View style={styles.gapText}>
-            <Text style={styles.title}>
-              3. Disclosure of your personal data
-            </Text>
-            <Text style={styles.textBlack}>
-              At vero eos et accusamus et iusto odio dignissimos ducimus qui
-              blanditiis praesentium voluptatum deleniti atque corrupti quos
-              dolores et quas molestias excepturi sint occaecati cupiditate non
-              provident, similique sunt in culpa qui officia deserunt mollitia
-              animi, id est laborum et dolorum fuga.
-            </Text>
-            <Text style={styles.textBlack}>
-              Et harum quidem rerum facilis est et expedita distinctio. Nam
-              libero tempore, cum soluta nobis est eligendi optio cumque nihil
-              impedit quo minus id quod maxime placeat facere possimus, omnis
-              voluptas assumenda est, omnis dolor repellendus.
-            </Text>
-            <Text style={styles.textBlack}>
-              Temporibus autem quibusdam et aut officiis debitis aut rerum
-              necessitatibus saepe eveniet ut et voluptates repudiandae sint et
-              molestiae non recusandae. Itaque earum rerum hic tenetur a
-              sapiente delectus
-            </Text>
-          </View>
+        <View style={styles.gapText}>
+          <Text style={styles.title}>Information Collection and Use</Text>
+          <Text style={styles.textBlack}>
+            The TruBarber app (referred to as "Application") collects information when you download and use it. This may include:
+          </Text>
+          <Text style={styles.textBlack}>- "App would like to access your location"</Text>
+          <Text style={styles.textBlack}>- "Track user's location"</Text>
+          <Text style={styles.textBlack}>
+            Location data helps provide personalized content, relevant recommendations, and location-based services. Aggregated and anonymized data also helps improve the application's performance.
+          </Text>
         </View>
-      </View>
-    </SafeAreaView>
+
+        <View style={styles.gapText}>
+          <Text style={styles.title}>Third-Party Services</Text>
+          <Text style={styles.textBlack}>
+            The Application uses the following third-party services, which may periodically receive anonymized data:
+          </Text>
+          <Text style={styles.textBlack}>- Google Play Services</Text>
+          <Text style={styles.textBlack}>- Google Analytics for Firebase</Text>
+          <Text style={styles.textBlack}>- Firebase Crashlytics</Text>
+        </View>
+
+        <View style={styles.gapText}>
+          <Text style={styles.title}>Opt-Out Rights</Text>
+          <Text style={styles.textBlack}>
+            You can stop all data collection by uninstalling the Application.
+          </Text>
+        </View>
+
+        <View style={styles.gapText}>
+          <Text style={styles.title}>Data Retention Policy</Text>
+          <Text style={styles.textBlack}>
+            User-provided data is retained for as long as you use the Application and for a reasonable time thereafter. For data deletion requests, contact brian@simationstudios.com.
+          </Text>
+        </View>
+
+        <View style={styles.gapText}>
+          <Text style={styles.title}>Children</Text>
+          <Text style={styles.textBlack}>
+            The Application does not knowingly collect personal information from children under 13. Please contact us if you are aware of such activity.
+          </Text>
+        </View>
+
+        <View style={styles.gapText}>
+          <Text style={styles.title}>Security</Text>
+          <Text style={styles.textBlack}>
+            We take appropriate measures to safeguard the confidentiality of your information.
+          </Text>
+        </View>
+
+        <View style={styles.gapText}>
+          <Text style={styles.title}>Changes</Text>
+          <Text style={styles.textBlack}>
+            This policy may be updated periodically. Please review it regularly.
+          </Text>
+        </View>
+
+        <View style={styles.gapText}>
+          <Text style={styles.title}>Your Consent</Text>
+          <Text style={styles.textBlack}>
+            By using the Application, you consent to this Privacy Policy.
+          </Text>
+        </View>
+
+        <View style={styles.gapText}>
+            <Text style={styles.textBlack}>
+              If you have any questions, please contact us via email at{' '}
+              <Text style={styles.link} onPress={handleEmailPress}>
+                brian@simationstudios.com
+              </Text>.
+            </Text>
+          </View>
+      </ScrollView>
+    </View>
+  </SafeAreaView>
   );
 }

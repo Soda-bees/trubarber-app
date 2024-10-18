@@ -338,13 +338,32 @@ export default function EditBusinessProfile({ navigation, route }) {
     }
   };
 
-  const checkLocationServices = () => {
-    return LocationServicesDialogBox.checkLocationServicesIsEnabled({
-      message:
-        '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
-      ok: 'YES',
-      cancel: 'NO',
-    });
+  const checkLocationServices = async () => {
+    // console.log("work checkLocationServices");
+    // return LocationServicesDialogBox.checkLocationServicesIsEnabled({
+    //   message:
+    //     '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
+    //   ok: 'YES',
+    //   cancel: 'NO',
+    // });
+
+    if (LocationServicesDialogBox) {
+      LocationServicesDialogBox.checkLocationServicesIsEnabled({
+        message:
+          '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
+        ok: 'YES',
+        cancel: 'NO',
+      })
+        .then(() => {
+          console.log('Location services enabled');
+        })
+        .catch(error => {
+          console.error('Location services not enabled', error.message);
+          throw error; // Re-throw the error to handle it in the calling function
+        });
+    } else {
+      console.error('LocationServicesDialogBox is not initialized');
+    }
   };
 
   const getCurrentLocation = () => {

@@ -64,6 +64,7 @@ import UploadProfileBarber from '../../screens/UploadProfileBarber';
 import EditBusinessProfile from '../../screens/EditBusinessProfile';
 import UserFavourites from '../../screens/UserFavourites';
 import Wallet from '../../screens/Wallet';
+import About from '../../screens/About';
 
 
 
@@ -236,6 +237,7 @@ export default function MainNavigator() {
           />
           <Stack.Screen name="EditScreen" component={EditScreen} />
           <Stack.Screen name="ProfileSecurity" component={ProfileSecurity} />
+          <Stack.Screen name="About" component={About} />
           <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
           <Stack.Screen
             name="BarberSevriceDetails"
@@ -262,6 +264,7 @@ export default function MainNavigator() {
           <Stack.Screen name="EditScreen" component={EditScreen} />
           <Stack.Screen name="ProfileSecurity" component={ProfileSecurity} />
           <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+          <Stack.Screen name="About" component={About} />
           <Stack.Screen name="SetUpServices" component={SetUpServices} />
           <Stack.Screen name="ServiceInfo" component={ServiceInfo} />
           <Stack.Screen name="BarberProfile" component={BarberProfile} />

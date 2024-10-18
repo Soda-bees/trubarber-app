@@ -42,10 +42,10 @@ export const styles = StyleSheet.create({
 
   inputContainer: {
     // backgroundColor: 'red',
-    marginTop: sizes.screenHeight * 0.032,
+    marginBottom: sizes.screenHeight * 0.12,
     marginLeft: sizes.screenWidth * 0.052,
     marginRight: sizes.screenWidth * 0.062,
-    gap: sizes.screenHeight * 0.012
+    // gap: sizes.screenHeight * 0.012
   },
   gapText: {
     gap: sizes.screenHeight * 0.012,
@@ -54,6 +54,12 @@ export const styles = StyleSheet.create({
   title: {
     color: colors.black,
     fontWeight: '700',
+    marginTop:sizes.screenHeight * 0.02
+  },
+  titleMain: {
+    color: colors.black,
+    fontWeight: '700',
+    marginTop:sizes.screenHeight * 0.02
   },
 
   textBlack: {
