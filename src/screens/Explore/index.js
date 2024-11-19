@@ -487,47 +487,7 @@ export default function Explore({navigation}) {
                   </ScrollView>
                 )}
 
-                <View style={styles.mapContainer}>
-                  <MapView
-                    style={styles.mapStyle}
-                    initialRegion={{
-                      latitude: location?.latitude,
-                      longitude: location?.longitude,
-                      latitudeDelta: 0.001,
-                      longitudeDelta: 0.001,
-                    }}
-                    followsUserLocation={true}
-                    showsMyLocationButton={true}
-                    showsUserLocation
-                    showsCompass={true}>
-                    {barberData?.map((item, index) => {
-                      return (
-                        <Marker
-                          key={index}
-                          coordinate={{
-                            latitude: item?.location?.latitude,
-                            longitude: item?.location?.longitude,
-                          }}>
-                          <ImageBackground
-                            source={images.locationIcon}
-                            style={styles.locationImgIcon}
-                            resizeMode="contain">
-                            <Image
-                              source={
-                                item?.profile
-                                  ? {uri: item?.profile}
-                                  : item?.gender === 'male'
-                                  ? images.male
-                                  : images.female
-                              }
-                              style={styles.markerIngStyle}
-                            />
-                          </ImageBackground>
-                        </Marker>
-                      );
-                    })}
-                  </MapView>
-                </View>
+               
                 <View style={styles.marginTop}>
                   {categories?.length > 0 && (
                     <Text

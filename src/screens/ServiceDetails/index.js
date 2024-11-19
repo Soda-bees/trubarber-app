@@ -29,6 +29,8 @@ export default function ServiceDetails({ navigation, route }) {
   const dispatch = useDispatch();
   const cart = useSelector(selectCart);
   const { item } = route.params;
+  console.log("item-=-=-=>",formatToJSON(item));
+  
   const userData = useSelector(selectUserData);
   const [modalOpen, setModalopen] = useState(false);
   const [selectedIndices, setSelectedIndices] = useState(null);
@@ -36,7 +38,9 @@ export default function ServiceDetails({ navigation, route }) {
   const [totalAmount, setTotalAmount] = useState('');
 
   useEffect(() => {
+    
     if (item && Array.isArray(item.options)) {
+      console.log("item" , formatToJSON(item.options));
       setStyleMenu(item.options);
     }
   }, [route.params.item]);
@@ -47,7 +51,7 @@ export default function ServiceDetails({ navigation, route }) {
       if (prevIndex === index) {
         setTotalAmount(prevAmount => prevAmount - price);
         return null;
-      } else {
+      } else {  
         // Select a new index
         setTotalAmount(prevAmount => prevAmount - prevAmount);
         setTotalAmount(prevAmount => prevAmount + price);
@@ -118,10 +122,10 @@ export default function ServiceDetails({ navigation, route }) {
             user: userData?._id,
             services: newArray,
             status: 'Pending',
-          };
-          console.log(obj);
+          };          
+          console.log(formatToJSON(obj));
           dispatch(updateCart(obj));
-          navigation.navigate('BookingProcess');
+          // navigation.navigate('BookingProcess');
         } else {
           const oldCart = cart;
           let newArray = item.options
