@@ -69,9 +69,9 @@ export default function BookingProcess({navigation, route}) {
     const backAction = () => {
       if (loader) {
         ToastAndroid.show('Please wait, loading...', ToastAndroid.SHORT);
-        return true; // Prevent default behavior
+        return true;
       }
-      return false; // Allow default behavior
+      return false;
     };
 
     const backHandler = BackHandler.addEventListener(
@@ -382,6 +382,9 @@ export default function BookingProcess({navigation, route}) {
   };
 
   const handleConfirm = async () => {
+    if (!authToken) {
+      return navigation.navigate('WelcomeScreen');
+    }
     const previousPrice = calculateTotalPriceForPendingAppointments(
       userData?.appoinment,
     );
@@ -460,20 +463,15 @@ export default function BookingProcess({navigation, route}) {
   };
 
   const maskCardNumber = cardNumber => {
-    // Remove spaces from the card number
     const cardNumberWithoutSpaces = cardNumber.replace(/\s+/g, '');
 
-    // Check if the card number is 16 digits
     if (cardNumberWithoutSpaces.length === 16) {
-      // Mask all but the last 4 digits
       const maskedCardNumber =
         '************' + cardNumberWithoutSpaces.slice(-4);
 
-      // Add spaces back to the masked card number
       return maskedCardNumber.replace(/(.{4})/g, '$1 ').trim();
     }
 
-    // If the card number is not 16 digits, return it as is (or handle the error)
     return cardNumber;
   };
 
@@ -712,8 +710,11 @@ export default function BookingProcess({navigation, route}) {
                   }}
                   style={{
                     position: 'absolute',
-                    bottom: sizes.screenHeight * 0.34,
-                    right: 5,
+                    bottom:
+                      Platform.OS == 'android'
+                        ? sizes.screenHeight * 0.34
+                        : sizes.screenHeight * 0.36,
+                    right: 12,
                   }}>
                   <Image
                     source={images.crossIcon}

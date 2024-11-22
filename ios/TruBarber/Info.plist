@@ -38,24 +38,23 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>This app requires access to the camera.</string>
+	<string>This app requires access to your camera to allow you to take and upload photos directly.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>We use your location to show relevant content and notifications.</string>
+	<string>We use your location to show nearby barbershops and enhance your experience with relevant local information.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>We use your location to show relevant content and notifications.</string>
+	<string>Your location is used to display nearby barbershops and to provide navigation to your selected shop, even if the app is running in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We use your location to show relevant content and notifications.</string>
+	<string>Your location is used to display nearby barbershops and provide navigation to your selected shop while using the app.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app does not require access to the microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app requires access to the photo library.</string>
+	<string>This app requires access to your photo library to upload and select photos for your profile or booking needs.</string>
 	<key>NSPushNotificationsUsageDescription</key>
-	<string>This app requires access to notifications.</string>
+	<string>Notifications are used to keep you updated on upcoming appointments and important updates from your barber.</string>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>We use your location to show relevant content and notifications.</string>
+    <string>This app may use tracking permission to personalize your experience and improve app functionality.</string>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>location</string>
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>

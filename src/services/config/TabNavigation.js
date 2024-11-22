@@ -1,18 +1,35 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { sizes } from '../utilities/sizes';
-import { colors } from '../utilities/colors';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {sizes} from '../utilities/sizes';
+import {colors} from '../utilities/colors';
 import images from '../utilities/images';
-import { Image, Platform, Text, View } from 'react-native';
-import { fontSize } from '../utilities/fonts';
+import {Image, Platform, Text, View} from 'react-native';
+import {fontSize} from '../utilities/fonts';
 import Profile from '../../screens/Profile';
 import Explore from '../../screens/Explore';
 import Catalogue from '../../screens/Catalogue';
 import Appointments from '../../screens/Appointments';
+import {useSelector} from 'react-redux';
+import {selectAuthToken} from '../../store/authToken';
+import WelcomeScreen from '../../screens/WelcomeScreen';
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigation() {
+  const authToken = useSelector(selectAuthToken);
+  const bottomTabStyling = {
+    backgroundColor: colors.white,
+    width: sizes.screenWidth,
+    height:
+      Platform.OS == 'android'
+        ? sizes.screenHeight * 0.075
+        : sizes.screenHeight * 0.105,
+    paddingTop: sizes.screenHeight * 0.01,
+    paddingHorizontal: sizes.screenWidth * 0.04,
+    borderTopRightRadius: sizes.screenWidth * 0.07,
+    borderTopLeftRadius: sizes.screenWidth * 0.07,
+  };
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -21,7 +38,10 @@ export default function TabNavigation() {
         tabBarStyle: {
           backgroundColor: colors.white,
           width: sizes.screenWidth,
-          height: Platform.OS == 'android' ? sizes.screenHeight * 0.075 : sizes.screenHeight * 0.105,
+          height:
+            Platform.OS == 'android'
+              ? sizes.screenHeight * 0.075
+              : sizes.screenHeight * 0.105,
           paddingTop: sizes.screenHeight * 0.01,
           paddingHorizontal: sizes.screenWidth * 0.04,
           borderTopRightRadius: sizes.screenWidth * 0.07,
@@ -32,7 +52,7 @@ export default function TabNavigation() {
         name="Explore"
         component={Explore}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <Image
               source={images.exploreTabBerfore}
               style={{
@@ -41,11 +61,11 @@ export default function TabNavigation() {
                 height: focused
                   ? sizes.screenWidth * 0.05
                   : sizes.screenWidth * 0.05,
-                tintColor: focused ? colors.black : colors.grayBorder
+                tintColor: focused ? colors.black : colors.grayBorder,
               }}
             />
           ),
-          tabBarLabel: ({ focused }) => (
+          tabBarLabel: ({focused}) => (
             <CustomTabLabel focused={focused} label="Explore" />
           ),
         }}
@@ -54,7 +74,7 @@ export default function TabNavigation() {
         name="Catalogue"
         component={Catalogue}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <View>
               <Image
                 source={images.catalogueTabBefore}
@@ -64,12 +84,12 @@ export default function TabNavigation() {
                   height: focused
                     ? sizes.screenWidth * 0.05
                     : sizes.screenWidth * 0.05,
-                  tintColor: focused ? colors.black : colors.grayBorder
+                  tintColor: focused ? colors.black : colors.grayBorder,
                 }}
               />
             </View>
           ),
-          tabBarLabel: ({ focused }) => (
+          tabBarLabel: ({focused}) => (
             <CustomTabLabel focused={focused} label="Catalogue" />
           ),
         }}
@@ -77,9 +97,10 @@ export default function TabNavigation() {
 
       <Tab.Screen
         name="Appointments"
-        component={Appointments}
+        component={authToken ? Appointments : WelcomeScreen}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarStyle: authToken ? bottomTabStyling : {display: 'none'},
+          tabBarIcon: ({focused}) => (
             <View>
               <Image
                 source={images.appointmentTabBefore}
@@ -89,21 +110,22 @@ export default function TabNavigation() {
                   height: focused
                     ? sizes.screenWidth * 0.05
                     : sizes.screenWidth * 0.05,
-                  tintColor: focused ? colors.black : colors.grayBorder
+                  tintColor: focused ? colors.black : colors.grayBorder,
                 }}
               />
             </View>
           ),
-          tabBarLabel: ({ focused }) => (
+          tabBarLabel: ({focused}) => (
             <CustomTabLabel focused={focused} label="Appointments" />
           ),
         }}
       />
       <Tab.Screen
         name="Profile"
-        component={Profile}
+        component={authToken ? Profile : WelcomeScreen}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarStyle: authToken ? bottomTabStyling : {display: 'none'},
+          tabBarIcon: ({focused}) => (
             <View>
               <Image
                 source={images.profileTabBefore}
@@ -113,13 +135,13 @@ export default function TabNavigation() {
                   height: focused
                     ? sizes.screenWidth * 0.05
                     : sizes.screenWidth * 0.05,
-                  tintColor: focused ? colors.black : colors.grayBorder
+                  tintColor: focused ? colors.black : colors.grayBorder,
                 }}
               />
             </View>
           ),
 
-          tabBarLabel: ({ focused }) => (
+          tabBarLabel: ({focused}) => (
             <CustomTabLabel focused={focused} label="Profile" />
           ),
         }}
@@ -128,7 +150,7 @@ export default function TabNavigation() {
   );
 }
 
-const CustomTabLabel = ({ focused, label }) => {
+const CustomTabLabel = ({focused, label}) => {
   const inactiveColor = colors.black;
   const activeColor = colors.tealMix;
   return (
@@ -137,7 +159,7 @@ const CustomTabLabel = ({ focused, label }) => {
         color: focused ? colors.black : colors.grayBorder,
         fontSize: fontSize.small,
         marginBottom: sizes.screenHeight * 0.01,
-        fontWeight: focused ? '500' : '400'
+        fontWeight: focused ? '500' : '400',
       }}>
       {label}
     </Text>

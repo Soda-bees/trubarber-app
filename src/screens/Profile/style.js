@@ -49,6 +49,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: sizes.screenWidth * 0.06,
+    overflow: 'hidden',
   },
   youngMan: {
     borderRadius: sizes.screenWidth * 200,
@@ -62,6 +63,7 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.h6,
     fontWeight: '700',
     color: colors.black,
+    width: sizes.screenWidth * 0.6,
   },
   lastName: {
     fontSize: fontSize.h6,
@@ -80,14 +82,14 @@ export const styles = StyleSheet.create({
   redLocation: {
     width: sizes.screenHeight * 0.022,
     height: sizes.screenHeight * 0.015,
-    tintColor:colors.black,
-    marginTop:4
+    tintColor: colors.black,
+    marginTop: 4,
   },
   locationText: {
     fontSize: fontSize.small,
     color: colors.black,
     fontWeight: '500',
-    width:sizes.screenWidth * 0.7
+    width: sizes.screenWidth * 0.7,
   },
   navigation: {
     marginLeft: sizes.screenWidth * 0.07,
@@ -117,5 +119,62 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     bottom: sizes.screenHeight * 0.19,
+  },
+
+  mainContainer: {
+    // height:sizes.screenHeight * 0.2,
+    // width:sizes.screenWidth * 0.9,
+    alignSelf: 'center',
+    backgroundColor: colors.white,
+    borderRadius: sizes.screenWidth * 0.03,
+    padding: sizes.screenWidth * 0.035,
+  },
+
+  modalHeading: {
+    color: colors.black,
+    fontWeight: '500',
+    fontSize: fontSize.h5,
+    textAlign: 'center',
+  },
+
+  modalText: {
+    color: colors.black,
+    fontSize: fontSize.medium,
+    marginVertical: sizes.screenHeight * 0.01,
+    textAlign: 'center',
+  },
+
+  cancelBtn: {
+    borderWidth: 1,
+    padding: 12,
+    borderRadius: 5,
+    marginRight:10,
+    width:sizes.screenWidth * 0.4,
+   
+  },
+  cancelBtn2: {
+    padding: 12,
+    borderRadius: 5,
+    backgroundColor:'red',
+    width:sizes.screenWidth * 0.4,
+  },
+
+  btnText:{
+    textAlign:'center',
+    fontWeight:'500',
+    fontSize:fontSize.smallM
+  },
+  btnText2:{
+    textAlign:'center',
+    fontWeight:'500',
+    color:colors.white,
+    fontWeight:'600',
+    fontSize:fontSize.smallM
+  },
+
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop:20
   },
 });

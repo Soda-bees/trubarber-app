@@ -59,7 +59,7 @@ export const styles = StyleSheet.create({
   locationRow: {
     flexDirection: 'row',
     height: sizes.screenHeight * 0.064,
-    width:sizes.screenWidth * 0.45,
+    width: sizes.screenWidth * 0.45,
     backgroundColor: colors.lightgray,
     borderRadius: sizes.screenWidth * 0.04,
     paddingHorizontal: sizes.screenWidth * 0.03,
@@ -80,7 +80,7 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontSize: fontSize.small,
     fontWeight: 'bold',
-    width:sizes.screenWidth * 0.27,
+    width: sizes.screenWidth * 0.27,
     overflow: 'hidden',
   },
   locationContainertop: {
@@ -104,7 +104,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.03,
     width: sizes.screenWidth * 0.042,
     resizeMode: 'contain',
-    tintColor:colors.black
+    tintColor: colors.black,
   },
   otherIconRow: {
     flexDirection: 'row',
@@ -202,8 +202,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
-    width: sizes.screenWidth*0.912,
-    alignSelf: 'center'
+    width: sizes.screenWidth * 0.912,
+    alignSelf: 'center',
   },
 
   contentMarginIOS: {
@@ -211,8 +211,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
-    width: sizes.screenWidth*0.912,
-    alignSelf: 'center'
+    width: sizes.screenWidth * 0.912,
+    alignSelf: 'center',
   },
 
   containerImage: {
@@ -220,7 +220,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.24,
     borderRadius: 12,
   },
-  
+
   containerImageIOS: {
     width: sizes.screenWidth * 0.44,
     height: sizes.screenHeight * 0.24,
@@ -239,7 +239,6 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.small,
   },
 
-
   bluredImg: {
     height: sizes.screenHeight * 0.099,
     borderRadius: sizes.screenHeight * 0.012,
@@ -247,17 +246,22 @@ export const styles = StyleSheet.create({
     opacity: 0.9,
     position: 'absolute',
     bottom: 10,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
 
   textDarkerblack: {
-    color:colors.black,
+    color: colors.black,
     fontWeight: '700',
     fontSize: fontSize.small,
-    marginLeft: sizes.screenWidth*0.02,
-    marginTop: sizes.screenHeight*0.01
+    marginLeft: sizes.screenWidth * 0.02,
+    marginTop: sizes.screenHeight * 0.01,
   },
   textBlack: {
+    color: colors.black,
+    fontSize: fontSize.extraSmall,
+    fontWeight: '700',
+  },
+  textBlackBarberLocation: {
     color: colors.black,
     fontSize: fontSize.extraSmall,
     fontWeight: '700',
@@ -284,7 +288,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   btnText: {
     fontSize: fontSize.small,
@@ -327,5 +331,48 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.1,
     borderColor: colors.white,
     borderWidth: 1,
+  },
+
+  loaderStyle: {
+    alignSelf: 'start',
+  },
+
+  modalContainer: {
+    width: sizes.screenWidth * 0.8,
+    backgroundColor: colors.white,
+    alignSelf: 'center',
+    borderRadius: sizes.screenWidth * 0.02,
+    paddingVertical:15
+  },
+
+  modalTextHeading: {
+    fontSize: sizes.fontLarge,
+    fontWeight: 'bold',
+    color: colors.black,
+    marginBottom: sizes.screenHeight * 0.01,
+    alignSelf: 'center',
+  },
+
+  modalMessage: {
+    fontSize: sizes.fontMedium,
+    color: colors.blackGrey,
+    textAlign: 'center',
+    marginBottom: sizes.screenHeight * 0.02,
+  },
+
+  supportButton: {
+    backgroundColor: colors.primary,
+    padding: sizes.screenHeight * 0.015,
+    borderRadius: 5,
+    width: sizes.screenWidth * 0.7,
+    alignSelf:'center',
+    // flex: 1,
+    // marginLeft: sizes.screenWidth * 0.02,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: colors.white,
+    fontSize: sizes.fontMedium,
+    fontWeight: 'bold',
   },
 });

@@ -54,6 +54,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.22,
     width: sizes.screenWidth * 0.91,
     borderRadius: sizes.screenWidth * 0.042,
+    resizeMode: 'cover',
   },
 
   contextText: {
@@ -71,6 +72,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: sizes.screenWidth * 0.02,
+    width:sizes.screenWidth * 0.55,
   },
   whiteLocation: {
     height: sizes.screenHeight * 0.017,
@@ -177,10 +179,10 @@ export const styles = StyleSheet.create({
     height: sizes.screenWidth * 0.04,
     marginRight: sizes.screenWidth * 0.042,
   },
-  crossStyle:{
+  crossStyle: {
     height: sizes.screenWidth * 0.06,
     marginRight: sizes.screenWidth * 0.02,
-  },  
+  },
   scrollContainer: {
     // marginTop: sizes.screenHeight * 0.02,
     marginBottom: sizes.screenHeight * 0.07,
@@ -203,12 +205,13 @@ export const styles = StyleSheet.create({
   },
   statusText: {
     backgroundColor: colors.black,
-    paddingHorizontal: sizes.screenWidth * 0.05,
+    padding: sizes.screenWidth * 0.011,
+    paddingHorizontal:12,
     fontSize: fontSize.medium,
     fontWeight: '500',
     color: colors.white,
     borderRadius: sizes.screenWidth * 0.02,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
 
   appointmentStyle: {
@@ -229,5 +232,21 @@ export const styles = StyleSheet.create({
     marginLeft: 5,
     textAlign: 'center',
     width: sizes.screenWidth * 0.7,
+  },
+
+  redLocation: {
+    justifyContent: 'flex-start',
+    paddingRight: 6,
+    height: 16,
+    tintColor: colors.black,
+    // backgroundColor : 'red',
+  },
+
+  barberLocation: {
+    fontSize: fontSize.small,
+    // color: colors.grayText,
+    maxWidth: sizes.screenWidth * 0.5,
+    textAlign: 'center',
+    // width: sizes.screenWidth * 0.5,
   },
 });

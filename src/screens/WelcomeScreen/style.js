@@ -164,4 +164,22 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.h2,
     width: sizes.screenWidth * 0.13,
   },
+
+  skipButton:{
+    position:'absolute',
+    top:sizes.screenHeight * 0.05,
+    right:sizes.screenWidth * 0.05,
+    borderRadius:sizes.screenWidth * 0.04,
+    borderColor:colors.white,
+    borderWidth:1,
+    paddingVertical:sizes.screenHeight * 0.014,
+    paddingHorizontal:sizes.screenHeight * 0.05,
+    backgroundColor:colors.blackGrey
+  },
+
+  skipText:{
+    color:colors.white,
+    fontSize:fontSize.medium,
+    fontWeight:'500'
+  },
 });

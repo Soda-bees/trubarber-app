@@ -21,7 +21,10 @@ import BackArrow from '../../components/BackArrow/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import moment from 'moment';
 import {useDispatch, useSelector} from 'react-redux';
-import {addFavouritesRedux, selectUserData} from '../../store/userData/index.js';
+import {
+  addFavouritesRedux,
+  selectUserData,
+} from '../../store/userData/index.js';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {selectAuthToken} from '../../store/authToken/index.js';
 import Modal from 'react-native-modal';
@@ -41,7 +44,7 @@ export default function Review({navigation, route}) {
   const barber = route?.params.barbar;
   const user = useSelector(selectUserData);
   const token = useSelector(selectAuthToken);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [showModal1, setShowModal1] = useState(false);
 
   const [services, setServices] = useState([]);
@@ -249,16 +252,14 @@ export default function Review({navigation, route}) {
   }, []);
 
   useEffect(() => {
-    const isFavourite = user?.favourites?.some(
-      fav => fav._id === barber._id,
-    );
+    const isFavourite = user?.favourites?.some(fav => fav._id === barber._id);
     setFav(isFavourite);
   }, [user, barber._id]);
 
   const handleAddFavourites = async () => {
     try {
       setFavLoader(true);
-      const body = { barberId: barber?._id };
+      const body = {barberId: barber?._id};
       const response = await addFavourite(token, body);
       console.log(response?.data);
       if (response?.data?.success) {
@@ -286,14 +287,13 @@ export default function Review({navigation, route}) {
 
   useEffect(() => {
     getAddress(barber?.location?.latitude, barber?.location?.longitude);
-    console.log("worj");
-
+    console.log('worj');
   }, []);
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
-      <ImageBackground
+        <ImageBackground
           imageStyle={styles.headerImage}
           // source={{ uri: barber?.businessProfile }}
         >
@@ -328,10 +328,10 @@ export default function Review({navigation, route}) {
                 <Image
                   source={
                     barber?.profile
-                      ? { uri: barber?.profile }
+                      ? {uri: barber?.profile}
                       : barber?.gender === 'male'
-                        ? images.male
-                        : images.female
+                      ? images.male
+                      : images.female
                   }
                   style={styles.male}
                 />
@@ -339,11 +339,15 @@ export default function Review({navigation, route}) {
               <View style={styles.barberNameContainer}>
                 <Text style={styles.barberName}>{barber?.name}</Text>
               </View>
-
             </View>
           </View>
         </ImageBackground>
-        <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={Platform.OS == 'android' ? 100 : sizes.screenHeight * 0.45} extraScrollHeight={100}>
+        <KeyboardAwareScrollView
+          enableOnAndroid={true}
+          extraHeight={
+            Platform.OS == 'android' ? 100 : sizes.screenHeight * 0.45
+          }
+          extraScrollHeight={100}>
           <View style={styles.ratingContainer}>
             <StarRating
               rating={rating}
@@ -358,7 +362,16 @@ export default function Review({navigation, route}) {
             </Text>
             <View style={styles.userRow}>
               <View style={styles.userRowLeft}>
-                <Image source={{uri: user.profile}} style={styles.profile} />
+                <Image
+                  source={
+                    user.profile
+                      ? {uri: user.profile}
+                      : user.gender === 'male'
+                      ? images.male
+                      : images.female
+                  }
+                  style={styles.profile}
+                />
                 <Text style={styles.userName}>{user.name}</Text>
               </View>
               {review ? (

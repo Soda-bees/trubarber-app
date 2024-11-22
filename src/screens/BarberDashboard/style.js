@@ -93,7 +93,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.03,
     width: sizes.screenWidth * 0.042,
     resizeMode: 'contain',
-    tintColor:colors.black
+    tintColor: colors.black,
   },
   otherIconRow: {
     flexDirection: 'row',
@@ -122,7 +122,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingHorizontal: sizes.screenWidth * 0.02,
     paddingBottom: sizes.screenHeight * 0.01,
-    height:sizes.screenHeight * 0.07
+    height: sizes.screenHeight * 0.07,
     // justifyContent: 'space-between',
   },
   boxImg: {
@@ -263,7 +263,7 @@ export const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: sizes.screenWidth * 0.025,
     marginStart: sizes.screenWidth * 0.01,
-    tintColor:colors.black
+    tintColor: colors.black,
   },
   reviewContainer: {
     marginTop: sizes.screenHeight * 0.01,
@@ -403,5 +403,44 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: sizes.screenHeight * 0.01,
+  },
+
+  modalContainer: {
+    width: sizes.screenWidth * 0.8,
+    backgroundColor: colors.white,
+    alignSelf: 'center',
+    borderRadius: sizes.screenWidth * 0.02,
+    paddingVertical: 15,
+  },
+
+  modalTextHeading: {
+    fontSize: sizes.fontLarge,
+    fontWeight: 'bold',
+    color: colors.black,
+    marginBottom: sizes.screenHeight * 0.01,
+    alignSelf: 'center',
+  },
+
+  modalMessage: {
+    fontSize: sizes.fontMedium,
+    color: colors.blackGrey,
+    textAlign: 'center',
+    marginBottom: sizes.screenHeight * 0.02,
+  },
+
+  supportButton: {
+    backgroundColor: colors.primary,
+    padding: sizes.screenHeight * 0.015,
+    borderRadius: 5,
+    width: sizes.screenWidth * 0.7,
+    alignSelf: 'center',
+    // flex: 1,
+    // marginLeft: sizes.screenWidth * 0.02,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: colors.white,
+    fontSize: sizes.fontMedium,
+    fontWeight: 'bold',
   },
 });

@@ -409,5 +409,6 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: fontSize.medium,
     marginBottom: sizes.screenWidth * 0.03,
+    paddingTop:20
   },
 });

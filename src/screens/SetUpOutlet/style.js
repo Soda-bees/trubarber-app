@@ -156,6 +156,15 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
     color: colors.black
   },
+  instagramInputIOS: {
+    fontSize: fontSize.small,
+    marginLeft: sizes.screenWidth * 0.08,
+    fontWeight: '500',
+    color: colors.black,
+    width:sizes.screenWidth * 0.8,
+    paddingVertical:11,
+    paddingLeft:3
+  },
   descriptionIOS: {
     color: colors.black,
     fontWeight: '600',

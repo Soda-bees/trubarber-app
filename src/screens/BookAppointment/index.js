@@ -145,6 +145,8 @@ export default function BookAppointment({navigation, route}) {
     },
   ]);
 
+  console.log('heyyyy', formatToJSON(barberReviews));
+
   const [tab, setTabs] = useState('About');
   const [status, setStatus] = useState(null);
 
@@ -241,6 +243,9 @@ export default function BookAppointment({navigation, route}) {
   };
 
   const handleNavigateToChat = async () => {
+    if (!authToken) {
+      return navigation.navigate('WelcomeScreen');
+    }
     if (chatRoomId) {
       navigation.navigate('ChatDetails', {chatRoomId});
     } else {
@@ -264,12 +269,12 @@ export default function BookAppointment({navigation, route}) {
       );
 
       const userReview = sortedReviews.find(
-        review => review.userData._id === userId,
+        review => review.userData?._id === userId,
       );
 
       if (userReview) {
         const filteredReviews = sortedReviews.filter(
-          review => review._id !== userReview._id,
+          review => review?._id !== userReview?._id,
         );
         setBarberReviews([userReview, ...filteredReviews]);
       } else {
@@ -375,6 +380,9 @@ export default function BookAppointment({navigation, route}) {
                 fav ? styles.bookMarkedConatiner2 : styles.bookMarkedConatiner
               }
               onPress={() => {
+                if (!authToken) {
+                  return navigation.navigate('WelcomeScreen');
+                }
                 if (!loader) {
                   handleAddFavourites();
                 }
@@ -430,7 +438,13 @@ export default function BookAppointment({navigation, route}) {
           <View style={styles.btnColorContainer}>
             <TouchableOpacity
               style={styles.btnColor}
-              onPress={() => navigation.navigate('BarberDirection', {barbar})}>
+              onPress={() => {
+                if (!authToken) {
+                  navigation.navigate('WelcomeScreen');
+                } else {
+                  navigation.navigate('BarberDirection', {barbar});
+                }
+              }}>
               <Image
                 style={styles.direction}
                 source={images.direction}
@@ -445,7 +459,11 @@ export default function BookAppointment({navigation, route}) {
             <TouchableOpacity
               style={styles.btnColor}
               onPress={() => {
-                dialNumber(barbar.phone);
+                if (!authToken) {
+                  navigation.navigate('WelcomeScreen');
+                } else {
+                  dialNumber(barbar.phone);
+                }
               }}>
               <Image
                 style={styles.direction}
@@ -472,7 +490,13 @@ export default function BookAppointment({navigation, route}) {
           <View style={styles.btnColorContainer}>
             <TouchableOpacity
               style={styles.btnColor}
-              onPress={() => handleNavigateToInstagram(barbar?.instagram)}>
+              onPress={() => {
+                if (!authToken) {
+                  navigation.navigate('WelcomeScreen');
+                } else {
+                  handleNavigateToInstagram(barbar?.instagram);
+                }
+              }}>
               <Image
                 style={styles.direction}
                 source={images.instagram}
@@ -587,7 +611,11 @@ export default function BookAppointment({navigation, route}) {
                   {tab === 'Reviews' ? (
                     <TouchableOpacity
                       onPress={() => {
-                        navigation.navigate('Review', {barbar});
+                        if (!authToken) {
+                          navigation.navigate('WelcomeScreen');
+                        } else {
+                          navigation.navigate('Review', {barbar});
+                        }
                       }}
                       style={styles.reviewBtn}>
                       <Image source={images.pencil} style={styles.pencil} />
@@ -606,9 +634,17 @@ export default function BookAppointment({navigation, route}) {
                   <View style={styles.ratingData}>
                     <View style={styles.rowAndmargin}>
                       <Image
-                        source={{uri: item?.userData?.profile}}
+                        source={
+                          item?.userData?.profile
+                            ? {uri: item?.userData?.profile}
+                            : item?.userData?.gender === 'male'
+                            ? images.male
+                            : images.female
+                        }
                         style={styles.profilePic}
                       />
+                      {/* source={userData?.profile ? { uri: userData?.profile } : userData?.gender === 'male' ? images.male : images.female} */}
+
                       <View style={styles.alignItems}>
                         <Text style={styles.usernameAllignment}>
                           {item?.userData?.name}

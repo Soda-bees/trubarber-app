@@ -287,7 +287,7 @@ export default function SetUpOutlet({ navigation, route }) {
                 />
                 <TextInput
                   placeholder='Add Link'
-                  style={styles.instagramInput}
+                  style={Platform.OS == 'android' ? styles.instagramInput : styles.instagramInputIOS}
                   placeholderTextColor={colors.black}
                   onChangeText={setInstagram}
                   value={instagram}

@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
   },
   backgroundColor: {
     backgroundColor: colors.pinkishwhite,
-    height: sizes.screenHeight
+    height: sizes.screenHeight,
   },
   transparentBg: {
     height: sizes.screenHeight * 0.12,
@@ -19,12 +19,11 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: sizes.screenHeight * 0.016,
-  
-},
+  },
 
   headerContainer: {
     marginTop: sizes.screenHeight * 0.056,
-    width: sizes.screenWidth * 0.852
+    width: sizes.screenWidth * 0.852,
   },
   headerText: {
     textAlign: 'center',
@@ -38,8 +37,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
-    width: sizes.screenWidth*0.912,
-    alignSelf: 'center'
+    width: sizes.screenWidth * 0.912,
+    alignSelf: 'center',
   },
 
   contentMarginIOS: {
@@ -47,8 +46,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
-    width: sizes.screenWidth*0.912,
-    alignSelf: 'center'
+    width: sizes.screenWidth * 0.912,
+    alignSelf: 'center',
   },
 
   containerImage: {
@@ -56,7 +55,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.24,
     borderRadius: 12,
   },
-  
+
   containerImageIOS: {
     width: sizes.screenWidth * 0.44,
     height: sizes.screenHeight * 0.24,
@@ -75,7 +74,6 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.small,
   },
 
-
   bluredImg: {
     height: sizes.screenHeight * 0.099,
     borderRadius: sizes.screenHeight * 0.012,
@@ -83,20 +81,30 @@ export const styles = StyleSheet.create({
     opacity: 0.9,
     position: 'absolute',
     bottom: 10,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
 
   textDarkerblack: {
-    color:colors.black,
+    color: colors.black,
     fontWeight: '700',
     fontSize: fontSize.small,
-    marginLeft: sizes.screenWidth*0.02,
-    marginTop: sizes.screenHeight*0.01
+    marginLeft: sizes.screenWidth * 0.02,
+    marginTop: sizes.screenHeight * 0.01,
   },
   textBlack: {
     color: colors.black,
     fontSize: fontSize.extraSmall,
     fontWeight: '700',
+  },
+  textBlackBarberLocation: {
+    color: colors.black,
+    fontSize: fontSize.extraSmall,
+    fontWeight: '700',
+  },
+
+  loaderStyle: {
+    alignSelf: 'flex-start',
+    marginLeft: 10,
   },
   appointmentContainer: {
     gap: 6,
@@ -118,7 +126,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   btnText: {
     fontSize: fontSize.small,
@@ -128,6 +136,4 @@ export const styles = StyleSheet.create({
   arrowStyle: {
     height: sizes.screenHeight * 0.012,
   },
-
-
 });

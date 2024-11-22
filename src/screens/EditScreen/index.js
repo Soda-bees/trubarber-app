@@ -12,38 +12,38 @@ import {
   Keyboard,
   Touchable,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { styles } from './style.js';
+import React, {useEffect, useState} from 'react';
+import {styles} from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
+import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
 import BackArrow from '../../components/BackArrow/index.js';
-import { colors, sizes } from '../../services/index.js';
-import { PermissionsAndroid, PermissionsIOS } from 'react-native';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectUserData, setUserData } from '../../store/userData/index.js';
-import { updateProfile, uploadProfile } from '../../services/config/API/index.js';
+import {colors, sizes} from '../../services/index.js';
+import {PermissionsAndroid, PermissionsIOS} from 'react-native';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectUserData, setUserData} from '../../store/userData/index.js';
+import {updateProfile, uploadProfile} from '../../services/config/API/index.js';
 import Loader from '../../components/Loader/index.js';
-import { selectAuthToken } from '../../store/authToken/index.js';
-import { ErrorShow } from '../../components/Error/index.js';
+import {selectAuthToken} from '../../store/authToken/index.js';
+import {ErrorShow} from '../../components/Error/index.js';
 import Toast from 'react-native-toast-message';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import TimePickerComponent from '../../components/TimePicketComponent/index.js';
-import { selectRole } from '../../store/role/index.js';
-import { parse, format } from 'date-fns';
+import {selectRole} from '../../store/role/index.js';
+import {parse, format} from 'date-fns';
 import Header from '../../components/Header/index.js';
-import Modal from "react-native-modal"
+import Modal from 'react-native-modal';
 
 // import {colors, sizes} from 'borderBottomcomponents/BackArrow/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
-export default function EditScreen({ navigation }) {
+export default function EditScreen({navigation}) {
   const userData = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken);
   const role = useSelector(selectRole);
-  console.log("userdata wallet profile ==========>>" , userData?.wallet);
+  console.log('userdata wallet profile ==========>>', userData?.wallet);
 
   const dispatch = useDispatch();
 
@@ -55,13 +55,13 @@ export default function EditScreen({ navigation }) {
   const [endTime, setEndTime] = useState(new Date());
   const [description, setDescription] = useState('');
   const [phone, setPhone] = useState('');
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false);
 
   const parseTimeString = time => {
     const [startTimeString, endTimeString] = time.split(' - ');
     const startTime = parseSingleTimeString(startTimeString);
     const endTime = parseSingleTimeString(endTimeString);
-    return { startTime, endTime };
+    return {startTime, endTime};
   };
 
   const parseSingleTimeString = timeString => {
@@ -95,10 +95,10 @@ export default function EditScreen({ navigation }) {
         setEmail(userData?.email);
         setName(userData?.name);
         setDescription(userData?.description);
-        const { startTime, endTime } = parseTimeString(userData?.time);
+        const {startTime, endTime} = parseTimeString(userData?.time);
         setStartTime(startTime);
         setEndTime(endTime);
-        setPhone(userData?.phone)
+        setPhone(userData?.phone);
       }
     }
   }, [userData]);
@@ -253,7 +253,7 @@ export default function EditScreen({ navigation }) {
   };
   const handleDeleteProfile = async () => {
     try {
-      setIsVisible(false)
+      setIsVisible(false);
       setLoader(true);
       const userBody = {
         profile: '',
@@ -266,7 +266,7 @@ export default function EditScreen({ navigation }) {
         authToken,
       );
       if (response.status == 200) {
-        setImgUri('')
+        setImgUri('');
         setLoader(false);
         ErrorShow(
           'success',
@@ -287,18 +287,19 @@ export default function EditScreen({ navigation }) {
   };
 
   const handleLibrary = () => {
-    setIsVisible(false)
+    setIsVisible(false);
     setTimeout(() => {
-      uploadPhoto('library')
+      uploadPhoto('library');
     }, 1000);
-  }
+  };
 
   return (
     <SafeAreaView>
-      <TouchableWithoutFeedback onPress={() => {
-        Keyboard.dismiss()
-        setIsVisible(false)
-      }}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
+          setIsVisible(false);
+        }}>
         <View style={styles.container}>
           <View style={styles.borderBottom}>
             <Header title={'Edit Profile'} />
@@ -306,11 +307,17 @@ export default function EditScreen({ navigation }) {
           <View style={styles.contentAlligment}>
             <TouchableOpacity
               onPress={() => setIsVisible(true)}
-            // onPress={() => uploadPhoto('library')}
+              // onPress={() => uploadPhoto('library')}
             >
               {/* {imgUri ? ( */}
               <Image
-                source={imgUri ? { uri: imgUri } : userData?.gender === "male" ? images.male : images.female}
+                source={
+                  imgUri
+                    ? {uri: imgUri}
+                    : userData?.gender === 'male'
+                    ? images.male
+                    : images.female
+                }
                 style={styles.youngMan}
                 resizeMode="cover"
               />
@@ -322,8 +329,7 @@ export default function EditScreen({ navigation }) {
               style={styles.uploadPhoto}
               // onPress={() => uploadPhoto('library')}
 
-              onPress={() => setIsVisible(true)}
-            >
+              onPress={() => setIsVisible(true)}>
               <Image
                 source={images.editProfileimg}
                 style={styles.editProfileimg}
@@ -370,7 +376,7 @@ export default function EditScreen({ navigation }) {
                   />
                 </View>
               </View>
-              {role == 'barber' &&
+              {role == 'barber' && (
                 <View style={styles.inputField}>
                   <View style={styles.rowInput}>
                     <Image
@@ -382,7 +388,7 @@ export default function EditScreen({ navigation }) {
                       placeholder="Phone"
                       style={styles.input}
                       placeholderTextColor={colors.placeholdertext}
-                      keyboardType='numeric'
+                      keyboardType="numeric"
                       value={phone}
                       onChangeText={text => {
                         setPhone(text);
@@ -390,8 +396,7 @@ export default function EditScreen({ navigation }) {
                     />
                   </View>
                 </View>
-              }
-
+              )}
 
               {/* {role == 'barber' && (
                 <View style={styles.inputField}>
@@ -430,6 +435,18 @@ export default function EditScreen({ navigation }) {
               )} */}
             </View>
           </KeyboardAwareScrollView>
+          <View style={Platform.OS == 'android' ? styles.btn2 : styles.btnIOS2}>
+            <TouchableOpacity
+              style={styles.btnViewLightCenter}
+              onPress={() => navigation.navigate('DeleteAccount')}>
+              <Text style={styles.deleteText}>Delete Account</Text>
+              <Image
+                source={images.arrowIcon}
+                style={styles.arrowIcon}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          </View>
           <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
             {loader ? (
               <Loader title={'Save'} />
@@ -438,24 +455,29 @@ export default function EditScreen({ navigation }) {
             )}
           </View>
           <Toast />
-          {
-            isVisible &&
-            <View style={Platform.OS == 'android' ? styles.modalContainer : styles.modalContainerIOS}
-              onStartShouldSetResponder={() => true}
-            >
-              <TouchableOpacity style={styles.bottomViewImg}
+          {isVisible && (
+            <View
+              style={
+                Platform.OS == 'android'
+                  ? styles.modalContainer
+                  : styles.modalContainerIOS
+              }
+              onStartShouldSetResponder={() => true}>
+              <TouchableOpacity
+                style={styles.bottomViewImg}
                 onPress={handleLibrary}
-              // onPress={
-              //   () => uploadPhoto('library')}
+                // onPress={
+                //   () => uploadPhoto('library')}
               >
                 <Image source={images.uploadimg} style={styles.imgStyle} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.bottomViewImg} onPress={handleDeleteProfile}>
-
+              <TouchableOpacity
+                style={styles.bottomViewImg}
+                onPress={handleDeleteProfile}>
                 <Image source={images.deleteIconBig} style={styles.imgStyle} />
               </TouchableOpacity>
             </View>
-          }
+          )}
         </View>
       </TouchableWithoutFeedback>
     </SafeAreaView>

@@ -532,11 +532,36 @@ export const handleIncreaseWallet = async (_id, token, body) => {
   }
 };
 
+export const handleDeleteAccount = async (body, token) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post(`auth/deleteAccount`, body, {
+      headers,
+    });
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
 
-// export const handleStripePayment =  async () => {
-//   try {
-    
-//   } catch (error) {
-    
-//   }
-// }
+export const handleconfirmAndDeleteAccount = async token => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post(
+      `auth/confirmAndDeleteAccount`,
+      {},
+      {
+        headers,
+      },
+    );
+    return response;
+  } catch (error) {
+    return error;
+  }
+};

@@ -22,7 +22,7 @@ import { removeAuthToken, selectAuthToken } from '../../store/authToken/index.js
 import { removeRole } from '../../store/role/index.js';
 import { selectUserData } from '../../store/userData/index.js';
 import axios from 'axios';
-import { selectlocation } from '../../store/location/index.js';
+import { removelocation, selectlocation } from '../../store/location/index.js';
 import {
   deleteDeviceToken,
   getAddressFromCoordinates,
@@ -30,7 +30,7 @@ import {
 import { removeCart } from '../../store/cart/index.js';
 import Header from '../../components/Header/index.js';
 import { useFocusEffect } from '@react-navigation/native';
-// import UserTabNavigation from '../../services/config/UserTabNavigation.js';
+import Modal from 'react-native-modal';
 
 export default function Profile({ navigation }) {
   const userData = useSelector(selectUserData);
@@ -41,6 +41,7 @@ export default function Profile({ navigation }) {
 
   const [address, setAddress] = useState(null);
   const [locationLoader, setLocationLoader] = useState(false);
+  const [confirmLogoutModal, setConfirmLogoutModal] = useState(false);
 
   const getAddress = async (latitude, longitude) => {
     setLocationLoader(true);
@@ -78,13 +79,15 @@ export default function Profile({ navigation }) {
   };
 
   const handleLogout = async () => {
+    setConfirmLogoutModal(false);
     handleDeleteDeviceToken();
     dispatch(removeAuthToken());
+    dispatch(removeRole());
     dispatch(removePaymentCard());
     dispatch(removeCart());
-    dispatch(removeRole());
     dispatch(removeUserData());
   };
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -180,8 +183,32 @@ export default function Profile({ navigation }) {
           </TouchableOpacity>
         </View>
         <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
-          <Button title={'Logout'} onPress={() => handleLogout()} />
+          <Button title={'Logout'} onPress={() => setConfirmLogoutModal(true)} />
         </View>
+        <Modal isVisible={confirmLogoutModal}>
+        <View style={styles.mainContainer}>
+          <Text style={styles.modalHeading}>Are you leaving?</Text>
+          <Text style={styles.modalText}>
+            Are you sure you want to{' '}
+            <Text style={{color: colors.red}}>Logout</Text>? You’ll need to
+            signin again to access your account.
+          </Text>
+          <View style={styles.modalButtonContainer}>
+            <TouchableOpacity
+              style={styles.cancelBtn}
+              activeOpacity={0.7}
+              onPress={() => setConfirmLogoutModal(false)}>
+              <Text style={styles.btnText}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.cancelBtn2}
+              activeOpacity={0.7}
+              onPress={() => handleLogout()}>
+              <Text style={styles.btnText2}>Logout Anyway</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       </View>
     </SafeAreaView>
   );
