@@ -1,14 +1,15 @@
 import {StyleSheet} from 'react-native';
-import { sizes } from '../../services';
+import {sizes} from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
-    height:sizes.screenHeight,
+    height: sizes.screenHeight,
     backgroundColor: '#fff',
   },
   scrollContainer: {
-    // padding: 16,
+    // marginTop: 16,
     alignItems: 'center',
+    padding: 20,
   },
   heading: {
     fontSize: 32,
@@ -28,11 +29,13 @@ export const styles = StyleSheet.create({
     color: '#4A4A4A',
     textAlign: 'justify',
     marginBottom: 20,
-    maxWidth: '90%',
   },
   featureContainer: {
     marginBottom: 20,
-    maxWidth: '90%',
+  },
+  featureContainer1: {
+    marginBottom: 20,
+    paddingHorizontal: sizes.screenWidth * 0.01,
   },
   featureTitle: {
     fontSize: 18,
@@ -52,6 +55,6 @@ export const styles = StyleSheet.create({
     color: '#4A4A4A',
     textAlign: 'center',
     marginTop: 20,
-    maxWidth: '90%',
+    marginBottom: sizes.screenHeight * 0.06,
   },
 });

@@ -58,10 +58,23 @@ export const styles = StyleSheet.create({
   },
 
   contextText: {
-    color: colors.black,
+    // color: colors.black,
+    // fontWeight: '800',
+    // fontSize: fontSize.large,
+    // textShadowColor: 'rgba(255, 255, 255, 0.7)', // Light shadow for dark backgrounds
+    // textShadowOffset: {width: 2, height: 2},
+    // textShadowRadius: 2,
+    color: colors.white,
     fontWeight: '800',
     fontSize: fontSize.large,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black background
+    padding: 3,
+    paddingHorizontal: 7,
+    // paddingVertical: 2,
+    borderRadius: sizes.screenWidth * 0.02,
+    overflow: 'hidden',
   },
+
   innerContainer: {
     marginTop: sizes.screenHeight * 0.052,
     marginLeft: sizes.screenWidth * 0.1,
@@ -72,7 +85,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: sizes.screenWidth * 0.02,
-    width:sizes.screenWidth * 0.55,
+    width: sizes.screenWidth * 0.55,
+    marginTop: 4,
   },
   whiteLocation: {
     height: sizes.screenHeight * 0.017,
@@ -204,9 +218,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   statusText: {
-    backgroundColor: colors.black,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black background
     padding: sizes.screenWidth * 0.011,
-    paddingHorizontal:12,
+    paddingHorizontal: 12,
     fontSize: fontSize.medium,
     fontWeight: '500',
     color: colors.white,
@@ -239,14 +253,18 @@ export const styles = StyleSheet.create({
     paddingRight: 6,
     height: 16,
     tintColor: colors.black,
-    // backgroundColor : 'red',
   },
 
   barberLocation: {
+    color: colors.white,
+    fontWeight: '800',
     fontSize: fontSize.small,
-    // color: colors.grayText,
-    maxWidth: sizes.screenWidth * 0.5,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 3,
+    paddingHorizontal: 7,
+    borderRadius: sizes.screenWidth * 0.02,
     textAlign: 'center',
-    // width: sizes.screenWidth * 0.5,
+    fontWeight: '800',
+    overflow: 'hidden',
   },
 });

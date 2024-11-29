@@ -42,20 +42,17 @@ export const styles = StyleSheet.create({
   },
   contentContainer: {
     // backgroundColor: 'orange',
-    width: sizes.screenWidth * 0.5,
+    width: sizes.screenWidth * 0.8,
     textAlign: 'center',
     color: colors.black,
     fontWeight: '600',
-    marginTop: sizes.screenHeight * 0.052
+    marginTop: sizes.screenHeight * 0.04,
+    fontSize:fontSize.large
   },
   contentAlligment: {
-    marginTop: sizes.screenHeight * 0.04,
-    // marginLeft: sizes.screenWidth * 0.042,
-    // flexDirection: 'row',
+    marginTop: sizes.screenHeight * 0.05,
     alignItems: 'center',
-    gap: sizes.screenWidth * 0.05,
     justifyContent: 'center',
-    // backgroundColor: 'orange',
   },
 
 
@@ -65,7 +62,6 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.08,
     borderRadius: sizes.screenWidth * 0.03,
     width: sizes.screenWidth * 0.85
-    
   },
 
   inputimage: {
@@ -82,7 +78,7 @@ export const styles = StyleSheet.create({
     marginLeft: sizes.screenWidth * 0.08,
     marginRight: sizes.screenWidth * 0.08,
     alignItems: 'center',
-    gap: sizes.screenHeight * 0.032
+    gap: sizes.screenHeight * 0.015
   },
   wholeInput: {
     marginLeft: sizes.screenWidth * 0.08,
@@ -98,6 +94,9 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight* 0.33
   },
   btnIOS: {
-    marginTop: sizes.screenHeight* 0.29
+    position:'absolute',
+    bottom: sizes.screenHeight * 0.1,
+    alignSelf:'center'
+    // marginTop: sizes.screenHeight* 0.29
   },
 });
