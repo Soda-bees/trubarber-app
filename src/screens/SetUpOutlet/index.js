@@ -7,25 +7,30 @@ import {
   SafeAreaView,
   Platform,
   Dimensions,
+  ScrollView,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import images from '../../services/utilities/images';
-import { styles } from './style.js';
+import {styles} from './style.js';
 import Button from '../../components/Button';
 import BackArrow from '../../components/BackArrow';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { PermissionsAndroid } from 'react-native';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {PermissionsAndroid} from 'react-native';
 import TimePickerComponent from '../../components/TimePicketComponent';
 import Loader from '../../components/Loader';
-import { uploadProfile } from '../../services/config/API';
-import { ErrorShow } from '../../components/Error';
+import {uploadProfile} from '../../services/config/API';
+import {ErrorShow} from '../../components/Error';
 import Toast from 'react-native-toast-message';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { colors, sizes } from '../../services';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {colors, sizes} from '../../services';
+import Modal from 'react-native-modal';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import Header from '../../components/Header';
+import formatToJSON from '../../services/config/FormatToJson';
 
-export default function SetUpOutlet({ navigation, route }) {
-  const { userData } = route.params;
-  const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+export default function SetUpOutlet({navigation, route}) {
+  const {userData} = route.params;
+  const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
 
   const [outletName, setOutletName] = useState('RedBox Barber');
   const [description, setDescription] = useState('');
@@ -34,10 +39,114 @@ export default function SetUpOutlet({ navigation, route }) {
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [loader, setLoader] = useState(false);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const [instagram, setInstagram] = useState('')
-  const [days, setDays] = useState(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
-  const [offDays, setOffDays] = useState([])
+  const [dimensions, setDimensions] = useState({width: 0, height: 0});
+  const [instagram, setInstagram] = useState('');
+  const [days, setDays] = useState([
+    'Sun',
+    'Mon',
+    'Tue',
+    'Wed',
+    'Thu',
+    'Fri',
+    'Sat',
+  ]);
+  const [offDays, setOffDays] = useState([]);
+  const [scheduled, setScheduled] = useState([
+    {
+      day: 'Monday',
+      available: false,
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      day: 'Tuesday',
+      available: true,
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      day: 'Wednesday',
+      available: true,
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      day: 'Thrusday',
+      available: true,
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      day: 'Friday',
+      available: true,
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      day: 'Saturday',
+      available: true,
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+    {
+      day: 'Sunday',
+      available: true,
+      startTime: new Date(),
+      endTime: new Date(),
+    },
+  ]);
+  const [showTimeModal, setShowTimeModal] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState({
+    index: null,
+    type: '',
+  });
+
+  const updateAllTimes = () => {
+    setScheduled(prevScheduled =>
+      prevScheduled.map(item => ({
+        ...item, // Spread the existing object
+        startTime: (() => {
+          const time = new Date();
+          time.setHours(6, 0, 0, 0); // Set to 6:00 AM
+          return time;
+        })(),
+        endTime: (() => {
+          const time = new Date();
+          time.setHours(22, 0, 0, 0); // Set to 10:00 PM
+          return time;
+        })(),
+      })),
+    );
+  };
+
+  useEffect(() => {
+    updateAllTimes();
+  }, [userData]);
+
+  const handleActiveToggle = index => {
+    setScheduled(prevScheduled =>
+      prevScheduled.map((item, idx) =>
+        idx === index ? {...item, available: !item.available} : item,
+      ),
+    );
+  };
+
+  const onStartTimeChangeIOS = (event, selectedDate) => {
+    // const currentDate = selectedDate
+    if (selectedIndex.index === null || !selectedIndex.type) return;
+
+    setScheduled(prevScheduled =>
+      prevScheduled.map((item, idx) =>
+        idx === selectedIndex.index
+          ? {
+              ...item,
+              [selectedIndex.type === 'start' ? 'startTime' : 'endTime']:
+                selectedDate,
+            }
+          : item,
+      ),
+    );
+  };
 
   const requestCameraPermission = async () => {
     const granted = await PermissionsAndroid.request(
@@ -139,32 +248,60 @@ export default function SetUpOutlet({ navigation, route }) {
     }
   };
 
-  const isValidInstagramLink = (url) => {
-    const instagramRegex = /^(https?:\/\/)?(www\.)?instagram\.com\/([a-zA-Z0-9._]+)/;
+  const isValidInstagramLink = url => {
+    const instagramRegex =
+      /^(https?:\/\/)?(www\.)?instagram\.com\/([a-zA-Z0-9._]+)/;
 
     // Test the URL against the regex pattern
     return instagramRegex.test(url);
   };
 
   const handleConfirm = async () => {
+    const updatedScheduled = scheduled.map(item => {
+      const formattedStartTime = formatTime(item?.startTime);
+      const formattedEndTime = formatTime(item?.endTime);
+      const {startTime, endTime, ...rest} = item;
+      return {
+        ...rest,
+        time: item?.available
+          ? `${formattedStartTime} - ${formattedEndTime}`
+          : '',
+      };
+    });
     if (!instagram) {
-      return ErrorShow('error', 'Oops!', 'Please provide your instagram profile link');
+      return ErrorShow(
+        'error',
+        'Oops!',
+        'Please provide your instagram profile link',
+      );
     }
     if (!isValidInstagramLink(instagram)) {
-      return ErrorShow('error', 'Oops!', 'Please provide your correct instagram profile link');
+      return ErrorShow(
+        'error',
+        'Oops!',
+        'Please provide your correct instagram profile link',
+      );
     }
     if (!description) {
       return ErrorShow('error', 'Oops!', 'Please fill the description');
     }
     // const time = `${formatTime(startTime)} - ${formatTime(endTime)}`;
-    const time = `6:00 AM - 10:00 PM`;
-    Object.assign(userData, { businessProfile: imgUri, description, time, instagram, offDays });
+    // const time = `6:00 AM - 10:00 PM`;
+    Object.assign(userData, {
+      businessProfile: imgUri,
+      description,
+      time: '',
+      instagram,
+      offDays,
+      scheduled: updatedScheduled,
+    });
     console.log(userData);
 
-    navigation.navigate('AuthSetUpServices', { userData });
+    navigation.navigate('AuthSetUpServices', {userData});
   };
 
   const formatTime = date => {
+    console.log('date===>', date);
     let hours = date.getHours();
     let minutes = date.getMinutes();
     const ampm = hours >= 12 ? 'PM' : 'AM';
@@ -195,7 +332,7 @@ export default function SetUpOutlet({ navigation, route }) {
             calculatedWidth = calculatedHeight * aspectRatio;
           }
 
-          resolve({ width: calculatedWidth, height: calculatedHeight });
+          resolve({width: calculatedWidth, height: calculatedHeight});
         },
         error => {
           reject(error);
@@ -210,8 +347,8 @@ export default function SetUpOutlet({ navigation, route }) {
         if (!imgUri) {
           return;
         }
-        const { width, height } = await checkDimensions(imgUri);
-        setDimensions({ width, height });
+        const {width, height} = await checkDimensions(imgUri);
+        setDimensions({width, height});
       } catch (error) {
         console.error('Error calculating image dimensions:', error);
       }
@@ -220,7 +357,7 @@ export default function SetUpOutlet({ navigation, route }) {
     calculateDimensions();
   }, [imgUri]);
 
-  const handleSelectDays = async (item) => {
+  const handleSelectDays = async item => {
     setOffDays(prevOffDays => {
       if (prevOffDays.includes(item)) {
         return prevOffDays.filter(day => day !== item);
@@ -228,18 +365,29 @@ export default function SetUpOutlet({ navigation, route }) {
         return [...prevOffDays, item];
       }
     });
+  };
 
-  }
+  const handleSetSelectedIndex = (index, type) => {
+    setSelectedIndex({
+      index: index, // Set the index
+      type: type, // Set the type
+    });
+    setShowTimeModal(true);
+  };
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <View>
-          <View style={styles.backArrow}>
-            <BackArrow onPress={() => navigation.goBack()} />
-          </View>
-          <Text style={styles.Forgotpass}>Set-Up Business Profile</Text>
-          <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={Platform.OS == 'ios' && sizes.screenHeight * 0.9}>
+        <Header title={'Set-Up Business Profile'} />
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View>
+            {/* <View style={styles.backArrow}>
+              <BackArrow onPress={() => navigation.goBack()} />
+            </View>
+            <Text style={styles.Forgotpass}>Set-Up Business Profile</Text> */}
+            {/* <KeyboardAwareScrollView
+            enableOnAndroid={true}
+            extraHeight={Platform.OS == 'ios' && sizes.screenHeight * 0.9}> */}
             <View>
               {/* <TouchableOpacity
                 style={imgUri ? {
@@ -276,9 +424,12 @@ export default function SetUpOutlet({ navigation, route }) {
               <Text style={styles.uploadCover}>Upload Photo</Text>
             </View> */}
             <View style={styles.timeContainer}>
-              <Text style={
-                Platform.OS == 'android' ? styles.title : styles.titleIOS
-              }>Instagram account</Text>
+              <Text
+                style={
+                  Platform.OS == 'android' ? styles.title : styles.titleIOS
+                }>
+                Instagram account
+              </Text>
               <View style={styles.timeSecond}>
                 <Image
                   source={images.instagram}
@@ -286,8 +437,12 @@ export default function SetUpOutlet({ navigation, route }) {
                   resizeMode="contain"
                 />
                 <TextInput
-                  placeholder='Add Link'
-                  style={Platform.OS == 'android' ? styles.instagramInput : styles.instagramInputIOS}
+                  placeholder="Add Link"
+                  style={
+                    Platform.OS == 'android'
+                      ? styles.instagramInput
+                      : styles.instagramInputIOS
+                  }
                   placeholderTextColor={colors.black}
                   onChangeText={setInstagram}
                   value={instagram}
@@ -304,7 +459,11 @@ export default function SetUpOutlet({ navigation, route }) {
                   Description
                 </Text>
                 <TextInput
-                  style={Platform.OS == 'android' ? styles.description : styles.descriptionIOS}
+                  style={
+                    Platform.OS == 'android'
+                      ? styles.description
+                      : styles.descriptionIOS
+                  }
                   onChangeText={setDescription}
                   value={description}
                   multiline={true}
@@ -313,7 +472,7 @@ export default function SetUpOutlet({ navigation, route }) {
                   placeholderTextColor="black"
                 />
               </View>
-              <View style={styles.timeContainer}>
+              {/* <View style={styles.timeContainer}>
                 <Text style={
                   Platform.OS == 'android' ? styles.title : styles.titleIOS
                 }>Time</Text>
@@ -325,8 +484,8 @@ export default function SetUpOutlet({ navigation, route }) {
                     resizeMode="contain"
                   />
                 </View>
-              </View>
-              <View style={styles.textContainer}>
+              </View> */}
+              {/* <View style={styles.textContainer}>
                 <Text
                   style={
                     Platform.OS == 'android' ? styles.title : styles.titleIOS
@@ -348,7 +507,7 @@ export default function SetUpOutlet({ navigation, route }) {
                     })
                   }
                 </View>
-              </View>
+              </View> */}
               {/* <View style={styles.timeContainer}>
                 <View style={styles.description}>
                   <TimePickerComponent
@@ -365,18 +524,113 @@ export default function SetUpOutlet({ navigation, route }) {
                   />
                 </View>
               </View> */}
+              {/* <Text style={styles.scheduleHeading}>
+                Our Working Days and Hours
+              </Text> */}
+              {scheduled.map((item, index) => {
+                return (
+                  <View style={styles.scheduleMainView} key={index}>
+                    <TouchableOpacity
+                      style={
+                        item.available
+                          ? styles.toggleBtn
+                          : styles.toggleBtnUnactive
+                      }
+                      onPress={() => handleActiveToggle(index)}>
+                      <View
+                        style={
+                          item.available
+                            ? styles.toggleBtnColor
+                            : styles.toggleBtnColorRed
+                        }></View>
+                    </TouchableOpacity>
+                    <View
+                      style={
+                        item.available
+                          ? styles.dayTimeView
+                          : styles.dayTimeViewUnactive
+                      }>
+                      <Text style={styles.scheduleDay}>{item.day}</Text>
+                      <View>
+                        {item.available ? (
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                            }}>
+                            <TouchableOpacity
+                              onPress={() =>
+                                handleSetSelectedIndex(index, 'start')
+                              }>
+                              <Text style={styles.scheduleDay}>{`${formatTime(
+                                item?.startTime,
+                              )}`}</Text>
+                            </TouchableOpacity>
+                            <Text style={styles.scheduleDay}>-</Text>
+
+                            <TouchableOpacity
+                              onPress={() =>
+                                handleSetSelectedIndex(index, 'end')
+                              }>
+                              <Text style={styles.scheduleDay}>{`${formatTime(
+                                item?.endTime,
+                              )}`}</Text>
+                            </TouchableOpacity>
+                          </View>
+                        ) : (
+                          // <TimePickerComponent
+                          //   startTime={startTime}
+                          //   setStartTime={setStartTime}
+                          //   endTime={endTime}
+                          //   setEndTime={setEndTime}
+                          //   isBold={true}
+                          // />
+                          <Text style={styles.scheduleDay}>Close</Text>
+                        )}
+                      </View>
+                    </View>
+                  </View>
+                );
+              })}
             </View>
-          </KeyboardAwareScrollView>
-        </View>
-        <Toast />
-        <View style={Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS}>
-          {loader ? (
-            <Loader title={'Next'} />
-          ) : (
-            <Button title={'Next'} onPress={() => handleConfirm()} />
-          )}
-        </View>
+            {/* </KeyboardAwareScrollView> */}
+          </View>
+          <Toast />
+          <View
+            style={
+              Platform.OS == 'android' ? styles.nextBtn : styles.nextBtnIOS
+            }>
+            {loader ? (
+              <Loader title={'Next'} />
+            ) : (
+              <Button title={'Next'} onPress={() => handleConfirm()} />
+            )}
+          </View>
+        </ScrollView>
       </View>
+      <Modal
+        onBackdropPress={() => setShowTimeModal(false)}
+        onBackButtonPress={() => setShowTimeModal(false)}
+        isVisible={showTimeModal}>
+        <DateTimePicker
+          testID="startTimePicker"
+          value={startTime}
+          mode="time"
+          is24Hour={false}
+          display="spinner"
+          // textColor="red"
+          positiveButton={{label: 'Done'}}
+          negativeButton={{label: 'Cancel'}}
+          onChange={onStartTimeChangeIOS}
+          style={{
+            backgroundColor: colors.bluishWhite,
+            borderRadius: sizes.screenWidth * 0.03,
+            overflow: 'hidden',
+            width: sizes.screenWidth * 0.75,
+            alignSelf: 'center',
+          }}
+        />
+      </Modal>
     </SafeAreaView>
   );
 }

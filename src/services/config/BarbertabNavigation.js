@@ -1,11 +1,11 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { sizes } from '../utilities/sizes';
-import { colors } from '../utilities/colors';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {sizes} from '../utilities/sizes';
+import {colors} from '../utilities/colors';
 import images from '../utilities/images';
-import { Image, Text, View, Platform } from 'react-native';
-import { fontSize } from '../utilities/fonts';
-import { Shadow } from 'react-native-shadow-2';
+import {Image, Text, View, Platform} from 'react-native';
+import {fontSize} from '../utilities/fonts';
+import {Shadow} from 'react-native-shadow-2';
 import BaberCatalogue from '../../screens/BarberCatalogue';
 import AppoinmentBarber from '../../screens/AppoinmentBarber';
 import BarberDashboard from '../../screens/BarberDashboard';
@@ -21,7 +21,10 @@ export default function BarberTabNavigation() {
         tabBarStyle: {
           backgroundColor: colors.white,
           width: sizes.screenWidth,
-          height: Platform.OS == 'android' ? sizes.screenHeight * 0.075 : sizes.screenHeight * 0.11,
+          height:
+            Platform.OS == 'android'
+              ? sizes.screenHeight * 0.075
+              : sizes.screenHeight * 0.09,
           paddingTop: sizes.screenHeight * 0.01,
           paddingHorizontal: sizes.screenWidth * 0.04,
           borderTopRightRadius: sizes.screenWidth * 0.07,
@@ -32,29 +35,30 @@ export default function BarberTabNavigation() {
         name="BarberDashboard"
         component={BarberDashboard}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <View>
               <Image
                 source={
                   // !focused
                   // ? images.dashboardTabBefore
-                  // : 
+                  // :
                   images.dashboardTabAfter
                 }
                 style={{
                   resizeMode: 'contain',
-                  width: sizes.screenWidth * 0.05,
+                  width: sizes.screenWidth * 0.06,
                   height: focused
-                    ? sizes.screenWidth * 0.05
-                    : sizes.screenWidth * 0.05,
-                  tintColor: focused ? colors.black : colors.grayBorder
+                    ? sizes.screenWidth * 0.06
+                    : sizes.screenWidth * 0.06,
+                  tintColor: focused ? colors.black : colors.grayBorder,
                 }}
               />
             </View>
           ),
-          tabBarLabel: ({ focused }) => (
-            <CustomTabLabel focused={focused} label="Dashboard" />
-          ),
+          // tabBarLabel: ({ focused }) => (
+          //   <CustomTabLabel focused={focused} label="Dashboard" />
+          // ),
+          tabBarLabel: () => null,
         }}
       />
 
@@ -62,27 +66,29 @@ export default function BarberTabNavigation() {
         name="BaberCatalogue"
         component={BaberCatalogue}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <Image
               source={
-                // !focused ? 
+                // !focused ?
                 images.catalogueTabBefore
-                // : 
+                // :
                 // images.catalogueTabAfter
               }
               style={{
                 resizeMode: 'contain',
-                width: sizes.screenWidth * 0.05,
+                width: sizes.screenWidth * 0.06,
                 height: focused
-                  ? sizes.screenWidth * 0.05
-                  : sizes.screenWidth * 0.05,
-                tintColor: focused ? colors.black : colors.grayBorder
+                  ? sizes.screenWidth * 0.06
+                  : sizes.screenWidth * 0.06,
+                tintColor: focused ? colors.black : colors.grayBorder,
               }}
             />
           ),
-          tabBarLabel: ({ focused }) => (
-            <CustomTabLabel focused={focused} label="Catalogue" />
-          ),
+          // tabBarLabel: ({ focused }) => (
+          //   <CustomTabLabel focused={focused} label="Catalogue" />
+          // ),
+
+          tabBarLabel: () => null,
         }}
       />
 
@@ -90,7 +96,7 @@ export default function BarberTabNavigation() {
         name="AppoinmentBarber"
         component={AppoinmentBarber}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <View>
               <Image
                 source={
@@ -100,18 +106,20 @@ export default function BarberTabNavigation() {
                 }
                 style={{
                   resizeMode: 'contain',
-                  width: sizes.screenWidth * 0.05,
+                  width: sizes.screenWidth * 0.06,
                   height: focused
-                    ? sizes.screenWidth * 0.05
-                    : sizes.screenWidth * 0.05,
-                  tintColor: focused ? colors.black : colors.grayBorder
+                    ? sizes.screenWidth * 0.06
+                    : sizes.screenWidth * 0.06,
+                  tintColor: focused ? colors.black : colors.grayBorder,
                 }}
               />
             </View>
           ),
-          tabBarLabel: ({ focused }) => (
-            <CustomTabLabel focused={focused} label="Appointment" />
-          ),
+          // tabBarLabel: ({ focused }) => (
+          //   <CustomTabLabel focused={focused} label="Appointment" />
+          // ),
+
+          tabBarLabel: () => null,
         }}
       />
 
@@ -119,34 +127,33 @@ export default function BarberTabNavigation() {
         name="Profile"
         component={BarberProfile}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <View>
               <Image
-                source={
-                  images.profileTabAfter
-                }
+                source={images.profileTabAfter}
                 style={{
                   resizeMode: 'contain',
-                  width: sizes.screenWidth * 0.05,
+                  width: sizes.screenWidth * 0.06,
                   height: focused
-                    ? sizes.screenWidth * 0.05
-                    : sizes.screenWidth * 0.05,
-                  tintColor: focused ? colors.black : colors.grayBorder
+                    ? sizes.screenWidth * 0.06
+                    : sizes.screenWidth * 0.06,
+                  tintColor: focused ? colors.black : colors.grayBorder,
                 }}
               />
             </View>
           ),
 
-          tabBarLabel: ({ focused }) => (
-            <CustomTabLabel focused={focused} label="Profile" />
-          ),
+          // tabBarLabel: ({ focused }) => (
+          //   <CustomTabLabel focused={focused} label="Profile" />
+          // ),
+          tabBarLabel: () => null,
         }}
       />
     </Tab.Navigator>
   );
 }
 
-const CustomTabLabel = ({ focused, label }) => {
+const CustomTabLabel = ({focused, label}) => {
   const inactiveColor = colors.black;
   const activeColor = colors.tealMix;
   return (
@@ -155,7 +162,7 @@ const CustomTabLabel = ({ focused, label }) => {
         color: focused ? colors.black : colors.grayBorder,
         fontSize: fontSize.small,
         marginBottom: sizes.screenHeight * 0.01,
-        fontWeight: focused ? '500' : '400'
+        fontWeight: focused ? '500' : '400',
       }}>
       {label}
     </Text>

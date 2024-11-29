@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { colors, fontSize, sizes } from '../../services';
+import {StyleSheet} from 'react-native';
+import {colors, fontSize, sizes} from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
@@ -12,14 +12,14 @@ export const styles = StyleSheet.create({
   backArrow: {
     // marginLeft: sizes.screenWidth * 0.04,
     marginTop: sizes.screenHeight * 0.03,
-    backgroundColor:'red'
+    backgroundColor: 'red',
   },
   Forgotpass: {
     // marginTop: sizes.screenHeight * 0.03,
     fontSize: fontSize.h5,
     color: colors.black,
     fontWeight: '700',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   addimage: {
     width: sizes.screenWidth * 0.2,
@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
   },
 
   uploadImage: {
-    marginTop: sizes.screenHeight*0.03,
+    marginTop: sizes.screenHeight * 0.03,
     borderRadius: sizes.screenWidth * 0.04,
     width: sizes.screenWidth * 0.9,
     height: sizes.screenHeight * 0.3,
@@ -80,7 +80,7 @@ export const styles = StyleSheet.create({
     width: sizes.screenWidth * 0.042,
     position: 'absolute',
     right: sizes.screenWidth * 0.03,
-    top: sizes.screenWidth * 0.025
+    top: sizes.screenWidth * 0.025,
   },
   clockIcon1: {
     height: sizes.screenHeight * 0.0222,
@@ -123,9 +123,9 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.selectorcolor,
     borderRadius: sizes.screenWidth * 0.02,
     position: 'relative',
-    height:sizes.screenWidth * 0.09,
-    alignItems:'start',
-    justifyContent:'center'
+    height: sizes.screenWidth * 0.09,
+    alignItems: 'start',
+    justifyContent: 'center',
   },
   descriptionIOS: {
     color: colors.black,
@@ -136,8 +136,8 @@ export const styles = StyleSheet.create({
     paddingHorizontal: sizes.screenWidth * 0.02,
     borderRadius: sizes.screenWidth * 0.02,
     position: 'relative',
-    height:sizes.screenHeight * 0.1,
-    paddingTop:10
+    height: sizes.screenHeight * 0.1,
+    paddingTop: 10,
   },
   descriptionTwo: {
     color: colors.black,
@@ -154,20 +154,19 @@ export const styles = StyleSheet.create({
   },
 
   nextBtn: {
-    position: 'absolute',
-    bottom: sizes.screenHeight * 0.07,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginVertical: sizes.screenHeight * 0.01,
   },
   nextBtnIOS: {
-    position: 'absolute',
-    bottom: sizes.screenHeight * 0.09,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginVertical: sizes.screenHeight * 0.01,
+    marginBottom: sizes.screenHeight * 0.47,
   },
   title: {
     color: colors.durationColor,
     fontSize: fontSize.small,
     marginStart: sizes.screenWidth * 0.01,
-    paddingBottom: sizes.screenWidth * 0.01
+    paddingBottom: sizes.screenWidth * 0.01,
   },
 
   titleIOS: {
@@ -175,6 +174,21 @@ export const styles = StyleSheet.create({
     fontSize: fontSize.small,
     marginVertical: sizes.screenHeight * 0.007,
   },
+  titleDaysIOS: {
+    color: colors.durationColor,
+    fontSize: fontSize.small,
+    marginVertical: sizes.screenHeight * 0.007,
+    marginLeft: sizes.screenWidth * 0.05,
+  },
+
+  workingDaysHeading: {
+    color: colors.durationColor,
+    fontSize: fontSize.small,
+    marginVertical: sizes.screenHeight * 0.01,
+    marginLeft: sizes.screenWidth * 0.05,
+    fontWeight: '500',
+  },
+
   timeSecond: {
     color: colors.black,
     fontWeight: '600',
@@ -183,16 +197,16 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.selectorcolor,
     borderRadius: sizes.screenWidth * 0.02,
     position: 'relative',
-    height:sizes.screenWidth * 0.1,
-    alignItems:'start',
-    justifyContent:'center',
+    height: sizes.screenWidth * 0.1,
+    alignItems: 'start',
+    justifyContent: 'center',
   },
-  instagramInput:{
+  instagramInput: {
     // backgroundColor:'red',
-    fontSize:fontSize.small,
-    marginLeft:sizes.screenWidth * 0.08,
-    fontWeight:'500',
-    color:colors.black
+    fontSize: fontSize.small,
+    marginLeft: sizes.screenWidth * 0.08,
+    fontWeight: '500',
+    color: colors.black,
   },
   instagramIcon: {
     height: sizes.screenHeight * 0.0222,
@@ -200,13 +214,13 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     left: sizes.screenWidth * 0.03,
     top: sizes.screenWidth * 0.026,
-    tintColor:colors.black
+    tintColor: colors.black,
   },
   daysContainer: {
     width: sizes.screenWidth * 0.9,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   daysTouchable: {
     height: sizes.screenWidth * 0.11,
@@ -232,21 +246,86 @@ export const styles = StyleSheet.create({
   daysText: {
     fontSize: fontSize.smallM,
     color: colors.black,
-    fontWeight: '500'
+    fontWeight: '500',
   },
   daysTextSelected: {
     fontSize: fontSize.smallM,
     color: colors.white,
-    fontWeight: '500'
+    fontWeight: '500',
   },
   daysContainerIOS: {
     width: sizes.screenWidth * 0.9,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
-  daysMainConatner:{
-    alignSelf:'center',
-    marginTop:sizes.screenWidth * 0.05
-  }
+  daysMainConatner: {
+    alignSelf: 'center',
+    marginTop: sizes.screenWidth * 0.05,
+  },
+  scheduleMainView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginBottom:13
+  },
+  toggleBtn: {
+    backgroundColor: colors.outlineColor,
+    width: sizes.screenWidth * 0.13,
+    height: sizes.screenHeight * 0.06,
+    borderRadius: sizes.screenWidth * 0.03,
+    justifyContent: 'center',
+  },
+
+  toggleBtnUnactive: {
+    backgroundColor: colors.darkerBordercolor,
+    width: sizes.screenWidth * 0.13,
+    height: sizes.screenHeight * 0.06,
+    borderRadius: sizes.screenWidth * 0.03,
+    justifyContent: 'center',
+  },
+  toggleBtnColor: {
+    backgroundColor: 'green',
+    width: sizes.screenWidth * 0.05,
+    height: sizes.screenHeight * 0.025,
+    borderRadius: sizes.screenWidth * 0.1,
+    alignSelf: 'center',
+  },
+
+  toggleBtnColorRed: {
+    backgroundColor: 'red',
+    width: sizes.screenWidth * 0.05,
+    height: sizes.screenHeight * 0.025,
+    borderRadius: sizes.screenWidth * 0.1,
+    alignSelf: 'center',
+  },
+  dayTimeView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: sizes.screenHeight * 0.06,
+    width: sizes.screenWidth * 0.75,
+    borderRadius: sizes.screenWidth * 0.03,
+    paddingHorizontal: 10,
+    marginLeft: 10,
+    backgroundColor: colors.outlineColor,
+  },
+  dayTimeViewUnactive: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: sizes.screenHeight * 0.06,
+    width: sizes.screenWidth * 0.75,
+    borderRadius: sizes.screenWidth * 0.03,
+    paddingHorizontal: 10,
+    marginLeft: 10,
+    backgroundColor: colors.darkerBordercolor,
+  },
+  scheduleDay: {
+    fontSize: fontSize.medium,
+    fontWeight: '500',
+  },
+  scheduleHeading: {
+    fontSize: fontSize.large,
+  },
 });

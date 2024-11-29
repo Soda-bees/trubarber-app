@@ -220,6 +220,7 @@ export default function BookingProcess({navigation, route}) {
   };
 
   const checkAndReturnTime = (startTime, formattedDate) => {
+    console.log('loggggggggggggggg',startTime,formattedDate);
     const dateTime = moment(
       `${formattedDate} ${startTime}`,
       'MM-DD-YYYY h:mm A',
@@ -244,7 +245,7 @@ export default function BookingProcess({navigation, route}) {
       adjustedDateTime.hours(adjustedDateTime.hours() + 1);
       adjustedDateTime.minutes(0);
     }
-
+console.log("loggghhhhhhhh",adjustedDateTime.format('hh:mm A'));
     return adjustedDateTime.format('hh:mm A');
   };
 
@@ -264,6 +265,7 @@ export default function BookingProcess({navigation, route}) {
         day: currentDate.format('ddd'), // Day of the week
       });
     }
+    console.log(formatToJSON(daysArray));
     setDates(daysArray);
   };
 
@@ -283,10 +285,31 @@ export default function BookingProcess({navigation, route}) {
     return Array.from(months); // Convert the Set to an array and return it
   };
 
+  const getDayObject = shortDay => {
+    // Mapping short form to full day names
+    const dayMap = {
+      Sun: 'Sunday',
+      Mon: 'Monday',
+      Tue: 'Tuesday',
+      Wed: 'Wednesday',
+      Thu: 'Thursday',
+      Fri: 'Friday',
+      Sat: 'Saturday',
+    };
+
+    // Get the full day name from the short day
+    const fullDayName = dayMap[shortDay];
+
+    // Find and return the object that matches the full day name
+    return barber?.scheduled.find(item => item.day === fullDayName) || null; // Returns null if no match is found
+  };
+
   const handleDateSelected = (formattedDate, day) => {
+    const dayObject = getDayObject(day);
+    console.log(formatToJSON(dayObject));
+
     setSelected(null);
-    const isOff = barber?.offDays?.includes(day);
-    if (isOff) {
+    if (dayObject?.available == false) {
       setDatedata(null);
       setSelected(null);
       setSelectedDate(null);
@@ -300,8 +323,10 @@ export default function BookingProcess({navigation, route}) {
       const bookedTimesForSelectedDate = bookedTime
         .filter(booking => booking.date === formattedDate)
         .map(booking => booking.time);
-      const [startTime1, endTime] = barber.time.split(' - ');
+      const [startTime1, endTime] = dayObject.time.split(' - ');
+      console.log("start time 1" , startTime1);
       const startTime = checkAndReturnTime(startTime1, formattedDate);
+      console.log("=--=-=-=",startTime , endTime);
       const availableTimeSlot = handleCreateTimeSlotSecond(
         startTime,
         endTime,
@@ -310,6 +335,31 @@ export default function BookingProcess({navigation, route}) {
       );
       setDatedata(availableTimeSlot);
     }
+    // const isOff = barber?.offDays?.includes(day);
+    // if (isOff) {
+    //   setDatedata(null);
+    //   setSelected(null);
+    //   setSelectedDate(null);
+    //   return ErrorShow(
+    //     'error',
+    //     'Oops!',
+    //     'Barber is not available today kindly choose another day',
+    //   );
+    // } else {
+    //   setSelectedDate(formattedDate);
+    //   const bookedTimesForSelectedDate = bookedTime
+    //     .filter(booking => booking.date === formattedDate)
+    //     .map(booking => booking.time);
+    //   const [startTime1, endTime] = barber.time.split(' - ');
+    //   const startTime = checkAndReturnTime(startTime1, formattedDate);
+    //   const availableTimeSlot = handleCreateTimeSlotSecond(
+    //     startTime,
+    //     endTime,
+    //     bookedTimesForSelectedDate,
+    //     totalDuration,
+    //   );
+    //   setDatedata(availableTimeSlot);
+    // }
   };
 
   const parseTime = timeString => {

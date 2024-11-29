@@ -43,9 +43,9 @@ export default function BookAppointment({navigation, route}) {
   const allBarbers = useSelector(selectbarber);
   const dispatch = useDispatch();
   const barbar = allBarbers?.find(barber => barber?._id === barbarId);
-  // console.log(barbar);
+  console.log(formatToJSON(barbar));
   const userData = useSelector(selectUserData);
-  console.log('favourites', userData?.favourites?.length);
+  // console.log('favourites', userData?.favourites?.length);
 
   const authToken = useSelector(selectAuthToken);
   const [services, setServices] = useState([]);
@@ -145,7 +145,7 @@ export default function BookAppointment({navigation, route}) {
     },
   ]);
 
-  console.log('heyyyy', formatToJSON(barberReviews));
+  // console.log('heyyyy', formatToJSON(barberReviews));
 
   const [tab, setTabs] = useState('About');
   const [status, setStatus] = useState(null);
@@ -183,7 +183,7 @@ export default function BookAppointment({navigation, route}) {
     findChat();
   }, [barbar]);
 
-  console.log('barberServices', barbar.services);
+  // console.log('barberServices', barbar.services);
 
   const findChat = async () => {
     try {
@@ -365,6 +365,8 @@ export default function BookAppointment({navigation, route}) {
     }
   };
 
+  console.log('logg', barbar?.scheduled);
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -491,11 +493,7 @@ export default function BookAppointment({navigation, route}) {
             <TouchableOpacity
               style={styles.btnColor}
               onPress={() => {
-                if (!authToken) {
-                  navigation.navigate('WelcomeScreen');
-                } else {
-                  handleNavigateToInstagram(barbar?.instagram);
-                }
+                handleNavigateToInstagram(barbar?.instagram);
               }}>
               <Image
                 style={styles.direction}
@@ -524,20 +522,63 @@ export default function BookAppointment({navigation, route}) {
           </TouchableOpacity>
         </View>
         {tab === 'About' ? (
-          <View>
-            <ScrollView style={styles.scrollView}>
+          <ScrollView style={styles.scrollView}>
+            <View style={styles.aboutContainer}>
               <Text style={styles.aboutContent}>{barbar?.description}</Text>
-            </ScrollView>
-            <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
-              <Button
-                title={'Book Appointment'}
-                onPress={() => {
-                  // navigation.navigate('BookingProcess')
-                  setTabs('Services');
-                }}
-              />
+
+              <View style={styles.horizontalLine} />
+
+              {barbar?.scheduled?.map((item, index) => {
+                return (
+                  <View style={styles.scheduleMainView} key={index}>
+                    <View
+                      style={
+                        item.available
+                          ? styles.toggleBtn
+                          : styles.toggleBtnUnactive
+                      }>
+                      <View
+                        style={
+                          item.available
+                            ? styles.toggleBtnColor
+                            : styles.toggleBtnColorRed
+                        }></View>
+                    </View>
+                    <View
+                      style={
+                        item.available
+                          ? styles.dayTimeView
+                          : styles.dayTimeViewUnactive
+                      }>
+                      <Text style={styles.scheduleDay}>{item?.day}</Text>
+                      <View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}>
+                          {item?.available ? (
+                            <Text style={styles.scheduleDay}>{item?.time}</Text>
+                          ) : (
+                            <Text style={styles.scheduleDay}>Close</Text>
+                          )}
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                );
+              })}
+              <View
+                style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
+                <Button
+                  title={'Book Appointment'}
+                  onPress={() => {
+                    setTabs('Services');
+                  }}
+                />
+              </View>
             </View>
-          </View>
+          </ScrollView>
         ) : tab === 'Services' ? (
           <ScrollView>
             {services?.length > 0 &&

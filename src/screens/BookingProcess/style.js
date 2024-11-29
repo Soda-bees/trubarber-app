@@ -45,6 +45,19 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: sizes.screenWidth * 0.2,
   },
+
+  offStyle: {
+    backgroundColor:'red',
+    width: sizes.screenWidth * 0.12,
+    height: sizes.screenWidth * 0.12,
+    // padding:sizes.screenWidth * 0.01,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: colors.black,
+    borderWidth: 1,
+    borderRadius: sizes.screenWidth * 0.2,
+  },
   datesDate: {
     fontSize: fontSize.smallM,
     fontWeight: '800',

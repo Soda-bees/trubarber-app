@@ -23,7 +23,7 @@ export default function TabNavigation() {
     height:
       Platform.OS == 'android'
         ? sizes.screenHeight * 0.075
-        : sizes.screenHeight * 0.105,
+        : sizes.screenHeight * 0.09,
     paddingTop: sizes.screenHeight * 0.01,
     paddingHorizontal: sizes.screenWidth * 0.04,
     borderTopRightRadius: sizes.screenWidth * 0.07,
@@ -41,7 +41,7 @@ export default function TabNavigation() {
           height:
             Platform.OS == 'android'
               ? sizes.screenHeight * 0.075
-              : sizes.screenHeight * 0.105,
+              : sizes.screenHeight * 0.09,
           paddingTop: sizes.screenHeight * 0.01,
           paddingHorizontal: sizes.screenWidth * 0.04,
           borderTopRightRadius: sizes.screenWidth * 0.07,
@@ -56,18 +56,19 @@ export default function TabNavigation() {
             <Image
               source={images.exploreTabBerfore}
               style={{
-                resizeMode: 'contain',
-                width: sizes.screenWidth * 0.05,
+                // resizeMode: 'contain',
+                width: sizes.screenWidth * 0.06,
                 height: focused
-                  ? sizes.screenWidth * 0.05
-                  : sizes.screenWidth * 0.05,
+                  ? sizes.screenWidth * 0.06
+                  : sizes.screenWidth * 0.06,
                 tintColor: focused ? colors.black : colors.grayBorder,
               }}
             />
           ),
-          tabBarLabel: ({focused}) => (
-            <CustomTabLabel focused={focused} label="Explore" />
-          ),
+          // tabBarLabel: ({focused}) => (
+          //   <CustomTabLabel focused={focused} label="Explore" />
+          // ),
+          tabBarLabel: () => null,
         }}
       />
       <Tab.Screen
@@ -80,18 +81,19 @@ export default function TabNavigation() {
                 source={images.catalogueTabBefore}
                 style={{
                   resizeMode: 'contain',
-                  width: sizes.screenWidth * 0.05,
+                  width: sizes.screenWidth * 0.06,
                   height: focused
-                    ? sizes.screenWidth * 0.05
-                    : sizes.screenWidth * 0.05,
+                    ? sizes.screenWidth * 0.06
+                    : sizes.screenWidth * 0.06,
                   tintColor: focused ? colors.black : colors.grayBorder,
                 }}
               />
             </View>
           ),
-          tabBarLabel: ({focused}) => (
-            <CustomTabLabel focused={focused} label="Catalogue" />
-          ),
+          // tabBarLabel: ({focused}) => (
+          //   <CustomTabLabel focused={focused} label="Catalogue" />
+          // ),
+          tabBarLabel: () => null,
         }}
       />
 
@@ -106,18 +108,19 @@ export default function TabNavigation() {
                 source={images.appointmentTabBefore}
                 style={{
                   resizeMode: 'contain',
-                  width: sizes.screenWidth * 0.05,
+                  width: sizes.screenWidth * 0.06,
                   height: focused
-                    ? sizes.screenWidth * 0.05
-                    : sizes.screenWidth * 0.05,
+                    ? sizes.screenWidth * 0.06
+                    : sizes.screenWidth * 0.06,
                   tintColor: focused ? colors.black : colors.grayBorder,
                 }}
               />
             </View>
           ),
-          tabBarLabel: ({focused}) => (
-            <CustomTabLabel focused={focused} label="Appointments" />
-          ),
+          // tabBarLabel: ({focused}) => (
+          //   <CustomTabLabel focused={focused} label="Appointments" />
+          // ),
+          tabBarLabel: () => null,
         }}
       />
       <Tab.Screen
@@ -131,19 +134,20 @@ export default function TabNavigation() {
                 source={images.profileTabBefore}
                 style={{
                   resizeMode: 'contain',
-                  width: sizes.screenWidth * 0.05,
+                  width: sizes.screenWidth * 0.06,
                   height: focused
-                    ? sizes.screenWidth * 0.05
-                    : sizes.screenWidth * 0.05,
+                    ? sizes.screenWidth * 0.06
+                    : sizes.screenWidth * 0.06,
                   tintColor: focused ? colors.black : colors.grayBorder,
                 }}
               />
             </View>
           ),
 
-          tabBarLabel: ({focused}) => (
-            <CustomTabLabel focused={focused} label="Profile" />
-          ),
+          // tabBarLabel: ({focused}) => (
+          //   <CustomTabLabel focused={focused} label="Profile" />
+          // ),
+          tabBarLabel: () => null,
         }}
       />
     </Tab.Navigator>
