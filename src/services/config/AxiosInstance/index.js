@@ -2,8 +2,8 @@ import axios from 'axios';
 
 // export const BASE_URL = 'http://192.168.100.110:8080/'; //Aleem
 // export const BASE_URL = 'http://192.168.100.111:6000/'; //fuzz
-export const BASE_URL = 'http://192.168.100.108:8080/'; //Bunny
-// export const BASE_URL = 'https://tru-barber-2515ddfdb32f.herokuapp.com/';
+// export const BASE_URL = 'http://192.168.100.108:8080/'; //Bunny
+export const BASE_URL = 'https://tru-barber-2515ddfdb32f.herokuapp.com/';
 
 export const axiosInstance = axios.create({
   baseURL: BASE_URL,

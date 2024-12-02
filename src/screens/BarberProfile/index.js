@@ -10,34 +10,34 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
-import { styles } from './style.js';
+import React, {useCallback, useEffect, useState} from 'react';
+import {styles} from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
-import { colors, sizes } from '../../services';
+import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
+import {colors, sizes} from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
-import { useDispatch, useSelector } from 'react-redux';
-import { removeAuthToken, selectAuthToken } from '../../store/authToken/index.js';
-import { removeRole } from '../../store/role/index.js';
-import { selectUserData } from '../../store/userData/index.js';
+import {useDispatch, useSelector} from 'react-redux';
+import {removeAuthToken, selectAuthToken} from '../../store/authToken/index.js';
+import {removeRole} from '../../store/role/index.js';
+import {selectUserData} from '../../store/userData/index.js';
 import axios from 'axios';
-import { removelocation, selectlocation } from '../../store/location/index.js';
+import {removelocation, selectlocation} from '../../store/location/index.js';
 import {
   deleteDeviceToken,
   getAddressFromCoordinates,
 } from '../../services/config/API/index.js';
-import { removeCart } from '../../store/cart/index.js';
+import {removeCart} from '../../store/cart/index.js';
 import Header from '../../components/Header/index.js';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import Modal from 'react-native-modal';
 
-export default function Profile({ navigation }) {
+export default function Profile({navigation}) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const authToken = useSelector(selectAuthToken);
 
-  const location = useSelector(selectlocation) || userData?.location
+  const location = useSelector(selectlocation) || userData?.location;
 
   const [address, setAddress] = useState(null);
   const [locationLoader, setLocationLoader] = useState(false);
@@ -48,7 +48,7 @@ export default function Profile({ navigation }) {
     try {
       const response = await getAddressFromCoordinates(latitude, longitude);
       // setAddress({ area: response?.area, city: response?.city });
-      setAddress(response)
+      setAddress(response);
       console.log('Location', response);
       setLocationLoader(false);
     } catch (error) {
@@ -57,14 +57,12 @@ export default function Profile({ navigation }) {
     }
   };
 
-
   useFocusEffect(
-    useCallback(() => {  
+    useCallback(() => {
       if (userData?.location?.latitude && userData?.location?.longitude) {
         getAddress(userData.location.latitude, userData.location.longitude);
       }
-  
-    }, [userData]) 
+    }, [userData]),
   );
 
   const handleDeleteDeviceToken = async () => {
@@ -95,9 +93,16 @@ export default function Profile({ navigation }) {
         <View style={styles.contentContainer}>
           <View style={styles.contentAlligment}>
             <Image
-              // source={{uri: userData?.profile}} 
-              source={userData?.profile ? { uri: userData?.profile } : userData?.gender === 'male' ? images.male : images.female}
-              style={styles.youngMan} />
+              // source={{uri: userData?.profile}}
+              source={
+                userData?.profile
+                  ? {uri: userData?.profile}
+                  : userData?.gender === 'male'
+                  ? images.male
+                  : images.female
+              }
+              style={styles.youngMan}
+            />
             <View style={styles.nameContainer}>
               <Text style={styles.firstName}>{userData?.name}</Text>
               {/* <Text style={styles.lastName}>Williamson</Text> */}
@@ -121,7 +126,6 @@ export default function Profile({ navigation }) {
               </View>
             )}
           </View>
-
         </View>
         <View style={styles.navigation}>
           <TouchableOpacity
@@ -136,8 +140,7 @@ export default function Profile({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.naviRow}
-            onPress={() => navigation.navigate('EditBusinessProfile')}
-          >
+            onPress={() => navigation.navigate('EditBusinessProfile')}>
             <Text style={styles.navText}>Edit Business Profile</Text>
             <Image
               source={images.arrowRight}
@@ -155,7 +158,9 @@ export default function Profile({ navigation }) {
               resizeMode="contain"
             />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.naviRow}>
+          <TouchableOpacity
+            style={styles.naviRow}
+            onPress={() => navigation.navigate('About')}>
             <Text style={styles.navText}>About</Text>
             <Image
               source={images.arrowRight}
@@ -183,32 +188,35 @@ export default function Profile({ navigation }) {
           </TouchableOpacity>
         </View>
         <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
-          <Button title={'Logout'} onPress={() => setConfirmLogoutModal(true)} />
+          <Button
+            title={'Logout'}
+            onPress={() => setConfirmLogoutModal(true)}
+          />
         </View>
         <Modal isVisible={confirmLogoutModal}>
-        <View style={styles.mainContainer}>
-          <Text style={styles.modalHeading}>Are you leaving?</Text>
-          <Text style={styles.modalText}>
-            Are you sure you want to{' '}
-            <Text style={{color: colors.red}}>Logout</Text>? You’ll need to
-            signin again to access your account.
-          </Text>
-          <View style={styles.modalButtonContainer}>
-            <TouchableOpacity
-              style={styles.cancelBtn}
-              activeOpacity={0.7}
-              onPress={() => setConfirmLogoutModal(false)}>
-              <Text style={styles.btnText}>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.cancelBtn2}
-              activeOpacity={0.7}
-              onPress={() => handleLogout()}>
-              <Text style={styles.btnText2}>Logout Anyway</Text>
-            </TouchableOpacity>
+          <View style={styles.mainContainer}>
+            <Text style={styles.modalHeading}>Are you leaving?</Text>
+            <Text style={styles.modalText}>
+              Are you sure you want to{' '}
+              <Text style={{color: colors.red}}>Logout</Text>? You’ll need to
+              signin again to access your account.
+            </Text>
+            <View style={styles.modalButtonContainer}>
+              <TouchableOpacity
+                style={styles.cancelBtn}
+                activeOpacity={0.7}
+                onPress={() => setConfirmLogoutModal(false)}>
+                <Text style={styles.btnText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.cancelBtn2}
+                activeOpacity={0.7}
+                onPress={() => handleLogout()}>
+                <Text style={styles.btnText2}>Logout Anyway</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
       </View>
     </SafeAreaView>
   );

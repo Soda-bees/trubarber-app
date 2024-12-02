@@ -57,12 +57,12 @@ export default function EditScreen({navigation}) {
   const [phone, setPhone] = useState('');
   const [isVisible, setIsVisible] = useState(false);
 
-  const parseTimeString = time => {
-    const [startTimeString, endTimeString] = time.split(' - ');
-    const startTime = parseSingleTimeString(startTimeString);
-    const endTime = parseSingleTimeString(endTimeString);
-    return {startTime, endTime};
-  };
+  // const parseTimeString = time => {
+  //   const [startTimeString, endTimeString] = time.split(' - ');
+  //   const startTime = parseSingleTimeString(startTimeString);
+  //   const endTime = parseSingleTimeString(endTimeString);
+  //   return {startTime, endTime};
+  // };
 
   const parseSingleTimeString = timeString => {
     const [time, modifier] = timeString.split(' ');
@@ -95,9 +95,9 @@ export default function EditScreen({navigation}) {
         setEmail(userData?.email);
         setName(userData?.name);
         setDescription(userData?.description);
-        const {startTime, endTime} = parseTimeString(userData?.time);
-        setStartTime(startTime);
-        setEndTime(endTime);
+        // const {startTime, endTime} = parseTimeString(userData?.time);
+        // setStartTime(startTime);
+        // setEndTime(endTime);
         setPhone(userData?.phone);
       }
     }
@@ -226,7 +226,7 @@ export default function EditScreen({navigation}) {
         name,
         profile: imgUri,
         description,
-        time: `${formatTime(startTime)} - ${formatTime(endTime)}`,
+        // time: `${formatTime(startTime)} - ${formatTime(endTime)}`,
       };
       const response = await updateProfile(
         role == 'user' ? userBody : BarberBody,
