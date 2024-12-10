@@ -239,8 +239,8 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.004,
     marginLeft: sizes.screenWidth * 0.092,
     marginRight: sizes.screenWidth * 0.092,
-    marginTop:20,
-    marginBottom:sizes.screenHeight * 0.02,
+    marginTop: 20,
+    marginBottom: sizes.screenHeight * 0.02,
   },
   btn: {
     position: 'absolute',
@@ -251,7 +251,7 @@ export const styles = StyleSheet.create({
     // position: 'absolute',
     // bottom: sizes.screenHeight * 0.045,
     alignSelf: 'center',
-    marginTop:20
+    marginTop:sizes.screenHeight * 0.2,
   },
   servicesContainer: {
     flexDirection: 'row',
@@ -393,7 +393,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   aboutContainer: {
-   marginBottom:sizes.screenHeight * 0.1
+    marginBottom: sizes.screenHeight * 0.1,
   },
   horizontalLine: {
     borderBottomColor: colors.darkerBordercolor,
@@ -459,14 +459,50 @@ export const styles = StyleSheet.create({
   },
 
   scheduleDay: {
-    fontSize: fontSize.medium,
+    fontSize: fontSize.large,
     fontWeight: '500',
+  },
+  scheduleDayOff: {
+    fontSize: fontSize.large,
+    fontWeight: '500',
+    color: colors.durationColor,
   },
 
   scheduleMainView: {
+    // flexDirection: 'row',
+    // alignItems: 'center',
+    // alignSelf:'center',
+    // marginBottom:10
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems:'center',
+    marginTop: sizes.screenHeight * 0.03,
+    paddingHorizontal: sizes.screenWidth * 0.07,
+  },
+
+  scheduleStatus: {
+    borderWidth: 1,
+    borderRadius: sizes.screenWidth * 0.04,
     alignItems: 'center',
-    alignSelf:'center',
-    marginBottom:10
+    justifyContent: 'center',
+    paddingHorizontal: sizes.screenWidth * 0.055,
+    height: sizes.screenHeight * 0.035,
+    borderColor: colors.durationColor,
+  },
+
+  sheduleTiming: {
+    fontSize: fontSize.small,
+    color: colors.durationColor,
+    marginTop: 5,
+    fontSize: fontSize.smallM,
+  },
+
+  sheduleTimingOff: {},
+
+  statusColor:{
+    color:colors.black
+  },
+  statusColorOff:{
+    color:colors.durationColor
   },
 });

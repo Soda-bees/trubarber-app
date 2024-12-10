@@ -365,7 +365,7 @@ export default function BookAppointment({navigation, route}) {
     }
   };
 
-  console.log('logg', barbar?.scheduled);
+  console.log('logg', formatToJSON(barbar?.scheduled));
 
   return (
     <SafeAreaView>
@@ -520,54 +520,16 @@ export default function BookAppointment({navigation, route}) {
               <Text style={styles.tabs}>Reviews</Text>
             </View>
           </TouchableOpacity>
+          <TouchableOpacity onPress={() => setTabs('Timming')}>
+            <View style={tab === 'Timming' ? styles.borderBottom : null}>
+              <Text style={styles.tabs}>Timming</Text>
+            </View>
+          </TouchableOpacity>
         </View>
         {tab === 'About' ? (
           <ScrollView style={styles.scrollView}>
             <View style={styles.aboutContainer}>
               <Text style={styles.aboutContent}>{barbar?.description}</Text>
-
-              <View style={styles.horizontalLine} />
-
-              {barbar?.scheduled?.map((item, index) => {
-                return (
-                  <View style={styles.scheduleMainView} key={index}>
-                    <View
-                      style={
-                        item.available
-                          ? styles.toggleBtn
-                          : styles.toggleBtnUnactive
-                      }>
-                      <View
-                        style={
-                          item.available
-                            ? styles.toggleBtnColor
-                            : styles.toggleBtnColorRed
-                        }></View>
-                    </View>
-                    <View
-                      style={
-                        item.available
-                          ? styles.dayTimeView
-                          : styles.dayTimeViewUnactive
-                      }>
-                      <Text style={styles.scheduleDay}>{item?.day}</Text>
-                      <View>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                          }}>
-                          {item?.available ? (
-                            <Text style={styles.scheduleDay}>{item?.time}</Text>
-                          ) : (
-                            <Text style={styles.scheduleDay}>Close</Text>
-                          )}
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                );
-              })}
               <View
                 style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
                 <Button
@@ -719,9 +681,85 @@ export default function BookAppointment({navigation, route}) {
                 }}></View>
             </ScrollView>
           </View>
+        ) : tab === 'Timming' ? (
+          <ScrollView
+          //  style={{marginBottom:100}}
+          >
+            {barbar?.scheduled?.map((item, index) => {
+              return (
+                <View style={styles.scheduleMainView} key={index}>
+                  <View>
+                    <Text
+                      style={
+                        item.available
+                          ? styles.scheduleDay
+                          : styles.scheduleDayOff
+                      }>
+                      {item?.day}
+                    </Text>
+                    <Text
+                      style={
+                        item.available
+                          ? styles.sheduleTiming
+                          : styles.sheduleTimingOff
+                      }>
+                      {item.time}
+                    </Text>
+                  </View>
+                  <View style={styles.scheduleStatus}>
+                    {item.available ? (
+                      <Text style={styles.statusColor}>Open</Text>
+                    ) : (
+                      <Text style={styles.statusColorOff}>Close</Text>
+                    )}
+                  </View>
+                </View>
+              );
+            })}
+            <View style={{marginBottom: sizes.screenHeight * 0.11}} />
+          </ScrollView>
         ) : null}
         <Toast />
       </View>
     </SafeAreaView>
   );
+}
+
+//////////////////////////// Schedule Old Desing /////////////////////////////
+
+{
+  /* <View
+                      style={
+                        item.available
+                          ? styles.toggleBtn
+                          : styles.toggleBtnUnactive
+                      }>
+                      <View
+                        style={
+                          item.available
+                            ? styles.toggleBtnColor
+                            : styles.toggleBtnColorRed
+                        }></View>
+                    </View>
+                    <View
+                      style={
+                        item.available
+                          ? styles.dayTimeView
+                          : styles.dayTimeViewUnactive
+                      }>
+                      <Text style={styles.scheduleDay}>{item?.day}</Text>
+                      <View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}>
+                          {item?.available ? (
+                            <Text style={styles.scheduleDay}>{item?.time}</Text>
+                          ) : (
+                            <Text style={styles.scheduleDay}>Close</Text>
+                          )}
+                        </View>
+                      </View>
+                    </View> */
 }
