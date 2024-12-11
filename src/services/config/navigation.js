@@ -65,6 +65,7 @@ import EditBusinessProfile from '../../screens/EditBusinessProfile';
 import UserFavourites from '../../screens/UserFavourites';
 import Wallet from '../../screens/Wallet';
 import About from '../../screens/About';
+import DeleteAccount from '../../screens/DeleteAccount';
 
 
 
@@ -189,7 +190,13 @@ export default function MainNavigator() {
       {!authToken ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+          <Stack.Screen name="MyTabs" component={MyTabs} />
           <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="HaircutServices" component={HaircutServices} />
+          <Stack.Screen name="BookAppointment" component={BookAppointment} />
+          <Stack.Screen name="ServiceDetails" component={ServiceDetails} />
+          <Stack.Screen name="BookingProcess" component={BookingProcess} />
+
           <Stack.Screen name="ForgotPass" component={ForgotPass} />
           <Stack.Screen name="Otp" component={Otp} />
           <Stack.Screen name="ResetPass" component={ResetPass} />
@@ -250,6 +257,7 @@ export default function MainNavigator() {
           <Stack.Screen name="BarberDirection" component={BarberDirection} />
           <Stack.Screen name="UserFavourites" component={UserFavourites} />
           <Stack.Screen name="Wallet" component={Wallet} />
+          <Stack.Screen name="DeleteAccount" component={DeleteAccount} />
         </Stack.Navigator>
       ) : (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -279,6 +287,7 @@ export default function MainNavigator() {
           <Stack.Screen name="ChatDetails" component={ChatDetails} />
           <Stack.Screen name="AddServices" component={AddServices} />
           <Stack.Screen name="EditBusinessProfile" component={EditBusinessProfile} />
+          <Stack.Screen name="DeleteAccount" component={DeleteAccount} />
         </Stack.Navigator>
       )}
     </NavigationContainer>

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {axiosInstance} from '../AxiosInstance';
 import {BASE_URL} from '../AxiosInstance';
+import {GOOGLE_MAPS_API_KEY} from "@env"
 
 export const checkServerConnection = async () => {
   try {
@@ -173,7 +174,6 @@ export const addServices = async (body, token) => {
 };
 
 export const getAddressFromCoordinates = async (latitude, longitude) => {
-  const GOOGLE_MAPS_API_KEY = 'AIzaSyDZHd__SjxYxquisLR6VcqIF1VuyVD4aiY';
   // try {
   //   const response = await axios.get(
   //     `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_MAPS_API_KEY}`,
@@ -532,11 +532,36 @@ export const handleIncreaseWallet = async (_id, token, body) => {
   }
 };
 
+export const handleDeleteAccount = async (body, token) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post(`auth/deleteAccount`, body, {
+      headers,
+    });
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
 
-// export const handleStripePayment =  async () => {
-//   try {
-    
-//   } catch (error) {
-    
-//   }
-// }
+export const handleconfirmAndDeleteAccount = async token => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axiosInstance.post(
+      `auth/confirmAndDeleteAccount`,
+      {},
+      {
+        headers,
+      },
+    );
+    return response;
+  } catch (error) {
+    return error;
+  }
+};

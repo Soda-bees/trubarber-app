@@ -8,28 +8,32 @@ import {
   TextInput,
   SafeAreaView,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { styles } from './style.js';
+import React, {useEffect, useState} from 'react';
+import {styles} from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
-import { colors, sizes } from '../../services';
+import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
+import {colors, sizes} from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectUserData } from '../../store/userData/index.js';
-import { removeCart, selectCart } from '../../store/cart/index.js';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectUserData} from '../../store/userData/index.js';
+import {removeCart, selectCart} from '../../store/cart/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import Header from '../../components/Header/index.js';
 import moment from 'moment';
-import { updateAppointmentStatus } from '../../services/config/API/index.js';
-import { selectAuthToken } from '../../store/authToken/index.js';
+import {
+  getAddressFromCoordinates,
+  updateAppointmentStatus,
+} from '../../services/config/API/index.js';
+import {selectAuthToken} from '../../store/authToken/index.js';
 // import UserTabNavigation from '../../services/config/UserTabNavigation.js';
 
-export default function Appointments({ navigation }) {
+export default function Appointments({navigation}) {
   const dispatch = useDispatch();
 
-  const authToken = useSelector(selectAuthToken)
+  const authToken = useSelector(selectAuthToken);
   const userData = useSelector(selectUserData);
 
   const calculateTotalAmount = services => {
@@ -73,7 +77,7 @@ export default function Appointments({ navigation }) {
     return name;
   };
 
-  const calculateDuration = (time) => {
+  const calculateDuration = time => {
     const [startTime, endTime] = time.split(' - ');
 
     // Parse the times using Moment.js
@@ -84,17 +88,41 @@ export default function Appointments({ navigation }) {
     const durationInMinutes = end.diff(start, 'minutes');
 
     return durationInMinutes;
+  };
 
-  }
-
-  const handleUpdateAppointmentStatus = async (_id) => {
+  const handleUpdateAppointmentStatus = async _id => {
     try {
-      const response = await updateAppointmentStatus(authToken, _id, 'Cancelled')
+      const response = await updateAppointmentStatus(
+        authToken,
+        _id,
+        'Cancelled',
+      );
       console.log(formatToJSON(response?.data));
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+
+  const [address, setAddress] = useState(null);
+  const [locationLoader, setLocationLoader] = useState(false);
+
+  const getAddress = async (latitude, longitude) => {
+    setLocationLoader(true);
+    try {
+      const response = await getAddressFromCoordinates(latitude, longitude);
+      setAddress(response);
+      setLocationLoader(false);
+    } catch (error) {
+      console.log(error);
+      setLocationLoader(false);
+    }
+  };
+
+  useEffect(() => {
+    getAddress(userData.location?.latitude, userData.location?.longitude);
+  }, []);
+
+  console.log(formatToJSON(userData));
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -107,10 +135,15 @@ export default function Appointments({ navigation }) {
                   <View key={index}>
                     <ImageBackground
                       // source={{ uri: item?.barber?.businessProfile }}
-                      source={item?.profile ? { uri: item?.profile } : item?.gender === "male" ? images.male : images.female}
+                      source={
+                        item?.user.profile
+                          ? {uri: item?.user.profile}
+                          : item?.user.gender === 'male'
+                          ? images.male
+                          : images.female
+                      }
                       imageStyle={styles.barberHat}
-                      resizeMode='contain'
-                    >
+                      resizeMode="contain">
                       <View style={styles.innerContainer}>
                         <View style={styles.nameView}>
                           <Text style={styles.contextText}>
@@ -119,11 +152,22 @@ export default function Appointments({ navigation }) {
                           <Text style={styles.statusText}>{item?.status}</Text>
                         </View>
                         <View style={styles.locationContainer}>
-                          <Image
-                            source={images.whiteLocation}
-                            style={styles.whiteLocation}
-                            resizeMode="contain"
-                          />
+                          {locationLoader ? (
+                            <ActivityIndicator size={15} color={colors.black} />
+                          ) : (
+                            <View style={styles.row}>
+                              <Image
+                                source={images.redLocation}
+                                resizeMode="contain"
+                                style={styles.redLocation}
+                              />
+                              <Text
+                                style={styles.barberLocation}
+                                numberOfLines={1}>
+                                {address ? `${address}.` : 'Location'}
+                              </Text>
+                            </View>
+                          )}
                         </View>
                       </View>
                     </ImageBackground>
@@ -134,7 +178,7 @@ export default function Appointments({ navigation }) {
                             <View style={styles.directionRow}>
                               <View style={styles.serviceImagecontainer}>
                                 <Image
-                                  source={{ uri: item?.serviceIcon }}
+                                  source={{uri: item?.serviceIcon}}
                                   style={styles.serviceImageresize}
                                   resizeMode="contain"
                                 />
@@ -170,14 +214,16 @@ export default function Appointments({ navigation }) {
                         <View style={styles.dateAndtimeView}>
                           <Text
                             style={styles.dateAndtime}>{`${convertDateFormat(
-                              item?.date,
-                            )}/${item?.time} (${calculateDuration(item?.time)} min)`}</Text>
+                            item?.date,
+                          )}/${item?.time} (${calculateDuration(
+                            item?.time,
+                          )} min)`}</Text>
                         </View>
                       </View>
                       <TouchableOpacity
                         style={styles.bookBtn}
                         onPress={() =>
-                          navigation.navigate('AppointmentDetails', { item })
+                          navigation.navigate('AppointmentDetails', {item})
                         }>
                         <Text style={styles.btnText}>See Details</Text>
                         <Image
@@ -186,15 +232,15 @@ export default function Appointments({ navigation }) {
                           style={styles.arrowStyle}
                         />
                       </TouchableOpacity>
-                      {
-                        item?.status === "Pending" &&
+                      {item?.status === 'Pending' && (
                         <TouchableOpacity
                           style={styles.bookBtn}
                           // onPress={() =>
                           //   navigation.navigate('AppointmentDetails', { item })
                           // }
-                          onPress={() => handleUpdateAppointmentStatus(item?._id)}
-                        >
+                          onPress={() =>
+                            handleUpdateAppointmentStatus(item?._id)
+                          }>
                           <Text style={styles.btnText}>Cancel Appointment</Text>
                           <Image
                             source={images.crossbtn}
@@ -202,7 +248,7 @@ export default function Appointments({ navigation }) {
                             style={styles.crossStyle}
                           />
                         </TouchableOpacity>
-                      }
+                      )}
                     </View>
                   </View>
                 );
@@ -221,7 +267,10 @@ export default function Appointments({ navigation }) {
           )}
           <View
             style={{
-              paddingBottom: Platform.OS == 'ios' ? sizes.screenHeight * 0.11 : sizes.screenHeight * 0.01,
+              paddingBottom:
+                Platform.OS == 'ios'
+                  ? sizes.screenHeight * 0.11
+                  : sizes.screenHeight * 0.01,
             }}
           />
         </ScrollView>

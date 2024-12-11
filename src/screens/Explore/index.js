@@ -14,6 +14,7 @@ import {
   Keyboard,
   Linking,
   AppState,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState, useCallback} from 'react';
 import images from '../../services/utilities/images';
@@ -23,28 +24,47 @@ import MapView, {Marker} from 'react-native-maps';
 import StarRating from 'react-native-star-rating-widget';
 import LottieView from 'lottie-react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {selectAuthToken} from '../../store/authToken';
-import {getAllBarber, handleGetUserDetails} from '../../services/config/API';
+import {removeAuthToken, selectAuthToken} from '../../store/authToken';
+import {
+  deleteDeviceToken,
+  getAddressFromCoordinates,
+  getAllBarber,
+  handleGetUserDetails,
+} from '../../services/config/API';
 import {ErrorShow} from '../../components/Error';
-import {selectlocation, setLocation} from '../../store/location';
+import {
+  removelocation,
+  selectlocation,
+  setLocation,
+} from '../../store/location';
 import {setBarber} from '../../store/barber';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import {useFocusEffect} from '@react-navigation/native';
 import formatToJSON from '../../services/config/FormatToJson';
 import {socket, socketService} from '../../services/Socket';
-import {selectUserData, setUserData} from '../../store/userData';
+import {
+  removeUserData,
+  selectUserData,
+  setUserData,
+} from '../../store/userData';
 import ChatConponent from '../../components/ChatComponent';
 import NotificationComponent from '../../components/NotificationComponent';
 import Favourites from '../../components/FavouriteComponent';
 import BarberLocation from '../../components/BarberLocationBox';
-import { openSettings } from 'react-native-permissions';
+import {openSettings} from 'react-native-permissions';
+import {requestTrackingPermission} from 'react-native-tracking-transparency';
+import {removeRole} from '../../store/role';
+import {removePaymentCard} from '../../store/paymentCard';
+import {removeCart} from '../../store/cart';
+import Modal from 'react-native-modal';
 
 export default function Explore({navigation}) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
-  const location = useSelector(selectlocation) || userData?.location;
-  console.log('Location-=-=-=>', location);
+  // const location = useSelector(selectlocation) || userData?.location;
+  const location = useSelector(selectlocation)
+  // console.log('Location-=-=-=>', location);
   const [region, setRegion] = useState(null);
   const authToken = useSelector(selectAuthToken);
   const [loader, setLoader] = useState(false);
@@ -54,26 +74,15 @@ export default function Explore({navigation}) {
   const [search, setSearch] = useState('');
   const [categories, setCategories] = useState([]);
   const [barberData, setBarberdata] = useState([]);
-
-  // useEffect(() => {
-  //   const cleanup = socketService(dispatch, authToken, userData);
-
-  //   return () => {
-  //     cleanup();
-  //   };
-  // }, [userData]);
+  const [addressData, setAddressData] = useState({});
+  const [locationLoader, setLocationLoader] = useState({});
+  const [isDeletedModal, setIsDeletedModal] = useState(false);
 
   let animation = React.createRef();
 
   useEffect(() => {
     animation.current?.play();
   }, []);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setLoader(false);
-  //   }, 2000);
-  // }, []);
 
   useEffect(() => {
     handleGetAllBarber();
@@ -153,21 +162,22 @@ export default function Explore({navigation}) {
   useEffect(() => {
     const handleAppStateChange = nextAppState => {
       if (nextAppState === 'active') {
-        initializeLocation(); // Re-run location initialization when app returns to the foreground
+        initializeLocation();
       }
     };
-  
-    // Subscribe to app state changes
-    const appStateSubscription = AppState.addEventListener('change', handleAppStateChange);
-  
-    // Initial permission request
+
+    const appStateSubscription = AppState.addEventListener(
+      'change',
+      handleAppStateChange,
+    );
+
     if (Platform.OS === 'android') {
       PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
       )
         .then(res => {
           if (res === PermissionsAndroid.RESULTS.GRANTED) {
-            requestUserPermission(); // Assuming you have a requestUserPermission function
+            requestUserPermission();
             initializeLocation();
           } else {
             initializeLocation();
@@ -180,8 +190,7 @@ export default function Explore({navigation}) {
     } else {
       initializeLocation();
     }
-  
-    // Clean up the subscription when the component unmounts
+
     return () => {
       appStateSubscription.remove();
     };
@@ -200,8 +209,21 @@ export default function Explore({navigation}) {
           console.log('catch');
           console.log('Location services not enabled', error.message);
           Alert.alert(
-            'Location Services Disabled',
-            'Please enable location services to use this feature.',
+            'Location Permission Required',
+            'We need your location to show you nearby barbers based on your location. Please enable location services in your settings.',
+            [
+              {text: 'Cancel', style: 'cancel'},
+              {
+                text: 'Open Settings',
+                onPress: () => {
+                  if (Platform.OS === 'ios') {
+                    openSettings();
+                  } else {
+                    Linking.openSettings(); // Opens app settings on Android
+                  }
+                },
+              },
+            ],
           );
         });
     }
@@ -238,14 +260,6 @@ export default function Explore({navigation}) {
   };
 
   const checkLocationServices = async () => {
-    // console.log("work checkLocationServices");
-    // return LocationServicesDialogBox.checkLocationServicesIsEnabled({
-    //   message:
-    //     '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
-    //   ok: 'YES',
-    //   cancel: 'NO',
-    // });
-
     if (LocationServicesDialogBox) {
       LocationServicesDialogBox.checkLocationServicesIsEnabled({
         message:
@@ -258,7 +272,7 @@ export default function Explore({navigation}) {
         })
         .catch(error => {
           console.error('Location services not enabled', error.message);
-          throw error; // Re-throw the error to handle it in the calling function
+          throw error;
         });
     } else {
       console.error('LocationServicesDialogBox is not initialized');
@@ -284,37 +298,46 @@ export default function Explore({navigation}) {
       },
       error => {
         console.log('Error getting location: ', error.message);
-        Alert.alert(
-          'Location Permission Required',
-          'Location access is essential for using all features of this app. Please enable location services in your settings.',
-          [
-            {
-              text: 'Cancel',
-              style: 'cancel',
-            },
-            {
-              text: 'Open Settings',
-              onPress: () => {
-                if (Platform.OS === 'ios') {
-                  openSettings();
-                } else {
-                  Linking.openSettings(); // Opens app settings on Android
-                }
-              },
-            },
-          ],
-        );
       },
       {enableHighAccuracy: false, timeout: 20000, maximumAge: 20000},
     );
+  };
+
+  const handleDeleteDeviceToken = async () => {
+    try {
+      const response = await deleteDeviceToken(authToken);
+      if (response?.status == 200) {
+        console.log(response?.data?.message);
+      }
+    } catch (error) {
+      console.log('error in user details', error);
+    }
+  };
+
+  const handleLogout = async () => {
+    setIsDeletedModal(false);
+    setTimeout(() => {
+      handleDeleteDeviceToken();
+      dispatch(removeAuthToken());
+      dispatch(removeRole());
+      dispatch(removePaymentCard());
+      dispatch(removeCart());
+      dispatch(removeUserData());
+      dispatch(removelocation());
+      navigation.navigate('WelcomeScreen');
+    }, 500);
   };
 
   const getUserDetails = async () => {
     try {
       const response = await handleGetUserDetails(authToken);
       if (response?.status == 200) {
-        console.log('userDetails in explore');
-        dispatch(setUserData(response?.data?.userData));
+        if (response.data.userData.isDeleted) {
+          setIsDeletedModal(true);
+        } else {
+          console.log('userDetails in explore');
+          dispatch(setUserData(response?.data?.userData));
+        }
       }
     } catch (error) {
       console.log('error in user details', error);
@@ -350,6 +373,47 @@ export default function Explore({navigation}) {
     }
   };
 
+  useEffect(() => {
+    const requestPermission = async () => {
+      const permission = await requestTrackingPermission();
+      if (permission === 'authorized') {
+        console.log('Tracking permission granted.');
+      } else {
+        console.log('Tracking permission denied or restricted.');
+      }
+    };
+    requestPermission();
+  }, []);
+
+  const getAddress = async (latitude, longitude, barberId) => {
+    setLocationLoader(prev => ({...prev, [barberId]: true}));
+    try {
+      const response = await getAddressFromCoordinates(latitude, longitude);
+      setAddressData(prev => ({
+        ...prev,
+        [barberId]: response,
+      }));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLocationLoader(prev => ({...prev, [barberId]: false}));
+    }
+  };
+
+  useEffect(() => {
+    barberData.forEach(barber => {
+      if (barber.location?.latitude && barber.location?.longitude) {
+        getAddress(
+          barber.location.latitude,
+          barber.location.longitude,
+          barber._id,
+        );
+      }
+    });
+  }, [barberData]);
+
+  console.log('yahooo', formatToJSON(categories));
+
   return (
     <SafeAreaView>
       {loader ? (
@@ -372,7 +436,7 @@ export default function Explore({navigation}) {
                   resizeMode="contain"
                   style={styles.transparentBg}>
                   <View style={styles.topIconRow}>
-                    {/* <BarberLocation user={true} /> */}
+                    <BarberLocation user={true} />
                     <View style={styles.otherIconRow}>
                       <Favourites />
                       <NotificationComponent />
@@ -542,95 +606,136 @@ export default function Explore({navigation}) {
                           ? styles.cardRow
                           : styles.cardRowIOS
                       }>
-                      {barberData?.map((item, index) => {
-                        const distance = calculateDistance(
-                          location?.latitude,
-                          location?.longitude,
-                          item.location.latitude,
-                          item.location.longitude,
-                        );
-                        return (
-                          <TouchableOpacity
-                            key={index}
-                            onPress={() =>
-                              navigation.navigate('BookAppointment', {
-                                item,
-                                tabName: 'About',
-                              })
-                            }>
-                            <ImageBackground
-                              source={
-                                item?.profile
-                                  ? {uri: item?.profile}
-                                  : item?.gender === 'male'
-                                  ? images.male
-                                  : images.female
-                              }
-                              imageStyle={styles.containerImage}
-                              style={styles.containerImage}>
-                              <View style={styles.row}>
-                                <Text style={styles.textWhite}>
-                                  {calculateAverageRating(item?.reviews)}
-                                </Text>
-                                <StarRating
-                                  maxStars={1}
-                                  starSize={12}
-                                  color={colors.gold}
-                                  rating={1}
-                                />
-                              </View>
-
+                      {barberData
+                        ?.filter(item => !item.isDeleted)
+                        ?.map((item, index) => {
+                          const barberId = item._id;
+                          const address = addressData[barberId];
+                          const distance = calculateDistance(
+                            location?.latitude,
+                            location?.longitude,
+                            item.location.latitude,
+                            item.location.longitude,
+                          );
+                          return (
+                            <TouchableOpacity
+                              key={index}
+                              onPress={() =>
+                                navigation.navigate('BookAppointment', {
+                                  item,
+                                  tabName: 'About',
+                                })
+                              }>
                               <ImageBackground
-                                source={images.bluredImg}
-                                imageStyle={styles.bluredImg}
-                                style={styles.bluredImg}>
-                                <View style={styles.appointmentContainer}>
-                                  <Text style={styles.textDarkerblack}>
-                                    {item.name}
+                                source={
+                                  item?.profile
+                                    ? {uri: item?.profile}
+                                    : item?.gender === 'male'
+                                    ? images.male
+                                    : images.female
+                                }
+                                imageStyle={styles.containerImage}
+                                style={styles.containerImage}>
+                                <View style={styles.row}>
+                                  <Text style={styles.textWhite}>
+                                    {calculateAverageRating(item?.reviews)}
                                   </Text>
-                                  <View style={styles.locationContainer}>
-                                    <Image
-                                      source={images.Location}
-                                      resizeMode="contain"
-                                      style={styles.locationImg}
-                                    />
-                                    <Text style={styles.textBlack}>
-                                      {distance !== null && (
-                                        <Text style={styles.textBlack}>
-                                          {`${distance.toFixed(2)} km`}
-                                        </Text>
-                                      )}
-                                    </Text>
-                                  </View>
-                                  <TouchableOpacity
-                                    style={styles.bookBtn}
-                                    onPress={() =>
-                                      navigation.navigate('BookAppointment', {
-                                        item,
-                                        tabName: 'Services',
-                                      })
-                                    }>
-                                    <Text style={styles.btnText}>
-                                      Book Appointment
-                                    </Text>
-                                    <Image
-                                      source={images.arrowIcon}
-                                      resizeMode="contain"
-                                      style={styles.arrowStyle}
-                                    />
-                                  </TouchableOpacity>
+                                  <StarRating
+                                    maxStars={1}
+                                    starSize={12}
+                                    color={colors.gold}
+                                    rating={1}
+                                  />
                                 </View>
+
+                                <ImageBackground
+                                  source={images.bluredImg}
+                                  imageStyle={styles.bluredImg}
+                                  style={styles.bluredImg}>
+                                  <View style={styles.appointmentContainer}>
+                                    <Text style={styles.textDarkerblack}>
+                                      {item.name}
+                                    </Text>
+                                    <View style={styles.locationContainer}>
+                                      <Image
+                                        source={images.Location}
+                                        resizeMode="contain"
+                                        style={styles.locationImg}
+                                      />
+                                      <View
+                                        style={{
+                                          width: sizes.screenWidth * 0.34,
+                                        }}>
+                                        {location ? (
+                                          <Text style={styles.textBlack}>
+                                            {distance !== null && (
+                                              <Text style={styles.textBlack}>
+                                                {`${distance.toFixed(2)} km`}
+                                              </Text>
+                                            )}
+                                          </Text>
+                                        ) : locationLoader[barberId] ? (
+                                          <ActivityIndicator
+                                            size="small"
+                                            color={colors.primary}
+                                            style={styles.loaderStyle}
+                                          />
+                                        ) : (
+                                          <Text
+                                            style={
+                                              styles.textBlackBarberLocation
+                                            }
+                                            numberOfLines={2}>
+                                            {address || 'Fetching address...'}
+                                          </Text>
+                                        )}
+                                      </View>
+                                    </View>
+                                    <TouchableOpacity
+                                      style={styles.bookBtn}
+                                      onPress={() =>
+                                        navigation.navigate('BookAppointment', {
+                                          item,
+                                          tabName: 'Services',
+                                        })
+                                      }>
+                                      <Text style={styles.btnText}>
+                                        Book Appointment
+                                      </Text>
+                                      <Image
+                                        source={images.arrowIcon}
+                                        resizeMode="contain"
+                                        style={styles.arrowStyle}
+                                      />
+                                    </TouchableOpacity>
+                                  </View>
+                                </ImageBackground>
                               </ImageBackground>
-                            </ImageBackground>
-                          </TouchableOpacity>
-                        );
-                      })}
+                            </TouchableOpacity>
+                          );
+                        })}
                     </View>
                   </ScrollView>
                 </View>
               </ScrollView>
               <View style={Platform.OS == 'ios' && styles.paddingBtm} />
             </View>
+            <Modal isVisible={isDeletedModal}>
+              <View style={styles.modalContainer}>
+                <Text style={styles.modalTextHeading}>Account Unavailable</Text>
+                <Text style={styles.modalMessage}>
+                  Your account is no longer available. To access our services in
+                  the future, feel free to create a new account.
+                </Text>
+                <TouchableOpacity
+                  style={styles.supportButton}
+                  onPress={() => {
+                    handleLogout();
+                  }}>
+                  <Text style={styles.buttonText}>Okay</Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
           </View>
         </TouchableWithoutFeedback>
       )}

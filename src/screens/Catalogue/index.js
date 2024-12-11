@@ -8,6 +8,7 @@ import {
   TextInput,
   SafeAreaView,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {styles} from './style.js';
@@ -21,7 +22,7 @@ import {selectbarber} from '../../store/barber/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
 import {selectlocation} from '../../store/location/index.js';
 import {selectUserData} from '../../store/userData/index.js';
-// import UserTabNavigation from '../../services/config/UserTabNavigation.js';
+import {getAddressFromCoordinates} from '../../services/config/API/index.js';
 
 export default function Catalogue({navigation}) {
   const barbers = useSelector(selectbarber);
@@ -32,6 +33,8 @@ export default function Catalogue({navigation}) {
   const [search, setSearch] = useState('');
   const [barberData, setBarberdata] = useState([]);
   const [servicesData, setserviceData] = useState([]);
+  const [addresses, setAddresses] = useState({});
+  const [locationLoader, setLocationLoader] = useState({});
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371;
@@ -111,6 +114,30 @@ export default function Catalogue({navigation}) {
     }
   };
 
+  const getAddress = async (latitude, longitude, barberId) => {
+    setLocationLoader(prev => ({...prev, [barberId]: true}));
+    try {
+      const response = await getAddressFromCoordinates(latitude, longitude);
+      setAddresses(prev => ({
+        ...prev,
+        [barberId]: response,
+      }));
+    } catch (error) {
+      console.error('Error fetching address:', error);
+    } finally {
+      setLocationLoader(prev => ({...prev, [barberId]: false}));
+    }
+  };
+
+  useEffect(() => {
+    filteredBarbers?.forEach(barber => {
+      const {latitude, longitude} = barber.location || {};
+      if (latitude && longitude && !addresses[barber._id]) {
+        getAddress(latitude, longitude, barber._id);
+      }
+    });
+  }, [filteredBarbers]);
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -175,84 +202,111 @@ export default function Catalogue({navigation}) {
                   ? styles.contentMargin
                   : styles.contentMarginIOS
               }>
-              {filteredBarbers?.map((item, index) => {
-                const distance = calculateDistance(
-                  location?.latitude,
-                  location?.longitude,
-                  item.location.latitude,
-                  item.location.longitude,
-                );
-                return (
-                  <ImageBackground
-                    key={index}
-                    // source={{ uri: item?.businessProfile }}
-                    source={
-                      item?.profile
-                        ? {uri: item?.profile}
-                        : item?.gender === 'male'
-                        ? images.male
-                        : images.female
-                    }
-                    imageStyle={
-                      Platform.OS == 'android'
-                        ? styles.containerImage
-                        : styles.containerImageIOS
-                    }
-                    style={styles.containerImage}>
-                    <View style={styles.row}>
-                      <Text style={styles.textWhite}>
-                        {calculateAverageRating(item.reviews)}
-                      </Text>
-                      <StarRating
-                        maxStars={1}
-                        starSize={12}
-                        color={colors.gold}
-                        rating={1}
-                      />
-                    </View>
+              {filteredBarbers
+                ?.filter(item => !item.isDeleted)
+                ?.map((item, index) => {
+                  const distance = calculateDistance(
+                    location?.latitude,
+                    location?.longitude,
+                    item.location.latitude,
+                    item.location.longitude,
+                  );
+                  return (
                     <ImageBackground
-                      source={images.bluredImg}
-                      imageStyle={styles.bluredImg}
-                      style={styles.bluredImg}>
-                      <View style={styles.appointmentContainer}>
-                        <Text style={styles.textDarkerblack}>{item?.name}</Text>
-                        <View style={styles.locationContainer}>
-                          <Image
-                            source={images.Location}
-                            resizeMode="contain"
-                            style={styles.locationImg}
-                          />
-                          {/* <Text style={styles.textBlack}>{item.location}</Text> */}
-                          {distance !== null && (
-                            <Text style={styles.textBlack}>
-                              {`${distance.toFixed(2)} km`}
-                            </Text>
-                          )}
-                        </View>
-                        <TouchableOpacity
-                          style={styles.bookBtn}
-                          onPress={() =>
-                            navigation.navigate('BookAppointment', {
-                              item,
-                              tabName: 'About',
-                            })
-                          }>
-                          <Text style={styles.btnText}>Book Appointment</Text>
-                          <Image
-                            source={images.arrowIcon}
-                            resizeMode="contain"
-                            style={styles.arrowStyle}
-                          />
-                        </TouchableOpacity>
+                      key={index}
+                      // source={{ uri: item?.businessProfile }}
+                      source={
+                        item?.profile
+                          ? {uri: item?.profile}
+                          : item?.gender === 'male'
+                          ? images.male
+                          : images.female
+                      }
+                      imageStyle={
+                        Platform.OS == 'android'
+                          ? styles.containerImage
+                          : styles.containerImageIOS
+                      }
+                      style={styles.containerImage}>
+                      <View style={styles.row}>
+                        <Text style={styles.textWhite}>
+                          {calculateAverageRating(item.reviews)}
+                        </Text>
+                        <StarRating
+                          maxStars={1}
+                          starSize={12}
+                          color={colors.gold}
+                          rating={1}
+                        />
                       </View>
+                      <ImageBackground
+                        source={images.bluredImg}
+                        imageStyle={styles.bluredImg}
+                        style={styles.bluredImg}>
+                        <View style={styles.appointmentContainer}>
+                          <Text style={styles.textDarkerblack}>
+                            {item?.name}
+                          </Text>
+                          <View style={styles.locationContainer}>
+                            <Image
+                              source={images.Location}
+                              resizeMode="contain"
+                              style={styles.locationImg}
+                            />
+                            {/* <Text style={styles.textBlack}>{item.location}</Text> */}
+                            <View
+                              style={{
+                                width: sizes.screenWidth * 0.34,
+                              }}>
+                              {location ? (
+                                distance !== null && (
+                                  <Text style={styles.textBlack}>
+                                    {`${distance.toFixed(2)} km`}
+                                  </Text>
+                                )
+                              ) : locationLoader[item._id] ? (
+                                <ActivityIndicator
+                                  size={1}
+                                  color={colors.black}
+                                  style={styles.loaderStyle}
+                                />
+                              ) : (
+                                <Text
+                                  style={styles.textBlackBarberLocation}
+                                  numberOfLines={2}>
+                                  {addresses[item._id] ||
+                                    `${distance.toFixed(2)} km`}
+                                </Text>
+                              )}
+                            </View>
+                          </View>
+                          <TouchableOpacity
+                            style={styles.bookBtn}
+                            onPress={() =>
+                              navigation.navigate('BookAppointment', {
+                                item,
+                                tabName: 'About',
+                              })
+                            }>
+                            <Text style={styles.btnText}>Book Appointment</Text>
+                            <Image
+                              source={images.arrowIcon}
+                              resizeMode="contain"
+                              style={styles.arrowStyle}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </ImageBackground>
                     </ImageBackground>
-                  </ImageBackground>
-                );
-              })}
+                  );
+                })}
             </View>
             <View
               style={{
-                paddingBottom: Platform.OS == 'android' ? sizes.screenHeight * 0.09 : sizes.screenHeight * 0.18,
+                paddingBottom:
+                  Platform.OS == 'android'
+                    ? sizes.screenHeight * 0.09
+                    : sizes.screenHeight * 0.18,
               }}
             />
           </ScrollView>

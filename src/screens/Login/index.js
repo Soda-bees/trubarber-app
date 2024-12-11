@@ -118,7 +118,7 @@ export default function Login({navigation}) {
     try {
       // Register the device for remote messages (iOS only)
       if (Platform.OS === 'ios') {
-        await messaging().registerDeviceForRemoteMessages();
+        // await messaging().registerDeviceForRemoteMessages();
         await messaging().setAutoInitEnabled(true);
       }
 
@@ -133,7 +133,6 @@ export default function Login({navigation}) {
   };
 
   useEffect(() => {
-    // Request notification permission (iOS only)
     const requestPermission = async () => {
       if (Platform.OS === 'ios') {
         const authStatus = await messaging().requestPermission();

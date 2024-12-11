@@ -25,11 +25,11 @@ export default function AuthSetUpServices({navigation, route}) {
 
   const [servicesData, setserviceData] = useState([
     {
-      icon: 'https://res.cloudinary.com/doohobw9k/image/upload/v1719221917/TruBarber/Profile/xph66mkuv5k2iluyveyj.png',
+      icon: 'https://res.cloudinary.com/doohobw9k/image/upload/v1732879356/Cuppa/Profile/h7lsoh24mbhsdmayqiep.png',
       name: 'Haircut',
     },
     {
-      icon: 'https://res.cloudinary.com/doohobw9k/image/upload/v1719221945/TruBarber/Profile/nd7aapjxiwy92htjnctg.png',
+      icon: 'https://res.cloudinary.com/doohobw9k/image/upload/v1732879311/Cuppa/Profile/hnt2nzyvbbjmydtbkrrc.png',
       name: 'Beard',
     },
   ]);

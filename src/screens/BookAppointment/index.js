@@ -43,9 +43,9 @@ export default function BookAppointment({navigation, route}) {
   const allBarbers = useSelector(selectbarber);
   const dispatch = useDispatch();
   const barbar = allBarbers?.find(barber => barber?._id === barbarId);
-  // console.log(barbar);
+  console.log(formatToJSON(barbar));
   const userData = useSelector(selectUserData);
-  console.log('favourites', userData?.favourites?.length);
+  // console.log('favourites', userData?.favourites?.length);
 
   const authToken = useSelector(selectAuthToken);
   const [services, setServices] = useState([]);
@@ -145,6 +145,8 @@ export default function BookAppointment({navigation, route}) {
     },
   ]);
 
+  // console.log('heyyyy', formatToJSON(barberReviews));
+
   const [tab, setTabs] = useState('About');
   const [status, setStatus] = useState(null);
 
@@ -181,7 +183,7 @@ export default function BookAppointment({navigation, route}) {
     findChat();
   }, [barbar]);
 
-  console.log('barberServices', barbar.services);
+  // console.log('barberServices', barbar.services);
 
   const findChat = async () => {
     try {
@@ -241,6 +243,9 @@ export default function BookAppointment({navigation, route}) {
   };
 
   const handleNavigateToChat = async () => {
+    if (!authToken) {
+      return navigation.navigate('WelcomeScreen');
+    }
     if (chatRoomId) {
       navigation.navigate('ChatDetails', {chatRoomId});
     } else {
@@ -264,12 +269,12 @@ export default function BookAppointment({navigation, route}) {
       );
 
       const userReview = sortedReviews.find(
-        review => review.userData._id === userId,
+        review => review.userData?._id === userId,
       );
 
       if (userReview) {
         const filteredReviews = sortedReviews.filter(
-          review => review._id !== userReview._id,
+          review => review?._id !== userReview?._id,
         );
         setBarberReviews([userReview, ...filteredReviews]);
       } else {
@@ -360,6 +365,8 @@ export default function BookAppointment({navigation, route}) {
     }
   };
 
+  console.log('logg', formatToJSON(barbar?.scheduled));
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -375,6 +382,9 @@ export default function BookAppointment({navigation, route}) {
                 fav ? styles.bookMarkedConatiner2 : styles.bookMarkedConatiner
               }
               onPress={() => {
+                if (!authToken) {
+                  return navigation.navigate('WelcomeScreen');
+                }
                 if (!loader) {
                   handleAddFavourites();
                 }
@@ -430,7 +440,13 @@ export default function BookAppointment({navigation, route}) {
           <View style={styles.btnColorContainer}>
             <TouchableOpacity
               style={styles.btnColor}
-              onPress={() => navigation.navigate('BarberDirection', {barbar})}>
+              onPress={() => {
+                if (!authToken) {
+                  navigation.navigate('WelcomeScreen');
+                } else {
+                  navigation.navigate('BarberDirection', {barbar});
+                }
+              }}>
               <Image
                 style={styles.direction}
                 source={images.direction}
@@ -445,7 +461,11 @@ export default function BookAppointment({navigation, route}) {
             <TouchableOpacity
               style={styles.btnColor}
               onPress={() => {
-                dialNumber(barbar.phone);
+                if (!authToken) {
+                  navigation.navigate('WelcomeScreen');
+                } else {
+                  dialNumber(barbar.phone);
+                }
               }}>
               <Image
                 style={styles.direction}
@@ -472,7 +492,9 @@ export default function BookAppointment({navigation, route}) {
           <View style={styles.btnColorContainer}>
             <TouchableOpacity
               style={styles.btnColor}
-              onPress={() => handleNavigateToInstagram(barbar?.instagram)}>
+              onPress={() => {
+                handleNavigateToInstagram(barbar?.instagram);
+              }}>
               <Image
                 style={styles.direction}
                 source={images.instagram}
@@ -498,22 +520,27 @@ export default function BookAppointment({navigation, route}) {
               <Text style={styles.tabs}>Reviews</Text>
             </View>
           </TouchableOpacity>
+          <TouchableOpacity onPress={() => setTabs('Timming')}>
+            <View style={tab === 'Timming' ? styles.borderBottom : null}>
+              <Text style={styles.tabs}>Timming</Text>
+            </View>
+          </TouchableOpacity>
         </View>
         {tab === 'About' ? (
-          <View>
-            <ScrollView style={styles.scrollView}>
+          <ScrollView style={styles.scrollView}>
+            <View style={styles.aboutContainer}>
               <Text style={styles.aboutContent}>{barbar?.description}</Text>
-            </ScrollView>
-            <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
-              <Button
-                title={'Book Appointment'}
-                onPress={() => {
-                  // navigation.navigate('BookingProcess')
-                  setTabs('Services');
-                }}
-              />
+              <View
+                style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
+                <Button
+                  title={'Book Appointment'}
+                  onPress={() => {
+                    setTabs('Services');
+                  }}
+                />
+              </View>
             </View>
-          </View>
+          </ScrollView>
         ) : tab === 'Services' ? (
           <ScrollView>
             {services?.length > 0 &&
@@ -587,7 +614,11 @@ export default function BookAppointment({navigation, route}) {
                   {tab === 'Reviews' ? (
                     <TouchableOpacity
                       onPress={() => {
-                        navigation.navigate('Review', {barbar});
+                        if (!authToken) {
+                          navigation.navigate('WelcomeScreen');
+                        } else {
+                          navigation.navigate('Review', {barbar});
+                        }
                       }}
                       style={styles.reviewBtn}>
                       <Image source={images.pencil} style={styles.pencil} />
@@ -606,9 +637,17 @@ export default function BookAppointment({navigation, route}) {
                   <View style={styles.ratingData}>
                     <View style={styles.rowAndmargin}>
                       <Image
-                        source={{uri: item?.userData?.profile}}
+                        source={
+                          item?.userData?.profile
+                            ? {uri: item?.userData?.profile}
+                            : item?.userData?.gender === 'male'
+                            ? images.male
+                            : images.female
+                        }
                         style={styles.profilePic}
                       />
+                      {/* source={userData?.profile ? { uri: userData?.profile } : userData?.gender === 'male' ? images.male : images.female} */}
+
                       <View style={styles.alignItems}>
                         <Text style={styles.usernameAllignment}>
                           {item?.userData?.name}
@@ -642,9 +681,85 @@ export default function BookAppointment({navigation, route}) {
                 }}></View>
             </ScrollView>
           </View>
+        ) : tab === 'Timming' ? (
+          <ScrollView
+          //  style={{marginBottom:100}}
+          >
+            {barbar?.scheduled?.map((item, index) => {
+              return (
+                <View style={styles.scheduleMainView} key={index}>
+                  <View>
+                    <Text
+                      style={
+                        item.available
+                          ? styles.scheduleDay
+                          : styles.scheduleDayOff
+                      }>
+                      {item?.day}
+                    </Text>
+                    <Text
+                      style={
+                        item.available
+                          ? styles.sheduleTiming
+                          : styles.sheduleTimingOff
+                      }>
+                      {item.time}
+                    </Text>
+                  </View>
+                  <View style={styles.scheduleStatus}>
+                    {item.available ? (
+                      <Text style={styles.statusColor}>Open</Text>
+                    ) : (
+                      <Text style={styles.statusColorOff}>Close</Text>
+                    )}
+                  </View>
+                </View>
+              );
+            })}
+            <View style={{marginBottom: sizes.screenHeight * 0.11}} />
+          </ScrollView>
         ) : null}
         <Toast />
       </View>
     </SafeAreaView>
   );
+}
+
+//////////////////////////// Schedule Old Desing /////////////////////////////
+
+{
+  /* <View
+                      style={
+                        item.available
+                          ? styles.toggleBtn
+                          : styles.toggleBtnUnactive
+                      }>
+                      <View
+                        style={
+                          item.available
+                            ? styles.toggleBtnColor
+                            : styles.toggleBtnColorRed
+                        }></View>
+                    </View>
+                    <View
+                      style={
+                        item.available
+                          ? styles.dayTimeView
+                          : styles.dayTimeViewUnactive
+                      }>
+                      <Text style={styles.scheduleDay}>{item?.day}</Text>
+                      <View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}>
+                          {item?.available ? (
+                            <Text style={styles.scheduleDay}>{item?.time}</Text>
+                          ) : (
+                            <Text style={styles.scheduleDay}>Close</Text>
+                          )}
+                        </View>
+                      </View>
+                    </View> */
 }

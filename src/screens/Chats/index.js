@@ -142,9 +142,10 @@ export default function Chats({ navigation }) {
                       return new Date(lastMessageB.createdAt || b.createdAt) - new Date(lastMessageA.createdAt || a.createdAt);
                     })
                     ?.map((item, index) => {
+                      const isDeleted = userData?.role === 'user' ? item?.barber?.isDeleted : item?.user?.isDeleted
                       const lastMessage = item?.messages?.length > 0 ? item?.messages[item?.messages?.length - 1] : ''
                       // const lastMessageImg = ite?.me
-                      console.log("last message", lastMessage);
+                      console.log("item", formatToJSON(isDeleted));
                       const timeAgo = calculateTimeAgo(lastMessage?.createdAt ? lastMessage?.createdAt : item?.createdAt)
                       const messages = item?.messages || []
                       const oppositeMessage = messages.filter(obj => obj?.sender !== userData?._id);
@@ -159,7 +160,7 @@ export default function Chats({ navigation }) {
                           <TouchableOpacity
                             style={styles.chatDetailContainer}
                             onPress={() => {
-                              navigation.navigate('ChatDetails', { chatRoomId: item?._id });
+                              navigation.navigate('ChatDetails', { chatRoomId: item?._id , isDeleted});
                             }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                               <Image

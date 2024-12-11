@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { colors, fontSize, sizes } from '../../services';
+import {StyleSheet} from 'react-native';
+import {colors, fontSize, sizes} from '../../services';
 import Signup from '../Signup';
 export const styles = StyleSheet.create({
   container: {
@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderColor: '#00000099',
-    borderWidth: 1
+    borderWidth: 1,
   },
   bookMarkedFalse: {
     height: 24,
@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   centerContent: {
-    marginTop: sizes.screenHeight * 0.06,
+    marginTop: sizes.screenHeight * 0.01,
     alignItems: 'center',
   },
   alignedDetails: {
@@ -93,7 +93,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.white,
     // Shadow properties for iOS
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     // Elevation for Android
@@ -239,7 +239,8 @@ export const styles = StyleSheet.create({
     marginTop: sizes.screenHeight * 0.004,
     marginLeft: sizes.screenWidth * 0.092,
     marginRight: sizes.screenWidth * 0.092,
-    // height:sizes.screenHeight * 0.25
+    marginTop: 20,
+    marginBottom: sizes.screenHeight * 0.02,
   },
   btn: {
     position: 'absolute',
@@ -247,9 +248,10 @@ export const styles = StyleSheet.create({
     left: sizes.screenWidth * 0.08,
   },
   btnIOS: {
-    position: 'absolute',
-    bottom: sizes.screenHeight * 0.045,
+    // position: 'absolute',
+    // bottom: sizes.screenHeight * 0.045,
     alignSelf: 'center',
+    marginTop:sizes.screenHeight * 0.2,
   },
   servicesContainer: {
     flexDirection: 'row',
@@ -390,12 +392,117 @@ export const styles = StyleSheet.create({
     marginBottom: sizes.screenHeight * 0.02,
     alignSelf: 'flex-start',
   },
-  scrollView: {
-    height: sizes.screenHeight * 0.28,
-    marginTop: 10,
-    // flex: 1,
+  aboutContainer: {
+    marginBottom: sizes.screenHeight * 0.1,
   },
-  // reviewContainer: {
-  //   height : sizes.screenHeight
-  // },
+  horizontalLine: {
+    borderBottomColor: colors.darkerBordercolor,
+    borderBottomWidth: 1,
+    marginVertical: 15,
+    width: sizes.screenWidth * 0.9,
+    alignSelf: 'center',
+  },
+
+  toggleBtn: {
+    backgroundColor: colors.outlineColor,
+    width: sizes.screenWidth * 0.13,
+    height: sizes.screenHeight * 0.06,
+    borderRadius: sizes.screenWidth * 0.03,
+    justifyContent: 'center',
+  },
+
+  toggleBtnUnactive: {
+    backgroundColor: colors.darkerBordercolor,
+    width: sizes.screenWidth * 0.13,
+    height: sizes.screenHeight * 0.06,
+    borderRadius: sizes.screenWidth * 0.03,
+    justifyContent: 'center',
+  },
+
+  toggleBtnColor: {
+    backgroundColor: 'green',
+    width: sizes.screenWidth * 0.05,
+    height: sizes.screenHeight * 0.025,
+    borderRadius: sizes.screenWidth * 0.1,
+    alignSelf: 'center',
+  },
+
+  toggleBtnColorRed: {
+    backgroundColor: 'red',
+    width: sizes.screenWidth * 0.05,
+    height: sizes.screenHeight * 0.025,
+    borderRadius: sizes.screenWidth * 0.1,
+    alignSelf: 'center',
+  },
+
+  dayTimeView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: sizes.screenHeight * 0.06,
+    width: sizes.screenWidth * 0.75,
+    borderRadius: sizes.screenWidth * 0.03,
+    paddingHorizontal: 10,
+    marginLeft: 10,
+    backgroundColor: colors.outlineColor,
+  },
+  dayTimeViewUnactive: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: sizes.screenHeight * 0.06,
+    width: sizes.screenWidth * 0.75,
+    borderRadius: sizes.screenWidth * 0.03,
+    paddingHorizontal: 10,
+    marginLeft: 10,
+    backgroundColor: colors.darkerBordercolor,
+  },
+
+  scheduleDay: {
+    fontSize: fontSize.large,
+    fontWeight: '500',
+  },
+  scheduleDayOff: {
+    fontSize: fontSize.large,
+    fontWeight: '500',
+    color: colors.durationColor,
+  },
+
+  scheduleMainView: {
+    // flexDirection: 'row',
+    // alignItems: 'center',
+    // alignSelf:'center',
+    // marginBottom:10
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems:'center',
+    marginTop: sizes.screenHeight * 0.03,
+    paddingHorizontal: sizes.screenWidth * 0.07,
+  },
+
+  scheduleStatus: {
+    borderWidth: 1,
+    borderRadius: sizes.screenWidth * 0.04,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: sizes.screenWidth * 0.055,
+    height: sizes.screenHeight * 0.035,
+    borderColor: colors.durationColor,
+  },
+
+  sheduleTiming: {
+    fontSize: fontSize.small,
+    color: colors.durationColor,
+    marginTop: 5,
+    fontSize: fontSize.smallM,
+  },
+
+  sheduleTimingOff: {},
+
+  statusColor:{
+    color:colors.black
+  },
+  statusColorOff:{
+    color:colors.durationColor
+  },
 });

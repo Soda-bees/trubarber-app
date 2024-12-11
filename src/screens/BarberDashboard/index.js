@@ -12,28 +12,40 @@ import {
   PermissionsAndroid,
   Alert,
 } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
-import { styles } from './style';
+import React, {useCallback, useEffect, useState} from 'react';
+import {styles} from './style';
 import images from '../../services/utilities/images';
-import { colors, sizes } from '../../services';
-import { StarRatingDisplay } from 'react-native-star-rating-widget';
+import {colors, sizes} from '../../services';
+import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import * as Progress from 'react-native-progress';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import { useDispatch, useSelector } from 'react-redux';
-import { setLocation } from '../../store/location';
-import { socket, socketService } from '../../services/Socket';
-import { selectUserData, setUserData } from '../../store/userData';
-import { selectAuthToken } from '../../store/authToken';
+import {useDispatch, useSelector} from 'react-redux';
+import {removelocation, setLocation} from '../../store/location';
+import {socket, socketService} from '../../services/Socket';
+import {
+  removeUserData,
+  selectUserData,
+  setUserData,
+} from '../../store/userData';
+import {removeAuthToken, selectAuthToken} from '../../store/authToken';
 import formatToJSON from '../../services/config/FormatToJson';
 import ChatConponent from '../../components/ChatComponent';
 import moment from 'moment';
-import { handleGetUserDetails } from '../../services/config/API';
-import { useFocusEffect } from '@react-navigation/native';
+import {
+  deleteDeviceToken,
+  handleGetUserDetails,
+} from '../../services/config/API';
+import {useFocusEffect} from '@react-navigation/native';
 import NotificationComponent from '../../components/NotificationComponent';
 import BarberLocation from '../../components/BarberLocationBox';
+import Modal from 'react-native-modal';
+import {removeRole} from '../../store/role';
+import {removePaymentCard} from '../../store/paymentCard';
+import {removeCart} from '../../store/cart';
+import { requestTrackingPermission } from 'react-native-tracking-transparency';
 
-export default function BarberDashboard({ navigation }) {
+export default function BarberDashboard({navigation}) {
   const dispatch = useDispatch();
   const userData = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken);
@@ -51,6 +63,7 @@ export default function BarberDashboard({ navigation }) {
   const [lossPercent, setLossPercent] = useState('10%');
   const [region, setRegion] = useState(null);
   const [barberReviews, setBarberReviews] = useState([]);
+  const [isDeletedModal, setIsDeletedModal] = useState(false);
 
   const [currentLocation, setCurrentLocation] = useState(
     'Rachael McPhail Street...',
@@ -82,7 +95,7 @@ export default function BarberDashboard({ navigation }) {
     const month = parseInt(parts[0], 10) - 1;
     const year = parseInt(parts[2], 10);
     const dateObj = new Date(year, month, day);
-    const options = { month: 'short', day: 'numeric' };
+    const options = {month: 'short', day: 'numeric'};
 
     return dateObj.toLocaleDateString('en-US', options);
   };
@@ -128,12 +141,41 @@ export default function BarberDashboard({ navigation }) {
     try {
       const response = await handleGetUserDetails(authToken);
       if (response?.status == 200) {
-        console.log('get barber details');
-        dispatch(setUserData(response?.data?.userData));
+        if (response.data.userData.isDeleted) {
+          setIsDeletedModal(true);
+        } else {
+          console.log('get barber details');
+          dispatch(setUserData(response?.data?.userData));
+        }
       }
     } catch (error) {
       console.log('error in barber details', error);
     }
+  };
+
+  const handleDeleteDeviceToken = async () => {
+    try {
+      const response = await deleteDeviceToken(authToken);
+      if (response?.status == 200) {
+        console.log(response?.data?.message);
+      }
+    } catch (error) {
+      console.log('error in user details', error);
+    }
+  };
+
+  const handleLogout = async () => {
+    setIsDeletedModal(false);
+    setTimeout(() => {
+      handleDeleteDeviceToken();
+      dispatch(removeAuthToken());
+      dispatch(removeRole());
+      dispatch(removePaymentCard());
+      dispatch(removeCart());
+      dispatch(removeUserData());
+      dispatch(removelocation());
+      navigation.navigate('WelcomeScreen');
+    }, 500);
   };
 
   const formatDate = createdAt => {
@@ -166,6 +208,18 @@ export default function BarberDashboard({ navigation }) {
     return percentage.toFixed(1);
   };
 
+  useEffect(() => {
+    const requestPermission = async () => {
+      const permission = await requestTrackingPermission();
+      if (permission === 'authorized') {
+        console.log('Tracking permission granted.');
+      } else {
+        console.log('Tracking permission denied or restricted.');
+      }
+    };
+    requestPermission();
+  }, []);
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -195,7 +249,6 @@ export default function BarberDashboard({ navigation }) {
           </ImageBackground>
         </View>
         <ScrollView>
-
           <View style={styles.containerBody}>
             <View style={styles.detailRow}>
               <View style={styles.detailContainer}>
@@ -230,7 +283,7 @@ export default function BarberDashboard({ navigation }) {
             <ScrollView
               style={styles.ScrollViewContainer}
               showsVerticalScrollIndicator={false}>
-              {userData.appoinment?.length == 0 ? (
+              {userData?.appoinment?.length == 0 ? (
                 <View style={styles.noAppointmentMainView}>
                   <Image
                     source={images.noAppointment}
@@ -241,7 +294,7 @@ export default function BarberDashboard({ navigation }) {
                   </Text>
                 </View>
               ) : (
-                <View style={{ marginBottom: 15 }}>
+                <View style={{marginBottom: 15}}>
                   <View style={styles.appointmentBtn}>
                     <Text style={styles.headingSummary}>Appointments</Text>
                     <TouchableOpacity
@@ -324,8 +377,13 @@ export default function BarberDashboard({ navigation }) {
                     <View style={styles.reviewBarContainer}>
                       {totalRating.map((item, index) => (
                         <View style={styles.reviewBarRow} key={index}>
-                          <Text style={styles.ratingGoldenText}>{item.star}</Text>
-                          <Image source={images.star} style={styles.starImage} />
+                          <Text style={styles.ratingGoldenText}>
+                            {item.star}
+                          </Text>
+                          <Image
+                            source={images.star}
+                            style={styles.starImage}
+                          />
                           <Progress.Bar
                             width={sizes.screenWidth * 0.28}
                             unfilledColor={colors.white}
@@ -355,7 +413,7 @@ export default function BarberDashboard({ navigation }) {
                       <View style={styles.ratingData}>
                         <View style={styles.rowAndmargin}>
                           <Image
-                            source={{ uri: item?.userData?.profile }}
+                            source={{uri: item?.userData?.profile}}
                             style={styles.profilePic}
                           />
                           <View style={styles.alignItems}>
@@ -386,8 +444,23 @@ export default function BarberDashboard({ navigation }) {
               <View style={Platform.OS == 'ios' && styles.paddingBtm} />
             </ScrollView>
           </View>
+          <Modal isVisible={isDeletedModal}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.modalTextHeading}>Account Unavailable</Text>
+              <Text style={styles.modalMessage}>
+                Your account is no longer available. To access our services in
+                the future, feel free to create a new account.
+              </Text>
+              <TouchableOpacity
+                style={styles.supportButton}
+                onPress={() => {
+                  handleLogout();
+                }}>
+                <Text style={styles.buttonText}>Okay</Text>
+              </TouchableOpacity>
+            </View>
+          </Modal>
         </ScrollView>
-
       </View>
     </SafeAreaView>
   );

@@ -30,7 +30,8 @@ import {
   getAddressFromCoordinates,
 } from '../../services/config/API/index.js';
 import Header from '../../components/Header/index.js';
-import {selectlocation} from '../../store/location/index.js';
+import {removelocation, selectlocation} from '../../store/location/index.js';
+import Modal from 'react-native-modal';
 
 export default function Profile({navigation}) {
   const userData = useSelector(selectUserData);
@@ -41,6 +42,7 @@ export default function Profile({navigation}) {
   const [address, setAddress] = useState('');
   const [locationLoader, setLocationLoader] = useState(false);
   const [cardDetails, setCardDetails] = useState({});
+  const [confirmLogoutModal, setConfirmLogoutModal] = useState(false);
 
   const handleDeleteDeviceToken = async () => {
     try {
@@ -54,12 +56,14 @@ export default function Profile({navigation}) {
   };
 
   const handleLogout = async () => {
+    setConfirmLogoutModal(false);
     handleDeleteDeviceToken();
     dispatch(removeAuthToken());
     dispatch(removeRole());
     dispatch(removePaymentCard());
     dispatch(removeCart());
     dispatch(removeUserData());
+    dispatch(removelocation());
   };
 
   const getAddress = async (latitude, longitude) => {
@@ -97,7 +101,6 @@ export default function Profile({navigation}) {
               />
               <View style={styles.nameContainer}>
                 <Text style={styles.firstName}>{userData?.name}</Text>
-                {/* <Text style={styles.lastName}>Williamson</Text> */}
               </View>
             </View>
             <View style={styles.locationPhonecontainer}>
@@ -117,24 +120,6 @@ export default function Profile({navigation}) {
                   </Text>
                 </View>
               )}
-              {/* <View style={styles.locationRow}>
-                <Image
-                  source={images.redLocation}
-                  resizeMode="contain"
-                  style={styles.redLocation}
-                />
-                <Text style={styles.locationText}>
-                  {address ? `${address.area}, ${address.city}.` : 'Location'}
-                </Text>
-              </View> */}
-              {/* <View style={styles.locationRow}>
-              <Image
-                source={images.redCall}
-                resizeMode="contain"
-                style={styles.redLocation}
-              />
-              <Text style={styles.locationText}>+1 1256864515</Text>
-            </View> */}
             </View>
           </View>
           <View style={styles.navigation}>
@@ -200,12 +185,37 @@ export default function Profile({navigation}) {
         </View>
 
         <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
-          <Button title={'Logout'} onPress={() => handleLogout()} />
+          <Button
+            title={'Logout'}
+            // onPress={() => handleLogout()}
+            onPress={() => setConfirmLogoutModal(true)}
+          />
         </View>
-        {/* <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
-          <Button title={'Buy'} onPress={handlePayment} />
-        </View> */}
       </View>
+      <Modal isVisible={confirmLogoutModal}>
+        <View style={styles.mainContainer}>
+          <Text style={styles.modalHeading}>Are you leaving?</Text>
+          <Text style={styles.modalText}>
+            Are you sure you want to{' '}
+            <Text style={{color: colors.red}}>Logout</Text>? You’ll need to
+            signin again to access your account.
+          </Text>
+          <View style={styles.modalButtonContainer}>
+            <TouchableOpacity
+              style={styles.cancelBtn}
+              activeOpacity={0.7}
+              onPress={() => setConfirmLogoutModal(false)}>
+              <Text style={styles.btnText}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.cancelBtn2}
+              activeOpacity={0.7}
+              onPress={() => handleLogout()}>
+              <Text style={styles.btnText2}>Logout Anyway</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }

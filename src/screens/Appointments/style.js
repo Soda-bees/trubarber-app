@@ -54,13 +54,27 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.22,
     width: sizes.screenWidth * 0.91,
     borderRadius: sizes.screenWidth * 0.042,
+    resizeMode: 'cover',
   },
 
   contextText: {
-    color: colors.black,
+    // color: colors.black,
+    // fontWeight: '800',
+    // fontSize: fontSize.large,
+    // textShadowColor: 'rgba(255, 255, 255, 0.7)', // Light shadow for dark backgrounds
+    // textShadowOffset: {width: 2, height: 2},
+    // textShadowRadius: 2,
+    color: colors.white,
     fontWeight: '800',
     fontSize: fontSize.large,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black background
+    padding: 3,
+    paddingHorizontal: 7,
+    // paddingVertical: 2,
+    borderRadius: sizes.screenWidth * 0.02,
+    overflow: 'hidden',
   },
+
   innerContainer: {
     marginTop: sizes.screenHeight * 0.052,
     marginLeft: sizes.screenWidth * 0.1,
@@ -71,6 +85,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: sizes.screenWidth * 0.02,
+    width: sizes.screenWidth * 0.55,
+    marginTop: 4,
   },
   whiteLocation: {
     height: sizes.screenHeight * 0.017,
@@ -177,10 +193,10 @@ export const styles = StyleSheet.create({
     height: sizes.screenWidth * 0.04,
     marginRight: sizes.screenWidth * 0.042,
   },
-  crossStyle:{
+  crossStyle: {
     height: sizes.screenWidth * 0.06,
     marginRight: sizes.screenWidth * 0.02,
-  },  
+  },
   scrollContainer: {
     // marginTop: sizes.screenHeight * 0.02,
     marginBottom: sizes.screenHeight * 0.07,
@@ -202,13 +218,14 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   statusText: {
-    backgroundColor: colors.black,
-    paddingHorizontal: sizes.screenWidth * 0.05,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black background
+    padding: sizes.screenWidth * 0.011,
+    paddingHorizontal: 12,
     fontSize: fontSize.medium,
     fontWeight: '500',
     color: colors.white,
     borderRadius: sizes.screenWidth * 0.02,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
 
   appointmentStyle: {
@@ -229,5 +246,25 @@ export const styles = StyleSheet.create({
     marginLeft: 5,
     textAlign: 'center',
     width: sizes.screenWidth * 0.7,
+  },
+
+  redLocation: {
+    justifyContent: 'flex-start',
+    paddingRight: 6,
+    height: 16,
+    tintColor: colors.black,
+  },
+
+  barberLocation: {
+    color: colors.white,
+    fontWeight: '800',
+    fontSize: fontSize.small,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 3,
+    paddingHorizontal: 7,
+    borderRadius: sizes.screenWidth * 0.02,
+    textAlign: 'center',
+    fontWeight: '800',
+    overflow: 'hidden',
   },
 });

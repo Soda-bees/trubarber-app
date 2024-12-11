@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   PermissionsAndroid,
   Alert,
+  Linking,
 } from 'react-native';
 import React, {useState} from 'react';
 import images from '../../services/utilities/images';
@@ -32,7 +33,7 @@ import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 
 export default function OutletCreated({navigation, route}) {
-  const location = useSelector(selectlocation)
+  const location = useSelector(selectlocation);
   const dispatch = useDispatch();
   const {userData} = route.params;
 
@@ -94,12 +95,45 @@ export default function OutletCreated({navigation, route}) {
   };
 
   const checkLocationServices = () => {
-    return LocationServicesDialogBox.checkLocationServicesIsEnabled({
-      message:
-        '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
-      ok: 'YES',
-      cancel: 'NO',
-    });
+    if (Platform.OS === 'ios') {
+      return new Promise((resolve, reject) => {
+        Geolocation.requestAuthorization(); // Request authorization on iOS
+        Geolocation.getCurrentPosition(
+          () => {
+            console.log('Location services enabled');
+            resolve();
+          },
+          error => {
+            console.error('Location services not enabled', error.message);
+            Alert.alert(
+              'Location Permission Required',
+              'Location access is required to display your shop’s location to nearby users. Please enable location permissions in your settings to proceed.',
+              [
+                {
+                  text: 'Cancel',
+                  style: 'cancel',
+                },
+                {
+                  text: 'Open Settings',
+                  onPress: () => {
+                    Linking.openSettings();
+                  },
+                },
+              ],
+            );
+            // reject(new Error('Location services are disabled'));
+          },
+          // {enableHighAccuracy: true, timeout: 20000},
+        );
+      });
+    } else {
+      return LocationServicesDialogBox.checkLocationServicesIsEnabled({
+        message:
+          '<h2>Use Location?</h2> This app wants to change your device settings:<br/><br/>Use GPS for location<br/><br/>',
+        ok: 'YES',
+        cancel: 'NO',
+      });
+    }
   };
 
   const getCurrentLocation = (setRegion, dispatch) => {
@@ -125,11 +159,23 @@ export default function OutletCreated({navigation, route}) {
       error => {
         console.log('Error getting location: ', error.message);
         Alert.alert(
-          'Error',
-          'Unable to retrieve your location. Please try again.',
+          'Location Permission Required',
+          'Location access is required to display your shop’s location to nearby users. Please enable location permissions in your settings to proceed.',
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+            {
+              text: 'Open Settings',
+              onPress: () => {
+                Linking.openSettings();
+              },
+            },
+          ],
         );
       },
-      // {enableHighAccuracy: true, timeout: 20000, maximumAge: 20000},
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 20000},
     );
   };
 
@@ -141,6 +187,7 @@ export default function OutletCreated({navigation, route}) {
         return handleLocation();
       }
       userData.location = location;
+      console.log('locaaaaa', location);
       const response = await handleBarberSignup(userData);
       if (response.status == 201) {
         setLoader(false);

@@ -95,6 +95,10 @@ export default function Wallet({navigation}) {
     }
   };
 
+  useEffect(() => {
+    handleGetWalletbalance()
+  }, []);
+
   const handleAddPayment = async () => {
     try {
       //  setBtnLoader(true)
@@ -184,7 +188,7 @@ export default function Wallet({navigation}) {
           // name: userData?.name || '',
           username: userData?.name,
           email: userData?.email,
-          user_id:userData._id
+          user_id: userData._id,
           // createdAt: userData?.createdAt,
         },
       });

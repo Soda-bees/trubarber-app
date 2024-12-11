@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
     locationDetailColumn: {
         marginStart: sizes.screenWidth * 0.02,
         marginEnd: sizes.screenWidth * 0.04,
-        overflow:'hidden'
+        overflow:'hidden',
     },
     nearbyTxt: {
         color: colors.gray,
@@ -58,5 +58,20 @@ export const styles = StyleSheet.create({
         fontSize: fontSize.small,
         fontWeight: 'bold',
         width:sizes.screenWidth * 0.3,
+        // backgroundColor:'red',
+        paddingRight:sizes.screenWidth * 0.025
+    },
+    currentLocationTxtIOSbarber: {
+        color: colors.black,
+        fontSize: fontSize.small,
+        fontWeight: 'bold',
+        // width:sizes.screenWidth * 0.3,
+        // backgroundColor:'red',
+        paddingRight:sizes.screenWidth * 0.02
+    },
+
+    enableLocation:{
+        color: colors.black,
+        fontWeight:'700',
     },
 })

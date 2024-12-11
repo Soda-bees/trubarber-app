@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { colors, fontSize, sizes } from '../../services';
+import {StyleSheet} from 'react-native';
+import {colors, fontSize, sizes} from '../../services';
 
 export const styles = StyleSheet.create({
   container: {
@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '700',
     alignSelf: 'center',
-    marginBottom: sizes.screenHeight * 0.05
+    marginBottom: sizes.screenHeight * 0.05,
   },
   addimage: {
     width: sizes.screenWidth * 0.2,
@@ -81,8 +81,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     right: sizes.screenWidth * 0.03,
     top: sizes.screenWidth * 0.025,
-    tintColor: colors.black
-
+    tintColor: colors.black,
   },
   instagramIcon: {
     height: sizes.screenHeight * 0.0222,
@@ -90,7 +89,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     left: sizes.screenWidth * 0.03,
     top: sizes.screenWidth * 0.026,
-    tintColor: colors.black
+    tintColor: colors.black,
   },
   clockIcon1: {
     height: sizes.screenHeight * 0.0222,
@@ -101,7 +100,7 @@ export const styles = StyleSheet.create({
     color: colors.durationColor,
     fontSize: fontSize.small,
     marginStart: sizes.screenWidth * 0.01,
-    paddingBottom: sizes.screenWidth * 0.01
+    paddingBottom: sizes.screenWidth * 0.01,
   },
 
   titleIOS: {
@@ -135,7 +134,7 @@ export const styles = StyleSheet.create({
     position: 'relative',
     height: sizes.screenWidth * 0.09,
     alignItems: 'start',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   timeSecond: {
     color: colors.black,
@@ -147,14 +146,23 @@ export const styles = StyleSheet.create({
     position: 'relative',
     height: sizes.screenWidth * 0.1,
     alignItems: 'start',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   instagramInput: {
     // backgroundColor:'red',
     fontSize: fontSize.small,
     marginLeft: sizes.screenWidth * 0.08,
     fontWeight: '500',
-    color: colors.black
+    color: colors.black,
+  },
+  instagramInputIOS: {
+    fontSize: fontSize.small,
+    marginLeft: sizes.screenWidth * 0.08,
+    fontWeight: '500',
+    color: colors.black,
+    width: sizes.screenWidth * 0.8,
+    paddingVertical: 11,
+    paddingLeft: 3,
   },
   descriptionIOS: {
     color: colors.black,
@@ -166,7 +174,7 @@ export const styles = StyleSheet.create({
     borderRadius: sizes.screenWidth * 0.02,
     position: 'relative',
     height: sizes.screenHeight * 0.1,
-    paddingTop: 10
+    paddingTop: 10,
   },
   descriptionTwo: {
     color: colors.black,
@@ -185,18 +193,20 @@ export const styles = StyleSheet.create({
   nextBtn: {
     position: 'absolute',
     bottom: sizes.screenHeight * 0.07,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   nextBtnIOS: {
-    position: 'absolute',
-    bottom: sizes.screenHeight * 0.09,
-    alignSelf: 'center'
+    marginTop:30,
+    marginBottom:100,
+    // position: 'absolute',
+    // bottom: sizes.screenHeight * 0.09,
+    // alignSelf: 'center',
   },
   daysContainer: {
     width: sizes.screenWidth * 0.9,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   daysTouchable: {
     height: sizes.screenWidth * 0.11,
@@ -222,17 +232,83 @@ export const styles = StyleSheet.create({
   daysText: {
     fontSize: fontSize.smallM,
     color: colors.black,
-    fontWeight: '500'
+    fontWeight: '500',
   },
   daysTextSelected: {
     fontSize: fontSize.smallM,
     color: colors.white,
-    fontWeight: '500'
+    fontWeight: '500',
   },
   daysContainerIOS: {
     width: sizes.screenWidth * 0.9,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+  },
+
+  toggleBtn: {
+    backgroundColor: colors.outlineColor,
+    width: sizes.screenWidth * 0.13,
+    height: sizes.screenHeight * 0.06,
+    borderRadius: sizes.screenWidth * 0.03,
+    justifyContent: 'center',
+  },
+
+  toggleBtnUnactive: {
+    backgroundColor: colors.darkerBordercolor,
+    width: sizes.screenWidth * 0.13,
+    height: sizes.screenHeight * 0.06,
+    borderRadius: sizes.screenWidth * 0.03,
+    justifyContent: 'center',
+  },
+
+  toggleBtnColor: {
+    backgroundColor: 'green',
+    width: sizes.screenWidth * 0.05,
+    height: sizes.screenHeight * 0.025,
+    borderRadius: sizes.screenWidth * 0.1,
+    alignSelf: 'center',
+  },
+
+  toggleBtnColorRed: {
+    backgroundColor: 'red',
+    width: sizes.screenWidth * 0.05,
+    height: sizes.screenHeight * 0.025,
+    borderRadius: sizes.screenWidth * 0.1,
+    alignSelf: 'center',
+  },
+
+  dayTimeView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: sizes.screenHeight * 0.06,
+    width: sizes.screenWidth * 0.75,
+    borderRadius: sizes.screenWidth * 0.03,
+    paddingHorizontal: 10,
+    marginLeft: 10,
+    backgroundColor: colors.outlineColor,
+  },
+  dayTimeViewUnactive: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: sizes.screenHeight * 0.06,
+    width: sizes.screenWidth * 0.75,
+    borderRadius: sizes.screenWidth * 0.03,
+    paddingHorizontal: 10,
+    marginLeft: 10,
+    backgroundColor: colors.darkerBordercolor,
+  },
+
+  scheduleDay: {
+    fontSize: fontSize.medium,
+    fontWeight: '500',
+  },
+
+  scheduleMainView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf:'center'
   },
 });

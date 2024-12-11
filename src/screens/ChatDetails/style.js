@@ -144,7 +144,7 @@ export const styles = StyleSheet.create({
     height: sizes.screenHeight * 0.07,
     color: colors.black,
     // backgroundColor:'red',
-    paddingTop:10
+    paddingTop: 10,
   },
 
   laoderContainer: {
@@ -196,5 +196,22 @@ export const styles = StyleSheet.create({
     right: 15,
     bottom: sizes.screenHeight * 0.1,
     zIndex: 10,
+  },
+
+  chatNoLonger: {
+    textAlign: 'center',
+    fontSize: fontSize.medium,
+    fontWeight: '500',
+    color: 'red',
+  },
+
+  newChatStarted: {
+    color: 'black',
+    position: 'absolute',
+    alignSelf: 'center',
+    top: sizes.screenHeight * 0.4,
+    textAlign: 'center',
+    fontSize: fontSize.smallM,
+    fontWeight: '500',
   },
 });

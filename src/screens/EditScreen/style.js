@@ -136,15 +136,25 @@ export const styles = StyleSheet.create({
   },
 
   btn: {
-    // top: sizes.screenHeight  * 0.182
     position: 'absolute',
     alignSelf: 'center',
     bottom: sizes.screenHeight * 0.03,
   },
+  btn2: {
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: sizes.screenHeight * 0.06,
+  },
+
   btnIOS: {
     position: 'absolute',
     alignSelf: "center",
     bottom: sizes.screenHeight * 0.1
+  },
+  btnIOS2: {
+    position: 'absolute',
+    alignSelf: "center",
+    bottom: sizes.screenHeight * 0.18
   },
   description: {
     color: colors.black,
@@ -218,5 +228,32 @@ export const styles = StyleSheet.create({
     borderRadius:sizes.screenHeight * 0.1,
     borderWidth:1,
     borderColor:colors.black,
+  },
+
+  deleteText:{
+    marginLeft: sizes.screenWidth * 0.032,
+    color: colors.white,
+    fontSize: fontSize.medium,
+    fontWeight: '600',
+    fontSize: fontSize.h6,
+  },
+
+  arrowIcon: {
+    height: sizes.screenHeight * 0.02,
+    width: sizes.screenHeight * 0.02,
+    marginRight: sizes.screenWidth * 0.03
+  },
+
+  btnViewLightCenter: {
+    backgroundColor: colors.red,
+    padding: sizes.screenHeight * 0.02,
+    width: sizes.screenWidth * 0.85,
+    alignSelf: 'center',
+    borderRadius: sizes.screenWidth * 0.05,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderWidth: sizes.screenWidth * 0.003,
+    borderColor: colors.white
   },
 });

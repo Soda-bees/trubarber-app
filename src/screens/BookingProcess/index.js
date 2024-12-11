@@ -69,9 +69,9 @@ export default function BookingProcess({navigation, route}) {
     const backAction = () => {
       if (loader) {
         ToastAndroid.show('Please wait, loading...', ToastAndroid.SHORT);
-        return true; // Prevent default behavior
+        return true;
       }
-      return false; // Allow default behavior
+      return false;
     };
 
     const backHandler = BackHandler.addEventListener(
@@ -220,6 +220,7 @@ export default function BookingProcess({navigation, route}) {
   };
 
   const checkAndReturnTime = (startTime, formattedDate) => {
+    console.log('loggggggggggggggg',startTime,formattedDate);
     const dateTime = moment(
       `${formattedDate} ${startTime}`,
       'MM-DD-YYYY h:mm A',
@@ -244,7 +245,7 @@ export default function BookingProcess({navigation, route}) {
       adjustedDateTime.hours(adjustedDateTime.hours() + 1);
       adjustedDateTime.minutes(0);
     }
-
+console.log("loggghhhhhhhh",adjustedDateTime.format('hh:mm A'));
     return adjustedDateTime.format('hh:mm A');
   };
 
@@ -264,6 +265,7 @@ export default function BookingProcess({navigation, route}) {
         day: currentDate.format('ddd'), // Day of the week
       });
     }
+    console.log(formatToJSON(daysArray));
     setDates(daysArray);
   };
 
@@ -283,10 +285,31 @@ export default function BookingProcess({navigation, route}) {
     return Array.from(months); // Convert the Set to an array and return it
   };
 
+  const getDayObject = shortDay => {
+    // Mapping short form to full day names
+    const dayMap = {
+      Sun: 'Sunday',
+      Mon: 'Monday',
+      Tue: 'Tuesday',
+      Wed: 'Wednesday',
+      Thu: 'Thursday',
+      Fri: 'Friday',
+      Sat: 'Saturday',
+    };
+
+    // Get the full day name from the short day
+    const fullDayName = dayMap[shortDay];
+
+    // Find and return the object that matches the full day name
+    return barber?.scheduled.find(item => item.day === fullDayName) || null; // Returns null if no match is found
+  };
+
   const handleDateSelected = (formattedDate, day) => {
+    const dayObject = getDayObject(day);
+    console.log(formatToJSON(dayObject));
+
     setSelected(null);
-    const isOff = barber?.offDays?.includes(day);
-    if (isOff) {
+    if (dayObject?.available == false) {
       setDatedata(null);
       setSelected(null);
       setSelectedDate(null);
@@ -300,8 +323,10 @@ export default function BookingProcess({navigation, route}) {
       const bookedTimesForSelectedDate = bookedTime
         .filter(booking => booking.date === formattedDate)
         .map(booking => booking.time);
-      const [startTime1, endTime] = barber.time.split(' - ');
+      const [startTime1, endTime] = dayObject.time.split(' - ');
+      console.log("start time 1" , startTime1);
       const startTime = checkAndReturnTime(startTime1, formattedDate);
+      console.log("=--=-=-=",startTime , endTime);
       const availableTimeSlot = handleCreateTimeSlotSecond(
         startTime,
         endTime,
@@ -310,6 +335,31 @@ export default function BookingProcess({navigation, route}) {
       );
       setDatedata(availableTimeSlot);
     }
+    // const isOff = barber?.offDays?.includes(day);
+    // if (isOff) {
+    //   setDatedata(null);
+    //   setSelected(null);
+    //   setSelectedDate(null);
+    //   return ErrorShow(
+    //     'error',
+    //     'Oops!',
+    //     'Barber is not available today kindly choose another day',
+    //   );
+    // } else {
+    //   setSelectedDate(formattedDate);
+    //   const bookedTimesForSelectedDate = bookedTime
+    //     .filter(booking => booking.date === formattedDate)
+    //     .map(booking => booking.time);
+    //   const [startTime1, endTime] = barber.time.split(' - ');
+    //   const startTime = checkAndReturnTime(startTime1, formattedDate);
+    //   const availableTimeSlot = handleCreateTimeSlotSecond(
+    //     startTime,
+    //     endTime,
+    //     bookedTimesForSelectedDate,
+    //     totalDuration,
+    //   );
+    //   setDatedata(availableTimeSlot);
+    // }
   };
 
   const parseTime = timeString => {
@@ -382,6 +432,9 @@ export default function BookingProcess({navigation, route}) {
   };
 
   const handleConfirm = async () => {
+    if (!authToken) {
+      return navigation.navigate('WelcomeScreen');
+    }
     const previousPrice = calculateTotalPriceForPendingAppointments(
       userData?.appoinment,
     );
@@ -460,20 +513,15 @@ export default function BookingProcess({navigation, route}) {
   };
 
   const maskCardNumber = cardNumber => {
-    // Remove spaces from the card number
     const cardNumberWithoutSpaces = cardNumber.replace(/\s+/g, '');
 
-    // Check if the card number is 16 digits
     if (cardNumberWithoutSpaces.length === 16) {
-      // Mask all but the last 4 digits
       const maskedCardNumber =
         '************' + cardNumberWithoutSpaces.slice(-4);
 
-      // Add spaces back to the masked card number
       return maskedCardNumber.replace(/(.{4})/g, '$1 ').trim();
     }
 
-    // If the card number is not 16 digits, return it as is (or handle the error)
     return cardNumber;
   };
 
@@ -712,8 +760,11 @@ export default function BookingProcess({navigation, route}) {
                   }}
                   style={{
                     position: 'absolute',
-                    bottom: sizes.screenHeight * 0.34,
-                    right: 5,
+                    bottom:
+                      Platform.OS == 'android'
+                        ? sizes.screenHeight * 0.34
+                        : sizes.screenHeight * 0.36,
+                    right: 12,
                   }}>
                   <Image
                     source={images.crossIcon}

@@ -7,7 +7,7 @@ import {LogBox, Text} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import socket from './src/services/Socket';
 import {StripeProvider} from '@stripe/stripe-react-native';
-import {PUBLISH_KEY_CLIENT, PUBLISH_KEY} from '@env';
+import {PUBLISH_KEY_CLIENT} from '@env';
 
 export default function App() {
   useEffect(() => {

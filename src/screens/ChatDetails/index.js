@@ -37,6 +37,7 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 const ChatDetails = ({navigation, route}) => {
   const chatRoomId = route?.params?.chatRoomId;
+  const isDeleted = route?.params?.isDeleted;
   const userData = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken);
   const dispatch = useDispatch();
@@ -410,15 +411,7 @@ const ChatDetails = ({navigation, route}) => {
           )} */}
           {selectedChat?.messages?.length === 0 && (
             <Text
-              style={{
-                color: 'black',
-                position: 'absolute',
-                alignSelf: 'center',
-                top: sizes.screenHeight * 0.4,
-                textAlign: 'center',
-                fontSize: fontSize.smallM,
-                fontWeight: '500',
-              }}>
+              style={styles.newChatStarted}>
               You're starting a new conversation. Say hi!
             </Text>
           )}
@@ -430,40 +423,48 @@ const ChatDetails = ({navigation, route}) => {
             inverted
             // onScroll={handleScroll}
           />
-          <View
-            style={
-              Platform.OS === 'android'
-                ? styles.texInputView
-                : styles.texInputViewIOS
-            }>
-            <TextInput
-              placeholder="Write Message.."
-              placeholderTextColor={colors.black}
-              multiline={true}
-              numberOfLines={2}
+          {isDeleted ? (
+            <Text
+              style={styles.chatNoLonger}>
+              This account is no longer available
+            </Text>
+          ) : (
+            <View
               style={
-                Platform.OS == 'android'
-                  ? styles.textInputContainer
-                  : styles.textInputContainerIOS
-              }
-              value={text}
-              onChangeText={text => setText(text)}
-            />
-            {text ? (
-              <TouchableOpacity onPress={handlesendMessage}>
-                <Image
-                  source={images.arrowBlackIcon}
-                  style={styles.sendBtnIcon}
-                />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.imageIconTouchable}
-                onPress={() => uploadPhoto('library')}>
-                <Image source={images.chatImg} style={styles.imgIcon} />
-              </TouchableOpacity>
-            )}
-          </View>
+                Platform.OS === 'android'
+                  ? styles.texInputView
+                  : styles.texInputViewIOS
+              }>
+              <TextInput
+                placeholder="Write Message.."
+                placeholderTextColor={colors.black}
+                multiline={true}
+                numberOfLines={2}
+                style={
+                  Platform.OS == 'android'
+                    ? styles.textInputContainer
+                    : styles.textInputContainerIOS
+                }
+                value={text}
+                onChangeText={text => setText(text)}
+              />
+              {text ? (
+                <TouchableOpacity onPress={handlesendMessage}>
+                  <Image
+                    source={images.arrowBlackIcon}
+                    style={styles.sendBtnIcon}
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={styles.imageIconTouchable}
+                  onPress={() => uploadPhoto('library')}>
+                  <Image source={images.chatImg} style={styles.imgIcon} />
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
+
           {Platform.OS == 'ios' && <KeyboardSpacer />}
         </View>
       )}

@@ -66,54 +66,31 @@ export default function WelcomeScreen({navigation}) {
     }
   }
 
-  // useEffect(() => {
-    // if (Platform.OS === 'android') {
-    //   PermissionsAndroid.request(
-    //     PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-    //   )
-    //     .then(res => {
-    //       console.log('res===>', res);
-    //       if (!!res && res === 'granted') {
-    //         requestUserPermission();
-    //         initializeLocation();
-    //       }
-    //       initializeLocation();
-    //     })
-    //     .catch(error => {
-    //       initializeLocation();
-    //       console.log('error in get permission in app.js');
-    //     });
-    // } else {
-    //   // requestUserPermission();
-    //   initializeLocation();
-    // }
-  // }, []);
-
   useEffect(() => {
     const handleAppStateChange = nextAppState => {
       if (nextAppState === 'active') {
-        initializeLocation(); // Re-run location initialization when app returns to the foreground
+        initializeLocation();
       }
     };
 
-    AppState.addEventListener('change', handleAppStateChange);
+    const subscription = AppState.addEventListener(
+      'change',
+      handleAppStateChange,
+    );
 
-    // Initial permission request
     if (Platform.OS === 'android') {
       PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
       )
         .then(res => {
-          console.log('res===>', res);
+          console.log('Notification permission result:', res);
           if (res === 'granted') {
             requestUserPermission();
-            initializeLocation();
-          } else {
-            initializeLocation();
           }
+          initializeLocation();
         })
         .catch(error => {
-          console.log('error in get permission in app.js');
+          console.log('Error requesting notification permission:', error);
           initializeLocation();
         });
     } else {
@@ -121,7 +98,7 @@ export default function WelcomeScreen({navigation}) {
     }
 
     return () => {
-      AppState.removeEventListener('change', handleAppStateChange);
+      subscription.remove();
     };
   }, []);
 
@@ -196,7 +173,7 @@ export default function WelcomeScreen({navigation}) {
         })
         .catch(error => {
           console.error('Location services not enabled', error.message);
-          throw error; // Re-throw the error to handle it in the calling function
+          throw error;
         });
     } else {
       console.error('LocationServicesDialogBox is not initialized');
@@ -222,26 +199,6 @@ export default function WelcomeScreen({navigation}) {
       },
       error => {
         console.log('Error getting location: ', error.message);
-        Alert.alert(
-          'Location Permission Required',
-          'Location access is essential for using all features of this app. Please enable location services in your settings.',
-          [
-            {
-              text: 'Cancel',
-              style: 'cancel',
-            },
-            {
-              text: 'Open Settings',
-              onPress: () => {
-                if (Platform.OS === 'ios') {
-                  openSettings();
-                } else {
-                  Linking.openSettings(); // Opens app settings on Android
-                }
-              },
-            },
-          ],
-        );
       },
       {enableHighAccuracy: false, timeout: 20000, maximumAge: 20000},
     );
@@ -315,7 +272,6 @@ export default function WelcomeScreen({navigation}) {
             </ImageBackground>
           </View>
         </ScrollView>
-
         <View
           style={Platform.OS == 'android' ? styles.wrapDot : styles.wrapDotIOS}>
           {itemList?.map((item, index) => {
@@ -364,28 +320,16 @@ export default function WelcomeScreen({navigation}) {
           </TouchableOpacity>
           <Button title={'Sign Up'} onPress={handleSignUP} light />
         </View>
-        {/* <View style={Platform.OS == 'ios' ? styles.wrapDotIOS : styles.wrapDot}>
-          {item?.map((item, index) => {
-            return (
-              <View key={index}>
-                {Platform.OS == 'android' ? (
-                  <Text
-                    key={index}
-                    style={imgActive == index ? styles.dotActive : styles.dot}>
-                    ⬤
-                  </Text>
-                ) : (
-                  <Octicons
-                    name={'dot-fill'}
-                    color={colors.white}
-                    size={sizes.screenHeight * 0.03}
-                    style={imgActive == index ? styles.dotActive : styles.dot}
-                  />
-                )}
-              </View>
-            );
-          })}
-        </View> */}
+        <TouchableOpacity
+          style={styles.skipButton}
+          onPress={() =>
+            navigation.reset({
+              index: 0, // Reset to the main Tab Navigator
+              routes: [{name: 'MyTabs'}], // Replace 'HomeTabs' with your Tab Navigator name
+            })
+          }>
+          <Text style={styles.skipText}>Skip</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
