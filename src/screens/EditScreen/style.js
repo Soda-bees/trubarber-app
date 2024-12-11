@@ -143,7 +143,7 @@ export const styles = StyleSheet.create({
   btn2: {
     position: 'absolute',
     alignSelf: 'center',
-    bottom: sizes.screenHeight * 0.06,
+    bottom: sizes.screenHeight * 0.11,
   },
 
   btnIOS: {
