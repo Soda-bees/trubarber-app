@@ -43,7 +43,7 @@ export default function EditScreen({navigation}) {
   const userData = useSelector(selectUserData);
   const authToken = useSelector(selectAuthToken);
   const role = useSelector(selectRole);
-  console.log('userdata wallet profile ==========>>', userData?.wallet);
+  // console.log('userdata wallet profile ==========>>', userData?.wallet);
 
   const dispatch = useDispatch();
 
@@ -64,25 +64,25 @@ export default function EditScreen({navigation}) {
   //   return {startTime, endTime};
   // };
 
-  const parseSingleTimeString = timeString => {
-    const [time, modifier] = timeString.split(' ');
+  // const parseSingleTimeString = timeString => {
+  //   const [time, modifier] = timeString.split(' ');
 
-    let [hours, minutes] = time.split(':');
-    if (hours === '12') {
-      hours = '00';
-    }
-    if (modifier === 'PM') {
-      hours = parseInt(hours, 10) + 12;
-    }
+  //   let [hours, minutes] = time.split(':');
+  //   if (hours === '12') {
+  //     hours = '00';
+  //   }
+  //   if (modifier === 'PM') {
+  //     hours = parseInt(hours, 10) + 12;
+  //   }
 
-    const date = new Date();
-    date.setHours(parseInt(hours, 10));
-    date.setMinutes(parseInt(minutes, 10));
-    date.setSeconds(0);
-    date.setMilliseconds(0);
+  //   const date = new Date();
+  //   date.setHours(parseInt(hours, 10));
+  //   date.setMinutes(parseInt(minutes, 10));
+  //   date.setSeconds(0);
+  //   date.setMilliseconds(0);
 
-    return date;
-  };
+  //   return date;
+  // };
 
   useEffect(() => {
     if (userData) {
@@ -203,15 +203,15 @@ export default function EditScreen({navigation}) {
     }
   };
 
-  const formatTime = date => {
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    return hours + ':' + minutes + ' ' + ampm;
-  };
+  // const formatTime = date => {
+  //   let hours = date.getHours();
+  //   let minutes = date.getMinutes();
+  //   const ampm = hours >= 12 ? 'PM' : 'AM';
+  //   hours = hours % 12;
+  //   hours = hours ? hours : 12; // the hour '0' should be '12'
+  //   minutes = minutes < 10 ? '0' + minutes : minutes;
+  //   return hours + ':' + minutes + ' ' + ampm;
+  // };
 
   const onHide = async () => [navigation.goBack()];
 

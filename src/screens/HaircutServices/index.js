@@ -65,11 +65,12 @@ export default function HaircutServices({navigation, route}) {
     if (reviews && reviews.length > 0) {
       const totalRating = reviews.reduce(
         (sum, review) => sum + parseFloat(review.rating),
-        0,
+        0
       );
-      return totalRating / reviews.length;
+      const averageRating = totalRating / reviews.length;
+      return averageRating.toFixed(1); // Format to one decimal place
     } else {
-      return 0;
+      return "0"; // Consistent formatting
     }
   };
 

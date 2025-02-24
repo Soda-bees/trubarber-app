@@ -43,6 +43,7 @@ export default function BookAppointment({navigation, route}) {
   const allBarbers = useSelector(selectbarber);
   const dispatch = useDispatch();
   const barbar = allBarbers?.find(barber => barber?._id === barbarId);
+  // console.log('aaaaa', barbar);
   console.log(formatToJSON(barbar));
   const userData = useSelector(selectUserData);
   // console.log('favourites', userData?.favourites?.length);
@@ -179,7 +180,7 @@ export default function BookAppointment({navigation, route}) {
   );
   useEffect(() => {
     setServices(barbar?.services);
-    handleStatus(barbar.time);
+    // handleStatus(barbar.time);
     findChat();
   }, [barbar]);
 
@@ -188,7 +189,7 @@ export default function BookAppointment({navigation, route}) {
   const findChat = async () => {
     try {
       const isChat = await findChatInRedux();
-      console.log('isChat', isChat);
+      // console.log('isChat', isChat);
       if (!isChat) {
         const body = {
           user: userData?._id,
@@ -225,6 +226,7 @@ export default function BookAppointment({navigation, route}) {
   };
 
   const handleStatus = openHours => {
+    console.log('openHour', openHours);
     const [startTime, endTime] = openHours.split(' - ');
     const currentTime = moment();
     const openTime = moment(startTime, 'hh:mm A');
@@ -293,11 +295,12 @@ export default function BookAppointment({navigation, route}) {
     if (reviews && reviews.length > 0) {
       const totalRating = reviews.reduce(
         (sum, review) => sum + parseFloat(review.rating),
-        0,
+        0
       );
-      return totalRating / reviews.length;
+      const averageRating = totalRating / reviews.length;
+      return averageRating.toFixed(1); // Format to one decimal place
     } else {
-      return 0;
+      return "0.0"; // Consistent formatting
     }
   };
 
@@ -365,7 +368,7 @@ export default function BookAppointment({navigation, route}) {
     }
   };
 
-  console.log('logg', formatToJSON(barbar?.scheduled));
+  // console.log('logg', formatToJSON(barbar?.scheduled));
 
   return (
     <SafeAreaView>
