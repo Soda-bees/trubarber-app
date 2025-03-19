@@ -177,4 +177,14 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop:20
   },
+
+  waterMarkStyle:{
+    width:sizes.screenWidth * 0.4,
+    height:sizes.screenHeight * 0.04,
+    alignSelf:'center',
+    marginTop: sizes.screenHeight*0.14,
+    resizeMode: 'contain',
+    // position: 'absolute',
+    // bottom: sizes.screenHeight*0.0
+  }
 });

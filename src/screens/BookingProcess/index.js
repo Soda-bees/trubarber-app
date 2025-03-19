@@ -9,18 +9,18 @@ import {
   ToastAndroid,
   Platform,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style.js';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
-import {Calendar, LocaleConfig} from 'react-native-calendars';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
 import BackArrow from '../../components/BackArrow';
-import {colors} from '../../services/utilities/colors';
-import {sizes} from '../../services/index.js';
+import { colors } from '../../services/utilities/colors';
+import { sizes } from '../../services/index.js';
 import Button from '../../components/Button/index.js';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectbarber} from '../../store/barber/index.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectbarber } from '../../store/barber/index.js';
 import {
   deleteCartItem,
   removeCart,
@@ -29,21 +29,21 @@ import {
   updateCart,
 } from '../../store/cart/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
-import {ErrorShow} from '../../components/Error/index.js';
+import { ErrorShow } from '../../components/Error/index.js';
 import Toast from 'react-native-toast-message';
-import {selectPaymentCard} from '../../store/paymentCard/index.js';
+import { selectPaymentCard } from '../../store/paymentCard/index.js';
 import Loader from '../../components/Loader/index.js';
-import {selectAuthToken} from '../../store/authToken/index.js';
+import { selectAuthToken } from '../../store/authToken/index.js';
 import {
   bookAppoinment,
   hanleGetBookedAppoinment,
 } from '../../services/config/API/index.js';
-import {addAppoinment, selectUserData} from '../../store/userData/index.js';
-import {socket, socketService} from '../../services/Socket';
+import { addAppoinment, selectUserData } from '../../store/userData/index.js';
+import { socket, socketService } from '../../services/Socket';
 import Header from '../../components/Header/index.js';
 import Modal from 'react-native-modal';
 
-export default function BookingProcess({navigation, route}) {
+export default function BookingProcess({ navigation, route }) {
   const dispatch = useDispatch();
   const barbers = useSelector(selectbarber);
   const cart = useSelector(selectCart);
@@ -116,26 +116,33 @@ export default function BookingProcess({navigation, route}) {
     const timeSlots = [];
 
     const convertTo24HourFormat = time => {
+      // Check if time is a valid string
+      if (!time || typeof time !== 'string') {
+        console.error('Invalid time input:', time);  // Log for debugging
+        return { hour: 0, minutes: 0 };  // Return a default value or handle it as needed
+      }
+    
       let [hour, minutes] = time.split(':');
       minutes = minutes.slice(0, 2);
       const modifier = time.slice(-2);
       hour = parseInt(hour);
       minutes = parseInt(minutes);
-
+    
       if (modifier === 'PM' && hour !== 12) {
         hour += 12;
       }
       if (modifier === 'AM' && hour === 12) {
         hour = 0;
       }
-      return {hour, minutes};
+      return { hour, minutes };
     };
+    
 
     const convertToMinutes = (hour, minutes) => hour * 60 + minutes;
 
-    let {hour: startHour, minutes: startMinutes} =
+    let { hour: startHour, minutes: startMinutes } =
       convertTo24HourFormat(startTime);
-    let {hour: endHour, minutes: endMinutes} = convertTo24HourFormat(endTime);
+    let { hour: endHour, minutes: endMinutes } = convertTo24HourFormat(endTime);
 
     // Adjust the endHour to include the last slot
     if (endMinutes > 0) {
@@ -220,7 +227,7 @@ export default function BookingProcess({navigation, route}) {
   };
 
   const checkAndReturnTime = (startTime, formattedDate) => {
-    console.log('loggggggggggggggg',startTime,formattedDate);
+    console.log('loggggggggggggggg', startTime, formattedDate);
     const dateTime = moment(
       `${formattedDate} ${startTime}`,
       'MM-DD-YYYY h:mm A',
@@ -245,7 +252,7 @@ export default function BookingProcess({navigation, route}) {
       adjustedDateTime.hours(adjustedDateTime.hours() + 1);
       adjustedDateTime.minutes(0);
     }
-console.log("loggghhhhhhhh",adjustedDateTime.format('hh:mm A'));
+    console.log("loggghhhhhhhh", adjustedDateTime.format('hh:mm A'));
     return adjustedDateTime.format('hh:mm A');
   };
 
@@ -323,10 +330,12 @@ console.log("loggghhhhhhhh",adjustedDateTime.format('hh:mm A'));
       const bookedTimesForSelectedDate = bookedTime
         .filter(booking => booking.date === formattedDate)
         .map(booking => booking.time);
-      const [startTime1, endTime] = dayObject.time.split(' - ');
-      console.log("start time 1" , startTime1);
+      const timeParts = dayObject?.time?.split(' - ') || [];
+      const [startTime1, endTime] = timeParts.length === 2 ? timeParts : [null, null];
+      // const [startTime1, endTime] = dayObject?.time.split(' - ');
+      console.log("start time 1", startTime1);
       const startTime = checkAndReturnTime(startTime1, formattedDate);
-      console.log("=--=-=-=",startTime , endTime);
+      console.log("=--=-=-=", startTime, endTime);
       const availableTimeSlot = handleCreateTimeSlotSecond(
         startTime,
         endTime,
@@ -396,7 +405,7 @@ console.log("loggghhhhhhhh",adjustedDateTime.format('hh:mm A'));
 
   const canBook = (array, barberId, date, time) =>
     array.some(
-      ({barber, status, date, time}) =>
+      ({ barber, status, date, time }) =>
         barber._id === barberId &&
         status === 'Pending' &&
         selectedDate === date &&
@@ -632,10 +641,10 @@ console.log("loggghhhhhhhh",adjustedDateTime.format('hh:mm A'));
                       // source={{ uri: barber?.businessProfile }}
                       source={
                         barber?.profile
-                          ? {uri: barber?.profile}
+                          ? { uri: barber?.profile }
                           : barber?.gender === 'male'
-                          ? images.male
-                          : images.female
+                            ? images.male
+                            : images.female
                       }
                       style={styles.imageContainer}
                     />
@@ -648,7 +657,7 @@ console.log("loggghhhhhhhh",adjustedDateTime.format('hh:mm A'));
                   </View>
                 </View>
               </View>
-              <View style={{marginTop: 20}}>
+              <View style={{ marginTop: 20 }}>
                 {cart &&
                   cart?.services?.map((item, index) => {
                     return (
@@ -693,7 +702,7 @@ console.log("loggghhhhhhhh",adjustedDateTime.format('hh:mm A'));
                 <TouchableOpacity
                   style={styles.textContainer}
                   onPress={() =>
-                    navigation.navigate('BookAppointment', {item: barber})
+                    navigation.navigate('BookAppointment', { item: barber })
                   }>
                   <Text style={styles.addAnotherservice}>
                     + Add Another Service
@@ -790,7 +799,7 @@ console.log("loggghhhhhhhh",adjustedDateTime.format('hh:mm A'));
                 </Text>
               )}
               {havePreviousBalance && (
-                <View style={{marginBottom: sizes.screenWidth * 0.03}}>
+                <View style={{ marginBottom: sizes.screenWidth * 0.03 }}>
                   <Button
                     title={'View Appointments'}
                     onPress={() => {
@@ -808,7 +817,7 @@ console.log("loggghhhhhhhh",adjustedDateTime.format('hh:mm A'));
                   navigation.navigate('Wallet');
                 }}
               />
-              <View style={{marginTop: sizes.screenWidth * 0.03}}></View>
+              <View style={{ marginTop: sizes.screenWidth * 0.03 }}></View>
               {!havePreviousBalance && (
                 <Button
                   title={'Cancel'}
@@ -821,8 +830,8 @@ console.log("loggghhhhhhhh",adjustedDateTime.format('hh:mm A'));
             </View>
           </View>
         </Modal>
-      </View>
       <Toast />
+      </View>
     </SafeAreaView>
   );
 }

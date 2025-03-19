@@ -138,6 +138,8 @@ import logoBlack from '../../../assets/logoBlack.png';
 import congratulationUpdated from '../../../assets/congratulationUpdated.png';
 import instagram from '../../../assets/instagram.png';
 import wallet from '../../../assets/wallet.png';
+import watermarkBlack from '../../../assets/watermarkBlack.png';
+import watermarkWhite from '../../../assets/watermarkWhite.png';
 
 const images = {
   wallet,
@@ -280,6 +282,8 @@ const images = {
   noAppointment,
   pencil,
   deleteIconn,
+  watermarkBlack,
+  watermarkWhite,
 };
 
 export default images;

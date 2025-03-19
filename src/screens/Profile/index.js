@@ -11,29 +11,29 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {styles} from './style.js';
+import React, { useEffect, useState } from 'react';
+import { styles } from './style.js';
 import images from '../../services/utilities/images';
 import Button from '../../components/Button';
-import StarRating, {StarRatingDisplay} from 'react-native-star-rating-widget';
-import {colors, sizes} from '../../services';
+import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
+import { colors, sizes } from '../../services';
 import BackArrow from '../../components/BackArrow/index.js';
-import {useDispatch, useSelector} from 'react-redux';
-import {removeAuthToken, selectAuthToken} from '../../store/authToken/index.js';
-import {removeRole} from '../../store/role/index.js';
-import {removeUserData, selectUserData} from '../../store/userData/index.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeAuthToken, selectAuthToken } from '../../store/authToken/index.js';
+import { removeRole } from '../../store/role/index.js';
+import { removeUserData, selectUserData } from '../../store/userData/index.js';
 import formatToJSON from '../../services/config/FormatToJson/index.js';
-import {removePaymentCard} from '../../store/paymentCard/index.js';
-import {removeCart} from '../../store/cart/index.js';
+import { removePaymentCard } from '../../store/paymentCard/index.js';
+import { removeCart } from '../../store/cart/index.js';
 import {
   deleteDeviceToken,
   getAddressFromCoordinates,
 } from '../../services/config/API/index.js';
 import Header from '../../components/Header/index.js';
-import {removelocation, selectlocation} from '../../store/location/index.js';
+import { removelocation, selectlocation } from '../../store/location/index.js';
 import Modal from 'react-native-modal';
 
-export default function Profile({navigation}) {
+export default function Profile({ navigation }) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const authToken = useSelector(selectAuthToken);
@@ -92,10 +92,10 @@ export default function Profile({navigation}) {
               <Image
                 source={
                   userData?.profile
-                    ? {uri: userData?.profile}
+                    ? { uri: userData?.profile }
                     : userData?.gender === 'male'
-                    ? images.male
-                    : images.female
+                      ? images.male
+                      : images.female
                 }
                 style={styles.youngMan}
               />
@@ -182,6 +182,9 @@ export default function Profile({navigation}) {
               />
             </TouchableOpacity>
           </View>
+        <Image
+          source={images.watermarkBlack} style={styles.waterMarkStyle}
+          resizeMode="contain" />
         </View>
 
         <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
@@ -197,7 +200,7 @@ export default function Profile({navigation}) {
           <Text style={styles.modalHeading}>Are you leaving?</Text>
           <Text style={styles.modalText}>
             Are you sure you want to{' '}
-            <Text style={{color: colors.red}}>Logout</Text>? You’ll need to
+            <Text style={{ color: colors.red }}>Logout</Text>? You’ll need to
             signin again to access your account.
           </Text>
           <View style={styles.modalButtonContainer}>

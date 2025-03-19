@@ -169,7 +169,7 @@ export default function Chats({ navigation }) {
                                 style={styles.profileImage} />
                               <View style={styles.chatDetailsColumn}>
                                 <Text style={styles.chatName}>
-                                  {userData?.role == 'user' ? item?.barber.name : item?.user?.name}
+                                  {userData?.role == 'user' ? item?.barber?.name : item?.user?.name}
                                 </Text>
                                 <Text style={styles.chatDetail} numberOfLines={1}>
                                   {lastMessage?.image?.length > 0 ? "Photo" : lastMessage?.text}

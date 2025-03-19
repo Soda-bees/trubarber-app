@@ -187,6 +187,14 @@ export default function Profile({navigation}) {
             />
           </TouchableOpacity>
         </View>
+
+
+        <Image
+          source={images.watermarkBlack} style={styles.waterMarkStyle}
+          resizeMode="contain" />
+        
+
+
         <View style={Platform.OS == 'android' ? styles.btn : styles.btnIOS}>
           <Button
             title={'Logout'}
