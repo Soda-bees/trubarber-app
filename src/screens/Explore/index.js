@@ -16,33 +16,33 @@ import {
   AppState,
   ActivityIndicator,
 } from 'react-native';
-import React, {useEffect, useState, useCallback} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import images from '../../services/utilities/images';
-import {styles} from './style';
-import {colors, sizes} from '../../services';
-import MapView, {Marker} from 'react-native-maps';
+import { styles } from './style';
+import { colors, sizes } from '../../services';
+import MapView, { Marker } from 'react-native-maps';
 import StarRating from 'react-native-star-rating-widget';
 import LottieView from 'lottie-react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {removeAuthToken, selectAuthToken} from '../../store/authToken';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeAuthToken, selectAuthToken } from '../../store/authToken';
 import {
   deleteDeviceToken,
   getAddressFromCoordinates,
   getAllBarber,
   handleGetUserDetails,
 } from '../../services/config/API';
-import {ErrorShow} from '../../components/Error';
+import { ErrorShow } from '../../components/Error';
 import {
   removelocation,
   selectlocation,
   setLocation,
 } from '../../store/location';
-import {setBarber} from '../../store/barber';
+import { setBarber } from '../../store/barber';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import {useFocusEffect} from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import formatToJSON from '../../services/config/FormatToJson';
-import {socket, socketService} from '../../services/Socket';
+import { socket, socketService } from '../../services/Socket';
 import {
   removeUserData,
   selectUserData,
@@ -52,14 +52,14 @@ import ChatConponent from '../../components/ChatComponent';
 import NotificationComponent from '../../components/NotificationComponent';
 import Favourites from '../../components/FavouriteComponent';
 import BarberLocation from '../../components/BarberLocationBox';
-import {openSettings} from 'react-native-permissions';
-import {requestTrackingPermission} from 'react-native-tracking-transparency';
-import {removeRole} from '../../store/role';
-import {removePaymentCard} from '../../store/paymentCard';
-import {removeCart} from '../../store/cart';
+import { openSettings } from 'react-native-permissions';
+import { requestTrackingPermission } from 'react-native-tracking-transparency';
+import { removeRole } from '../../store/role';
+import { removePaymentCard } from '../../store/paymentCard';
+import { removeCart } from '../../store/cart';
 import Modal from 'react-native-modal';
 
-export default function Explore({navigation}) {
+export default function Explore({ navigation }) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   // const location = useSelector(selectlocation) || userData?.location;
@@ -151,9 +151,9 @@ export default function Explore({navigation}) {
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c;
     return distance;
@@ -212,7 +212,7 @@ export default function Explore({navigation}) {
             'Location Permission Required',
             'We need your location to show you nearby barbers based on your location. Please enable location services in your settings.',
             [
-              {text: 'Cancel', style: 'cancel'},
+              { text: 'Cancel', style: 'cancel' },
               {
                 text: 'Open Settings',
                 onPress: () => {
@@ -283,7 +283,7 @@ export default function Explore({navigation}) {
     console.log('work getCurrentLocation');
     Geolocation.getCurrentPosition(
       position => {
-        const {latitude, longitude} = position.coords;
+        const { latitude, longitude } = position.coords;
         const locationObj = {
           latitude,
           longitude,
@@ -299,7 +299,7 @@ export default function Explore({navigation}) {
       error => {
         console.log('Error getting location: ', error.message);
       },
-      {enableHighAccuracy: false, timeout: 20000, maximumAge: 20000},
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 20000 },
     );
   };
 
@@ -353,12 +353,12 @@ export default function Explore({navigation}) {
 
   const filteredBarbers = search
     ? (() => {
-        const searchLower = search.toLowerCase();
-        const filtered = barberData.filter(item =>
-          item.name.toLowerCase().includes(searchLower),
-        );
-        return filtered.length > 0 ? filtered : null;
-      })()
+      const searchLower = search.toLowerCase();
+      const filtered = barberData.filter(item =>
+        item.name.toLowerCase().includes(searchLower),
+      );
+      return filtered.length > 0 ? filtered : null;
+    })()
     : null;
 
   const calculateAverageRating = reviews => {
@@ -387,7 +387,7 @@ export default function Explore({navigation}) {
   }, []);
 
   const getAddress = async (latitude, longitude, barberId) => {
-    setLocationLoader(prev => ({...prev, [barberId]: true}));
+    setLocationLoader(prev => ({ ...prev, [barberId]: true }));
     try {
       const response = await getAddressFromCoordinates(latitude, longitude);
       setAddressData(prev => ({
@@ -397,7 +397,7 @@ export default function Explore({navigation}) {
     } catch (error) {
       console.log(error);
     } finally {
-      setLocationLoader(prev => ({...prev, [barberId]: false}));
+      setLocationLoader(prev => ({ ...prev, [barberId]: false }));
     }
   };
 
@@ -484,10 +484,10 @@ export default function Explore({navigation}) {
                             <ImageBackground
                               source={
                                 item?.profile
-                                  ? {uri: item?.profile}
+                                  ? { uri: item?.profile }
                                   : item?.gender === 'male'
-                                  ? images.male
-                                  : images.female
+                                    ? images.male
+                                    : images.female
                               }
                               imageStyle={styles.containerImage}
                               style={styles.containerImage}>
@@ -579,10 +579,10 @@ export default function Explore({navigation}) {
                             <Image
                               source={
                                 item?.profile
-                                  ? {uri: item?.profile}
+                                  ? { uri: item?.profile }
                                   : item?.gender === 'male'
-                                  ? images.male
-                                  : images.female
+                                    ? images.male
+                                    : images.female
                               }
                               style={styles.markerIngStyle}
                             />
@@ -617,7 +617,7 @@ export default function Explore({navigation}) {
                                 })
                               }>
                               <Image
-                                source={{uri: item?.icon}}
+                                source={{ uri: item?.icon }}
                                 style={styles.imageResize}
                                 resizeMode="contain"
                               />
@@ -669,10 +669,10 @@ export default function Explore({navigation}) {
                               <ImageBackground
                                 source={
                                   item?.profile
-                                    ? {uri: item?.profile}
+                                    ? { uri: item?.profile }
                                     : item?.gender === 'male'
-                                    ? images.male
-                                    : images.female
+                                      ? images.male
+                                      : images.female
                                 }
                                 imageStyle={styles.containerImage}
                                 style={styles.containerImage}>

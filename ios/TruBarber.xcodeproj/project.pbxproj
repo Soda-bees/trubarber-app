@@ -164,8 +164,8 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				65D71F955A353291247D0B99 /* [CP] Embed Pods Frameworks */,
 				C2CF0C03F9F3D635DDE593A6 /* [CP] Copy Pods Resources */,
+				62E5F30DDEA2E06E0F791C3F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -187,9 +187,9 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				CEA057D5156C7AAAFA86244C /* [CP] Embed Pods Frameworks */,
 				EF0123BF05D7D90A33BA210D /* [CP] Copy Pods Resources */,
 				2A663DC3E4F1FABCA8311692 /* [CP-User] [RNFB] Core Configuration */,
+				E9F4A52156B3D7C4ADFB9E67 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -308,7 +308,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		65D71F955A353291247D0B99 /* [CP] Embed Pods Frameworks */ = {
+		62E5F30DDEA2E06E0F791C3F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -364,7 +364,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TruBarber-TruBarberTests/Pods-TruBarber-TruBarberTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CEA057D5156C7AAAFA86244C /* [CP] Embed Pods Frameworks */ = {
+		E9F4A52156B3D7C4ADFB9E67 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -453,6 +453,7 @@
 			baseConfigurationReference = D09AECDD6D755D790A2C70C0 /* Pods-TruBarber-TruBarberTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 5947YLGBNJ;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -481,6 +482,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = 5947YLGBNJ;
 				INFOPLIST_FILE = TruBarberTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -506,21 +508,22 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TruBarber/TruBarber.entitlements;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5947YLGBNJ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = TruBarber/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TruBarber;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sodabees.TruBarber;
 				PRODUCT_NAME = TruBarber;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -535,21 +538,22 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TruBarber/TruBarber.entitlements;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5947YLGBNJ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = TruBarber/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TruBarber;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sodabees.TruBarber;
 				PRODUCT_NAME = TruBarber;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

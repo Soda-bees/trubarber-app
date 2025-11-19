@@ -554,7 +554,7 @@ PODS:
     - React-perflogger (= 0.72.7)
   - RNCAsyncStorage (1.23.1):
     - React-Core
-  - RNDateTimePicker (8.3.0):
+  - RNDateTimePicker (7.6.2):
     - React-Core
   - RNFBApp (20.3.0):
     - Firebase/CoreOnly (= 10.29.0)
@@ -874,7 +874,7 @@ SPEC CHECKSUMS:
   React-utils: a851f8cc24fe51d791bc99df1acd7dfb1f7e2189
   ReactCommon: 5c6c2d0a9fe7dcd78cc2148c8fe580d84715bf95
   RNCAsyncStorage: aa75595c1aefa18f868452091fa0c411a516ce11
-  RNDateTimePicker: 29264364ea7b8cc0fb355b3843cf276a4ff78966
+  RNDateTimePicker: 078355128345a5c07ec26ce51fd648d46678de97
   RNFBApp: 9b390ca6026fb1c589fb1f7e33acca0517576bc7
   RNFBMessaging: 2c67c83791fa6846e0dfda7505ddad84a04987b6
   RNGestureHandler: ce291ffa86e0e07c99ec4734fc0bb4920c5e75fe
